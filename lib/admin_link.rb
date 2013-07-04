@@ -12,7 +12,7 @@ module AdminLink
       base + "tickets/show/#{object.id}"
     when Payment
       base + "payments/show/#{object.id}"
-    when Commission
+    when Commission::Rule
       base + "commissions/##{object.carrier}_#{object.number}"
     when Airport
       base + "airports/show/#{object.id}"

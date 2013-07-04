@@ -4,13 +4,13 @@ require 'spec_helper'
 # TODO написать rspec_matcher для комиссий, с более внятным выводом причин
 describe Commission do
 
-  RSpec::Matchers.define(:match_commission) do |page, commission|
+  RSpec::Matchers.define(:match_rule) do |page, rule|
 
     match_for_should do |example|
       @recommendation = example.recommendation
-      @proposed = page.find_commission(@recommendation)
-      if @proposed != commission
-        @reason = commission.turndown_reason(@recommendation)
+      @proposed = page.find_rule(@recommendation)
+      if @proposed != rule
+        @reason = rule.turndown_reason(@recommendation)
         false
       else
         true
@@ -19,7 +19,7 @@ describe Commission do
 
     match_for_should_not do |example|
       @recommendation = example.recommendation
-      @proposed = page.find_commission(@recommendation)
+      @proposed = page.find_rule(@recommendation)
       !@proposed
     end
 
@@ -38,7 +38,7 @@ describe Commission do
     end
 
     description do
-      "match commission"
+      "match rule"
     end
   end
 
@@ -55,33 +55,33 @@ describe Commission do
   book.pages.each do |page|
 
     describe "#{page.carrier} on #{page.start_date || 'beginning of time'}" do
-      page.commissions.each do |commission|
+      page.rules.each do |rule|
 
-        describe commission.inspect do
+        describe rule.inspect do
 
-          if commission.skipped?
+          if rule.skipped?
             specify { pending "disabled or not implemented, skipping examples" }
             next
           end
 
-          if commission.examples.blank?
+          if rule.examples.blank?
             specify { pending "no examples" }
             next
           end
 
-          commission.examples.each do |example|
+          rule.examples.each do |example|
 
             context example.inspect do
 
               subject {example}
 
-              if commission.disabled?
+              if rule.disabled?
                 it {
-                  should_not match_commission(page)
+                  should_not match_rule(page)
                 }
               else
                 it {
-                  should match_commission(page, commission)
+                  should match_rule(page, rule)
                 }
               end
 

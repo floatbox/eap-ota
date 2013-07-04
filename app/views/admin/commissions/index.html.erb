@@ -18,8 +18,8 @@
     <h3>с <% if page.start_date %> <%= l page.start_date %><% else %> незапамятных времен<% end %>,
         выписка <%= page.ticketing_methods.to_sentence.presence || 'отключена' %>
     </h3>
-    <% page.all.each do |commission| %>
-      <%= render 'commission', :commission => commission, :as_table => @as_table %>
+    <% page.rules.each do |rule| %>
+      <%= render 'rule', :rule => rule, :as_table => @as_table %>
     <% end %>
   <hr>
   <% end %>

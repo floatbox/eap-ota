@@ -7,32 +7,32 @@ describe Commission::Rule::Matching do
   describe "interline rules" do
 
     RSpec::Matchers.define(:match_recommendation) do |recommendation|
-      match do |subject_commission|
+      match do |subject_rule|
         begin
           # FIXME сделать другой выключатель проверки интерлайнов
           old, Commission::Rule.skip_interline_validity_check = Commission::Rule.skip_interline_validity_check, false
-          @reason = subject_commission.turndown_reason(recommendation)
+          @reason = subject_rule.turndown_reason(recommendation)
         ensure
           Commission::Rule.skip_interline_validity_check = old
         end
         ! @reason
       end
 
-      failure_message_for_should do |subject_commission|
-        "expected that '#{recommendation.short}' would match commission, but failed with reason #{@reason.inspect}."
+      failure_message_for_should do |subject_rule|
+        "expected that '#{recommendation.short}' would match rule, but failed with reason #{@reason.inspect}."
       end
 
-      failure_message_for_should_not do |subject_commission|
-        "expected that '#{recommendation.short}' would not match commission."
+      failure_message_for_should_not do |subject_rule|
+        "expected that '#{recommendation.short}' would not match rule."
       end
 
       description do
-        "'#{recommendation.short}' matches commission."
+        "'#{recommendation.short}' matches rule."
       end
     end
 
     # определяет класс комиссий с единственным правилом и возвращает это правило
-    def commission(&block)
+    def rule(&block)
 
       Commission::Reader.new.define do
         # FIXME дефолт для Recommendation.example
@@ -41,7 +41,7 @@ describe Commission::Rule::Matching do
         instance_eval &block
         # неопределенная агентская/субагентская комиссия
         commission '/'
-      end.all.first
+      end.rules.first
 
     end
 
@@ -57,7 +57,7 @@ describe Commission::Rule::Matching do
 
     describe "no interline rules specified (defaults to no interline allowed)" do
       subject do
-        commission do
+        rule do
           # nothing here
         end
       end
@@ -71,7 +71,7 @@ describe Commission::Rule::Matching do
 
     describe "interline :no" do
       subject do
-        commission do
+        rule do
           interline :no
         end
       end
@@ -85,7 +85,7 @@ describe Commission::Rule::Matching do
 
     describe "interline :no_codeshare" do
       subject do
-        commission do
+        rule do
           interline :no_codeshare
         end
       end
@@ -99,7 +99,7 @@ describe Commission::Rule::Matching do
 
     describe "interline :yes" do
       subject do
-        commission do
+        rule do
           interline :yes
         end
       end
@@ -114,7 +114,7 @@ describe Commission::Rule::Matching do
 
     describe "interline :first" do
       subject do
-        commission do
+        rule do
           interline :first
         end
       end
@@ -126,7 +126,7 @@ describe Commission::Rule::Matching do
 
     describe "interline :half" do
       subject do
-        commission do
+        rule do
           interline :half
         end
       end
@@ -139,7 +139,7 @@ describe Commission::Rule::Matching do
 
     describe "interline :less_than_half" do
       subject do
-        commission do
+        rule do
           interline :less_than_half
         end
       end
@@ -152,7 +152,7 @@ describe Commission::Rule::Matching do
 
     describe "interline :absent" do
       subject do
-        commission do
+        rule do
           interline :absent
         end
       end
@@ -165,7 +165,7 @@ describe Commission::Rule::Matching do
     describe "interline :unconfirmed" do
       # на текущий момент, считаем что неподтвержденный интерлайн - работает только при половине собственных рейсов
       subject do
-        commission do
+        rule do
           interline :unconfirmed
         end
       end
@@ -179,7 +179,7 @@ describe Commission::Rule::Matching do
     context "combinations of" do
       describe "interline :no, :yes" do
         subject do
-          commission do
+          rule do
             interline :no, :yes
           end
         end
@@ -190,7 +190,7 @@ describe Commission::Rule::Matching do
 
       describe "interline :no, :first" do
         subject do
-          commission do
+          rule do
             interline :no, :first
           end
         end
@@ -202,7 +202,7 @@ describe Commission::Rule::Matching do
 
       describe "interline :yes, :absent" do
         subject do
-          commission do
+          rule do
             interline :yes, :absent
           end
         end
@@ -213,7 +213,7 @@ describe Commission::Rule::Matching do
 
       describe "interline :no, :unconfirmed" do
         subject do
-          commission do
+          rule do
             interline :no, :unconfirmed
           end
         end

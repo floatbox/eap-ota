@@ -8,9 +8,6 @@ class Commission::Page
 
   include KeyValueInit
 
-  # @return Array<Commission::Rule> список правил (в порядке обсчета)
-  attr_accessor :commissions
-
   # @return String IATA код перевозчика
   attr_accessor :carrier
 
@@ -18,62 +15,62 @@ class Commission::Page
   attr_accessor :start_date
 
   def initialize(*)
-    @commissions = []
+    @index = []
     super
   end
 
   # создает и вносит в книгу комиссию
   def create_rule(attrs)
-    commission = Commission::Rule.new(attrs)
-    register commission
+    rule = Commission::Rule.new(attrs)
+    register rule
   end
 
   # вносит в книгу готовую комиссию
-  def register commission
-    commission.number = commissions.size + 1
-    if commission.important
-      commissions.unshift commission
+  def register rule
+    rule.number = @index.size + 1
+    if rule.important
+      @index.unshift rule
     else
-      commissions.push commission
+      @index.push rule
     end
-    commission
+    rule
   end
 
   # Inspection
   ############
 
   # @return Array<Commission::Rule> список правил (в порядке ввода/документа)
-  def all
-    commissions.sort_by(&:number)
+  def rules
+    @index.sort_by(&:number)
   end
 
   # @return Boolean есть ли хоть одна (включенная) комиссия?
   def empty?
-    commissions.all?(&:disabled?)
+    @index.all?(&:disabled?)
   end
 
   def ticketing_methods
-    commissions.reject(&:disabled?).collect(&:ticketing_method).uniq.sort
+    @index.reject(&:disabled?).collect(&:ticketing_method).uniq.sort
   end
 
   # Recommendation finders
   ########################
 
-  def find_commission(recommendation)
-    commission = commissions.find do |c|
-      c.applicable?(recommendation)
+  def find_rule(recommendation)
+    rule = @index.find do |r|
+      r.applicable?(recommendation)
     end
-    return unless commission
-    return if commission.disabled?
-    commission
+    return unless rule
+    return if rule.disabled?
+    rule
   end
 
   # Применяет каждое правило в странице к рекомендации.
   # Объясняет, почему не сработало.
   def all_with_reasons_for(recommendation)
     found = nil
-    commissions.map do |c|
-      reason = c.turndown_reason(recommendation)
+    @index.map do |r|
+      reason = r.turndown_reason(recommendation)
       status =
         if !found && reason
           :fail
@@ -82,8 +79,8 @@ class Commission::Page
         else
           :skipped
         end
-      found = c unless reason
-      [c, status, reason]
+      found = r unless reason
+      [r, status, reason]
     end
   end
 end

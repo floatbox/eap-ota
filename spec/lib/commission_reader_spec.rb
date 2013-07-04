@@ -15,7 +15,7 @@ describe Commission::Reader do
     end
 
     it "should have one commission" do
-      book.all.should have(1).item
+      book.rules.should have(1).item
     end
 
     it "should find a commission for correct recommendation" do
@@ -24,7 +24,7 @@ describe Commission::Reader do
     end
   end
 
-  context "two carriers, three simple commissions" do
+  context "two carriers, three simple rules" do
     subject :book do
       Commission::Reader.new.define do
         carrier 'FV'
@@ -40,8 +40,8 @@ describe Commission::Reader do
       book.carriers.should == ['FV', 'AB']
     end
 
-    it "should have registered three commissions" do
-      book.all.should have(3).items
+    it "should have registered three rules" do
+      book.should have(3).rules
     end
 
     describe "#exists_for?" do
@@ -76,8 +76,8 @@ describe Commission::Reader do
       book.carriers.should == ['FV', 'AB']
     end
 
-    it "should have registered four commissions" do
-      book.all.should have(4).items
+    it "should have registered four rules" do
+      book.should have(4).rules
     end
 
     it "should define four pages" do
@@ -115,8 +115,8 @@ describe Commission::Reader do
       end
     end
 
-    subject :commission do
-      book.all.first
+    subject :rule do
+      book.rules.first
     end
 
     its(:agent) {should == Fx('2%')}
@@ -142,8 +142,8 @@ describe Commission::Reader do
         end
       end
 
-      subject :commission do
-        book.all.first
+      subject :rule do
+        book.rules.first
       end
 
       its(:check) {should eq("# COMPILED")}
@@ -159,15 +159,15 @@ describe Commission::Reader do
         end
       end
 
-      subject :commission do
-        book.all.first
+      subject :rule do
+        book.rules.first
       end
 
       its(:check) {should eq("true")}
       its(:check_proc) {should be_an_instance_of(Proc)}
 
       it "should return currect value on custom_check" do
-        commission.applicable_custom_check?(stub(:recommendation)).should == true
+        rule.applicable_custom_check?(stub(:recommendation)).should == true
       end
     end
 
@@ -220,7 +220,7 @@ describe Commission::Reader do
       end
     end
 
-    subject { book.pages_for(carrier: 'FV').first.all.first }
+    subject { book.pages_for(carrier: 'FV').first.rules.first }
 
     its(:system) { should eq(:amadeus) }
     its(:consolidator) { should eq(Fx(0)) }
@@ -246,20 +246,20 @@ describe Commission::Reader do
 
         its(:start_date) { should eq(Date.new(2013,2,1))}
         it "should have per page numeration" do
-          page.all.first.number.should eq(1)
+          page.rules.first.number.should eq(1)
         end
       end
     end
 
-    describe ".all" do
-      subject { book.all }
+    describe ".rules" do
+      subject { book.rules }
       it {should be_an(Array)}
       its(:size) { should == 3 }
       its(:first) { should be_a(Commission::Rule) }
     end
   end
 
-  context "several commissions for a company" do
+  context "several rules for a company" do
 
     let :book do
       Commission::Reader.new.define do
@@ -301,7 +301,7 @@ describe Commission::Reader do
     }
 
     specify {
-      book.pages_for(carrier: 'AB').first.should have(4).commissions
+      book.pages_for(carrier: 'AB').first.should have(4).rules
     }
 
     describe ".all_with_reasons_for" do
@@ -309,7 +309,7 @@ describe Commission::Reader do
 
       it {should have(4).items}
 
-      it "should display all commissions in order of importance" do
+      it "should display all rules in order of importance" do
         subject.map {|row| row[0].agent_comments.strip}.should == %W[third first second fourth]
       end
 
@@ -321,17 +321,17 @@ describe Commission::Reader do
         subject[2][2].should be_nil
       end
 
-      it "should display as successful really applied commission" do
+      it "should display as successful really applied rule" do
         subject.find {|row| row[1] == :success}[0].should == book.find_for(recommendation)
       end
     end
 
     describe "#number" do
-      it "should auto number commissions for every carrier according to source position from 1" do
-        book.all.every.number.should == [1, 1, 2, 3, 4]
+      it "should auto number rules for every carrier according to source position from 1" do
+        book.rules.every.number.should == [1, 1, 2, 3, 4]
       end
 
-      it "should apply commissions according to importance" do
+      it "should apply rules according to importance" do
         book.all_with_reasons_for(recommendation).every.first.every.number.should == [3, 1, 2, 4]
       end
 
@@ -339,7 +339,7 @@ describe Commission::Reader do
 
   end
 
-  context "no_commission commissions for a company" do
+  context "no_commission rules for a company" do
 
     let :book do
       Commission::Reader.new.define do
@@ -367,12 +367,12 @@ describe Commission::Reader do
       book.exists_for?(recommendation).should be_true
     }
 
-    it "should not find no_commission commission" do
+    it "should not find no_commission rule" do
       book.find_for(recommendation).should be_nil
     end
 
     specify {
-      book.pages_for(carrier: 'AB').first.should have(3).commissions
+      book.pages_for(carrier: 'AB').first.should have(3).rules
     }
 
     describe ".all_with_reasons_for" do
@@ -388,7 +388,7 @@ describe Commission::Reader do
         subject[1][2].should be_nil
       end
 
-      it "should display as successful really applied commission" do
+      it "should display as successful really applied rules" do
         subject.find {|row| row[1] == :success}[0].agent_comments.strip.should == "second"
       end
     end
@@ -404,7 +404,7 @@ describe Commission::Reader do
         end
       end
 
-      subject { book.all.first }
+      subject { book.rules.first }
 
       its(:agent) { should be_blank }
       its(:subagent) { should == Fx('2%') }
@@ -418,7 +418,7 @@ describe Commission::Reader do
         end
       end
 
-      subject { book.all.first }
+      subject { book.rules.first }
 
       its(:agent) { should == Fx('2%') }
       its(:subagent) { should be_blank }

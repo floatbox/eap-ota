@@ -15,8 +15,8 @@ class Commission::Book
     pages_for(carrier: recommendation.validating_carrier_iata).present?
   end
 
-  def all
-    pages.map(&:all).flatten.sort_by {|c| c.source.to_i }
+  def rules
+    pages.map(&:rules).flatten.sort_by(&:source)
   end
 
   def carriers
@@ -44,7 +44,7 @@ class Commission::Book
 
   def find_for(recommendation)
     page = find_page(carrier: recommendation.validating_carrier_iata) or return
-    page.find_commission(recommendation)
+    page.find_rule(recommendation)
   end
 
   # выбирает активную страницу для

@@ -14,7 +14,7 @@ class Commission::Writer::Page
     end
     str << "\n"
 
-    @page.all.each do |rule|
+    @page.rules.each do |rule|
       str << Commission::Writer::Rule.new(rule).write
       str << "\n"
     end

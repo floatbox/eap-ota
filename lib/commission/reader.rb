@@ -69,7 +69,7 @@ class Commission::Reader
       raise ArgumentError, "strange commission: #{arg}"
     end
 
-    make_commission(
+    make_rule(
       :carrier => @carrier,
       :agent => vals[0],
       :subagent => vals[1],
@@ -80,19 +80,19 @@ class Commission::Reader
   # заглушка для example который _не должны_ найти комиссию
   def no_commission(reason=true)
     # opts здесь по идее содержит только examples
-    make_commission(
+    make_rule(
       :carrier => @carrier,
       :source => caller_address,
       :no_commission => reason
     )
   end
 
-  def make_commission(attrs)
+  def make_rule(attrs)
     attrs = attrs.merge(opts).reverse_merge(default_opts)
     self.opts = {}
     @page.create_rule(attrs)
   end
-  private :make_commission
+  private :make_rule
 
   def cast_attrs!(attrs)
     attrs[:start_date] &&= attrs[:start_date].to_date

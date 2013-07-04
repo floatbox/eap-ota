@@ -149,7 +149,7 @@ class Commission::Rule
   end
 
   def inspect
-    "<commission #{carrier}##{number} at #{source}>"
+    "<Commission::Rule #{carrier}##{number} at #{source}>"
   end
 
 end

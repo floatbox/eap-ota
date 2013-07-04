@@ -8,7 +8,7 @@ module Commission
     delegate \
       :exists_for?,
       :find_for,
-      :all,
+      :rules,
       :carriers,
         to: :default_book
 
