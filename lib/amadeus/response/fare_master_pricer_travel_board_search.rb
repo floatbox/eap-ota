@@ -101,19 +101,39 @@ module Amadeus
         elements :description, :as => :descriptions
       end
 
+      class ProductInformation
+        include SAXMachine
+
+        element :cabin
+        element :rbd, :as => :booking_class
+        element :avlStatus, :as => :availability
+        element :passengerType, :as => :passenger_type
+      end
+
+      class FareDetails
+        include SAXMachine
+
+        element :segRef, :as => :seg_ref
+
+        elements :productInformation, :as => :product_information, :class => ProductInformation
+      end
+
+      class PaxFareProduct
+        include SAXMachine
+
+        element :ptc
+        elements :fareDetails, :as => :fare_details, :class => FareDetails
+        elements :codeShareDetails, :as => :carrier_iatas, :class => CarrierIATA
+        elements :traveller, :as => :travellers
+        elements :fare, :as => :fares, :class => Fare
+      end
+
       class FlightRecommendation
         include SAXMachine
 
-        element :fareBasis, :as => :fare_basis
-
         elements :ptc, :as => :ptcs
-        elements :fare, :as => :fares, :class => Fare
+        elements :paxFareProduct, :as => :pax_fare_products, :class => PaxFareProduct
         elements :amount, :as => :amounts
-        elements :cabin, :as => :cabins
-        elements :rbd, :as => :booking_classes
-        elements :avlStatus, :as => :availabilities
-        elements :codeShareDetails, :as => :carrier_iatas, :class => CarrierIATA
-        elements :traveller, :as => :travellers
         elements :segmentFlightRef, :as => :segment_flight_refs, :class => SegmentFlightRef
       end
 
@@ -131,21 +151,26 @@ module Amadeus
 
         parsed.recommendations.map do |recommendation|
 
+          # booking_classes/availabilities/cabins
+          pax_fare_product = recommendation.pax_fare_products.find { |pfp| pfp.ptc == 'ADT' }
+          details = pax_fare_product.fare_details
+
+          blank_count = recommendation.pax_fare_products.collect(&:travellers).flatten(1).size
           price_total = recommendation.amounts.first.to_f
-          price_tax = recommendation.amounts.second.to_f
+          price_tax = recommendation.amounts.last.to_f
           price_fare = price_total - price_tax
-          cabins = cabins_sax(recommendation)
-          booking_classes = booking_classes_sax(recommendation)
-          availabilities = availabilities_sax(recommendation)
-          validating_carrier_iata, marketing_carrier_iatas = carrier_iatas_sax(recommendation)
-          last_tkt_date = last_tkt_date_sax(recommendation)
-          additional_info = additional_info_sax(recommendation)
+          cabins = cabins_sax(details)
+          booking_classes = booking_classes_sax(details)
+          availabilities = availabilities_sax(details)
+          validating_carrier_iata, marketing_carrier_iatas = carrier_iatas_sax(pax_fare_product)
+          last_tkt_date = last_tkt_date_sax(pax_fare_product)
+          additional_info = additional_info_sax(pax_fare_product)
 
           variants = variants_sax(recommendation, flight_indexes_cache)
 
           Recommendation.new(
             source: 'amadeus',
-            blank_count: recommendation.travellers.count,
+            blank_count: blank_count,
             price_fare: price_fare,
             price_tax: price_tax,
             variants: variants,
@@ -252,54 +277,50 @@ module Amadeus
         )
       end
 
-      def adult_indexes(recommendation)
-        size = recommendation.cabins.size / recommendation.ptcs.size
-        ind = recommendation.ptcs.index('ADT')
-        from = ind
-        to = size * (ind + 1)
-        from...to
+      def cabins_sax(details)
+        info = details.collect(&:product_information).flatten(1)
+        info.select! { |inf| inf.passenger_type == 'ADT' }
+        info.collect(&:cabin)
       end
 
-      # FIXME? объединить методы с похожей логикой
-      def cabins_sax(recommendation)
-        cabins = recommendation.cabins
-        cabins[adult_indexes(recommendation)]
+      def booking_classes_sax(details)
+        info = details.collect(&:product_information).flatten(1)
+        info.select! { |inf| inf.passenger_type == 'ADT' }
+        info.collect(&:booking_class)
       end
 
-      def booking_classes_sax(recommendation)
-        booking_classes = recommendation.booking_classes
-        booking_classes[adult_indexes(recommendation)]
+      def availabilities_sax(details)
+        info = details.collect(&:product_information).flatten(1)
+        info.select! { |inf| inf.passenger_type == 'ADT' }
+        info.collect(&:availability)
       end
 
-      def availabilities_sax(recommendation)
-        availabilities = recommendation.availabilities
-        availabilities[adult_indexes(recommendation)]
+      def additional_info_sax(pax_fare_product)
+        fares = pax_fare_product.fares
+        descriptions = fares.collect(&:descriptions)
+        qualifiers = fares.collect(&:qualifiers)
+        starter = descriptions + qualifiers
+        # здесь явное отличие additional_info от старого парсера - нигде не используется, не стал заморачиваться с fare_basis
+        starter.map{ |e| e.join('\n')}.join('\n\n')
       end
 
-      def additional_info_sax(recommendation)
-        fares = recommendation.fares
-        descriptions = fares.map(&:descriptions)
-        qualifiers = fares.map(&:qualifiers)
-        fare_basis = recommendation.fare_basis
-        ((descriptions + qualifiers).map { |e| e.join('\n') } ).join('\n\n') + '\n\nfareBasis: ' + fare_basis
-      end
+      def carrier_iatas_sax(pax_fare_product)
+        carrier_iatas = pax_fare_product.carrier_iatas
+        marketing_carrier_iatas = carrier_iatas.map(&:companies).flatten(1)
+        qualifiers = carrier_iatas.map(&:qualifiers).flatten(1)
 
-      def carrier_iatas_sax(recommendation)
-        carrier_iatas = recommendation.carrier_iatas
-        marketing_carrier_iatas = carrier_iatas.map(&:companies)
-        # validating_carrier_iata
         validating_carrier_iata = nil
-        carrier_iatas.map(&:qualifiers).zip(marketing_carrier_iatas) do |qualifier, company|
+        qualifiers.zip(marketing_carrier_iatas) do |qualifier, company|
           if qualifier == 'V'
             validating_carrier_iata = company
             break
           end
         end
-        [validating_carrier_iata, marketing_carrier_iatas.flatten(1)]
+        [validating_carrier_iata, marketing_carrier_iatas]
       end
 
-      def last_tkt_date_sax(recommendation)
-        messages = recommendation.fares
+      def last_tkt_date_sax(pax_fare_product)
+        messages = pax_fare_product.fares
         messages.map(&:descriptions).zip(messages.map(&:qualifiers)) do |descriptions, qualifier|
           descriptions.each do |description|
             if description =~ /\d+\w{3}\d+/
@@ -322,13 +343,14 @@ module Amadeus
       end
 
       def parsed
-        @parsed ||= XMLResponse.parse(doc.to_xml)
+        xml = benchmark 'to_xml' do doc.to_xml end
+        @parsed ||= XMLResponse.parse(xml)
       end
 
       private :parsed,
-        :adult_indexes,
         :booking_classes_sax,
         :cabins_sax,
+        :availabilities_sax,
         :additional_info_sax,
         :technical_stop_sax,
         :parse_flights_sax,

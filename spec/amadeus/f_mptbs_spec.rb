@@ -38,11 +38,13 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
         it { should have(1).variant }
 
         its(:blank_count) { should == 4 }
+        its(:validating_carrier_iata) { should == 'OS'}
         its(:cabins) { should == %W( M M M M ) }
         its(:booking_classes) { should == %W( T T T T ) }
 
         its(:price_fare) { should == 22480.0 }
         its(:price_tax) { should == 20656.0 }
+        its(:last_tkt_date) { should == Date.parse("30APR11") }
 
         describe 'variant' do
           let_once!(:variant) { recommendation.variants.first }
@@ -78,7 +80,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
               its(:duration) { should == 180 }
             end
 
-            describe 'second flight' do
+            describe 'second flight with incomplete terminals' do
               let_once!(:flight) { segment.flights.second }
               subject { flight }
 
