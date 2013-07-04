@@ -13,7 +13,7 @@ module ProfileOrder
   end
 
   def profile_route
-    route.blank? ? tickets.first.route.gsub(/ \([A-Z]{2}\)/, '') : route
+    route.blank? ? tickets.first.route.gsub(/ \([A-Z0-9]{2}\)/, '') : route
   end
 
   def profile_route_smart
