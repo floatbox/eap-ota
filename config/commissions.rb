@@ -988,10 +988,9 @@ important!
 discount "2.3%"
 commission "5%/3%"
 
-# example 'okocdg cdgoko/ab'
-# example 'cdgoko'
-# example 'okomia'
-#example 'jfkbwi' временно выключен
+example 'okocdg cdgoko/ab'
+example 'cdgoko'
+example 'okomia'
 agent    "1% от опубл. тарифа DL на трансатлантический перелет при перевозке, начинающейся в Европе, Азии или Африке;"
 agent    "1% от опубл. тарифа других авиакомпаний в комбинации с опубл. тарифом DL на трансатлант.перелет при перевозке, нач.в Европе, Азии или Африке;"
 agent    "1% от опубл. тарифа DL при внутренних перелетах по США"
