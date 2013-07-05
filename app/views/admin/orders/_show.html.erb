@@ -76,7 +76,4 @@ URL для оплаты: <%= link_to edit_payment_url(:code => @item.code), edit
 <% if @item.ok_to_auto_ticket? %>
   <td><%= button_to 'Отменить автоматическую выписку', {:action => 'cancel_auto_ticketing', :id => @item.id} %></td>
 <% end %>
-<% if !@item.fix_price? && @item.sold_tickets.present? && Rails.env != 'production' %>
-  <td><%= button_to 'Пересчитать цены', {:action => 'recalculate_prices', :id => @item.id} %></td>
-<% end %>
 </tr> </table>

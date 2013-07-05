@@ -3,6 +3,16 @@ class Admin::TicketsController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
+  def create
+    super
+    @item.order.recalculate_prices if @item.order
+  end
+
+  def update
+    super
+    @item.order.recalculate_prices if @item.order
+  end
+
   def show_versions
     get_object
   end

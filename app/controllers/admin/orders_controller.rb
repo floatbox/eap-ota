@@ -37,6 +37,16 @@ class Admin::OrdersController < Admin::EviterraResourceController
     super
   end
 
+  def create
+    super
+    @item.recalculate_prices
+  end
+
+  def update
+    super
+    @item.recalculate_prices
+  end
+
   # FIXME копипаста из тайпуса, чтобы добавить вызов set_attributes_on_new.
   # надеюсь, в будущих версиях тайпуса - выковыряем
   def new
@@ -144,11 +154,6 @@ class Admin::OrdersController < Admin::EviterraResourceController
 
   def ticket
     flash[:alert] = 'не удалось загрузить все билеты' unless @order.ticket!
-    redirect_to :action => :show, :id => @order.id
-  end
-
-  def recalculate_prices
-    flash[:alert] = 'Ошибка при пересчете цен' unless @order.recalculate_prices
     redirect_to :action => :show, :id => @order.id
   end
 
