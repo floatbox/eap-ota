@@ -999,7 +999,6 @@ subagent "0,5% от опубл. тарифа других авиакомпани
 subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
 interline :no, :yes
 check %{ includes(%W(europe asia africa), Country[country_iatas.first].continent ) }
-disabled "включил dtt"
 ticketing_method "aviacenter"
 ## discount "0.3%"
 commission "1%/0.5%"
