@@ -179,8 +179,7 @@ class Commission::Reader
   end
 
   def check(check_text=nil, &block)
-    # TODO включить после перехода
-    # raise ArgumentError, "check block should be given as String" unless check_text
+    raise ArgumentError, "check block should be given as String" unless check_text
     block_text =
       "lambda do |recommendation|
         #{ check_text }

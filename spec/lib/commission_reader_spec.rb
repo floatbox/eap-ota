@@ -108,7 +108,7 @@ describe Commission::Reader do
         discount '2%'
         our_markup '1%'
         disabled "because of Caturday, that's why"
-        check { true }
+        check %{ true }
         tour_code "FOOBAR"
         designator "PP10"
         commission '2%/3'
@@ -133,22 +133,6 @@ describe Commission::Reader do
   end
 
   describe "#check" do
-    describe "given as code (DEPRECATED)" do
-      let :book do
-        Commission::Reader.new.define do
-          carrier 'SU'
-          check {true}
-          commission '0/0'
-        end
-      end
-
-      subject :rule do
-        book.rules.first
-      end
-
-      its(:check) {should eq("# COMPILED")}
-      its(:check_proc) {should be_an_instance_of(Proc)}
-    end
 
     describe "given as text" do
       let :book do
