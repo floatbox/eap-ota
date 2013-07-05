@@ -20,10 +20,9 @@
 <% @orders.each do |order| %>
 <% if order.profile_alive_tickets_exists?|| order.profile_all_tickets_returned?  || admin_user%>
 <div class="order"
-  <% if order.profile_all_tickets_returned? %>style="background-color: #ddd;"
-  <% elsif !order.profile_alive_tickets_exists? %>
-  style="background-color: transparent; border: 1px dotted #454752"<% end %>
->
+  <% if order.profile_all_tickets_returned? %> style="background-color: #ddd;"
+  <% elsif !order.profile_alive_tickets_exists? %> style="background-color: transparent; border: 1px dotted #454752"
+  <% end %>>
 <table class="order-summary">
     <tr>
         <th style="width: 120px;">Дата заказа</th>
@@ -74,7 +73,7 @@
         <th>Распечатать</th>
     </tr>
     <% order.profile_tickets.each do |ticket| %>
-        <tr>
+        <tr <% if !ticket.profile_active? %>style="color: #999"<% end %>>
             <td><%= ticket.profile_name %></td>
             <td><%= ticket.number_with_code %></td>
             <td><%= ticket.profile_status %>
