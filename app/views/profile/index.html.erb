@@ -18,8 +18,12 @@
     <p class="orders-empty">Вы еще ничего не заказывали. Хотите <a href="/">купить билет</a>?</p>
 <% else %>
 <% @orders.each do |order| %>
-<% if order.profile_alive_tickets_exists? || admin_user%>
-<div class="order" <% if order.profile_ticketed? && !order.profile_alive_tickets_exists? %>style='background-color: transparent; border: 1px dotted #454752'<% end %>>
+<% if order.profile_alive_tickets_exists?|| order.profile_all_tickets_returned?  || admin_user%>
+<div class="order"
+  <% if order.profile_all_tickets_returned? %>style="background-color: #ddd;"
+  <% elsif !order.profile_alive_tickets_exists? %>
+  style="background-color: transparent; border: 1px dotted #454752"<% end %>
+>
 <table class="order-summary">
     <tr>
         <th style="width: 120px;">Дата заказа</th>
@@ -46,7 +50,7 @@
   <div class="orc-show">Показать детали</div>
   <div class="orc-hide">Скрыть детали</div>
   <% if order.profile_alive_tickets_exists? || !order.profile_ticketed? %>
-    <% if order.profile_stored? && order.profile_arrival_in_future?%>
+    <% if order.profile_stored? && order.profile_arrival_in_future? %>
     <div class="orc-pnr">
         <span class="orc-links">Маршрутная квитанция: <a class="orc-link" href="<%= profile_itinerary_path(:id => order.pnr_number) %>" target="_blank">на русском</a>
         <a class="orc-link" href="<%= profile_itinerary_path(:id => order.pnr_number, :lang =>'en') %>" target="_blank">in English</a>
@@ -58,7 +62,7 @@
 
 <% if order.profile_ticketed? %>
 
-<% if order.profile_alive_tickets_exists? || admin_user%>
+<% if order.profile_alive_tickets_exists? || order.profile_all_tickets_returned? || admin_user%>
 <div class="order-details">
 
   <div class="ord-passengers">
@@ -121,7 +125,10 @@
 <% if admin_user %>
 <div class="order-debug">
   <p class="ors-route-raw"><% if order.profile_alive_tickets_exists? %> Живой!
-    <% else %> Мертвый! <% end %> <%= order.profile_sold_tickets_count %>=<%= order.profile_ticketed? %></p>
+    <% else %> Мертвый! <% end %>
+    <% if order.profile_all_tickets_returned? %> Возврат! <% end %>
+    
+    <%= order.profile_sold_tickets_count %>=<%= order.profile_ticketed? %></p>
   <p class="ors-route-raw">Route: <%= order.profile_route %></p>
   <p class="ors-route-raw">Статусы заказа: <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %></p>
   <% if order.profile_ticketed? %>

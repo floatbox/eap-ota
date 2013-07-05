@@ -17,4 +17,8 @@ module ProfileTicket
     kind == 'ticket' && ['ticketed', 'exchanged'].include?(status)
   end
 
+  def profile_returned?
+    kind == 'ticket' && status == 'returned'
+  end
+
 end

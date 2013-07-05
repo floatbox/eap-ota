@@ -108,9 +108,17 @@ module ProfileOrder
   end
 
   def profile_alive_tickets_exists?
-    tickets.each do |t|
+    profile_tickets.each do |t|
       return true if t.profile_alive?
     end
-    return nil
+    return false
   end
+
+  def profile_all_tickets_returned?
+    profile_tickets.each do |t|
+      return false unless t.profile_returned?
+    end
+    return true
+  end
+
 end
