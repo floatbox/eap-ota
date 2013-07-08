@@ -2485,13 +2485,13 @@ commission "7%/5%"
 example 'svocdg/business'
 example 'svocdg/business cdgsvo/business'
 agent    "9% (7%) (7%) от тарифа Бизнес класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) из/в пунктов в РФ;"
-subagent ""
+subagent "7%"
 classes :business
 check %{ includes(country_iatas, 'RU') }
 important!
 ticketing_method "aviacenter"
-discount "9%"
-commission "9%/8.5%"
+discount "7%"
+commission "9%/7%"
 
 example 'cdgsvo svocdg/ab'
 agent "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
