@@ -116,7 +116,7 @@ initForms: function() {
     var checkEmail = function(value) {
         if (!value) return 'Введите адрес электронной почты.';
         if (/[а-яА-Я]/.test(value)) return 'Адрес электронной почты может содержать только латинские символы.';
-        if (!/@\S+\.\w+/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
+        if (!/^\S+@\S+\.\w+$/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
     };
 
     var signIn = new profileForm(this.el.find('.phu-signin'));
@@ -178,6 +178,8 @@ initForms: function() {
     
     $('#signin-email, #signup-email, #forgot-email').on('correct', function() {
         if (this.value && /[а-яА-Я]/.test(this.value)) $(this).val('');
+    }).on('change', function() {
+        $(this).val($.trim(this.value));
     });    
 
 }
@@ -292,9 +294,9 @@ var profileField = function(selector, check) {
     this.elem.on('focus change', function() {
         if (that.error) {
             that.elem.removeClass('phuf-error').trigger('correct');
-            that.elem.closest('form').trigger('correct');
             that.error = undefined;
         }
+        that.elem.closest('form').trigger('correct');
     });
     this.check = check;
 };
