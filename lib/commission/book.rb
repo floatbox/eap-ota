@@ -28,7 +28,7 @@ class Commission::Book
   end
 
   def pages_for(opts)
-    carrier = opts[:carrier] or raise ArgumentError "carrier not specified"
+    carrier = opts[:carrier] or raise ArgumentError, "carrier not specified"
     @index[carrier]
   end
 
