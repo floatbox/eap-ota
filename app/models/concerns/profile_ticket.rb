@@ -13,8 +13,16 @@ module ProfileTicket
     return 'возвращен' if status == 'returned'
   end
 
+  def profile_active?
+    kind == 'ticket' && status == 'ticketed'
+  end
+
   def profile_alive?
     kind == 'ticket' && ['ticketed', 'exchanged'].include?(status)
+  end
+
+  def profile_returned?
+    kind == 'ticket' && status == 'returned'
   end
 
 end

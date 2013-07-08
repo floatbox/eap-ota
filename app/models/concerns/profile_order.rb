@@ -13,7 +13,7 @@ module ProfileOrder
   end
 
   def profile_route
-    route.blank? ? tickets.first.route.gsub(/ \([A-Z]{2}\)/, '') : route
+    route.blank? ? tickets.first.route.gsub(/ \([A-Z0-9]{2}\)/, '') : route
   end
 
   def profile_route_smart
@@ -45,6 +45,7 @@ module ProfileOrder
 
   def profile_status
     # FIXME некрасиво, переписать надо
+    return 'оплачен' if ticket_status == 'ticketed'
     return 'денежные средства заблокированы на карте' if payment_type == 'card' && payment_status == 'blocked'
     return 'денежные средства списаны с карты' if payment_type == 'card' && payment_status == 'charged'
     return 'оплачен' if ['cash','invoice'].include?(payment_type) && payment_status == 'charged'
@@ -86,6 +87,10 @@ module ProfileOrder
     tickets_count > 0
   end
 
+  def profile_sold_tickets_count
+    sold_tickets.count
+  end
+
   def profile_stored?
     tickets_count > 0 && tickets.first.flights.present?
   end
@@ -103,9 +108,17 @@ module ProfileOrder
   end
 
   def profile_alive_tickets_exists?
-    tickets.each do |t|
+    profile_tickets.each do |t|
       return true if t.profile_alive?
     end
-    return nil
+    return false
   end
+
+  def profile_all_tickets_returned?
+    profile_tickets.each do |t|
+      return false unless t.profile_returned?
+    end
+    return true
+  end
+
 end
