@@ -15,6 +15,13 @@ module InsuranceHelper
     "https://www.smart-ins.ru/vzr_iframe/light?#{uri_params.to_query}"
   end
 
+  def cherehapa_insurance_uri order_form
+    return unless uri_params = sravnikupi_uri_params(order_form)
+    # пока не показываем страховку для России
+    return if uri_params['country'] == 'RU'
+    "https://partners.cherehapa.ru/widget/jsbanner/eviterra.html?pid=251_291_219_42369&travel=1&calculate=1&#{uri_params.to_query}"
+  end
+
   def sravnikupi_uri_params order_form
     return unless order_form
     return unless order_form.recommendation

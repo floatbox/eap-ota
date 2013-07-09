@@ -15,16 +15,16 @@
 </div>
 <div class="bfrs-message">
     <p class="bfrsm-text"><strong><%= t 'booking.success.allright' %></strong> <%= t @order_form.people.one? ? 'one' : 'few', :scope => [:booking, :success, @order_form.payment_type == 'card' ? 'card' : 'cash'] %> <%= t 'booking.success.confirmation' %>&nbsp; <span class="link bf-hint bfrsm-hint" data-hint="bfh-mail"><%= t 'booking.success.whattodo.link' %></span</p>
-    <p class="bfrsm-pnr"><a target="_blank" href="<%= pnr_path %>">Распечатать подтверждение</a></p>
+    <p class="bfrsm-pnr"><a target="_blank" href="<%= pnr_path %><%= '?lang=en' if I18n.locale == :en %>"><%= t 'booking.success.print' %></a></p>
     <p class="bfrsm-text bfrsm-number"><%= raw t 'booking.success.pnr', :number => content_tag(:span, pnr_number, :class => 'bfr-pnr') %></p>
 </div>
 
 <% ostrovok_url = ostrovok_link(@order_form) %>
-<% insurance_url = sravnikupi_insurance_uri(@order_form) %>
+<% insurance_url = cherehapa_insurance_uri(@order_form) %>
 <% tripster_url = tripster_link(@order_form) %>
 <% weatlas_url = weatlas_link(@order_form) unless tripster_url %>
 
-<% if ostrovok_url || insurance_url || weatlas_url %>
+<% if ostrovok_url || insurance_url || weatlas_url || tripster_url %>
 <div class="bfrs-addition">
     <% if ostrovok_url %>
     <div class="bfrs-hotels">
@@ -43,6 +43,10 @@
     <% end %>
     <% if insurance_url %>
     <div class="bfrs-insurance">
+
+        <iframe src="<%= insurance_url %>" style="border: none; width: 197px; height: 200px;">
+
+        <!--
         <h5 class="bfrsa-title">Туристическая страховка</h5>
         <ul class="bfrsa-features">
             <li class="bfrsa-feature">Электронный полис</li>
@@ -54,6 +58,8 @@
             <a class="bfrsa-link" href="<%= insurance_url %>" target="_blank">Выбрать<br>и&nbsp;купить полис</a>
         </div>
         <div class="bfrsa-partner">Совместно с партнером Sravnikupi.ru</div>
+        -->
+
     </div>
     <% end %>
     <% if tripster_url %>

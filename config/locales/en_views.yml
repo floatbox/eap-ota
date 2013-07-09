@@ -38,7 +38,9 @@ en:
     home: "Eviterra — the cheapest flights worldwide. Online. All airlines. Discounts."
     search: "Search for flights %{title}"
     results: "Flights %{title}"
-    booking: "Flight booking %{title}"
+    booking:
+      one: "Flight booking %{title}"
+      few: "Flights booking %{title}"
     segment: "%{cities} on %{date}"
     return: "back on %{date}"
   search:
@@ -462,6 +464,7 @@ en:
         link: "Nothing happened, what should I do?"
         hint: "If you haven't recieved a booking confirmation letter within 10-15 minutes, check the Spam folder in your mail. If the letter isn't there, please contact us (<a href=\"mailto:operator@eviterra.com\">operator@eviterra.com</a>) or call <nobr>(+7 495 660-35-20) &mdash;</nobr>, we will fix it."
       pnr: "Your booking number — %{number}"
+      print: "Print confirmation"
     failed_booking:
       title: "Booking failed"
       description: "This might have happened because the airline couldn't confirm the seats for this flight on this fare. Sadly it doesn't depend on us. Choose %{other}."
