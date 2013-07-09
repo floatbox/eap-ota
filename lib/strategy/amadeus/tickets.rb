@@ -63,6 +63,8 @@ module Strategy::Amadeus::Tickets
   def amadeus_ticket(office_id)
     ::Amadeus.session(office_id) do |amadeus|
       amadeus.pnr_retrieve(:number => @order.pnr_number).or_fail!
+      # отправляем в очередь для получения данных о визе в америку
+      amadeus.cmd('QE8C21') if @order.needs_visa_notification?
       # пересоздаем TST и сверяем цены
       # не выписываем, если цены изменились
       pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @order.commission_carrier).or_fail!
@@ -89,6 +91,9 @@ module Strategy::Amadeus::Tickets
       if m = pnr_text.match(/^ \s* (\d+) \s+ FM /x)
         amadeus.cmd("XE #{m[1]}")
       end
+
+      # отправляем в очередь для получения данных о визе в америку
+      amadeus.cmd('QE8C21') if @order.needs_visa_notification?
 
       # даем доступы для наших офисов
       # TODO может, при создании брони сразу вбивать оба офиса
