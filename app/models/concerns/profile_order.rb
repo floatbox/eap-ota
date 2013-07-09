@@ -96,12 +96,17 @@ module ProfileOrder
   end
 
   def profile_tickets
-    tickets.where(:kind=>'ticket').where('id NOT IN ' + profile_ticket_parents)
+    parents = profile_ticket_parents
+    if parents
+      tickets.where(:kind=>'ticket').where('status <> "exchanged" OR id NOT IN ' + parents)
+    else
+     tickets.where(:kind=>'ticket')
+    end
   end
 
   def profile_ticket_parents
-    ids = tickets.pluck(:parent_id)
-    '(' + ids.compact.join(',') + ')'
+    ids = tickets.pluck(:parent_id).compact
+    !ids.empty? ? '(' + ids.compact.join(',') + ')' : nil
   end
 
   def profile_arrival_date
