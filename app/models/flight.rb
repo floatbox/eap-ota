@@ -62,6 +62,16 @@ class Flight
       departure.tz.local_to_utc(DateTime.strptime( departure_date + departure_time, '%d%m%y%H%M' )).to_time
   end
 
+  def departure_datetime
+    offset = departure.tz.utc_to_local(departure_datetime_utc) - departure_datetime_utc
+    departure_datetime_utc.getlocal(offset)
+  end
+
+  def arrival_datetime
+    offset = arrival.tz.utc_to_local(arrival_datetime_utc) - arrival_datetime_utc
+    arrival_datetime_utc.getlocal(offset)
+  end
+
   def duration
     @duration ||= (arrival_datetime_utc.to_i - departure_datetime_utc.to_i) / 60 rescue 0
   end

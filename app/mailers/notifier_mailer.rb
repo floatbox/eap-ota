@@ -3,6 +3,7 @@ class NotifierMailer < ActionMailer::Base
   helper :pricer
   helper :booking
   helper :baggage
+  helper :google_now
   helper :hotels
   layout 'pnr'
 

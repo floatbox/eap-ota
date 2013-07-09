@@ -1,8 +1,11 @@
 # encoding: utf-8
 class PNRMailer < ActionMailer::Base
+  # FIXME Вместо него используется NotifierMailer
   helper :pricer
   helper :booking
   helper :baggage
+  helper :google_now
+  helper :hotels
   layout 'pnr'
 
   add_template_helper(ApplicationHelper)
