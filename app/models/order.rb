@@ -292,7 +292,8 @@ class Order < ActiveRecord::Base
       :delivery,
       :last_pay_time,
       :partner,
-      :marker
+      :marker,
+      :needs_visa_notification
 
     copy_attrs recommendation, self,
       :source,
