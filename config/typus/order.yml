@@ -77,6 +77,7 @@ Order:
       - display_fee_details
       - auto_ticket
       - no_auto_ticket_reason
+      - needs_visa_notification
     form:
       - section_general_info
       - description
