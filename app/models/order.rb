@@ -182,6 +182,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def create_visa_notice
+    if needs_visa_notification? && ticket_status == 'ticketed'
+      notifications.new.create_visa_notice
+    end
+  end
+
   def baggage_array
     return [] unless sold_tickets.all?{|t| t.baggage_info.present?}
     sold_tickets.map do |t|
@@ -547,6 +553,8 @@ class Order < ActiveRecord::Base
       recalculate_prices
     end
     create_ticket_notice
+    create_visa_notice if needs_visa_notification?
+    true
   end
 
   def update_price_with_payment_commission_in_tickets

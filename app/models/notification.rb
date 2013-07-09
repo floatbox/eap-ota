@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 class Notification < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::TextHelper
@@ -91,11 +92,10 @@ class Notification < ActiveRecord::Base
   end
 
   def create_visa_notice
-    message = PNRMailer.visa_notice()
-    self.attach_pnr = false
-    self.subject = message.subject
-    self.comment = message.body.to_s
-    self.status = 'delayed'
+    self.attach_pnr = true
+    self.subject = 'Информация о визе для вашего авиабилета'
+    self.format = 'ticket'
+    self.comment = CustomTemplate.new.render(:template => "notifications/visa_notice")
     save
   end
 
