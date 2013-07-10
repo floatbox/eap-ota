@@ -4,145 +4,74 @@ module Amadeus
 
     module FareMasterPricerTravelBoardSearchSax
 
-      # ======
-      class ErrorMessage
-        include SAXMachine
-        element :description, :as => :message
-        element :error, :as => :code
-      end
-      # ======
-
-      class SegmentFlightRef
-        include SAXMachine
-
-        elements :refQualifier, :as => :ref_qualifiers
-        elements :refNumber, :as => :ref_numbers
-      end
-      # ======
-
-      class TStopDetails
-        include SAXMachine
-
-        element :locationId, :as => :location_iata
-        element :firstTime, :as => :departure_time
-        element :date, :as => :departure_date
-        element :dateQualifier, :as => :qualifier
-      end
-
-      class TStop
-        include SAXMachine
-
-        elements :stopDetails, :as => :details, :class => TStopDetails
-      end
-
-      class EndpointsInfo
-        include SAXMachine
-
-        element :locationId, :as => :location_id
-        element :terminal, :as => :terminal
-      end
-      
-      class FlightInformation
-        include SAXMachine
-
-        element :operatingCarrier, :as => :operating_carrier
-        element :marketingCarrier, :as => :marketing_carrier
-        # для locationId и terminal первый элемент это iata и терминал вылета, второй - прилета
-        element :flightNumber, :as => :flight_number
-        element :dateOfArrival, :as => :arrival_date
-        element :timeOfArrival, :as => :arrival_time
-        element :dateOfDeparture, :as => :departure_date
-        element :timeOfDeparture, :as => :departure_time
-        element :equipmentType, :as => :equipment_type
-
-        elements :location, :as => :endpoints_info, :class => EndpointsInfo
-      end
-
-      class FlightProposal
-        include SAXMachine
-        element :ref
-        element :unitQualifier
-      end
-
-      class FlightDetails
-        include SAXMachine
-
-        element :flightInformation, :as => :flight_information, :class => FlightInformation
-        elements :technicalStop, :as => :technical_stops, :class => TStop
-      end
-
-      class GroupOfFlights
-        include SAXMachine
-
-        elements :flightProposal, :as => :flight_proposals, :class => FlightProposal
-        elements :flightDetails, :as => :flight_details, :class => FlightDetails
-      end
-
-      class FlightIndex
-        include SAXMachine
-
-        elements :groupOfFlights, :as => :groups, :class => GroupOfFlights
-      end
-
-      # =====
-
-      class CarrierIATA
-        include SAXMachine
-        elements :company, :as => :companies
-        elements :transportStageQualifier, :as => :qualifiers
-        # qualifier == 'V' -> validating_carrier_iata
-        # else -> marketing_carrier_iata
-      end
-
-      class Fare
-        include SAXMachine
-
-        elements :textSubjectQualifier, :as => :qualifiers
-        elements :description, :as => :descriptions
-      end
-
-      class ProductInformation
-        include SAXMachine
-
-        element :cabin
-        element :rbd, :as => :booking_class
-        element :avlStatus, :as => :availability
-        element :passengerType, :as => :passenger_type
-      end
-
-      class FareDetails
-        include SAXMachine
-
-        element :segRef, :as => :seg_ref
-
-        elements :productInformation, :as => :product_information, :class => ProductInformation
-      end
-
-      class PaxFareProduct
-        include SAXMachine
-
-        element :ptc
-        elements :fareDetails, :as => :fare_details, :class => FareDetails
-        elements :codeShareDetails, :as => :carrier_iatas, :class => CarrierIATA
-        elements :traveller, :as => :travellers
-        elements :fare, :as => :fares, :class => Fare
-      end
-
-      class FlightRecommendation
-        include SAXMachine
-
-        elements :ptc, :as => :ptcs
-        elements :paxFareProduct, :as => :pax_fare_products, :class => PaxFareProduct
-        elements :amount, :as => :amounts
-        elements :segmentFlightRef, :as => :segment_flight_refs, :class => SegmentFlightRef
-      end
-
       class XMLResponse
-        include SAXMachine
+        include CompactSAXMachine
 
-        element :error, :class => ErrorMessage
-        elements :recommendation, :as => :recommendations, :class => FlightRecommendation
-        elements :flightIndex, :as => :flight_indexes, :class => FlightIndex
+        element :error do
+          element :description, :as => :message
+          element :error, :as => :code
+        end
+        elements :recommendation, :as => :recommendations do
+          elements :ptc, :as => :ptcs
+          elements :paxFareProduct, :as => :pax_fare_products do
+            element :ptc
+            elements :fareDetails, :as => :fare_details do
+              element :segRef, :as => :seg_ref
+              elements :productInformation, :as => :product_information do
+                element :cabin
+                element :rbd, :as => :booking_class
+                element :avlStatus, :as => :availability
+                element :passengerType, :as => :passenger_type
+              end
+            end
+            elements :codeShareDetails, :as => :carrier_iatas do
+              elements :company, :as => :companies
+              elements :transportStageQualifier, :as => :qualifiers
+            end
+            elements :traveller, :as => :travellers
+            elements :fare, :as => :fares do
+              elements :textSubjectQualifier, :as => :qualifiers
+              elements :description, :as => :descriptions
+            end
+          end
+          elements :amount, :as => :amounts
+          elements :segmentFlightRef, :as => :segment_flight_refs do
+            elements :refQualifier, :as => :ref_qualifiers
+            elements :refNumber, :as => :ref_numbers
+          end
+        end
+        elements :flightIndex, :as => :flight_indexes do
+          elements :groupOfFlights, :as => :groups do
+            elements :flightProposal, :as => :flight_proposals do
+              element :ref
+              element :unitQualifier
+            end
+            elements :flightDetails, :as => :flight_details do
+              element :flightInformation, :as => :flight_information do
+                element :operatingCarrier, :as => :operating_carrier
+                element :marketingCarrier, :as => :marketing_carrier
+                element :flightNumber, :as => :flight_number
+                element :dateOfArrival, :as => :arrival_date
+                element :timeOfArrival, :as => :arrival_time
+                element :dateOfDeparture, :as => :departure_date
+                element :timeOfDeparture, :as => :departure_time
+                element :equipmentType, :as => :equipment_type
+                elements :location, :as => :endpoints_info do
+                  element :locationId, :as => :location_id
+                  element :terminal, :as => :terminal
+                end
+              end
+              elements :technicalStop, :as => :technical_stops do
+                elements :stopDetails, :as => :details do
+                  element :locationId, :as => :location_iata
+                  element :firstTime, :as => :departure_time
+                  element :date, :as => :departure_date
+                  element :dateQualifier, :as => :qualifier
+                end
+              end
+            end
+          end
+        end
       end
 
       # sax
@@ -240,6 +169,7 @@ module Amadeus
         Flight.new(
           operating_carrier_iata: info.operating_carrier,
           marketing_carrier_iata: info.marketing_carrier,
+          # для locationId и terminal первый элемент это iata и терминал вылета, второй - прилета
           departure_iata: info.endpoints_info.first.location_id,
           departure_term: info.endpoints_info.first.terminal,
           arrival_iata: info.endpoints_info.second.location_id,
@@ -289,6 +219,8 @@ module Amadeus
       end
 
       def carrier_iatas_sax(pax_fare_product)
+        # qualifier == 'V' -> validating_carrier_iata
+        # else -> marketing_carrier_iata
         carrier_iatas = pax_fare_product.carrier_iatas
         marketing_carrier_iatas = carrier_iatas.flat_map(&:companies)
         qualifiers = carrier_iatas.flat_map(&:qualifiers)
