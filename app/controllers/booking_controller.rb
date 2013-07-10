@@ -156,7 +156,7 @@ class BookingController < ApplicationController
       else
         strategy = Strategy.select(:order => @order)
 
-        unless strategy.delayed_ticketing?
+        if  !strategy.delayed_ticketing?
           logger.info "Pay: ticketing"
 
           unless strategy.ticket
@@ -164,6 +164,10 @@ class BookingController < ApplicationController
             logger.info "Pay: ticketing failed"
             @error_message = :ticketing
             @order.unblock!
+          end
+        else
+          if @order.ok_to_auto_ticket?
+            AutoTicketStuff.new(order: @order).create_auto_ticket_job
           end
         end
       end
