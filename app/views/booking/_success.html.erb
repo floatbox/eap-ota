@@ -20,7 +20,7 @@
 </div>
 
 <% ostrovok_url = ostrovok_link(@order_form) %>
-<% insurance_url = cherehapa_insurance_uri(@order_form) %>
+<% insurance_url = sravnikupi_insurance_uri(@order_form) %>
 <% tripster_url = tripster_link(@order_form) %>
 <% weatlas_url = weatlas_link(@order_form) unless tripster_url %>
 
@@ -44,9 +44,8 @@
     <% if insurance_url %>
     <div class="bfrs-insurance">
 
-        <iframe src="<%= insurance_url %>" style="border: none; width: 197px; height: 200px;">
+        <!--<iframe src="<%= insurance_url %>" style="border: none; width: 197px; height: 210px;">-->
 
-        <!--
         <h5 class="bfrsa-title">Туристическая страховка</h5>
         <ul class="bfrsa-features">
             <li class="bfrsa-feature">Электронный полис</li>
@@ -58,7 +57,6 @@
             <a class="bfrsa-link" href="<%= insurance_url %>" target="_blank">Выбрать<br>и&nbsp;купить полис</a>
         </div>
         <div class="bfrsa-partner">Совместно с партнером Sravnikupi.ru</div>
-        -->
 
     </div>
     <% end %>
