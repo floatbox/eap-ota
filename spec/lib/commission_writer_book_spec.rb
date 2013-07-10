@@ -21,6 +21,9 @@ describe Commission::Writer::Book do
       agent "продолжается и здесь"
       subagent "* Какой-то текст со странными правками"
       subagent "продолжается и здесь"
+      classes :business, :economy
+      subclasses "ABCDEFGH"
+      routes "MOW...US/ALL", "MOW-PAR-MOW"
       consolidator "2%"
       blanks "50"
       discount "4%"

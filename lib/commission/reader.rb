@@ -157,7 +157,7 @@ class Commission::Reader
   end
 
   # пока принимает уже готовый массив
-  def routes routes
+  def routes *routes
     opts[:routes] = routes
   end
 

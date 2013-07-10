@@ -39,7 +39,7 @@ class Commission::Writer::Rule
     end
 
     if @rule.routes
-      str << %[subclasses #{@rule.routes.map(&:inspect).join(", ")}\n]
+      str << %[routes #{@rule.routes.map(&:inspect).join(", ")}\n]
     end
 
     str << %[important!\n] if @rule.important
