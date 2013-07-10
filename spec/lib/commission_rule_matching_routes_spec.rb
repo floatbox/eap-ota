@@ -57,7 +57,23 @@ describe Commission::Rule::Matching do
     end
 
     describe "ellipsis (...)" do
-      pending
+      describe 'simple case' do
+        subject {'...MOW...'}
+        it {should match_route('PAR-MOW-PAR')}
+        it {should match_route('MOW-PAR')}
+        it {should match_route('MOW-PAR-MOW')}
+      end
+      describe 'simple case #2' do
+        subject {'LED...MOW'}
+        it {should match_route('LED-MOW')}
+        it {should match_route('LED-EKB-UFA-MOW')}
+        it {should_not match_route('LED-MOW-LED')}
+      end
+      describe 'with modifiers' do
+        subject {'LED...MOW/RT'}
+        it {should_not match_route('LED-UFA-MOW')}
+        it {should match_route('LED-MOW-UFA-LED')}
+      end
     end
 
     describe "comma enumerations" do

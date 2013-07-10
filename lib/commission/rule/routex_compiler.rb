@@ -41,17 +41,30 @@ class Commission::Rule::RoutexCompiler
         end
 
       if regex_needed?
-        Regexp.compile(
-          '^' +
+        regexp_tokens =
           compiled_tokens.collect do |token|
-            if token[',']
+            if token == '...'
+              '.*?'
+            elsif token[',']
               '(' + token.split(',').join('|') + ')'
             else
               token
             end
-          end.join +
-          '$'
-        )
+          end
+
+        if regexp_tokens.first == '.*?'
+          regexp_tokens.shift
+        else
+          regexp_tokens.unshift '^'
+        end
+
+        if regexp_tokens.last == '.*?'
+          regexp_tokens.pop
+        else
+          regexp_tokens.push '$'
+        end
+
+        Regexp.compile( regexp_tokens.join )
       else
         compiled_tokens.join
       end
