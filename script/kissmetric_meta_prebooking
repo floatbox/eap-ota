@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+# скрипт для подсчета фейлов пребукинга по авиакомпаниям, на вход принимает csv из киссметрики
+# bundle exec rails runner script/kissmetric_meta_prebooking input.csv
+
+require 'csv'
+
+filename = ARGV.last
+
+acc = Hash.new(0)
+
+CSV.foreach(filename) do |url, visits, fails|
+  fails = fails.to_i
+  query = url.split(%r{/}).last
+  if fails.to_i.nonzero? && query =~ /(\w+)(?:#|\?)(.*)/
+    query_key = $1
+    query_params = $2
+
+    begin
+      recommendation_key = query_params.match(/recommendation=([a-zA-Z0-9\.]+)/).captures.first
+      recommendation = Recommendation.deserialize(recommendation_key)
+    rescue NoMethodError => error
+      #$stderr.puts error
+      next
+    end
+
+    carrier_iata = recommendation.validating_carrier_iata
+    carrier = Carrier[carrier_iata]
+    en_longname = carrier.en_longname
+    ru_longname = carrier.ru_longname
+    en_shortname = carrier.en_shortname
+    ru_shortname = carrier.ru_shortname
+
+    carrier_key = [carrier_iata, en_longname, en_shortname, ru_longname, ru_shortname]
+    acc[carrier_key] += fails
+  end
+end
+
+sorted = acc.sort_by { |k,v| v }
+CSV($stdout) do |csv_out|
+  sorted.reverse.each do |pair|
+    csv_out << pair.flatten(1)
+  end
+end

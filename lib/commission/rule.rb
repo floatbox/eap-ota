@@ -58,7 +58,11 @@ class Commission::Rule
   # маршруты, на которых применимо правило.
   # @note FIXME никто не использует. научить!
   # @return [Array<String>]
-  attr_accessor :routes
+  attr_reader :routes
+
+  # скомпилированные до регексов маршруты
+  # @return [Array<String,Regexp>]
+  attr_reader :compiled_routes
 
   # последнее средство сравнения - текст блока на ruby.
   # будет выполнен в контексте рекомендации.
@@ -145,6 +149,13 @@ class Commission::Rule
   def examples=(example_array)
     @examples = example_array.collect do |code, source|
       Commission::Example.new( code: code, source: source, commission: self )
+    end
+  end
+
+  def routes=(routex_array)
+    @routes = routex_array
+    @compiled_routes = routex_array.flat_map do |routex|
+      Commission::Rule::RoutexCompiler.new(routex).compiled
     end
   end
 

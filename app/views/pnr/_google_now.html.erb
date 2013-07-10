@@ -1,0 +1,40 @@
+<div style="display:none;" itemscope itemtype="http://schema.org/ReservationPackage">
+  <% pnr.flights.each do |flight| %>
+    <% passengers.each do |person| %>
+      <div  itemscope itemprop="reservation" itemtype="http://schema.org/FlightReservation">
+
+        <meta itemprop="reservationNumber" content="<%= pnr.number %>" />
+        <meta itemprop="ticketNumber" content="<%= person.tickets.first.number_with_code %>" />
+
+        <div itemscope  itemprop="underName" itemtype="http://schema.org/Person">
+          <meta itemprop="givenName" content="<%= person.first_name %>" />
+          <meta itemprop="familyName" content="<%= person.last_name %>" />
+        </div>
+
+        <div itemscope itemprop="reservationFor"  itemtype="http://schema.org/Flight">
+          <meta itemprop="flightNumber"content="<%= flight.flight_number %>" />
+          <meta itemprop="departureTime" content="<%= flight.departure_datetime.iso8601 %>" />
+          <meta itemprop="arrivalTime" content="<%= flight.arrival_datetime.iso8601 %>" />
+          <% if flight.departure_term.present? %>
+            <meta itemprop="departureTerminal"content="<%= flight.departure_term %>" />
+          <% end %>
+
+          <div itemscope itemprop="airline"  itemtype="http://schema.org/Airline" />
+            <meta itemprop="iataCode" content="<%= flight.marketing_carrier_iata %>" />
+            <meta itemprop="name" content="<%= flight.marketing_carrier.en_shortname %>" />
+          </div>
+
+          <div itemscope itemprop="departureAirport"  itemtype="http://schema.org/Airport">
+            <meta itemprop="iataCode" content="<%= flight.departure_iata %>" />
+            <meta itemprop="name" content="<%= flight.departure.name_en %>" />
+          </div>
+
+          <div itemscope itemprop="arrivalAirport"  itemtype="http://schema.org/Airport">
+            <meta itemprop="iataCode" content="<%= flight.arrival_iata %>" />
+            <meta itemprop="name" content="<%= flight.arrival.name_en %>" />
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</div>

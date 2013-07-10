@@ -151,17 +151,19 @@ module Amadeus
 
         parsed.recommendations.map do |recommendation|
 
-          # booking_classes/availabilities/cabins
-          pax_fare_product = recommendation.pax_fare_products.find { |pfp| pfp.ptc == 'ADT' }
-          details = pax_fare_product.fare_details
-
-          blank_count = recommendation.pax_fare_products.collect(&:travellers).flatten(1).size
+          blank_count = recommendation.pax_fare_products.flat_map(&:travellers).size
           price_total = recommendation.amounts.first.to_f
           price_tax = recommendation.amounts.last.to_f
           price_fare = price_total - price_tax
-          cabins = cabins_sax(details)
-          booking_classes = booking_classes_sax(details)
-          availabilities = availabilities_sax(details)
+
+          # booking_classes/availabilities/cabins
+          pax_fare_product = recommendation.pax_fare_products.find { |pfp| pfp.ptc == 'ADT' }
+          # FIXME нужна ли тут вторая проверка на ADT? passengerType может отличаться от ptc?
+          product_informations = pax_fare_product.fare_details.flat_map(&:product_information).select { |inf| inf.passenger_type == 'ADT' }
+          cabins = product_informations.map(&:cabin)
+          booking_classes = product_informations.map(&:booking_class)
+          availabilities = product_informations.map(&:availability)
+
           validating_carrier_iata, marketing_carrier_iatas = carrier_iatas_sax(pax_fare_product)
           last_tkt_date = last_tkt_date_sax(pax_fare_product)
           additional_info = additional_info_sax(pax_fare_product)
@@ -277,24 +279,6 @@ module Amadeus
         )
       end
 
-      def cabins_sax(details)
-        info = details.collect(&:product_information).flatten(1)
-        info.select! { |inf| inf.passenger_type == 'ADT' }
-        info.collect(&:cabin)
-      end
-
-      def booking_classes_sax(details)
-        info = details.collect(&:product_information).flatten(1)
-        info.select! { |inf| inf.passenger_type == 'ADT' }
-        info.collect(&:booking_class)
-      end
-
-      def availabilities_sax(details)
-        info = details.collect(&:product_information).flatten(1)
-        info.select! { |inf| inf.passenger_type == 'ADT' }
-        info.collect(&:availability)
-      end
-
       def additional_info_sax(pax_fare_product)
         fares = pax_fare_product.fares
         descriptions = fares.collect(&:descriptions)
@@ -306,8 +290,8 @@ module Amadeus
 
       def carrier_iatas_sax(pax_fare_product)
         carrier_iatas = pax_fare_product.carrier_iatas
-        marketing_carrier_iatas = carrier_iatas.map(&:companies).flatten(1)
-        qualifiers = carrier_iatas.map(&:qualifiers).flatten(1)
+        marketing_carrier_iatas = carrier_iatas.flat_map(&:companies)
+        qualifiers = carrier_iatas.flat_map(&:qualifiers)
 
         validating_carrier_iata = nil
         qualifiers.zip(marketing_carrier_iatas) do |qualifier, company|
@@ -348,9 +332,6 @@ module Amadeus
       end
 
       private :parsed,
-        :booking_classes_sax,
-        :cabins_sax,
-        :availabilities_sax,
         :additional_info_sax,
         :technical_stop_sax,
         :parse_flights_sax,
