@@ -22,8 +22,10 @@ class Commission::Rule::RoutexCompiler
     end
   end
 
+  # проверка на наличие перечислений, "любых городов" и стран на маршруте
+  # иначе достаточно простого текстового сравнения
   def regex_needed?
-    @body[','] || @body['...']
+    @body[','] || @body['...'] || @body =~ /\b\w{2}\b/
   end
 
   def compiled
@@ -43,12 +45,17 @@ class Commission::Rule::RoutexCompiler
       if regex_needed?
         regexp_tokens =
           compiled_tokens.collect do |token|
-            if token == '...'
-              '.*?'
-            elsif token[',']
-              '(' + token.split(',').join('|') + ')'
-            else
+            if token == '-'
               token
+            elsif token == '...'
+              '.*?'
+            else
+              alts = token.split(',').flat_map {|token| expand_aliases(token)}
+              if alts.size == 1
+                alts.first
+              else
+                '(' + alts.join('|') + ')'
+              end
             end
           end
 
@@ -69,6 +76,19 @@ class Commission::Rule::RoutexCompiler
         compiled_tokens.join
       end
 
+    end
+  end
+
+  private
+
+  def expand_aliases(token)
+    if token.size == 3
+      # город
+      return token
+    elsif token.size == 2
+      return Country[token].city_iatas
+    else
+      raise ArgumentError, "#{@source.inspect} contains  unknown subtoken #{token}"
     end
   end
 end

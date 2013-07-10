@@ -12,6 +12,10 @@ describe Commission::Rule::Matching do
         @rule = Commission::Rule.new(routes: [routex])
         @rule.applicable_routes?(@recommendation)
       end
+
+      failure_message_for_should do |routex|
+        "expected that #{routex.inspect} would match #{route.inspect}, compiled_routes: #{@rule.compiled_routes.inspect}"
+      end
     end
 
     describe 'simple routes' do
@@ -92,6 +96,19 @@ describe Commission::Rule::Matching do
         it {should match_route('LED-PAR')}
         it {should_not match_route('PAR-MOW')}
         it {should match_route('MOW-PAR-LED')}
+      end
+    end
+
+    describe "countries" do
+      describe 'simple case' do
+        subject {'RU-PAR'}
+        it {should match_route('MOW-PAR')}
+        it {should_not match_route('PAR-MOW-PAR')}
+      end
+      describe 'mixed case' do
+        subject {'US...RU/OW,RT'}
+        it {should match_route('NYC-PAR-MOW-PAR-NYC')}
+        it {should_not match_route('MOW-NYC')}
       end
     end
 

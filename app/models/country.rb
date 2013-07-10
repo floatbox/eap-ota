@@ -54,6 +54,10 @@ class Country < ActiveRecord::Base
     City.all(:conditions => ['country_id = ? AND disabled != ?', self.id, true], :order => 'importance DESC', :limit => 5).every.iata
   end
 
+  def city_iatas
+    @city_iatas ||= cities.pluck(:iata).compact
+  end
+
   # FIXME WTF? хотя бы iata коды использовать. не айдишники из базы!1
   def self.options_for_nationality_select
     [ ['', [['Россия', 170]]],
