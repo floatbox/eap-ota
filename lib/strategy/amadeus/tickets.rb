@@ -63,8 +63,6 @@ module Strategy::Amadeus::Tickets
   def amadeus_ticket(office_id)
     ::Amadeus.session(office_id) do |amadeus|
       amadeus.pnr_retrieve(:number => @order.pnr_number).or_fail!
-      # отправляем в очередь для получения данных о визе в америку
-      amadeus.cmd('QE8C21') if @order.needs_visa_notification?
       # пересоздаем TST и сверяем цены
       # не выписываем, если цены изменились
       pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @order.commission_carrier).or_fail!
@@ -76,6 +74,9 @@ module Strategy::Amadeus::Tickets
         amadeus.pnr_commit_and_retrieve.or_fail!
       end
       amadeus.doc_issuance_issue_ticket.or_fail!
+
+      # отправляем в очередь для получения данных о визе в америку
+      amadeus.cmd('QE8C21') if @order.needs_visa_notification?
     end
   end
 
@@ -92,12 +93,12 @@ module Strategy::Amadeus::Tickets
         amadeus.cmd("XE #{m[1]}")
       end
 
-      # отправляем в очередь для получения данных о визе в америку
-      amadeus.cmd('QE8C21') if @order.needs_visa_notification?
-
       # даем доступы для наших офисов
       # TODO может, при создании брони сразу вбивать оба офиса
       amadeus.cmd("ES/G MOWR2233B-B, MOWR228FA-B")
+
+      # отправляем в очередь для получения данных о визе в америку
+      amadeus.cmd('QE8C21') if @order.needs_visa_notification?
 
       # дальше полные права на американский офис,
       amadeus.cmd("RP/NYC1S21HX/ALL")
