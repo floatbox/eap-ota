@@ -593,19 +593,19 @@
     position: absolute;
     top: 18px;
     left: -16px;
-    width: 15px;
+    width: 14px;
     height: 2000px;
     border: 1px solid #FFF;
-    border-width: 1px 0 0 1px;
+    border-width: 2px 0 0 2px;
 }
 .ob-line {
     position: absolute;
     top: 0;
     left: -16px;
-    width: 15px;
+    width: 14px;
     height: 26px;
     border: 1px solid #FFF;
-    border-width: 0 0 1px 1px;
+    border-width: 0 0 2px 2px;
 }
 .ob-overlay {
     position: absolute;
