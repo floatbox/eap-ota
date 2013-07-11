@@ -30,6 +30,7 @@ class AutoTicketStuff
     !order.email['hotmail']  or return 'название почтового ящика содержит hotmail'
     !order.email['yahoo']  or return 'название почтового ящика содержит yahoo'
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
+    no_dupe_orders? or return 'dupe'
     (Order.where(email: order.email, ticket_status: ['booked', 'ticketed', 'processing_ticket', 'error_ticket']).where('created_at > ?', Time.now - 6.hours).count < 2) or return 'пользователь совершил 1 успешный заказ ранее'#текущий заказ уже попадает в count
     people.map{|p| [p.first_name, p.last_name]}.uniq.count == people.count or return 'есть 2 пассажира с совпадающими именем и фамилией'
     nil
@@ -37,5 +38,20 @@ class AutoTicketStuff
 
   def create_auto_ticket_job
     Delayed::Job.enqueue AutoTicketJob.new(order_id: order.id), run_at: 30.minutes.from_now
+  end
+
+  def passenger_names(o)
+    o.full_info.split("\n").map do |t|
+      t.split('/')[0..1].join(' ')
+    end.sort
+  end
+
+  def no_dupe_orders?
+    Order.where(departure_date: order.departure_date,
+      route: order.route,
+      ticket_status: ['booked', 'ticketed', 'processing_ticket', 'error_ticket'],
+      commission_carrier: order.commission_carrier).select do |o|
+        passenger_names(o) == passenger_names(order)
+      end.count == 1
   end
 end
