@@ -51,6 +51,7 @@ gem "every"
 gem "memoize"
 gem 'morpher_inflect'
 gem 'russian'
+gem 'unicode'
 #gem 'graticule'
 gem 'mysql2'
 gem 'paper_trail'
