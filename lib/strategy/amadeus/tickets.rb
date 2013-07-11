@@ -44,6 +44,7 @@ module Strategy::Amadeus::Tickets
     # Для выписки в американском офисе нужно убедится, что текуший офис - 2233
     raise Strategy::TicketError, 'Заказ не в состоянии booked' unless @order.ticket_status == 'booked'
     @order.update_attributes :ticket_status => 'processing_ticket'
+    add_to_visa_queue if @order.needs_visa_notification
     case @order.commission_ticketing_method
     when 'aviacenter'
       amadeus_ticket('MOWR2233B')
@@ -75,8 +76,16 @@ module Strategy::Amadeus::Tickets
       end
       amadeus.doc_issuance_issue_ticket.or_fail!
 
-      # отправляем в очередь для получения данных о визе в америку
-      amadeus.cmd('QE8C21') if @order.needs_visa_notification?
+    end
+  end
+
+  def add_to_visa_queue
+    # отправляем в очередь для получения данных о визе в америку
+    ::Amadeus.booking do |amadeus|
+      if @order.needs_visa_notification?
+        amadeus.pnr_retrieve(:number => @order.pnr_number).or_fail!
+        amadeus.cmd('QE8C21') if @order.needs_visa_notification?
+      end
     end
   end
 
@@ -96,9 +105,6 @@ module Strategy::Amadeus::Tickets
       # даем доступы для наших офисов
       # TODO может, при создании брони сразу вбивать оба офиса
       amadeus.cmd("ES/G MOWR2233B-B, MOWR228FA-B")
-
-      # отправляем в очередь для получения данных о визе в америку
-      amadeus.cmd('QE8C21') if @order.needs_visa_notification?
 
       # дальше полные права на американский офис,
       amadeus.cmd("RP/NYC1S21HX/ALL")
