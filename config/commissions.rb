@@ -1,47 +1,23 @@
-carrier "SU", "Aeroflot", start_date: "2013-06-01"
-########################################
-
-example "svocdg"
-example "svocdg cdgsvo"
-example "svocdg/su cdgsvo/ab"
-agent "4% от тарифа на собств. рейсы SU, вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам;"
-subagent "3% от тарифа на собств. рейсы SU, вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам;"
-interline :no, :yes
-ticketing_method "aviacenter"
-discount "3%"
-commission "4%/3%"
-
-example "cdgsvo/ab"
-agent "1.3. На рейсы других авиакомпаний по соглашениям «Интерлайн» при продаже перевозок без комбинации с рейсом под кодом «SU»:"
-agent "- 1 евро по курсу GDS на день выписки авиабилета) за авиаперевозку  (в рублевом эквиваленте, исчисляемом по расчетному курсу, установленному ОАО «Аэрофлот» на день оформления авиабилета с округлением до целого числа в большую сторону);"
-agent "- 1 евро по курсу GDS на день выписки авиабилета) при переоформлении авиабилета с доплатой по тарифу (в рублевом эквиваленте, исчисляемом по расчетному курсу, установленному ОАО «Аэрофлот» на день оформления  авиабилета с округлением до целого числа в большую сторону); "
-subagent "• на рейсы Interline без комбинации с рейсом под кодом «SU»:"
-subagent "5 (пять) руб. с авиабилета (в т.ч. при переоформлении авиабилета с доплатой по тарифу)."
-interline :absent
-ticketing_method "aviacenter"
-#discount '5'
-## our_markup 100
-consolidator "2%"
-commission "1eur/5"
-
-example 'svosip/VV'
-example 'odssvo svoods/VV'
-check %{ includes(city_iatas, 'SIP ODS') }
-interline :no, :yes, :absent
-ticketing_method "aviacenter"
-important!
-no_commission "Катя просила выключить срочно от 14.06.12"
-
-example "svocdg/p"
-agent ""
-subagent ""
-subclasses "P"
-ticketing_method "aviacenter"
-important!
-no_commission "закрыли субсидированные тарифы"
-
 carrier "SU", "Aeroflot", start_date: "2013-07-01"
 ########################################
+
+example 'jfksvo svojfk'
+agent "правила для выписки авиакомпании SU в DTT"
+agent "При вылете из США - все классы - агентская 9%, субагентская 8%, скидка 7%"
+subagent "8%"
+check %{ includes(country_iatas.first, 'US') }
+ticketing_method "downtown"
+discount "7%"
+commission "9%/8%"
+
+example 'cdgsvo svocdg'
+agent "правила для выписки авиакомпании SU в DTT"
+agent "При вылете НЕ из России - все классы - агентская 5%, субагентская   4.5%, скидка 4%"
+subagent "4.5%"
+check %{ not includes(country_iatas.first, 'RU') }
+ticketing_method "downtown"
+discount "4%"
+commission "5%/4.5%"
 
 example "svocdg"
 example "svocdg cdgsvo"
@@ -55,15 +31,16 @@ discount "4%"
 commission "4%/3%"
 
 example "cdgsvo"
-example " cdgsvo/ab svocdg/su"
+example "cdgsvo/ab svocdg/su"
 agent "1 евро с билета на собств. рейсы SU с началом перевозки за пределами РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 subagent "5 (пять) руб. с билета на собств. рейсы SU с началом перевозки за пределами РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 interline :no, :yes
 ticketing_method "aviacenter"
-#discount '5'
-## our_markup 100
+discount '0'
+our_markup '0'
 consolidator "2%"
 check %{ not includes_only(country_iatas.first, 'RU') }
+disabled "Выписываем такое в dtt"
 commission "1eur/5"
 
 example "cdgsvo/ab"
