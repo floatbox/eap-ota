@@ -1546,9 +1546,10 @@ carrier "IB", "IBERIA"
 example 'svocdg cdgsvo'
 agent    "1 руб. с билета на рейсы IB. (Билеты Interline под кодом IB могут быть выписаны только в случае существования опубл. тарифов и только при условии, что IB выполняет первый рейс маршрута."
 subagent "50 коп. с билета на рейсы IB"
-# discount "1.5%"
+discount "0%"
 ticketing_method "aviacenter"
-consolidator "2%"
+consolidator "0%"
+our_markup "2%"
 commission "1/0.5"
 
 carrier "IG", "MERIDIANA (РИНГ-АВИА)"
