@@ -462,7 +462,7 @@ commission "1/0.5"
 example 'cdgsvo/ab'
 no_commission
 
-carrier "AZ", "ALITALIA", start_date: "2013-06-01"
+carrier "AZ", "ALITALIA", start_date: "2013-07-01"
 ########################################
 
 example 'svojfk/v jfksvo/m'
@@ -475,79 +475,12 @@ subclasses "JEDIPYBMHKAVTNSLO"
 check %{ includes(country_iatas, 'RU') and includes(country_iatas, 'US') and includes_only(country_iatas, 'US RU') }
 ticketing_method "downtown"
 discount "5%"
+disabled "отмена повышенной! мега срочно"
 commission "8%/6%"
-
-example 'svolin/business'
-example 'ledlin/business linled/business'
-example 'ievfco/business'
-example 'ievlin/business'
-example 'tbsfco/business fcotbs/business'
-example 'evnfco/business fcoevn/business'
-agent "5% на БИЗНЕС класс."
-subagent "3% от тарифа на все направления Alitalia (Эконом и Бизнес класса) с началом путешествия из Москвы и Санкт-Петербурга, а также из Киева (из Киева Alitalia летает в Рим (AZ481) и Милан (AZ7469), Тбилиси (из Тбилиси Alitalia летает в Рим (AZ551), Еревана (из Еревана Alitalia летает в Рим (AZ557) (тарифы туда и обратно, а также тарифы в одну сторону, но с вылетом из Москвы или Санкт-Петербурга, Киева, Тбилиси или Еревана). Повышенная комиссия не применяется, если начало путешествия не из этих городов. На рейсы code-share комиссия не применяется (за исключением code-share с AP/VE/XM/CT)"
-classes :business
-check %{
-  includes_only(operating_carrier_iatas, 'AZ VE XM CT') and
-  ( includes(city_iatas.first, 'MOW LED SVX') or
-    (includes(city_iatas.first, 'IEV') and includes_only(city_iatas, 'IEV ROM MIL')) or
-    (includes(city_iatas.first, 'TBS') and includes_only(city_iatas, 'TBS ROM')) or
-    (includes(city_iatas.first, 'EVN') and includes_only(city_iatas, 'EVN ROM'))
-  )
-}
-ticketing_method "aviacenter"
-discount "3%"
-commission "5%/3%"
 
 example 'svolin/az565 linsvo/AZ560'
 example 'svolin/az565 linsvo/AZ560 svocdg'
 example 'svolin/az565 linsvo/AZ564'
-agent "4% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
-agent "с обязательным наличием в маршруте рейса Москва-Милан AZ565 или AZ56 и обязательным наличием в маршруте рейса Милан-Москва AZ560 и AZ564."
-subagent "2% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
-classes :economy
-check %{ includes(flights.every.full_flight_number, %W(AZ565 AZ56)) and includes(flights.every.full_flight_number, %W(AZ560 AZ564)) }
-ticketing_method "aviacenter"
-discount "2%"
-commission "4%/2%"
-
-example 'mrucdg'
-example 'mrucdg cdgmru'
-agent    "1 euro. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
-subagent "5 руб. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
-ticketing_method "aviacenter"
-our_markup "0.2%"
-commission "1eur/5"
-
-example 'svocdg cdgsvo/ab'
-agent    "1 euro с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
-subagent "5 руб. с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
-interline :first
-ticketing_method "aviacenter"
-our_markup "0.2%"
-commission "1eur/5"
-
-example 'svocdg/ab cdgsvo'
-no_commission
-
-carrier "AZ", "ALITALIA", start_date: "2013-07-01"
-########################################
-
-# example 'svojfk/v jfksvo/m'
-# example 'jfksvo/o'
-agent "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
-agent "Если, кратко, то J,E,D,I P,Y,B,M,H,K A,V,T,N,S,L,O"
-agent "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
-subagent "6%"
-subclasses "JEDIPYBMHKAVTNSLO"
-check %{ includes(country_iatas, 'RU') and includes(country_iatas, 'US') and includes_only(country_iatas, 'US RU') }
-ticketing_method "downtown"
-discount "5%"
-disabled "отмена повышенной! мега срочно"
-commission "8%/6%"
-
-# example 'svolin/az565 linsvo/AZ560'
-# example 'svolin/az565 linsvo/AZ560 svocdg'
-# example 'svolin/az565 linsvo/AZ564'
 agent "4% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
 agent "с обязательным наличием в маршруте рейса Москва-Милан AZ565 или AZ56 и обязательным наличием в маршруте рейса Милан-Москва AZ560 и AZ564."
 subagent "2% от тарифа ЭКОНОМ КЛАССА на ВСЕ НАПРАВЛЕНИЯ ALITALIA с вылетом из Москвы"
@@ -563,7 +496,8 @@ example 'mrucdg cdgmru'
 agent    "1 euro. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
 subagent "5 руб. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
 ticketing_method "aviacenter"
-our_markup "0.2%"
+our_markup "0%"
+discount "1.5%"
 commission "1eur/5"
 
 example 'svocdg cdgsvo/ab'
@@ -571,7 +505,8 @@ agent    "1 euro с билета по опубл. тарифам на рейсы
 subagent "5 руб. с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 interline :first
 ticketing_method "aviacenter"
-our_markup "0.2%"
+our_markup "0%"
+discount "1.5%"
 commission "1eur/5"
 
 example 'svocdg/ab cdgsvo'
@@ -1549,7 +1484,8 @@ subagent "50 коп. с билета на рейсы IB"
 discount "0%"
 ticketing_method "aviacenter"
 consolidator "0%"
-our_markup "2%"
+our_markup "0%"
+discount "1.5%"
 commission "1/0.5"
 
 carrier "IG", "MERIDIANA (РИНГ-АВИА)"
@@ -1837,7 +1773,7 @@ check %{ includes(country_iatas, 'ES FR IT CZ PT NL CH') }
 interline :no, :yes
 ticketing_method "aviacenter"
 our_markup "0"
-discount "0.5%"
+discount "1.5%"
 commission "1/0.05"
 
 example 'svooko'
@@ -1848,7 +1784,7 @@ subagent "5 коп. с билета по опубл. тарифам на соб�
 interline :no, :yes
 ticketing_method "aviacenter"
 our_markup "0"
-discount "0.5%"
+discount "1.5%"
 commission "1/0.05"
 
 example 'svocdg/LX'
@@ -1862,6 +1798,7 @@ interline :absent
 check %{ includes_only(marketing_carrier_iatas, %W[LX EW CL IQ C3]) }
 ticketing_method "aviacenter"
 our_markup "0"
+discount "1.5%"
 commission "1/0.05"
 
 example 'svocdg/ab'
