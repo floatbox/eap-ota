@@ -81,7 +81,7 @@ module Strategy::Amadeus::Tickets
 
   def add_to_visa_queue
     # отправляем в очередь для получения данных о визе в америку
-    ::Amadeus.booking do |amadeus|
+    ::Amadeus.ticketing do |amadeus|
       if @order.needs_visa_notification?
         amadeus.pnr_retrieve(:number => @order.pnr_number).or_fail!
         amadeus.cmd('QE8C21') if @order.needs_visa_notification?
