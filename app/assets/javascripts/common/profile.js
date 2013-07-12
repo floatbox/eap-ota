@@ -113,23 +113,26 @@ openSignUp: function() {
 initForms: function() {
 
     var that = this;
-    var checkEmail = function(value) {
-        if (!value) return 'Введите адрес электронной почты.';
-        if (/[а-яА-Я]/.test(value)) return 'Адрес электронной почты может содержать только латинские символы.';
-        if (!/^\S+@\S+\.\w+$/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
+    var checkEmail = function(value, full) {
+        if (full) { 
+            if (!value) return 'Введите адрес электронной почты.';
+            if (!/^\S+@\S+\.\w+$/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
+        } else if (value) {
+            if (/[а-яА-Я]/.test(value)) return 'Адрес электронной почты может содержать только латинские символы.';
+        }
     };
 
     var signIn = new profileForm(this.el.find('.phu-signin'));
     signIn.add('#signin-email', checkEmail);
-    signIn.add('#signin-password', function(value) {
-        if (!value) return 'Введите пароль.';
+    signIn.add('#signin-password', function(value, full) {
+        if (full && !value) return 'Введите пароль.';
     });
     signIn.process = function(result) {
         window.location = result.location;
     };
-    signIn.errors['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
-    signIn.errors['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';
-    signIn.errors['failed'] = function() {
+    signIn.messages['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
+    signIn.messages['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';
+    signIn.messages['failed'] = function() {
         var value = $('#signin-password').val();
         var again = value === value.toUpperCase() ? 'Проверьте, не&nbsp;нажата&nbsp;ли клавиша Caps&nbsp;Lock, и&nbsp;попробуйте ещё раз.' : 'Попробуйте еще раз.';
         return 'Неправильная пара логин-пароль. ' + again;
@@ -141,8 +144,8 @@ initForms: function() {
         that.el.find('.phu-signup').closest('.phu-section').hide();
         that.el.find('.phu-signup-result').show();
     };    
-    signUp.errors['exist'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
-    signUp.errors['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
+    signUp.messages['exist'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
+    signUp.messages['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
 
     this.el.find('.phusur-what-link .link').on('click', function() {
         that.el.find('.phusur-what-link').hide();
@@ -162,7 +165,7 @@ initForms: function() {
         that.el.find('.phu-forgot-fields').hide();
         that.el.find('.phu-forgot-result').show();
     };
-    forgot.errors['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';    
+    forgot.messages['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';    
 
     this.el.find('.phufr-what-link .link').on('click', function() {
         that.el.find('.phufr-what-link').hide();
@@ -176,7 +179,7 @@ initForms: function() {
         forgot.button.prop('disabled', false);
     });
     
-    $('#signin-email, #signup-email, #forgot-email').on('correct', function() {
+    $('#signin-email, #signup-email, #forgot-email').on('focus', function() {
         if (this.value && /[а-яА-Я]/.test(this.value)) $(this).val('');
     }).on('change', function() {
         $(this).val($.trim(this.value));
@@ -233,27 +236,31 @@ var profileForm = function(elem) {
     this.elem = elem;
     this.elem.on('submit', function(event) {
         event.preventDefault();
-        if (that.validate()) {
+        if (that.validate(true)) {
             that.send();
         }
     });
-    this.elem.on('correct', function() {
-        that.error();
-    });
     this.process = $.noop;
+    this.error = this.elem.find('.phu-error');
     this.button = this.elem.find('.phu-submit .phu-button').prop('disabled', false);
     this.fields = [];
-    this.errors = {};
+    this.messages = {};
 };
 profileForm.prototype = {
-validate: function() {
-    var error;
+validate: function(full) {
+    this.errors = [];
     for (var i = 0, l = this.fields.length; i < l; i++) {
-        this.fields[i].validate();
-        if (!error) error = this.fields[i].error;
+        var f = this.fields[i];
+        if (full) f.validate(true);
+        if (f.error) this.errors.push(f.error);
     }
-    this.error(error);
-    return !Boolean(error);
+    if (this.errors.length !== 0) {
+        this.error.html(this.errors[0]).show();
+        return false;
+    } else {
+        this.error.hide();
+        return true;
+    }
 },
 send: function() {
     var that = this;
@@ -266,48 +273,47 @@ send: function() {
                 that.process(result);
             } else if (result.errors && result.errors.length) {
                 that.button.prop('disabled', false);
-                that.error(result.errors[0]);
+                that.showError(result.errors[0]);
             }
         }).fail(function(jqXHR, status, message) {
             that.button.prop('disabled', false);
-            that.error(jqXHR.statusText);
+            that.showError(jqXHR.statusText);
         });
         this.button.prop('disabled', true);
     }
 },
 add: function(selector, check) {
-    this.fields.push(new profileField(selector, check));
+    this.fields.push(new profileField(selector, check, this));
 },
-error: function(message) {
-    if (message) {
-        var custom = this.errors[message];
-        this.elem.find('.phu-error').html(typeof custom === 'function' ? custom() : (custom || message)).show();    
-    } else {
-        this.elem.find('.phu-error').hide();
+showError: function(message) {
+    var custom = this.messages[message];
+    this.error.html(typeof custom === 'function' ? custom() : (custom || message)).show();
+    for (var i = this.fields.length; i--;) {
+        this.fields[i].error = ''; // Чтобы при редактировании полей пропало сообщение
     }
 }
 };
 
-var profileField = function(selector, check) {
+var profileField = function(selector, check, form) {
     var that = this;
+    this.form = form;
     this.elem = $(selector);
-    this.elem.on('focus change', function() {
-        if (that.error) {
-            that.elem.removeClass('phuf-error').trigger('correct');
-            that.error = undefined;
+    this.elem.on('input change', function() {
+        var error = that.check(this.value);
+        if (error !== that.error) {
+            that.error = error;
+            that.update();
+            that.form.validate();
         }
-        that.elem.closest('form').trigger('correct');
     });
     this.check = check;
 };
 profileField.prototype = {
-validate: function() {
-    var value = this.elem.val();
-    if (this.error = this.check(value)) {
-        this.elem.addClass('phuf-error');
-    } else {
-        this.elem.removeClass('phuf-error');
-    }
+validate: function(full) {
+    this.error = this.check(this.elem.val(), full);
+},
+update: function() {
+    this.elem.toggleClass('phuf-error', Boolean(this.error));
 }
 };
 
