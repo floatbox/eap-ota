@@ -10,6 +10,13 @@ module Commission::Rule::Matching
     cattr_accessor :skip_interline_validity_check
   end
 
+  # можно ли показывать клиентам и продавать предложения
+  # по данному комиссинному правилу?
+  # TODO Переместить в другой модуль?
+  def sellable?
+    !disabled?
+  end
+
   def disabled?
     disabled || not_implemented || no_commission
   end

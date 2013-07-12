@@ -12,11 +12,11 @@ describe Commission::Book do
     end
 
     it "should return nil when no page for carrier present" do
-      book.find_for(Recommendation.new(validating_carrier_iata: 'ZZ')).should be_nil
+      book.find_for(Recommendation.new(validating_carrier_iata: 'ZZ')).should == Commission::Rule::Null
     end
 
     it "should return nil when no findable commissions on page present" do
-      book.find_for(Recommendation.new(validating_carrier_iata: 'AB')).should be_nil
+      book.find_for(Recommendation.new(validating_carrier_iata: 'AB')).should == Commission::Rule::Null
     end
 
     pending "test normal matching"

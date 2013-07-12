@@ -4,7 +4,7 @@ module Pricing
     attr_accessor :price_fare, :price_tax, :blank_count
 
     delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing_method,
-      :to => :commission, :prefix => :commission, :allow_nil => true
+      :to => :commission, :prefix => :commission
 
     include IncomeSuppliers
 
@@ -77,7 +77,6 @@ module Pricing
     end
 
     def price_agent
-      return 0 unless commission
       commission_agent.call(price_fare, :multiplier =>  blank_count)
     end
 
@@ -87,22 +86,18 @@ module Pricing
     end
 
     def price_consolidator
-      return 0 unless commission
       commission_consolidator.call(price_fare, :multiplier => blank_count)
     end
 
     def price_blanks
-      return 0 unless commission
       commission_blanks.call(price_fare, :multiplier => blank_count)
     end
 
     def price_discount
-      return 0 unless commission
       -commission_discount.call(price_fare, :multiplier => blank_count)
     end
 
     def price_our_markup
-      return 0 unless commission
       commission_our_markup.call(price_fare, :multiplier => blank_count)
     end
 
@@ -116,7 +111,12 @@ module Pricing
     end
 
     def commission
-      @commission ||= Commission.find_for(self)
+      @commission || raise("no commission found yet. run #find_commission!")
+    end
+
+    # пока не придумал для метода места получше
+    def find_commission!(args={})
+      @commission = Commission.find_for(self)
     end
 
     # пытаемся избежать сохранения формул в order_forms_cache

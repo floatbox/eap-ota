@@ -3,6 +3,8 @@ require 'spec_helper'
 
 describe RamblerCache do
 
+  next "выключаю, не пользуемся уже год"
+
   describe '#rambler_data_from_recs' do
 
     before(:each) do

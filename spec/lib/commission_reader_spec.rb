@@ -351,8 +351,8 @@ describe Commission::Reader do
       book.exists_for?(recommendation).should be_true
     }
 
-    it "should not find no_commission rule" do
-      book.find_for(recommendation).should be_nil
+    it "should find no_commission rule" do
+      book.find_for(recommendation).should_not be_sellable
     end
 
     specify {

@@ -43,8 +43,8 @@ class Commission::Book
   ########################
 
   def find_for(recommendation)
-    page = find_page(carrier: recommendation.validating_carrier_iata) or return
-    page.find_rule(recommendation)
+    page = find_page(carrier: recommendation.validating_carrier_iata) or return Commission::Rule::Null
+    page.find_rule(recommendation) or return Commission::Rule::Null
   end
 
   # выбирает активную страницу для
