@@ -8,7 +8,7 @@ module Urls::Search
     CHECKABLE = %w(adults children infants)
     FILLER = Urls::Search::FILLER_CHARACTER
     CABINS = %W{Y M B C F E W #{FILLER}}
-    SEGMENT_SIZE = 13
+    SEGMENT_SIZE = 11
     # основная валидация происходит здесь
     URL_REGEX = /^
       (?<cabin>\w)
@@ -17,12 +17,12 @@ module Urls::Search
       (?<infants>\d)
       (?<segments>(?:[\p{Word}#{FILLER}]{#{SEGMENT_SIZE}}){1,6})$ #\p{Word} матчит и юникодные символы - нужно для сирены
     /xu
-    # явно проверяем наличие филлера третим символом
+    # явно проверяем наличие филлера третьим символом
     IATA_REGEX = /(?:[A-ZА-Я]{2}#{FILLER})|(?:[A-ZА-Я]{3})/
     SEGMENT_REGEX = /
       (?<from_iata>#{IATA_REGEX})
       (?<to_iata>#{IATA_REGEX})
-      (?<date>(?:\d{2}\w{3}\d{2}))
+      (?<date>(?:\d{2}\w{3}))
     /xu
 
     def initialize(url)
@@ -46,7 +46,7 @@ module Urls::Search
 
     def parse(url)
       if r = URL_REGEX.match(::Unicode::upcase(url))
-        @decoded = OpenStruct.new(
+        @decoded = PricerForm.new(
           adults: r[:adults].to_i,
           children: r[:children].to_i,
           infants: r[:infants].to_i,
@@ -58,9 +58,36 @@ module Urls::Search
         false
       end
     rescue => message
-      # TODO убрать puts
-      $stdout.puts "PARSE ERROR: #{message}"
       return false
+    end
+
+    def parse_segments(coded)
+      total_segments = coded.size / SEGMENT_SIZE
+      raw_segments = coded.scan(SEGMENT_REGEX)
+      raise "not all segments are valid" unless total_segments == raw_segments.size
+
+      segments = {}
+
+      raw_segments.each_with_index do |match, index|
+        segments[index.to_s] = {
+          from: decode_iata(match.first),
+          to: decode_iata(match.second),
+          date: decode_date(match.last)
+        }
+
+      end
+      segments
+    end
+
+    def decode_iata(coded_iata)
+      # филлер после проверки регекспом может остаться в конце iata
+      coded_iata.delete! FILLER
+      coded_iata
+    end
+
+    def decode_date(coded_date)
+      d = Date.parse(coded_date)
+      d < Date.today ? d.next_year : d
     end
 
     def check_cabin(code)
@@ -68,19 +95,6 @@ module Urls::Search
         raise "cabin code should be one of [#{CABINS.join(' ' )}] instead of #{code}"
       end
       code
-    end
-
-    def parse_segments(raw_segments)
-      total_segments = raw_segments.size / SEGMENT_SIZE
-      segments = raw_segments.scan(SEGMENT_REGEX)
-      raise "not all segments are valid" unless total_segments == segments.size
-      segments.map do |match|
-        OpenStruct.new(
-          from_iata: match[0],
-          to_iata: match[1],
-          flight_date: Date.parse(match[2])
-        )
-      end
     end
 
   end
