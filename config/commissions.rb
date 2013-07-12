@@ -1174,7 +1174,7 @@ agent "4% (2%) (2%) от опубл. тарифов на собств. (вклю
 subagent "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
 ticketing_method "aviacenter"
-discount "2%"
+discount "3%"
 commission '4%/2%'
 
 example 'svocdg/ab'
@@ -3984,7 +3984,7 @@ subagent "Субагентская комиссия 3%"
 interline :no, :yes
 ticketing_method "direct"
 our_markup "0"
-discount "2.5%"
+discount "4%"
 commission "3%/3%"
 
 # general dtt для горячей замены
