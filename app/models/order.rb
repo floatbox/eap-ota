@@ -236,6 +236,10 @@ class Order < ActiveRecord::Base
     tickets.to_a.select(&:ticketed?).every.number_with_code.join('; ')
   end
 
+  def first_payment_ref
+    secured_payments.first.ref
+  end
+
   def tickets_office_ids_array
     tickets.collect{|t| t.office_id}.uniq
   end
