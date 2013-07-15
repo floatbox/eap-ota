@@ -133,10 +133,18 @@ initForms: function() {
     signIn.messages['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
     signIn.messages['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';
     signIn.messages['failed'] = function() {
-        var value = $('#signin-password').val();
-        var again = value === value.toUpperCase() ? 'Проверьте, не&nbsp;нажата&nbsp;ли клавиша Caps&nbsp;Lock, и&nbsp;попробуйте ещё раз.' : 'Попробуйте еще раз.';
-        return 'Неправильная пара логин-пароль. ' + again;
+        return 'Неправильная пара логин-пароль. Попробуйте еще раз.';
     };
+    $('#signin-password').on('keypress', function(event) {
+        var s = String.fromCharCode(event.which);
+        if (s.toUpperCase() === s && s.toLowerCase() !== s && !event.shiftKey) {
+            signIn.caps = 'Внимание! Включена клавиша Caps Lock.';
+        } else {
+            signIn.caps = undefined;
+        }
+        signIn.validate();        
+    });    
+    
     
     var signUp = new profileForm(this.el.find('.phu-signup'));
     signUp.add('#signup-email', checkEmail);
@@ -180,7 +188,7 @@ initForms: function() {
     });
     
     $('#signin-email, #signup-email, #forgot-email').on('focus', function() {
-        if (this.value && /[а-яА-Я]/.test(this.value)) $(this).val('');
+        if (this.value && /[а-яА-Я]/.test(this.value)) $(this).val('').trigger('input');
     }).on('change', function() {
         $(this).val($.trim(this.value));
     });    
@@ -197,32 +205,36 @@ init: function() {
     var compare = function() {
         var p1 = $('#new-password-1').val();
         var p2 = $('#new-password-2').val();
-        if (p1 && p2 && p1 != p2) {
-            return 'Введенные пароли не совпадают, вы ошиблись при наборе. Повторите попытку.';
+        if (p1 && p2 && p2.length >= p1.length && p1 != p2) {
+            form.dismatch = 'Введенные пароли не совпадают, вы ошиблись при наборе. Повторите попытку.';
+        } else {
+            form.dismatch = undefined;
         }
+        form.validate();
     };
 
     var form = new profileForm(this.el.find('form'));
-    form.add('#new-password-1', function(value) {
-        if (!value) return 'Введите пароль.';
+    form.add('#new-password-1', function(value, full) {
+        if (full && !value) return 'Введите пароль.';
         return compare();
     });
-    form.add('#new-password-2', function(value) {
-        if (!value) return 'Введите пароль ещё раз.';
+    form.add('#new-password-2', function(value, full) {
+        if (full && !value) return 'Введите пароль ещё раз.';
         return compare();
     });
+    $('#new-password-1, #new-password-2').on('keypress', function(event) {
+        var s = String.fromCharCode(event.which);
+        if (s.toUpperCase() === s && s.toLowerCase() !== s && !event.shiftKey) {
+            form.caps = 'Внимание! Включена клавиша Caps Lock.';
+        } else {
+            form.caps = undefined;
+        }
+        form.validate();        
+    });
+    
     form.process = function(result) {
         window.location = result.location;
     };    
-    
-    $('#new-password-1, #new-password-2').on('correct', function() {
-        var p1 = $('#new-password-1');
-        var p2 = $('#new-password-2');
-        if (p1.val() && p2.val()) {
-            p1.val('').removeClass('phuf-error');
-            p2.val('').removeClass('phuf-error');
-        };
-    });  
     
 },
 use: function(token) {
@@ -249,6 +261,8 @@ var profileForm = function(elem) {
 profileForm.prototype = {
 validate: function(full) {
     this.errors = [];
+    if (!full && this.dismatch) this.errors.push(this.dismatch);
+    if (!full && this.caps) this.errors.push(this.caps);    
     for (var i = 0, l = this.fields.length; i < l; i++) {
         var f = this.fields[i];
         if (full) f.validate(true);
