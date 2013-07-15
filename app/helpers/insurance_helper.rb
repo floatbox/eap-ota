@@ -4,7 +4,7 @@ module InsuranceHelper
   def sravnikupi_insurance_uri order_form
     return unless uri_params = sravnikupi_uri_params(order_form)
     # пока не показываем страховку для России
-    return if uri_params['country'] == 'RU'
+    return if uri_params['country_code'] == 'RU'
     "http://www.sravnikupi.ru/?pid=251_291_219_42369&travel=1&calculate=1&#{uri_params.to_query}"
   end
 
@@ -18,8 +18,8 @@ module InsuranceHelper
   def cherehapa_insurance_uri order_form
     return unless uri_params = sravnikupi_uri_params(order_form)
     # пока не показываем страховку для России
-    return if uri_params['country'] == 'RU'
-    "https://partners.cherehapa.ru/widget/jsbanner/eviterra.html?pid=251_291_219_42369&travel=1&calculate=1&#{uri_params.to_query}"
+    return if uri_params['country_code'] == 'RU'
+    "https://partners.cherehapa.ru/widget/jsbanner/eviterra.html?#{uri_params.to_query}"
   end
 
   def sravnikupi_uri_params order_form
