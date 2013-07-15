@@ -31,7 +31,7 @@ class BookingController < ApplicationController
   #   "query_key"=>"ki1kri"
   def api_booking
     @query_key = params[:query_key]
-    @search = PricerForm.load_from_cache(params[:query_key])
+    @search = PricerForm.from_code(params[:query_key])
     #FIXME берем партнера из сохраненной PricerForm - надежно, но некрасиво
     @partner = Partner[@search.partner]
     @destination = get_destination
@@ -88,7 +88,7 @@ class BookingController < ApplicationController
     @order_form = OrderForm.load_from_cache(params[:number])
     @order_form.init_people
     @order_form.admin_user = admin_user
-    @search = PricerForm.load_from_cache(@order_form.query_key)
+    @search = PricerForm.from_code(@order_form.query_key)
 
     if params[:iphone]
       render :partial => 'iphone'

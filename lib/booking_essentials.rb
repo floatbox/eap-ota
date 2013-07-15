@@ -35,7 +35,8 @@ module BookingEssentials
 
   def recover_pricer_form
     if params[:query_key]
-      @search = PricerForm.load_from_cache(params[:query_key])
+      #@search = PricerForm.load_from_cache(params[:query_key])
+      @search = PricerForm.from_code(params[:query_key])
     else
       @search = PricerForm.new
       @search.adults = params[:adults] if params[:adults]

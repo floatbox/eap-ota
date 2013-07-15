@@ -1,4 +1,8 @@
 # encoding: utf-8
+
+require 'urls/search/encoder'
+require 'urls/search/decoder'
+
 class PricerForm
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -15,6 +19,9 @@ class PricerForm
   accepts_nested_attributes_for :segments
   delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
   validate :check_people_total
+
+  include Urls::Search::Encodable
+  include Urls::Search::Decodable
 
   # перенести в хелпер
   def self.convert_api_date(date_str)
@@ -56,8 +63,8 @@ class PricerForm
       raise ArgumentError, "Lack of required parameter(s)  - \"#{lack_of_parameters.join(', ')}\""
     end
     return if !(Location[args[:from]] || Location[args[:to]])
-    @from_as_object = Location[args[:from]]
-    @to_as_object = Location[args[:to]]
+    #@from_as_object = Location[args[:from]]
+    #@to_as_object = Location[args[:to]]
     segments = {}
     segments["0"] = {:from => args[:from], :to => args[:to], :date => convert_api_date(args[:date1])}
     if args[:date2].present?
@@ -165,9 +172,9 @@ class PricerForm
 
   # FIXME обходит необходимость использовать segments_attributes в жаваскрипте
   # но нет уверенности, что не создаю каких-то дополнительных проблем
-  def segments=(attrs)
-    self.segments_attributes = attrs
-  end
+  #def segments=(attrs)
+    #self.segments_attributes = attrs
+  #end
 
   def date1
     segments.first.date
