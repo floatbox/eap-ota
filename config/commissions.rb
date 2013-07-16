@@ -1230,7 +1230,7 @@ agent    "Проверять интерлайн при бронировании 
 subagent "5 коп. с билета по опубл. тарифам HR"
 comment "включено с дополнительной проверкой"
 interline :no, :absent
-ticketing_method "direct"
+ticketing_method "aviacenter"
 our_markup "20"
 consolidator "2%"
 commission "1/0.05"
@@ -3802,15 +3802,13 @@ check %{
 subagent ""
 interline :no_codeshare
 ticketing_method "downtown"
-disabled "Пока выключено"
 commission "5%/3.5%"
 
 example 'svocdg/w/ab:s7 cdgsvo/w'
 agent "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
 subagent "0.1%"
 subclasses "W"
-ticketing_method "downtown"
-disabled "Пока выключено"
+ticketing_method "aviacenter"
 commission '0.1%/0.1%'
 
 example 'svorgk/ab:s7'
@@ -3959,8 +3957,7 @@ check %{
   (includes(city_iatas, 'KJA KHV') and includes(city_iatas, 'BKK'))
 }
 subagent ""
-ticketing_method "downtown"
-disabled "Пока выключено"
+ticketing_method "aviacenter"
 commission "0.1%/0.1%"
 
 example 'svocdg/ab cdgsvo'
@@ -3972,6 +3969,7 @@ interline :no, :yes
 ticketing_method "direct"
 our_markup "0"
 discount "2.25%"
+disabled "Выключили прямую выписку"
 commission "3%/3%"
 
 example 'svojfk jfksvo'
@@ -3980,7 +3978,6 @@ subagent "3.5% dtt"
 comment "general dtt для горячей замены"
 interline :no_codeshare
 ticketing_method "downtown"
-important!
 discount "2%"
 commission "1%/3.5%"
 
@@ -3991,7 +3988,6 @@ subagent "0%"
 interline :no, :yes
 ticketing_method "downtown"
 our_markup "400"
-disabled "Пока выключено"
 commission "0%/0%"
 
 carrier "GA", "GARUDA INDONESIA"
