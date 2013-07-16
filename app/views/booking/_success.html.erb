@@ -41,11 +41,13 @@
         <div class="bfrsa-partner">Совместно с партнером Ostrovok.ru</div>
     </div>
     <% end %>
+
     <% if insurance_url %>
     <div class="bfrs-insurance">
-        <iframe src="<%= insurance_url %>" style="border: none; width: 197px; height: 210px;">
+        <iframe src="<%= insurance_url %>" style="border: none; width: 197px; height: 210px;"></iframe>
     </div>
     <% end %>
+
     <% if tripster_url %>
     <div class="bfrs-excursion">
         <h5 class="bfrsa-title">Чем заняться<br><%= city_case_in(@order_form) %></h5>
