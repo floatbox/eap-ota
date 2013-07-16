@@ -49,8 +49,6 @@ subagent "5 (пять) руб.  с билета на рейсы Interline без
 interline :absent
 ticketing_method "aviacenter"
 consolidator "2%"
-discount '0'
-our_markup 100
 commission "1eur/5"
 
 example 'odssvo svoods/VV'
