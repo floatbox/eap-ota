@@ -20,7 +20,7 @@ module BookingEssentials
         :recommendation => @recommendation,
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
-        :query_key => @search.query_key,
+        :query_key => @coded_search,
         :partner => partner,
         :marker => marker
       )

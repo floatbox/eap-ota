@@ -15,6 +15,7 @@ class BookingController < ApplicationController
   #   "marker"=>"",
   #   "variant_id"=>"1"
   def preliminary_booking
+    @coded_search = params[:query_key]
     if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       render :json => {
         :success => true,

@@ -45,7 +45,7 @@ class Destination
     200
   end
 
-  def move_average_price search, recommendation, query_key
+  def move_average_price search, recommendation, code
     if (!search.complex_route? &&
         search.people_count.values.sum == search.people_count[:adults] &&
         ([nil, '', 'Y'].include? search.cabin) &&
@@ -65,7 +65,7 @@ class Destination
       if average_price > price
         logger.info "Create Hot Offer for Destination"
         hot_offers.create(
-          :code => query_key,
+          :code => code,
           :search => search,
           :recommendation => recommendation,
           :price => price)
@@ -89,6 +89,14 @@ class Destination
     to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
     from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
     find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => search.rt)
+  end
+
+  def self.get_by_iatas search
+    find_or_create_by(
+      from_iata: search.from_iata,
+      to_iata: search.to_iata,
+      rt: search.rt
+    )
   end
 
 end

@@ -11,8 +11,10 @@ module Urls
       end
 
       module Classmethods
-        def from_code(url)
-          decoder = Decoder.new(url)
+        def from_code(code)
+          # затычка для старых урлов
+          return load_from_cache(code) if code.size == 6
+          decoder = Decoder.new(code)
           if decoder.valid?
             decoded = decoder.decoded
             PricerForm.new(
