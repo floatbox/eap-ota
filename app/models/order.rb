@@ -237,7 +237,7 @@ class Order < ActiveRecord::Base
   end
 
   def first_payment_ref
-    secured_payments.first.ref
+    secured_payments.first.try(&:ref)
   end
 
   def tickets_office_ids_array
