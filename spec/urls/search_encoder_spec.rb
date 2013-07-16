@@ -19,7 +19,7 @@ describe Urls::Search::Encoder do
       segments_hash[index.to_s] = {
         from: from,
         to: to,
-        date: Date.parse(date)
+        date: date
       }
     end
 
@@ -31,62 +31,38 @@ describe Urls::Search::Encoder do
       segments: segments_hash
     )
 
-    Urls::Search::Encoder.new(pricer_form)
+    pricer_form.encode_url
   end
 
-  context 'one-way ticket search' do
-    before(:all) do
-      segments = [['MOW', 'PAR', '12SEP13']]
-      @encoder = get_url(segments: segments)
-    end
-
-    subject { @encoder }
-
-    its(:valid?) { should be_true }
-    its(:url) { should == 'B110MOWPAR12SEP' }
+  specify 'one-way ticket search' do
+    segments = [['MOW', 'PAR', '120913']]
+    url = get_url(segments: segments)
+    url.should == 'B110MOWPAR12SEP'
   end
 
-  context 'two-way ticket search' do
-    before(:all) do
-      segments = [['MOW', 'PAR', '12SEP13'], ['PAR', 'MOW', '17SEP13']]
-      @encoder = get_url(segments: segments)
-    end
-
-    subject { @encoder }
-
-    its(:valid?) { should be_true }
-    its(:url) { should == 'B110MOWPAR12SEPPARMOW17SEP' }
+  specify 'two-way ticket search' do
+    segments = [['MOW', 'PAR', '120913'], ['PAR', 'MOW', '170913']]
+    url = get_url(segments: segments)
+    url.should == 'B110MOWPAR12SEPPARMOW17SEP'
   end
 
-  context 'complex route' do
-    before(:all) do
-      segments = [
-        ['MOW', 'PAR', '12SEP'],
-        ['PAR', 'AMS', '17SEP'],
-        ['AMS', 'CHC', '18SEP'],
-        ['CHC', 'AMS', '20SEP'],
-        ['AMS', 'PAR', '30SEP'],
-        ['PAR', 'MOW', '12OCT']
-      ]
-      @encoder = get_url(segments: segments)
-    end
-
-    subject { @encoder }
-
-    its(:valid?) { should be_true }
-    its(:url) { should == 'B110MOWPAR12SEPPARAMS17SEPAMSCHC18SEPCHCAMS20SEPAMSPAR30SEPPARMOW12OCT' }
+  specify 'complex route' do
+    segments = [
+      ['MOW', 'PAR', '120913'],
+      ['PAR', 'AMS', '170913'],
+      ['AMS', 'CHC', '180913'],
+      ['CHC', 'AMS', '200913'],
+      ['AMS', 'PAR', '300913'],
+      ['PAR', 'MOW', '121013']
+    ]
+    url = get_url(segments: segments)
+    url.should == 'B110MOWPAR12SEPPARAMS17SEPAMSCHC18SEPCHCAMS20SEPAMSPAR30SEPPARMOW12OCT'
   end
 
-  context 'short iatas' do
-    before(:all) do
-      segments = [['RU', 'US', '12SEP13']]
-      @encoder = get_url(segments: segments)
-    end
-
-    subject { @encoder }
-
-    its(:valid?) { should be_true }
-    its(:url) { should == "B110RU#{filler}US#{filler}12SEP" }
+  specify 'short iatas' do
+    segments = [['RU', 'US', '120913']]
+    url = get_url(segments: segments)
+    url.should == "B110RU#{filler}US#{filler}12SEP"
   end
 end
 

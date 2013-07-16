@@ -116,7 +116,7 @@ module Urls
 
       def decode_date(coded_date)
         d = Date.parse(coded_date)
-        d < Date.today ? d.next_year : d
+        d = d < Date.today ? d.next_year : d
         d.strftime('%d%m%y')
       end
 

@@ -69,7 +69,7 @@ describe Urls::Search::Decoder do
 
           its(:from) { should == 'PAR' }
           its(:to) { should == 'MOW' }
-          its(:date) { should == Date.parse('16AUG13') }
+          its(:date) { should == '160813' }
         end
       end
 
@@ -79,13 +79,13 @@ describe Urls::Search::Decoder do
       it 'should be current year' do
         url = 'Y100MOWPAR08SEP'
         decoder = Urls::Search::Decoder.new(url)
-        decoder.decoded.segments.last.date.should == Date.parse('08SEP13')
+        decoder.decoded.segments.last.date.should == '080913'
       end
 
       it 'should be next year' do
         url = 'Y100MOWPAR08FEB'
         decoder = Urls::Search::Decoder.new(url)
-        decoder.decoded.segments.last.date.should == Date.parse('08FEB14')
+        decoder.decoded.segments.last.date.should == '080214'
       end
     end
 
@@ -112,7 +112,7 @@ describe Urls::Search::Decoder do
 
           its(:from) { should == 'AMS' }
           its(:to) { should == 'PAR' }
-          its(:date) { should == Date.parse('01SEP13') }
+          its(:date) { should == '010913' }
         end
       end
 

@@ -110,14 +110,14 @@ class PricerController < ApplicationController
         Conf.amadeus.recommendations_lite
       logger.info "Suggested limit: #{suggested_limit}"
 
-        @recommendations = Mux.new(:lite => true, :suggested_limit => suggested_limit).pricer(@search)
+      @recommendations = Mux.new(:lite => true, :suggested_limit => suggested_limit).pricer(@search)
 
       # измеряем рекомендации до фильтрации
       meter :api_total_unfiltered_recommendations, @recommendations.size
 
-      @query_key = @search.query_key
+      @code = @search.encode_url
       if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
-        @destination.move_average_price @search, @recommendations.first, @query_key
+        @destination.move_average_price @search, @recommendations.first, @code
       end
 
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))

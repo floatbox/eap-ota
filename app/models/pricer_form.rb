@@ -63,8 +63,6 @@ class PricerForm
       raise ArgumentError, "Lack of required parameter(s)  - \"#{lack_of_parameters.join(', ')}\""
     end
     return if !(Location[args[:from]] || Location[args[:to]])
-    #@from_as_object = Location[args[:from]]
-    #@to_as_object = Location[args[:to]]
     segments = {}
     segments["0"] = {:from => args[:from], :to => args[:to], :date => convert_api_date(args[:date1])}
     if args[:date2].present?

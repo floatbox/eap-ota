@@ -26,10 +26,10 @@ module Urls
       private
 
       def encode_search(search)
-        cabin = search.cabin.to_s
-        adults = search.adults.to_s
-        children = search.children.to_s
-        infants = search.infants.to_s
+        cabin = (search.cabin || Urls::Search::DEFAULT_CABIN).to_s
+        adults = (search.adults || Urls::Search::DEFAULT_ADULTS).to_s
+        children = (search.children || Urls::Search::DEFAULT_CHILDREN).to_s
+        infants = (search.infants || Urls::Search::DEFAULT_INFANTS).to_s
         segments = encode_segments(search.segments)
 
         @url = cabin + adults + children + infants + segments
