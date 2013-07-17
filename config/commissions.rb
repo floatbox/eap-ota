@@ -16,7 +16,7 @@ agent "При вылете НЕ из России - все классы - аге
 subagent "4.5%"
 check %{ not includes(country_iatas.first, 'RU') and not includes(city_iatas, 'TLV') }
 ticketing_method "downtown"
-discount "3%"
+discount "3.5%"
 commission "5%/4.5%"
 
 example 'svobkk bkksvo'
@@ -136,7 +136,7 @@ comment "дополнительно: Хьюстон-Сингапур"
 ticketing_method "aviacenter"
 important!
 check %{ includes(city_iatas, 'HOU SIN') and includes(city_iatas, 'MOW') and includes(country_iatas, 'RU') }
-discount "5.2%"
+discount "6%"
 commission "9%/7%"
 
 example 'kbpsvo svopek'
@@ -161,7 +161,7 @@ subagent "11% от всех применяемых опубликованных 
 comment "Майами/Нью-Йорк прямые из Москвы и сквозные через Москву из RU UA KZ UZ AM — через dtt"
 comment "FIX кривой и не полный чек"
 check %{ includes(city_iatas, %W(NYC MIA LAX)) and includes(city_iatas, 'MOW') and includes(country_iatas, %W(RU UA KZ UZ AM)) }
-discount "7.5%"
+discount "9.5%"
 important! # ац вперед! 
 ticketing_method "downtown"
 commission "12%/11%"
@@ -681,7 +681,7 @@ agent    "7% от всех опубликованных и специальны�
 subagent "5% от опубликованных тарифов на рейсы CX. 50 коп с билета по туроператорским   тарифам на собств. рейсы СХ (наличие ваучера обязательно)."
 interline :no, :yes
 ticketing_method "aviacenter"
-discount "3.7%"
+discount "4.5%"
 commission "7%/5%"
 
 carrier "CY", "CYPRUS AIRWAYS"
@@ -709,7 +709,7 @@ example 'svocdg'
 agent    "9% от тарифа на рейсы, полностью выполняемые CZ;"
 subagent "7% от тарифа на рейсы, полностью выполняемые CZ;"
 ticketing_method "aviacenter"
-discount "5.2%"
+discount "6%"
 commission "9%/7%"
 
 example 'cdgsvo svocdg/ab'
@@ -1597,7 +1597,7 @@ example 'svocdg'
 agent "С 15.02.2011г. 7% от опубл. тарифов на собств. рейсы JU"
 subagent "JU  С 21.02.2011г. 5% от опубл. тарифов на собств. рейсы JU"
 ticketing_method "aviacenter"
-discount "3.7%"
+discount "4.5%"
 commission "7%/5%"
 
 example 'svocdg cdgsvo/ab'
@@ -1678,7 +1678,7 @@ subclasses "CDZIWSYMUKHALQTNRV"
 check %{ includes(country_iatas, 'RU') and includes(country_iatas.first, 'US') and includes_only(country_iatas, 'US RU') }
 ticketing_method "downtown"
 our_markup "0.1%"
-discount "4.6%"
+discount "5%"
 commission "8%/6%"
 
 example 'svocdg'
@@ -1740,7 +1740,7 @@ check %{ includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR 
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP10"
-discount "5.2%"
+discount "6.5%"
 commission "10%/8%"
 
 example 'svojfk/q'
@@ -1752,7 +1752,7 @@ check %{ includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME 
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP8"
-discount "4.6%"
+discount "5%"
 commission "8%/6%"
 
 example 'svojfk/y'
@@ -1873,7 +1873,7 @@ check %{ includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR 
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP10"
-discount "6%"
+discount "7%"
 commission "10%/8%"
 
 example 'svojfk/q'
@@ -2196,7 +2196,7 @@ check %{ includes_only(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR 
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP10"
-discount "6%"
+discount "7%"
 commission "10%/8%"
 
 example 'svojfk/q'
@@ -2208,7 +2208,7 @@ check %{ includes_only(country_iatas, %W[TR AE BH IL KW QA BG CY CZ HR HU MD ME 
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP8"
-discount "4.6%"
+discount "5.5%"
 commission "8%/6%"
 
 example 'svojfk/y'
@@ -2220,7 +2220,7 @@ check %{ includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP5"
-discount "1.5%"
+discount "2.5%"
 commission "5%/3%"
 
 example 'dmebcn'
@@ -3153,7 +3153,7 @@ subagent "5% от суммы тарифов всех подклассов Биз
 classes :business
 international
 ticketing_method "aviacenter"
-discount "3.7%"
+discount "4.5%"
 commission "7%/5%"
 
 example 'svocdg cdgsvo'
@@ -3502,7 +3502,7 @@ example 'tbsdme'
 agent "8 (восемь) % от опубл. тарифа на собств. рейсы авиакомпании А9;"
 subagent "6 % от опубл. тарифа на собств. рейсы А9;"
 ticketing_method "aviacenter"
-discount "4.6%"
+discount "5%"
 commission "8%/6%"
 
 example 'tbsdme dmetbs/ab'
@@ -3510,7 +3510,7 @@ agent "7 (семь)  % от опубл. тарифа по маршрутам с�
 subagent "5 % от опубл. тарифа по маршрутам со сквозными тарифами, включающими участок авиакомпании А9 и авиакомпаний, с которыми А9 имеет Интерлайн-Соглашение"
 interline :yes
 ticketing_method "aviacenter"
-discount "3.7%"
+discount "4.5%"
 commission "7%/5%"
 
 example 'dmetbs/ab'
@@ -3646,7 +3646,7 @@ example 'svocdg cdgsvo'
 agent "5% DTT"
 subagent "3% DTT"
 ticketing_method "downtown"
-discount "2%"
+discount "4%"
 commission "5%/4%"
 
 carrier "S7", "S7 AIRLINES"
@@ -3987,7 +3987,7 @@ subagent "3.5% dtt"
 comment "general dtt для горячей замены"
 interline :no_codeshare
 ticketing_method "downtown"
-discount "2%"
+discount "3.5%"
 commission "1%/3.5%"
 
 example 'svocdg/ab cdgsvo'
