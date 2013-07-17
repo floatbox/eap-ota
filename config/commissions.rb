@@ -7,7 +7,7 @@ agent "При вылете из США - все классы - агентска�
 subagent "8%"
 check %{ includes(country_iatas.first, 'US') }
 ticketing_method "downtown"
-discount "6%"
+discount "7.5%"
 commission "9%/8%"
 
 example 'cdgsvo svocdg'
@@ -16,7 +16,7 @@ agent "При вылете НЕ из России - все классы - аге
 subagent "4.5%"
 check %{ not includes(country_iatas.first, 'RU') and not includes(city_iatas, 'TLV') }
 ticketing_method "downtown"
-discount "3.5%"
+discount "4.2%"
 commission "5%/4.5%"
 
 example 'svobkk bkksvo'
