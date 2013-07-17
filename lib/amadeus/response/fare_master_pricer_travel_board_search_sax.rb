@@ -12,6 +12,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
     elements :recommendation do
       elements :paxFareProduct do
         element :ptc
+        def adt?; ptc == 'ADT' end
         elements :fareDetails do
           element :segRef
           elements :productInformation do
@@ -19,16 +20,19 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
             element :rbd
             element :avlStatus
             element :passengerType
+            def adt?; passengerType == 'ADT' end
           end
         end
         elements :codeShareDetails do
           element :company
           element :transportStageQualifier
+          def v?; transportStageQualifier == 'V' end
         end
         elements :traveller
         elements :fare do
           element :textSubjectQualifier
           elements :description
+          def ltd?; textSubjectQualifier == 'LTD' end
         end
       end
       elements :amount
@@ -36,6 +40,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
         elements :referencingDetail do
           element :refQualifier
           element :refNumber
+          def s?; refQualifier == 'S' end
         end
       end
     end
@@ -44,6 +49,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
         elements :flightProposal do
           element :ref
           element :unitQualifier
+          def eft?; unitQualifier == 'EFT' end
         end
         elements :flightDetails do
           element :flightInformation do
@@ -66,6 +72,8 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
               element :firstTime
               element :date
               element :dateQualifier
+              def arrival?;   dateQualifier == 'AA' end
+              def departure?; dateQualifier == 'AD' end
             end
           end
         end
@@ -86,16 +94,14 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
       price_fare = price_total - price_tax
 
       # booking_classes/availabilities/cabins
-      pax_fare_product = recommendation.paxFareProduct.find { |pfp| pfp.ptc == 'ADT' }
+      pax_fare_product = recommendation.paxFareProduct.find(&:adt?)
       # FIXME нужна ли тут вторая проверка на ADT? passengerType может отличаться от ptc?
-      product_informations = pax_fare_product.fareDetails.flat_map(&:productInformation).select { |inf| inf.passengerType == 'ADT' }
+      product_informations = pax_fare_product.fareDetails.flat_map(&:productInformation).select(&:adt?)
       cabins = product_informations.map(&:cabin)
       booking_classes = product_informations.map(&:rbd)
       availabilities = product_informations.map(&:avlStatus)
 
-      validating_carrier_iata = pax_fare_product.codeShareDetails.find { |csd|
-        csd.transportStageQualifier == 'V'
-      }.company
+      validating_carrier_iata = pax_fare_product.codeShareDetails.find(&:v?).company
       marketing_carrier_iatas = pax_fare_product.codeShareDetails.map(&:company)
 
       last_tkt_date = last_tkt_date_sax(pax_fare_product)
@@ -122,7 +128,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
 
   def variants_sax(recommendation, flight_indexes_cache)
     recommendation.segmentFlightRef.map do |segment|
-      rnumbers = segment.referencingDetail.select{ |d| d.refQualifier == 'S' }.map(&:refNumber)
+      rnumbers = segment.referencingDetail.select(&:s?).map(&:refNumber)
 
       segments = flight_indexes_cache.zip(rnumbers).map do |possible_segments, rnumber|
         possible_segments[rnumber.to_i - 1]
@@ -137,7 +143,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
     parsed.flightIndex.map do |flight_index|
       flight_index.groupOfFlights.map do |group|
 
-        eft_raw = group.flightProposal.find {|fp| fp.unitQualifier == 'EFT' }.ref.to_i
+        eft_raw = group.flightProposal.find(&:eft?).ref.to_i
         eft = (eft_raw / 100 * 60 + eft_raw % 100)
 
         flights = group.flightDetails.map { |details| parse_flights_sax(details) }
@@ -172,8 +178,8 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   end
 
   def technical_stop_sax(stop)
-    arrival   = stop.stopDetails.find {|d| d.dateQualifier == 'AA' }
-    departure = stop.stopDetails.find {|d| d.dateQualifier == 'AD' }
+    arrival   = stop.stopDetails.find(&:arrival?)
+    departure = stop.stopDetails.find(&:departure?)
     TechnicalStop.new(
       departure_date: departure.date,
       departure_time: departure.firstTime,
@@ -192,9 +198,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   end
 
   def last_tkt_date_sax(pax_fare_product)
-    ltd_message = pax_fare_product.fare.find { |pricing_message|
-      pricing_message.textSubjectQualifier == 'LTD'
-    }
+    ltd_message = pax_fare_product.fare.find(&:ltd?)
     date_str = ltd_message.description.grep(/^\d+\w{3}\d+$/).first or
       raise "no last ticket date found in pricing message #{ltd_message.description.inspect}"
     Date.parse(date_str)
