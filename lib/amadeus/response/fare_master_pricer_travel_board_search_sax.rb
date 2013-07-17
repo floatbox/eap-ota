@@ -124,8 +124,8 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
     recommendation.segmentFlightRef.map do |segment|
       rnumbers = segment.referencingDetail.select{ |d| d.refQualifier == 'S' }.map(&:refNumber)
 
-      segments = rnumbers.each_with_index.map do |number, index|
-        flight_indexes_cache[number.to_i - 1][index]
+      segments = flight_indexes_cache.zip(rnumbers).map do |possible_segments, rnumber|
+        possible_segments[rnumber.to_i - 1]
       end
 
       Variant.new(segments: segments)
@@ -133,25 +133,21 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   end
 
   def flight_indexes_sax
-    # cache[номер рекомендации][номер сегмента]
-    result = {}
-
-    parsed.flightIndex.each_with_index do |flight_index, segment_index|
-      flight_index.groupOfFlights.each_with_index do |group, rec_index|
+    # cache[номер сегмента, 0 based][номер варианта перелетов по сегменту, 0 based]
+    parsed.flightIndex.map do |flight_index|
+      flight_index.groupOfFlights.map do |group|
 
         eft_raw = group.flightProposal.find {|fp| fp.unitQualifier == 'EFT' }.ref.to_i
         eft = (eft_raw / 100 * 60 + eft_raw % 100)
 
         flights = group.flightDetails.map { |details| parse_flights_sax(details) }
 
-        result[rec_index] ||= {}
-        result[rec_index][segment_index] = Segment.new(
+        Segment.new(
           total_duration: eft,
           flights: flights
         )
       end
     end
-    result
   end
 
   def parse_flights_sax(details)
