@@ -14,9 +14,17 @@ example 'cdgsvo svocdg'
 agent "правила для выписки авиакомпании SU в DTT"
 agent "При вылете НЕ из России - все классы - агентская 5%, субагентская   4.5%, скидка 4%"
 subagent "4.5%"
-check %{ not includes(country_iatas.first, 'RU') }
+check %{ not includes(country_iatas.first, 'RU') and not includes(city_iatas, 'TLV') }
 ticketing_method "downtown"
 discount "3%"
+commission "5%/4.5%"
+
+example 'svobkk bkksvo'
+agent "Коля: SU на dtt 5%/4.5%/4.2%, кроме тель-авива и SU#1"
+subagent "4.5%"
+check %{ not includes(city_iatas, 'TLV') }
+ticketing_method "downtown"
+discount "4.2%"
 commission "5%/4.5%"
 
 example "svocdg"
@@ -27,6 +35,7 @@ subagent "3%  от тарифа на собств. рейсы SU с начало
 interline :no, :yes
 check %{ includes_only(country_iatas.first, 'RU') }
 ticketing_method "aviacenter"
+disabled "Выписываем по широкому безтельавивному правилу в dtt"
 discount "2.25%"
 commission "4%/3%"
 
