@@ -92,7 +92,11 @@ describe Recommendation do
 
     context "no commission" do
       let(:commission) {nil}
-      its('income.round') {should ==  -79}
+      specify {
+        expect {
+          subject.income
+        }.to raise_error
+      }
     end
 
     context "with all the prices and direct commission" do

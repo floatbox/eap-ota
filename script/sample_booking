@@ -3,6 +3,7 @@ require File.expand_path('../../config/environment',  __FILE__)
 
 factories!
 order = OrderForm.load_from_cache('50225c0364047a0aee00003e')
+order.recommendation.find_commission!
 order.email = 'email@example.com'
 order.phone = '12345678'
 #order.people_count = {:infants => 1, :children => 1, :adults => 2}
