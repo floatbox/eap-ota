@@ -1,4 +1,7 @@
 module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
+  # FIXME не доверять выбору element/elements ниже
+  # некоторые "дочерние" элементы - на самом деле глубоко по иерархии
+  # TODO документировать, какие именно?
   class XMLResponse
     include CompactSAXMachine
 
@@ -19,20 +22,21 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
           end
         end
         elements :codeShareDetails do
-          # почему это массивы?
-          elements :company
-          elements :transportStageQualifier
+          element :company
+          element :transportStageQualifier
         end
         elements :traveller
         elements :fare do
-          elements :textSubjectQualifier
+          element :textSubjectQualifier
           elements :description
         end
       end
       elements :amount
       elements :segmentFlightRef do
-        elements :refQualifier
-        elements :refNumber
+        elements :referencingDetail do
+          element :refQualifier
+          element :refNumber
+        end
       end
     end
     elements :flightIndex do
@@ -69,7 +73,8 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
     end
   end
 
-  # sax
+  private
+
   def recommendations_sax
     flight_indexes_cache = flight_indexes_sax
 
@@ -77,7 +82,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
 
       blank_count = recommendation.paxFareProduct.flat_map(&:traveller).size
       price_total = recommendation.amount.first.to_f
-      price_tax = recommendation.amount.last.to_f
+      price_tax = recommendation.amount.second.to_f
       price_fare = price_total - price_tax
 
       # booking_classes/availabilities/cabins
@@ -88,7 +93,11 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
       booking_classes = product_informations.map(&:rbd)
       availabilities = product_informations.map(&:avlStatus)
 
-      validating_carrier_iata, marketing_carrier_iatas = carrier_iatas_sax(pax_fare_product)
+      validating_carrier_iata = pax_fare_product.codeShareDetails.find { |csd|
+        csd.transportStageQualifier == 'V'
+      }.company
+      marketing_carrier_iatas = pax_fare_product.codeShareDetails.map(&:company)
+
       last_tkt_date = last_tkt_date_sax(pax_fare_product)
       additional_info = additional_info_sax(pax_fare_product)
 
@@ -112,19 +121,15 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   end
 
   def variants_sax(recommendation, flight_indexes_cache)
-    variants = []
-
     recommendation.segmentFlightRef.map do |segment|
-      rnumbers = segment.refQualifier.zip(segment.refNumber).select{ |qualifier, number| qualifier == 'S' }.transpose.last.map(&:to_i)
+      rnumbers = segment.referencingDetail.select{ |d| d.refQualifier == 'S' }.map(&:refNumber)
 
-      segments = []
-
-      rnumbers.each_with_index do |number, index|
-        segments << flight_indexes_cache[number - 1][index]
+      segments = rnumbers.each_with_index.map do |number, index|
+        flight_indexes_cache[number.to_i - 1][index]
       end
-      variants << Variant.new(segments: segments)# if segments.compact.present?
+
+      Variant.new(segments: segments)
     end
-    variants
   end
 
   def flight_indexes_sax
@@ -134,21 +139,10 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
     parsed.flightIndex.each_with_index do |flight_index, segment_index|
       flight_index.groupOfFlights.each_with_index do |group, rec_index|
 
-        proposals = group.flightProposal
-
-        ref, p_eft, dontcare = proposals
-        eft_raw = p_eft.ref.to_i
+        eft_raw = group.flightProposal.find {|fp| fp.unitQualifier == 'EFT' }.ref.to_i
         eft = (eft_raw / 100 * 60 + eft_raw % 100)
 
-        flights = []
-
-        group.flightDetails.each do |details|
-          info = details.flightInformation
-          technical_stops = details.technicalStop
-
-          tstops = technical_stops.map { |ts| technical_stop_sax(ts) }
-          flights << parse_flights_sax(info, tstops)
-        end
+        flights = group.flightDetails.map { |details| parse_flights_sax(details) }
 
         result[rec_index] ||= {}
         result[rec_index][segment_index] = Segment.new(
@@ -160,7 +154,9 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
     result
   end
 
-  def parse_flights_sax(info, tech_stops)
+  def parse_flights_sax(details)
+    info = details.flightInformation
+    technical_stops = details.technicalStop.map { |ts| technical_stop_sax(ts) }
     Flight.new(
       operating_carrier_iata: info.operatingCarrier,
       marketing_carrier_iata: info.marketingCarrier,
@@ -175,72 +171,37 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
       departure_date: info.dateOfDeparture,
       departure_time: info.timeOfDeparture,
       equipment_type_iata: info.equipmentType,
-      technical_stops: tech_stops
+      technical_stops: technical_stops
     )
   end
 
   def technical_stop_sax(stop)
-    details = stop.stopDetails
-
-    info = {}
-
-    details.each do |d|
-      case d.dateQualifier
-      when 'AD'
-        info[:departure_time] = d.firstTime
-        info[:departure_date] = d.date
-      when 'AA'
-        info[:arrival_time] = d.firstTime
-        info[:arrival_date] = d.date
-        info[:location_iata] = d.locationId
-      end
-    end
+    arrival   = stop.stopDetails.find {|d| d.dateQualifier == 'AA' }
+    departure = stop.stopDetails.find {|d| d.dateQualifier == 'AD' }
     TechnicalStop.new(
-      departure_date: info[:departure_date],
-      departure_time: info[:departure_time],
-      arrival_date: info[:arrival_date],
-      arrival_time: info[:arrival_time],
-      location_iata: info[:location_iata]
+      departure_date: departure.date,
+      departure_time: departure.firstTime,
+      arrival_date: arrival.date,
+      arrival_time: arrival.firstTime,
+      location_iata: arrival.locationId
     )
   end
 
+  # debug information
   def additional_info_sax(pax_fare_product)
-    fares = pax_fare_product.fare
-    descriptions = fares.collect(&:description)
-    qualifiers = fares.collect(&:textSubjectQualifier)
-    starter = descriptions + qualifiers
-    # здесь явное отличие additional_info от старого парсера - нигде не используется, не стал заморачиваться с fare_basis
-    starter.map{ |e| e.join('\n')}.join('\n\n')
-  end
-
-  def carrier_iatas_sax(pax_fare_product)
-    # qualifier == 'V' -> validating_carrier_iata
-    # else -> marketing_carrier_iata
-    carrier_iatas = pax_fare_product.codeShareDetails
-    marketing_carrier_iatas = carrier_iatas.flat_map(&:company)
-    qualifiers = carrier_iatas.flat_map(&:transportStageQualifier)
-
-    validating_carrier_iata = nil
-    qualifiers.zip(marketing_carrier_iatas) do |qualifier, company|
-      if qualifier == 'V'
-        validating_carrier_iata = company
-        break
-      end
-    end
-    [validating_carrier_iata, marketing_carrier_iatas]
+    return ""
+    pax_fare_product.fare.map {|pricing_message|
+      ([pricing_message.textSubjectQualifier] + pricing_message.description)
+    }.join("\n")
   end
 
   def last_tkt_date_sax(pax_fare_product)
-    messages = pax_fare_product.fare
-    messages.map(&:description).zip(messages.map(&:textSubjectQualifier)) do |descriptions, qualifier|
-      descriptions.each do |description|
-        if description =~ /\d+\w{3}\d+/
-          return Date.parse(description)
-        end
-      end
-    end
-
-    return
+    ltd_message = pax_fare_product.fare.find { |pricing_message|
+      pricing_message.textSubjectQualifier == 'LTD'
+    }
+    date_str = ltd_message.description.grep(/^\d+\w{3}\d+$/).first or
+      raise "no last ticket date found in pricing message #{ltd_message.description.inspect}"
+    Date.parse(date_str)
   end
 
   def error_message_sax
@@ -257,14 +218,4 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
     xml = benchmark 'to_xml' do doc.to_xml end
     @parsed ||= XMLResponse.parse(xml)
   end
-
-  private :parsed,
-    :additional_info_sax,
-    :technical_stop_sax,
-    :parse_flights_sax,
-    :flight_indexes_sax,
-    :variants_sax,
-    :carrier_iatas_sax,
-    :last_tkt_date_sax
-
 end
