@@ -305,10 +305,9 @@ module PricerHelper
     # concat recommendation.source
     concat %( <a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe if recommendation.source == 'amadeus'
     concat 'Наземный участок ' if recommendation.ground?
-    concat 'Не можем продать ' unless recommendation.sellable?
     concat 'Нет интерлайна ' if recommendation.source == 'amadeus' && !recommendation.valid_interline?
     concat recommendation.validating_carrier_iata + ' '
-    if recommendation.commission
+    if recommendation.sellable?
       concat %( #{recommendation.commission.agent}/#{recommendation.commission.subagent})
       unless recommendation.commission.consolidator.zero?
         concat %( +#{recommendation.commission.consolidator})
@@ -325,10 +324,11 @@ module PricerHelper
       concat %( = #{recommendation.income.round(2) } р.) unless recommendation.income.zero?
       concat ' '
       concat link_to('комиссия', check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
-    elsif Commission.exists_for?(recommendation)
-      concat link_to('не подходят правила', check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
-    else
-      concat link_to('нет правил для авиакомпании', admin_commissions_url, :target => '_blank')
+    elsif
+      reason = recommendation.commission.no_commission
+      reason = 'продажа отключена' if reason == true;
+      concat 'Не можем продать '
+      concat link_to(reason, check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
     end
     concat " #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
     # concat ' (' + recommendation.booking_classes.join(',') + ')'

@@ -101,6 +101,8 @@ class Recommendation
     new_rec = dup
     new_rec.price_fare, new_rec.price_tax = prices
     new_rec.reset_commission!
+    # FIXME отреагировать на изменение цены/продаваемости!
+    new_rec.find_commission!
     new_rec
   end
 
@@ -141,16 +143,11 @@ class Recommendation
   end
 
   def sellable?
-    # consolidator-а пока не проверяем.
-    # FIXME перепровить после подключения новых договоров
-    # validating_carrier.consolidator && commission
-
     #FIXME Временный костыль, приходят рейсы выполняемые аэросвитом
     return if flights.any? do |f|
       f.marketing_carrier_iata == 'PS' && booking_class_for_flight(f) == 'T'
     end
-
-    commission
+    commission.sellable?
   end
 
   def ignored_carriers

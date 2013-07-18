@@ -14,7 +14,7 @@ class Order < ActiveRecord::Base
   scope :for_manual_ticketing, lambda { where("payment_status IN ('blocked', 'charged') AND
     ticket_status = 'booked' AND
     pnr_number != '' AND
-    (NOT auto_ticket OR created_at < ?)", Time.now - 40.minutes ) }
+    (NOT auto_ticket OR updated_at < ?)", Time.now - 40.minutes ) }
 
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
@@ -106,6 +106,7 @@ class Order < ActiveRecord::Base
   end
 
   def make_payable_by_card
+    update_attributes(auto_ticket: true, no_auto_ticket_reason: '') if pnr_number.present? && ['delivery', 'cash'].include?(payment_type)
     update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending' && (pnr_number.present? || parent_pnr_number.present?)
   end
 
@@ -187,6 +188,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def create_visa_notice
+    if needs_visa_notification? && ticket_status == 'ticketed'
+      notifications.new.create_visa_notice
+    end
+  end
+
   def baggage_array
     return [] unless sold_tickets.all?{|t| t.baggage_info.present?}
     sold_tickets.map do |t|
@@ -239,6 +246,10 @@ class Order < ActiveRecord::Base
 
   def sold_tickets_numbers
     tickets.to_a.select(&:ticketed?).every.number_with_code.join('; ')
+  end
+
+  def first_payment_ref
+    secured_payments.first.try(&:ref)
   end
 
   def tickets_office_ids_array
@@ -297,7 +308,8 @@ class Order < ActiveRecord::Base
       :delivery,
       :last_pay_time,
       :partner,
-      :marker
+      :marker,
+      :needs_visa_notification
 
     copy_attrs recommendation, self,
       :source,
@@ -551,6 +563,8 @@ class Order < ActiveRecord::Base
       recalculate_prices
     end
     create_ticket_notice
+    create_visa_notice if needs_visa_notification?
+    true
   end
 
   def update_price_with_payment_commission_in_tickets

@@ -17,6 +17,10 @@ module Amadeus
         xpath('//r:relatedProduct/r:status').every.to_s - ['HK', 'KK'] == []
       end
 
+      def has_cancelled_flights?
+        xpath('//r:relatedProduct[r:status="UN"]').present?
+      end
+
       def additional_pnr_numbers
         xpath('//r:itineraryReservationInfo/r:reservation').inject({}) do |result, ri|
           marketing_carrier = ri.xpath('r:companyId').to_s

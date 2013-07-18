@@ -52,6 +52,7 @@ module Strategy::Amadeus::Booking
       amadeus.pnr_commit_really_hard do
         pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
         @rec.last_tkt_date = pricing.last_tkt_date
+        # FIXME отреагировать на изменение цены/продаваемости
         new_rec = @rec.dup_with_new_prices(pricing.prices)
         unless @order_form.price_with_payment_commission == new_rec.price_with_payment_commission
           logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@order_form.price_with_payment_commission} -> #{new_rec.price_with_payment_commission}"

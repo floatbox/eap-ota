@@ -86,6 +86,8 @@ class BookingController < ApplicationController
 
   def index
     @order_form = OrderForm.load_from_cache(params[:number])
+    # Среагировать на изменение продаваемости/цены
+    @order_form.recommendation.find_commission!
     @order_form.init_people
     @order_form.admin_user = admin_user
     @search = PricerForm.load_from_cache(@order_form.query_key)
@@ -103,6 +105,8 @@ class BookingController < ApplicationController
   def recalculate_price
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
+    # Среагировать на изменение продаваемости/цены
+    @order_form.recommendation.find_commission!
     @order_form.admin_user = admin_user
     @order_form.valid?
     if @order_form.update_price_and_counts
@@ -156,7 +160,7 @@ class BookingController < ApplicationController
       else
         strategy = Strategy.select(:order => @order)
 
-        unless strategy.delayed_ticketing?
+        if  !strategy.delayed_ticketing?
           logger.info "Pay: ticketing"
 
           unless strategy.ticket
@@ -164,6 +168,10 @@ class BookingController < ApplicationController
             logger.info "Pay: ticketing failed"
             @error_message = :ticketing
             @order.unblock!
+          end
+        else
+          if @order.ok_to_auto_ticket?
+            AutoTicketStuff.new(order: @order).create_auto_ticket_job
           end
         end
       end

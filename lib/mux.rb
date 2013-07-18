@@ -33,6 +33,9 @@ class Mux
     amadeus.release
 
     recommendations = recommendations.reject(&:ignored_carriers)
+    benchmark 'commission matching calendar' do
+      recommendations.every.find_commission!
+    end
     recommendations = recommendations.select(&:sellable?) unless admin_user
     recommendations.delete_if(&:without_full_information?)
     recommendations.every.clear_variants
@@ -80,6 +83,9 @@ class Mux
       recommendations.delete_if(&:ground?)
 
       recommendations = recommendations.reject(&:ignored_carriers)
+      benchmark 'commission matching' do
+        recommendations.every.find_commission!
+      end
       recommendations = recommendations.select(&:sellable?) unless admin_user
       unless lite
         # sort

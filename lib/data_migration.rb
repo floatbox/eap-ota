@@ -8,6 +8,21 @@ require 'csv'
 
 module DataMigration
 
+  def self.get_cancelled_flights
+    order_ids = StoredFlight.where('dept_date > ?', Date.today).every.tickets.flatten.every.order_id.uniq
+    result = []
+    Amadeus.ticketing do |amadeus|
+      Order.where(ticket_status: 'ticketed', id: order_ids, source: 'amadeus').each do |order|
+        if order.pnr_number.present? &&
+           amadeus.pnr_retrieve(number: order.pnr_number).has_cancelled_flights?
+          puts order.pnr_number
+          result << order.pnr_number
+        end
+      end
+    end
+    result
+  end
+
   def self.create_payments_csv
     PaperTrail.controller_info = {:done => 'Payu status sync'}
     d = Date.parse('2012-12-01')
