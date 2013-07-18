@@ -217,6 +217,12 @@ class OrderForm
     end
   end
 
+  def needs_visa_notification
+    recommendation.flights.any?{|f| f.arrival.country.alpha2 == 'US' &&
+                                    f.departure.country.alpha2 != 'US'} &&
+      people.any?{|p| ['RU', 'BY', 'UA', 'KZ'].include?(p.nationality.alpha2)}
+  end
+
   def variant
     recommendation.try(:journey)
   end
