@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130624131907) do
+ActiveRecord::Schema.define(:version => 20130718131818) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -380,6 +380,14 @@ ActiveRecord::Schema.define(:version => 20130624131907) do
   add_index "orders", ["payment_type"], :name => "index_orders_on_payment_type"
   add_index "orders", ["pnr_number"], :name => "index_orders_on_pnr_number"
   add_index "orders", ["ticket_status"], :name => "index_orders_on_ticket_status"
+
+  create_table "orders_stored_flights", :id => false, :force => true do |t|
+    t.integer "stored_flight_id"
+    t.integer "order_id"
+  end
+
+  add_index "orders_stored_flights", ["order_id", "stored_flight_id"], :name => "index_orders_stored_flights_on_order_id_and_stored_flight_id"
+  add_index "orders_stored_flights", ["stored_flight_id", "order_id"], :name => "index_orders_stored_flights_on_stored_flight_id_and_order_id"
 
   create_table "partners", :force => true do |t|
     t.string   "token",                                  :null => false

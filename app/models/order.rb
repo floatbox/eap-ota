@@ -63,6 +63,10 @@ class Order < ActiveRecord::Base
     Partner.pluck :token
   end
 
+  def save_stored_flights(flights)
+    self.stored_flights = flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights if flights.all? &:dept_date #костыль, для билетов с открытой датой
+  end
+
   def show_vat
     sold_tickets.present? && sold_tickets.all?(&:show_vat) && sold_tickets.every.office_id.uniq != ['FLL1S212V']
   end
@@ -110,6 +114,7 @@ class Order < ActiveRecord::Base
   has_many :payments
   has_many :secured_payments, conditions: { status: %W[ blocked charged processing_charge ]}, class_name: 'Payment'
   belongs_to :customer
+  has_and_belongs_to_many :stored_flights
 
   # не_рефанды
   def last_payment

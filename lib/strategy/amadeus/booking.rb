@@ -39,6 +39,8 @@ module Strategy::Amadeus::Booking
       end
       logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
       @order_form.save_to_order
+      #binding.pry
+      @order_form.order.save_stored_flights(@rec.flights)
 
       set_people_numbers(add_multi_elements.passengers)
 
