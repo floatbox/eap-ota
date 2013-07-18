@@ -524,6 +524,7 @@ class Order < ActiveRecord::Base
   def ticket!
     return false unless ticket_status.in? 'booked', 'processing_ticket', 'error_ticket'
     return false unless load_tickets(true)
+    update_attributes(:additional_pnr_number => tickets.first.additional_pnr_number) if tickets.first.additional_pnr_number
     update_attributes(:ticket_status => 'ticketed', :ticketed_date => Date.today)
     update_price_with_payment_commission_in_tickets
     update_prices_from_tickets
