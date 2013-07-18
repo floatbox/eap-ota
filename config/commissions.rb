@@ -34,7 +34,7 @@ example "svocdg/su cdgsvo/ab"
 agent "4%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 subagent "3%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 interline :no, :yes
-routes "RU.../OW,RT"
+routes "RU..."
 ticketing_method "aviacenter"
 discount "1.5%"
 commission "4%/3%"
@@ -792,7 +792,7 @@ example 'svotam/j tamsvo/z'
 agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ (до Mexico Tour Code RUMXPREM ); "
 subagent "3%"
 subclasses "JCDZI"
-routes "MOW-RU,MX/OW,RT"
+routes "MOW-MX/OW,RT"
 ticketing_method "downtown"
 tour_code "RUMXPREM"
 discount "1.5%"
@@ -1372,7 +1372,7 @@ agent "7% от опубл.тарифов по классу С,D,I,Z, а такж
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 subclasses "CDIZ"
 interline :no, :yes
-routes "ALA-KZ,CN/OW,RT"
+routes "ALA-CN/OW,RT"
 ticketing_method "aviacenter"
 discount "3.5%"
 commission "7%/7%"
@@ -1385,7 +1385,7 @@ agent "7% от опубл.тарифов по классу С,D,I,Z, а такж
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 comment "копия для эконом класса"
 interline :no, :yes
-routes "ALA-KZ,CN/OW,RT"
+routes "ALA-CN/OW,RT"
 ticketing_method "aviacenter"
 discount "3.5%"
 commission "7%/7%"
@@ -1394,7 +1394,7 @@ example 'pekweh'
 example 'nayweh wehnay'
 agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 subagent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
-routes "BJS.../OW,RT"
+routes "BJS..."
 ticketing_method "aviacenter"
 domestic
 consolidator "2%"
@@ -1426,7 +1426,8 @@ example 'pekxmn xmnweh'
 agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 subagent "0%"
 important!
-routes "BJS-CN.../OW,RT"
+routes "BJS..."
+domestic
 ticketing_method "aviacenter"
 consolidator "2%"
 commission "0%/0%"
@@ -1852,7 +1853,7 @@ example 'svocdg/ab cdgsvo'
 agent "1%(0,5%)(0%) с вылетом из России на рейсы Interline, условии наличия в билете хотя бы одного сегмента собств.рейса LO; "
 subagent "0.5%"
 interline :yes
-routes "RU.../OW,RT"
+routes "RU..."
 ticketing_method "aviacenter"
 commission "1%/0.5%"
 
@@ -2005,7 +2006,7 @@ carrier "MS", "EGYPT AIR"
 example 'svocai caisvo'
 agent    "9% от тарифа на рейсы MS из Москвы"
 subagent "7% от тарифа на рейсы MS из Москвы"
-routes "MOW.../OW,RT"
+routes "MOW..."
 ticketing_method "aviacenter"
 discount "3.5%"
 commission "9%/7%"
@@ -2014,7 +2015,7 @@ example 'caisvo svocai'
 agent    "5% от тарифа на рейсы MS из Египта"
 subagent "3,5% от тарифа на рейсы MS из Египта"
 international
-routes "EG.../OW,RT"
+routes "EG..."
 ticketing_method "aviacenter"
 discount "1.75%"
 commission "5%/3.5%"
@@ -2055,7 +2056,7 @@ example 'svotpe/business'
 agent "MU междунар или регион-ные* рейсы Бизнес класс, вылет из Москвы – 9%"
 subagent "MU междунар или регион-ные* рейсы Бизнес класс, вылет из Москвы – 7%"
 classes :business
-routes "MOW-TW,HK,MO.../OW,RT"
+routes "MOW-TW,HK,MO..."
 ticketing_method "aviacenter"
 discount "3.5%"
 commission "9%/7%"
@@ -2192,7 +2193,7 @@ example 'svojfk/a jfksvo/z'
 agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
 subagent "8%"
 subclasses "FADZP"
-routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/OW,RT"
+routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP10"
@@ -2204,7 +2205,7 @@ example 'svojfk/q jfksvo/k'
 agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
 subagent "6%"
 subclasses "QVWSTLK"
-routes "TR,AE,BH,IL,KW,QA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/OW,RT"
+routes "TR,AE,BH,IL,KW,QA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP8"
@@ -2216,7 +2217,7 @@ example 'svojfk/y jfksvo/m'
 agent "по классам Y, B, M, U, H у них комиссия 5%"
 subagent "3%"
 subclasses "YBMUH"
-routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/OW,RT"
+routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP5"
@@ -2591,7 +2592,7 @@ example 'svojfk/a jfksvo/z'
 agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
 subagent "8%"
 subclasses "FADZP"
-routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US"
+routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP10"
@@ -2603,7 +2604,7 @@ example 'svojfk/q jfksvo/k'
 agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
 subagent "6%"
 subclasses "QVWSTLK"
-routes "TR,AE,BH,IL,KW,QA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US"
+routes "TR,AE,BH,IL,KW,QA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP8"
@@ -2792,7 +2793,7 @@ example 'yowsvo'
 agent "0% от всех опубл. тарифов на собств.рейсы UA на внутренних маршрутах внутри Американского континента и международных маршрутах с началом путешествия в США или Канаде;"
 subagent ""
 comment "Сша/Канада, Американский континент"
-routes "US,CA.../OW,RT"
+routes "US,CA..."
 international
 ticketing_method "aviacenter"
 consolidator "2%"
@@ -2827,7 +2828,7 @@ example 'svojfk/a jfksvo/z'
 agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
 subagent "8%"
 subclasses "FADZP"
-routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SD,SN,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US"
+routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SD,SN,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 international
 tour_code "815ZU"
@@ -2840,7 +2841,7 @@ example 'svojfk/q jfksvo/k'
 agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
 subagent "6%"
 subclasses "QVWSTLK"
-routes "TR,AE,BH,IL,KW,QA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US"
+routes "TR,AE,BH,IL,KW,QA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 international
 tour_code "815ZU"
@@ -2853,7 +2854,7 @@ example 'svojfk/y jfksvo/m'
 agent "по классам Y, B, M, U, H у них комиссия 5%"
 subagent "3%"
 subclasses "YBMUH"
-routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US"
+routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 international
 tour_code "815ZU"
@@ -2880,7 +2881,7 @@ example 'yowsvo'
 agent "0% от всех опубл. тарифов на собств.рейсы UA на внутренних маршрутах внутри Американского континента и международных маршрутах с началом путешествия в США или Канаде;"
 subagent ""
 comment "Сша/Канада, Американский континент"
-routes "US,CA.../OW,RT"
+routes "US,CA..."
 international
 ticketing_method "aviacenter"
 consolidator "2%"
@@ -2891,7 +2892,7 @@ example 'svojfk/a jfksvo/z'
 agent    "по классам F, A,D, Z, P у них осталась комиссия 10 %"
 subagent "8%"
 subclasses "FADZP"
-routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US"
+routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 international
 tour_code "815ZU"
@@ -2904,7 +2905,7 @@ example 'svojfk/q jfksvo/k'
 agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
 subagent "6%"
 subclasses "QVWSTLK"
-routes "TR,AE,BH,IL,KW,QA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US"
+routes "TR,AE,BH,IL,KW,QA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 international
 tour_code "815ZU"
@@ -2917,7 +2918,7 @@ example 'svojfk/y jfksvo/m'
 agent "по классам Y, B, M, U, H у них комиссия 5%"
 subagent "3%"
 subclasses "YBMUH"
-routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US"
+routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 ticketing_method "downtown"
 international
 tour_code "815ZU"
@@ -3247,7 +3248,7 @@ example 'tbsiev'
 agent "5% от тарифов перевозок по России, СНГ и Грузии всех подклассов и классов обслуживания (за исключением маршрутов Групп А и Б)."
 subagent "3% от тарифов перевозок по СНГ и Грузии всех подклассов и классов обслуживания (за искл. маршрутов Групп А и Б)"
 comment "Россия СНГ и Грузия"
-routes "...RU,AZ,AM,BY,KZ,KG,MD,TJ,TM,UZ,UA,GE..."
+check %{ includes_only(country_iatas, 'RU AZ AM BY KZ KG MD TJ TM UZ UA GE') }
 important!
 ticketing_method "aviacenter"
 discount "1.5%"
@@ -3297,7 +3298,7 @@ agent "*от суммы тарифов (опубликованных в АСБ) 
 agent "*за каждый взятый с пассажира штраф при оформлении возврата или обмена авиабилетов с взиманием штрафных санкций;"
 subagent "c 01.04.2013 г. 50 коп с билета по маршрутам:"
 comment "группа А "
-routes "MOW-KGD/OW,RT", "MOW-KZN/OW,RT", "MOW-UFA/OW,RT", "MOW-LED/OW,RT", "MOW-KUF/OW,RT", "MOW-GOJ/OW,RT", "MOW-KRR/OW,RT", "MOW-AER/OW,RT", "MOW-AAQ/OW,RT", "MOW-GBB/OW,RT", "MOW-BAK/OW,RT", "MOW-GDZ/OW,RT", "MOW-KVD/OW,RT", "MOW-LLK/OW,RT", "MOW-SIP/OW,RT", "MOW-MRV/OW,RT", "SVX-AER/OW,RT", "SVX-KZN/OW,RT", "SVX-SIP/OW,RT", "SVX-KUF/OW,RT", "SVX-YKS/OW,RT", "SVX-HTA/OW,RT", "SVX-AAQ/OW,RT", "SVX-UFA/OW,RT", "SVX-GDZ/OW,RT", "SVX-EVN/OW,RT", "SVX-KHV/OW,RT", "SVX-VVO/OW,RT", "SVX-KRR/OW,RT", "SVX-KJA/OW,RT", "SVX-PKC/OW,RT", "SVX-BAK/OW,RT", "SVX-TBS/OW,RT" , "LED-LWN/OW,RT", "LED-LLK/OW,RT", "LED-VVO/OW,RT", "LED-IKT/OW,RT", "LED-KHV/OW,RT", "LED-YKS/OW,RT", "KUF-DYU/OW,RT", "KUF-AAQ/OW,RT", "KUF-AER/OW,RT", "KUF-LBD/OW,RT", "CEK-GOJ/OW,RT", "CEK-TAS/OW,RT" , "PEE-DYU/OW,RT", "PEE-LBD/OW,RT", "UFA-LBD/OW,RT", "UFA-DYU/OW,RT", "KJA-IKT/OW,RT", "KJA-MRV/OW,RT", "MRV-AER/OW,RT", "SIP-GOJ/OW,RT", "EVN-GOJ/OW,RT", "EVN-KUF/OW,RT", "KRR-VVO/OW,RT", "KRR-OVB/OW,RT", "GOJ-TAS/OW,RT", "GOJ-SIP/OW,RT", "GOJ-NMA/OW,RT", "IKT-/OW,RT"
+routes "MOW-KGD,KZN,UFA,LED,KUF,GOJ,KRR,AER,AAQ,GBB,BAK,GDZ,KVD,LLK,SIP,MRV/OW,RT", "SVX-AER,KZN,SIP,KUF,YKS,HTA,AAQ,UFA,GDZ,EVN,KHV,VVO,KRR,KJZ,PKC,BAK,TBS/OW,RT", "LED-LWN,LLK,VVO,IKT,KHV,YKS/OW,RT", "KUF-DYU/OW,RT", "KUF-AAQ/OW,RT", "KUF-AER/OW,RT", "KUF-LBD/OW,RT", "CEK-GOJ,TAS/OW,RT", "PEE-DYU,LBD/OW,RT", "UFA-LBD,DYU/OW,RT", "KJA-IKT,MRV/OW,RT", "MRV-AER/OW,RT", "SIP-GOJ/OW,RT", "EVN-GOJ,KUF/OW,RT", "KRR-VVO,OVB/OW,RT", "GOJ-TAS,SIP,NMA/OW,RT", "IKT-PKC/OW,RT"
 important!
 ticketing_method "aviacenter"
 consolidator "2%"
@@ -3308,7 +3309,7 @@ example "tivsvo"
 example "svotiv tivsvo"
 agent "0.1% Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват;"
 subagent "0.5 Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват;"
-check %{ includes_only(city_iatas, 'MOW TIV') }
+routes "MOW-TIV/ALL"
 important!
 ticketing_method "aviacenter"
 consolidator "2%"
@@ -3318,7 +3319,7 @@ example 'svohta'
 agent "ГРУППА Б: 3 (три) % от тарифа по всем подклассам по маршрутам: Москва-Чита; Чита-Москва; Москва-Чита-Москва; Чита-Москва-Чита;"
 subagent "1 (Один) % от тарифа по всем подклассам по маршрутам: Москва-Чита; Чита-Москва; Москва-Чита-Москва; Чита-Москва-Чита;"
 comment "группа Б SPECIAL FOR CHITA"
-routes "MOW-HTA/OW,RT"
+routes "MOW-HTA/ALL"
 important!
 ticketing_method "aviacenter"
 discount "0.5%"
@@ -3397,7 +3398,7 @@ agent "5% от всех опубл.тарифов на собств. рейсы 
 agent "Перевозки на короткие расстояния: Между Fiji & Pacific Islands, AU, NZ"
 subagent "3% от всех опубл.тарифов на собств. рейсы FJ для перевозки на короткие расстояния,"
 subagent "Перевозки на короткие расстояния: Между Fiji & Pacific Islands, AU, NZ"
-routes "...FJ,AU,NZ,KI,MH,FM,NR,PH,WS,SB,TO,TV,VU,CK,AS,PF,GU,NC,NU,NF,MP,PW..."
+routes "FJ-FJ,AU,NZ,KI,MH,FM,NR,PH,WS,SB,TO,TV,VU,CK,AS,PF,GU,NC,NU,NF,MP,PW/ALL"
 interline :no, :yes
 ticketing_method "aviacenter"
 discount "1.5%"
@@ -3409,7 +3410,6 @@ agent "7% от всех опубл.тарифов на собств. рейсы 
 agent "Перевозки на дальние расстояния: Между Fiji & всеми другими пунктами назначения маршрутной сети авиакомпании FJ."
 subagent "5% от всех опубл.тарифов на собств. рейсы FJ для перевозки на дальние расстояния,"
 subagent "Перевозки на дальние расстояния: Между Fiji & всеми другими пунктами назначения маршрутной сети авиакомпании FJ."
-routes "FJ.../OW,RT"
 interline :no, :yes
 ticketing_method "aviacenter"
 discount "2.5%"
@@ -3811,8 +3811,16 @@ agent "При продаже перевозок между г. Москва и �
 agent "При продаже перевозок между г. Москва и г. Анапа,г. Анапа и
 г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
 comment "Огромная гео-вырезка без код-шера"
-routes "MOW-RGK,VAR,BTK,BOJ,SPU,PUY,TIV,SIP,AER,AAQ,ALC,PMI,HTA/ALL", "OVB-HTA,AAQ,UUD,UUS,BJS,HKG,ALA,BKK,HKT,SIP,IKT/ALL", "IKT-GDX,OVB,BJS,BKK/ALL", "OMS,UUD-BJS/ALL", "KJA,KHV-BKK/ALL"
+comment "выключил routes из-за сквозных тарифов. нужны реальные примеры, чтобы понять применимость routes"
+comment "routes MOW-RGK,VAR,BTK,BOJ,SPU,PUY,TIV,SIP,AER,AAQ,ALC,PMI,HTA/ALL OVB-HTA,AAQ,UUD,UUS,BJS,HKG,ALA,BKK,HKT,SIP,IKT/ALL IKT-GDX,OVB,BJS,BKK/ALL OMS,UUD-BJS/ALL KJA,KHV-BKK/ALL"
 subagent ""
+check %{
+  (includes(city_iatas, 'MOW') and includes(city_iatas, 'RGK VAR BTK BOJ SPU PUY TIV SIP AER AER AAQ ALC PMI HTA')) or
+  (includes(city_iatas, 'OVB') and includes(city_iatas, 'HTA AAQ UUD UUS BJS HKG ALA BKK HKT SIP')) or
+  (includes(city_iatas, 'IKT') and includes(city_iatas, 'GDX OVB BJS BKK')) or
+  (includes(city_iatas, 'OMS UUD') and includes(city_iatas, 'BJS')) or
+  (includes(city_iatas, 'KJA KHV') and includes(city_iatas, 'BKK'))
+}
 interline :no_codeshare
 ticketing_method "downtown"
 commission "5%/3.5%"
@@ -3962,8 +3970,16 @@ agent "При продаже перевозок между г. Москва и �
 г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
 agent "При продаже перевозок между г. Москва и г. Анапа,г. Анапа и
 г. Москва, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), оформленных на ПД на рейсы Перевозчика, включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет 0.1%"
-routes "MOW-RGK,VAR,BTK,BOJ,SPU,PUY,TIV,SIP,AER,AAQ,ALC,PMI,HTA/ALL", "OVB-HTA,AAQ,UUD,UUS,BJS,HKG,ALA,BKK,HKT,SIP,IKT/ALL", "IKT-GDX,OVB,BJS,BKK/ALL", "OMS,UUD-BJS/ALL", "KJA,KHV-BKK/ALL"
 subagent ""
+comment "выключил routes из-за сквозных тарифов. нужны реальные примеры, чтобы понять применимость routes"
+comment "routes MOW-RGK,VAR,BTK,BOJ,SPU,PUY,TIV,SIP,AER,AAQ,ALC,PMI,HTA/ALL OVB-HTA,AAQ,UUD,UUS,BJS,HKG,ALA,BKK,HKT,SIP,IKT/ALL IKT-GDX,OVB,BJS,BKK/ALL MS,UUD-BJS/ALL KJA,KHV-BKK/ALL"
+check %{
+  (includes(city_iatas, 'MOW') and includes(city_iatas, 'RGK VAR BTK BOJ SPU PUY TIV SIP AER AER AAQ ALC PMI HTA')) or
+  (includes(city_iatas, 'OVB') and includes(city_iatas, 'HTA AAQ UUD UUS BJS HKG ALA BKK HKT SIP')) or
+  (includes(city_iatas, 'IKT') and includes(city_iatas, 'GDX OVB BJS BKK')) or
+  (includes(city_iatas, 'OMS UUD') and includes(city_iatas, 'BJS')) or
+  (includes(city_iatas, 'KJA KHV') and includes(city_iatas, 'BKK'))
+}
 ticketing_method "aviacenter"
 commission "0.1%/0.1%"
 
