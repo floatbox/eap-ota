@@ -44,22 +44,19 @@ class AutoTicketStuff
   def passenger_names(o)
     o.full_info.split("\n").map do |t|
       t.split('/')[0..1].join(' ')
-    end.sort
+    end
   end
 
   def no_dupe_orders?
-    Order.where(departure_date: order.departure_date,
-      route: order.route,
-      ticket_status: ['booked', 'ticketed', 'processing_ticket', 'error_ticket'],
-      commission_carrier: order.commission_carrier).select do |o|
-        passenger_names(o) == passenger_names(order)
-      end.count == 1
+    order.stored_flights.all? do |stored_flight|
+      passengers = stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).map{|o| passenger_names(o)}.flatten
+      passengers.count == passengers.uniq.count
+    end
   end
 
   def group_booking?
-    Order.where(departure_date: order.departure_date,
-      route: order.route,
-      ticket_status: ['booked', 'ticketed', 'processing_ticket', 'error_ticket'],
-      commission_carrier: order.commission_carrier).sum(:blank_count) > 8
+    order.stored_flights.any? do |stored_flight|
+      stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).sum(:blank_count) > 8
+    end
   end
 end

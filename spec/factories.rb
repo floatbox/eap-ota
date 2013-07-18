@@ -23,6 +23,14 @@ FactoryGirl.define do
     email 'example@gmail.com'
   end
 
+  factory :stored_flight do
+    marketing_carrier_iata 'SU'
+    departure_iata 'SVO'
+    arrival_iata 'LED'
+    dept_date Date.today + 1.week
+    flight_number 1
+  end
+
   factory :person do
     first_name
     last_name
