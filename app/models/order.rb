@@ -14,7 +14,7 @@ class Order < ActiveRecord::Base
   scope :for_manual_ticketing, lambda { where("payment_status IN ('blocked', 'charged') AND
     ticket_status = 'booked' AND
     pnr_number != '' AND
-    (NOT auto_ticket OR created_at < ?)", Time.now - 40.minutes ) }
+    (NOT auto_ticket OR updated_at < ?)", Time.now - 40.minutes ) }
 
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
@@ -102,6 +102,7 @@ class Order < ActiveRecord::Base
   end
 
   def make_payable_by_card
+    update_attributes(auto_ticket: true, no_auto_ticket_reason: '') if pnr_number.present? && ['delivery', 'cash'].include?(payment_type)
     update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending' && (pnr_number.present? || parent_pnr_number.present?)
   end
 
