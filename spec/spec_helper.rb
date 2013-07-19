@@ -40,6 +40,8 @@ Spork.prefork do
 
     config.include SpecExtensions::LetOnce
 
+    # нужно для database_cleaner
+    config.use_transactional_fixtures = false
   end
 
 end
