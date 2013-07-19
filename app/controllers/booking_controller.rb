@@ -159,6 +159,7 @@ class BookingController < ApplicationController
         @error_message = :payment
       else
         strategy = Strategy.select(:order => @order)
+        strategy.lax = !!admin_user
 
         if  !strategy.delayed_ticketing?
           logger.info "Pay: ticketing"

@@ -9,6 +9,7 @@ module BookingEssentials
 
     track_partner(params[:partner], params[:marker])
     strategy = Strategy.select( :rec => @recommendation, :search => @search )
+    strategy.lax = !!admin_user
 
     StatCounters.inc %W[enter.preliminary_booking.total]
     StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
@@ -79,6 +80,7 @@ module BookingEssentials
     end
 
     strategy = Strategy.select( :rec => @order_form.recommendation, :order_form => @order_form )
+    strategy.lax = !!admin_user
     booking_status = strategy.create_booking
 
     if booking_status == :failed
