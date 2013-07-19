@@ -391,25 +391,21 @@ init: function() {
     }
     this.toggle = function() {
         var st = $w.scrollTop(), s = 2;
-        if (st > tedge) {
-            s = 3; // кнопка за верхним краем
+        if (st < tedge) {
+            s = 0; // не видно подробности
         } else if (st < bedge) {
-            s = 0; // кнопка за нижним краем
-        } else if (st < bedge + 40) {
-            s = 1; // видно кнопку, но не видно подробности
+            s = 1; // видно подробности, но не кнопку
         }
         if (s !== state) {
-            that.el.toggleClass('ob-fixed', s === 0 || s === 3);
-            that.el.toggleClass('ob-tfixed', s === 3);
-            that.el.toggleClass('ob-bfixed', s === 0);
-            that.el.toggleClass('ob-subfixed', s < 2);
+            that.el.toggleClass('ob-fixed', s !== 2);
+            that.el.toggleClass('ob-subfixed', s === 0);
             state = s;
         }
     };
     this.count = function() {
-        var offset = that.el.find('.o-details').offset().top;
-        tedge = offset - 128 - 53;
-        bedge = offset - $w.height();
+        var wh = $w.height();
+        tedge = that.el.find('.o-details').offset().top + 200 - wh;
+        bedge = that.el.offset().top + that.el.height() - wh;
         that.toggle();
     };
     this.reset = function() {
@@ -427,7 +423,7 @@ bind: function() {
 },
 unbind: function() {
     $w.unbind('scroll', this.toggle).unbind('resize', this.count);
-    this.el.removeClass('ob-fixed ob-tfixed ob-bfixed ob-subfixed');
+    this.el.removeClass('ob-fixed ob-subfixed');
     this.reset();
 },
 update: function() {

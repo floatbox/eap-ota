@@ -354,7 +354,7 @@ updateDetails: function() {
         }
     }
     if (!this.details) {
-        this.details = $('<div class="o-details">').hide().appendTo(this.el);
+        this.details = $('<div class="o-details">').hide().insertAfter(this.el.find('.o-segments'));
     }
     this.details.html(temp.html());
 },
