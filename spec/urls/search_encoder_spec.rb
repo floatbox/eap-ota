@@ -6,15 +6,9 @@ describe Urls::Search::Encoder do
   let(:filler) { Urls::Search::FILLER_CHARACTER }
 
   def get_url(params={})
-    adults = params[:adults] || 1
-    children = params[:children] || 1
-    infants = params[:infants] || 0
-    cabin = params[:cabin] || 'B'
-    segments = params[:segments] || []
 
     segments_hash = {}
-
-    segments.each_with_index do |segment, index|
+    params[:segments].each_with_index do |segment, index|
       from, to, date = segment
       segments_hash[index.to_s] = {
         from: from,
@@ -24,10 +18,10 @@ describe Urls::Search::Encoder do
     end
 
     pricer_form = PricerForm.new(
-      adults: adults,
-      children: children,
-      infants: infants,
-      cabin: cabin,
+      adults: params[:adults] || 1,
+      children: params[:children] || 0,
+      infants: params[:infants] || 0,
+      cabin: params[:cabin] || 'Y',
       segments: segments_hash
     )
 
@@ -37,13 +31,13 @@ describe Urls::Search::Encoder do
   specify 'one-way ticket search' do
     segments = [['MOW', 'PAR', '120913']]
     url = get_url(segments: segments)
-    url.should == 'B110MOWPAR12SEP'
+    url.should == 'MOW-PAR-Sep12'
   end
 
   specify 'two-way ticket search' do
     segments = [['MOW', 'PAR', '120913'], ['PAR', 'MOW', '170913']]
     url = get_url(segments: segments)
-    url.should == 'B110MOWPAR12SEPPARMOW17SEP'
+    url.should == 'MOW-PAR-Sep12;Sep17'
   end
 
   specify 'complex route' do
@@ -56,13 +50,31 @@ describe Urls::Search::Encoder do
       ['PAR', 'MOW', '121013']
     ]
     url = get_url(segments: segments)
-    url.should == 'B110MOWPAR12SEPPARAMS17SEPAMSCHC18SEPCHCAMS20SEPAMSPAR30SEPPARMOW12OCT'
+    url.should == 'MOW-PAR-Sep12;AMS-Sep17;CHC-Sep18;AMS-Sep20;PAR-Sep30;MOW-Oct12'
   end
 
   specify 'short iatas' do
     segments = [['RU', 'US', '120913']]
     url = get_url(segments: segments)
-    url.should == "B110RU#{filler}US#{filler}12SEP"
+    url.should == "RU-US-Sep12"
+  end
+
+  specify 'business class' do
+    segments = [['RU', 'US', '120913']]
+    url = get_url(segments: segments, cabin: 'C')
+    url.should == "RU-US-Sep12;business"
+  end
+
+  specify 'passengers' do
+    segments = [['MOW', 'PAR', '120913']]
+    url = get_url(segments: segments, adults: 2, infants: 1)
+    url.should == "MOW-PAR-Sep12;2adt;inf"
+  end
+
+  specify 'more passengers' do
+    segments = [['MOW', 'PAR', '120913']]
+    url = get_url(segments: segments, adults: 1, children: 2)
+    url.should == "MOW-PAR-Sep12;adt;2chd"
   end
 end
 
