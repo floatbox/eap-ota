@@ -40,6 +40,12 @@ describe Urls::Search::Encoder do
     url.should == 'MOW-PAR-Sep12;Sep17'
   end
 
+  specify 'ground segment search' do
+    segments = [['MOW', 'RTM', '120913'], ['AMS', 'MOW', '170913']]
+    url = get_url(segments: segments)
+    url.should == 'MOW-RTM-Sep12;AMS-MOW-Sep17'
+  end
+
   specify 'complex route' do
     segments = [
       ['MOW', 'PAR', '120913'],

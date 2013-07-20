@@ -34,18 +34,16 @@ module Urls
         true
       end
 
-      # FIXME возможен разорванный маршрут, где кодировщик уберет только to_iata
       def encode_segments(segments)
         segments.each_with_index.map do |segment, idx|
           prev_segment = segments[idx - 1] if idx > 0
-          tokens = []
+          tokens = [segment.from_iata, segment.to_iata]
           # временно конфигурируемо
-          if idx == 0 || ((idx == 1 && !Conf.search_urls.short_rt) || (idx > 1 && !Conf.search_urls.short_chains)) && prev_segment.to_iata != segment.from_iata
-            tokens << segment.from_iata
-          end
-          unless Conf.search_urls.short_rt && idx == 1 && prev_segment.from_iata == segment.to_iata
-            tokens << segment.to_iata
-          end
+          Conf.search_urls.short_chains and idx > 0 and
+            prev_segment.to_iata == segment.from_iata and tokens.shift
+          Conf.search_urls.short_rt and idx == 1 and segments.size == 2 and
+            prev_segment.from_iata == segment.to_iata and
+            prev_segment.to_iata == segment.from_iata and tokens = []
           tokens << encode_date(segment.date_as_date)
           tokens.join(Conf.search_urls.internal_separator)
         end
