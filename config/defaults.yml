@@ -177,7 +177,7 @@ riemann:
     stat_counters: yes
     meter: yes
 search_urls:
-  segment_separator: ';'
+  segment_separator: '-'
   internal_separator: '-'
   short_rt: yes
   short_chains: yes
