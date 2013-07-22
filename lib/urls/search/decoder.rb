@@ -69,11 +69,11 @@ module Urls
           when 'first'
             cabin = 'F'
 
-          when /^(\d*)adt$/
+          when /^(\d*)(adt|adults?)$/
             adults   = ($1.presence || 1).to_i
-          when /^(\d*)chd$/
+          when /^(\d*)(chd|child|children)$/
             children = ($1.presence || 1).to_i
-          when /^(\d*)inf$/
+          when /^(\d*)(inf|infants?)$/
             infants  = ($1.presence || 1).to_i
 
           # все остальное считаем пунктами назначения

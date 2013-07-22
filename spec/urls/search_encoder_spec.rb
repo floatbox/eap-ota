@@ -74,13 +74,13 @@ describe Urls::Search::Encoder do
   specify 'passengers' do
     segments = [['MOW', 'PAR', '120913']]
     url = get_url(segments: segments, adults: 2, infants: 1)
-    url.should == "MOW-PAR-Sep12;2adt;inf"
+    url.should == "MOW-PAR-Sep12;2adults;infant"
   end
 
   specify 'more passengers' do
     segments = [['MOW', 'PAR', '120913']]
     url = get_url(segments: segments, adults: 1, children: 2)
-    url.should == "MOW-PAR-Sep12;adt;2chd"
+    url.should == "MOW-PAR-Sep12;adult;2children"
   end
 end
 

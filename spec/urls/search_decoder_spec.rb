@@ -145,7 +145,7 @@ describe Urls::Search::Decoder do
     context 'children and class' do
 
       before(:all) do
-        @url = 'MOW-PAR-Aug8;PAR-AMS-Aug16;2adt;inf;business'
+        @url = 'MOW-PAR-Aug8;PAR-AMS-Aug16;2adults;infant;business'
         @decoder = Urls::Search::Decoder.new(@url)
       end
 

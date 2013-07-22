@@ -66,12 +66,12 @@ module Urls
       def encode_pax(search)
         return if search.adults == 1 && search.children == 0 && search.infants == 0
         result = []
-        result << "adt" if search.adults == 1
-        result << "#{search.adults}adt" if search.adults > 1
-        result << "chd" if search.children == 1
-        result << "#{search.children}chd" if search.children > 1
-        result << "inf" if search.infants == 1
-        result << "#{search.infants}inf" if search.infants > 1
+        result << "adult" if search.adults == 1
+        result << "#{search.adults}adults" if search.adults > 1
+        result << "child" if search.children == 1
+        result << "#{search.children}children" if search.children > 1
+        result << "infant" if search.infants == 1
+        result << "#{search.infants}infants" if search.infants > 1
         result
       end
     end
