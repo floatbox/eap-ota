@@ -7,7 +7,7 @@ class City < ActiveRecord::Base
   has_paper_trail
 
   def self.timezones
-    TZInfo::Timezone.all_identifiers
+    TZInfo::Timezone.all_country_zone_identifiers
   end
 
   has_many :airports
