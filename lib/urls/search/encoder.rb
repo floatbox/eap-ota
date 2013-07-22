@@ -28,8 +28,8 @@ module Urls
       def encode_search(search)
         @url = (
           Array(encode_segments(search.segments)) +
-          Array(encode_cabin(search.cabin)) +
-          Array(encode_pax(search))
+          Array(encode_pax(search)) +
+          Array(encode_cabin(search.cabin))
         ).compact.join(Conf.search_urls.segment_separator)
         @url.upcase! if Conf.search_urls.upcase_all
         true
@@ -79,7 +79,7 @@ module Urls
           result << "infant" if search.infants == 1
           result << "#{search.infants}infants" if search.infants > 1
         end
-        result
+        result.join(Conf.search_urls.internal_separator)
       end
     end
   end
