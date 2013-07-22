@@ -2,11 +2,15 @@
 
 module Urls
   module Search
-    FILLER_CHARACTER = '~'
-    DEFAULT_CABIN = 'Y'
-    DEFAULT_ADULTS = 1
-    DEFAULT_CHILDREN = 0
-    DEFAULT_INFANTS = 0
+    module Defaults
+      CABIN = 'Y'
+      ADULTS = 1
+      CHILDREN = 0
+      INFANTS = 0
+    end
   end
 end
+
+require 'urls/search/decoder'
+require 'urls/search/encoder'
 

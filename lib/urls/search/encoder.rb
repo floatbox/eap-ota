@@ -4,15 +4,11 @@ require 'urls/search'
 
 module Urls
   module Search
-    module Encodable
-      def encode_url
-        encoder = Encoder.new(self)
-        encoder.url
-      end
-    end
 
     class Encoder
       attr_reader :url
+
+      include Urls::Search::Defaults
 
       def initialize(search)
         @url = nil

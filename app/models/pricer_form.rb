@@ -1,8 +1,5 @@
 # encoding: utf-8
 
-require 'urls/search/encoder'
-require 'urls/search/decoder'
-
 class PricerForm
   include Mongoid::Document
   include Mongoid::Timestamps
@@ -20,8 +17,19 @@ class PricerForm
   delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
   validate :check_people_total
 
-  include Urls::Search::Encodable
-  include Urls::Search::Decodable
+  # урлы
+  def self.from_code(code)
+    # затычка для старых урлов
+    return load_from_cache(code) if code.size == 6
+    decoder = Urls::Search::Decoder.new(code)
+    decoder.decoded if decoder.valid?
+  end
+
+  def encode_url
+    encoder = Urls::Search::Encoder.new(self)
+    encoder.url
+  end
+  # /урлы
 
   # перенести в хелпер
   def self.convert_api_date(date_str)
@@ -414,5 +422,5 @@ class PricerForm
   def short_date(ds)
     ds[0,2] + '.' + ds[2,2]
   end  
-  
+
 end

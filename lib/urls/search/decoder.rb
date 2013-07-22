@@ -4,24 +4,10 @@ require 'urls/search'
 
 module Urls
   module Search
-
-    module Decodable
-      def self.included(base)
-        base.extend(Classmethods)
-      end
-
-      module Classmethods
-        def from_code(code)
-          # затычка для старых урлов
-          return load_from_cache(code) if code.size == 6
-          decoder = Decoder.new(code)
-          decoder.decoded if decoder.valid?
-        end
-      end
-    end
-
     class Decoder
       attr_reader :decoded
+
+      include Urls::Search::Defaults
 
       def initialize(url)
         @decoded = nil
@@ -37,10 +23,10 @@ module Urls
       def parse(url)
 
         segments = []
-        adults = 0
-        children = 0
-        infants = 0
-        cabin = 'Y'
+        adults = ADULTS
+        children = CHILDREN
+        infants = INFANTS
+        cabin = CABIN
 
         location_stack = []
 
@@ -84,9 +70,6 @@ module Urls
         end
 
         raise "unknown token or missing date for IATA #{location_stack.inspect}" unless location_stack.empty?
-
-        # если пассажиры вообще не указаны - это один взрослый
-        adults = 1 if [adults, children, infants] == [0, 0, 0]
 
         @decoded = PricerForm.new(
           adults: adults,

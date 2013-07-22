@@ -167,12 +167,13 @@ describe Urls::Search::Decoder do
       end
     end
 
-    # specify('lowercase') { parsed?('b100mowpar08AUG').should be_true }
-    # specify('with filler character') { parsed?("Y100MOWPA#{filler}08AUG").should be_true }
+    specify('date with prefix day') { parsed?('MOW-AMS-6Jul').should be_true }
+    specify('date with postfix day') { parsed?('MOW-AMS-Jul6').should be_true }
+    specify('date with zero-prefixed day') { parsed?('MOW-AMS-06Jul').should be_true }
+    specify('lowercase') { parsed?('mow-ams-jul24').should be_true }
     # для сирены
-    # specify('with cyrillic iatas') { parsed?('C100СПБPAR08AUG').should be_true }
-    # specify('with cyrillic lowercase iatas') { parsed?('C100спбPAR08AUG').should be_true }
-    # specify('with filler character') { parsed?("C100MO#{filler}PAR08AUG").should be_true }
+    specify('with cyrillic iatas') { parsed?('СПБ-PAR-8Aug').should be_true }
+    specify('with cyrillic lowercase iatas') { parsed?('спб-PAR-8AUG').should be_true }
   end
 
 
@@ -180,12 +181,12 @@ describe Urls::Search::Decoder do
 
     next "not needed yet"
 
-    specify('completely wrong url') { parsed?('foowalksintothebar').should be_false }
-    # specify('wrong length') { parsed?('Y100MOWPAR088').should be_false }
-    specify('wrong adults value') { parsed?('YM00MOWPAR08AUG').should be_false }
-    specify('wrong children value') { parsed?('Y0z0MOWPAR08AUG').should be_false }
-    specify('wrong infants value') { parsed?('Y00zMOWPAR08AUG').should be_false }
-    specify('7 segments') { parsed?('Y009' + 'MOWPAR08AUG' * 7).should be_false }
+    specify('completely wrong structure') { parsed?('foowalksintothebar').should be_false }
+    specify('wrong month') { parsed?('MOW-AMS-Ju24').should be_false }
+    specify('wrong adults value') { parsed?('MOW-AMS-Jul24-Aadults-2children-infant').should be_false }
+    specify('wrong children value') { parsed?('MOW-AMS-Jul24-2adults-Bchildren-infant').should be_false }
+    specify('wrong infants value') { parsed?('MOW-AMS-Jul24-3adults-2children-~infant').should be_false }
+    specify('7 segments') { parsed?('MOW-AMS-Jul24-PAR-Jul26-MIL-Jul31-PRG-Aug1-ROM-Aug8-MOW-Aug15-LED-Aug18').should be_false }
   end
 end
 
