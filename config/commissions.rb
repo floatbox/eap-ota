@@ -25,6 +25,7 @@ subagent "4.5%"
 check %{ not includes(city_iatas, 'TLV') }
 ticketing_method "downtown"
 discount "2.75%"
+disabled "Включаем SU#4"
 commission "5%/4.5%"
 
 example "svocdg"
@@ -35,8 +36,7 @@ subagent "3%  от тарифа на собств. рейсы SU с начало
 interline :no, :yes
 check %{ includes_only(country_iatas.first, 'RU') }
 ticketing_method "aviacenter"
-disabled "Выписываем по широкому безтельавивному правилу в dtt"
-discount "1.5%"
+discount "3.5%"
 commission "4%/3%"
 
 example "cdgsvo"
@@ -3288,12 +3288,12 @@ ticketing_method "aviacenter"
 consolidator "2%"
 commission "0.1%/0.5"
 
-example "svotiv/U63171"
-example "tivsvo/U63172"
-example "svotiv/U63171 tivsvo/U63172"
-agent "0.1% Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват (только на рейсы U6 3171/3172);"
-subagent "0.5 Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват (только на рейсы U6 3171/3172);"
-check %{  includes_only(city_iatas, 'MOW TIV') and includes_only(flights.every.full_flight_number, %W(U63171 U63172)) }
+example "svotiv"
+example "tivsvo"
+example "svotiv tivsvo"
+agent "0.1% Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват;"
+subagent "0.5 Москва-Тиват; Тиват-Москва; Москва-Тиват-Москва; Тиват-Москва-Тиват;"
+check %{ includes_only(city_iatas, 'MOW TIV') }
 important!
 ticketing_method "aviacenter"
 consolidator "2%"
