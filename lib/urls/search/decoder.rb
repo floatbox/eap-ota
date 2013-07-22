@@ -4,6 +4,10 @@ require 'urls/search'
 
 module Urls
   module Search
+
+    class ParserError < Exception
+    end
+
     class Decoder
       attr_reader :decoded
 
@@ -40,7 +44,7 @@ module Urls
             date = decode_date(token)
             from, to = location_stack
             if to.nil?
-              raise "first segment can't be shortened" if segments.empty?
+              raise ParserError, "first segment can't be shortened" if segments.empty?
               # указан только "туда"
               from, to = segments.last[:to], from
               # не указано ничего, roundtrip
@@ -65,11 +69,13 @@ module Urls
           # все остальное считаем пунктами назначения
           else
             location_stack.push token
-            raise "unknown token or dangling IATA #{token.inspect}" if location_stack.size > 2
+            raise ParserError, "unknown token or dangling IATA #{token.inspect}" if location_stack.size > 2
           end
         end
 
-        raise "unknown token or missing date for IATA #{location_stack.inspect}" unless location_stack.empty?
+        unless location_stack.empty?
+          raise ParserError, "unknown token or missing date for IATA #{location_stack.inspect}"
+        end
 
         @decoded = PricerForm.new(
           adults: adults,
@@ -78,6 +84,12 @@ module Urls
           cabin: cabin,
           segments: paramify_array(segments)
         )
+        true
+      # штатные случаи рейзятся с ParserError, нештатные - без,
+      # в любом случае перехватываем, чтобы не свалиться и переправить юзера на главную, шлем в airbrake
+      rescue Exception
+        with_warning
+        return false
       end
 
       def paramify_array(array)
@@ -89,7 +101,6 @@ module Urls
         d = d < Date.today ? d.next_year : d
         d.strftime('%d%m%y')
       end
-
     end
   end
 end

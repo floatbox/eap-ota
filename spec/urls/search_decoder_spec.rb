@@ -6,8 +6,6 @@ describe Urls::Search::Decoder do
     Time.stub(:now).and_return(Date.parse('14JUL2013'))
   end
 
-  let(:filler) { Urls::Search::FILLER_CHARACTER }
-
   def parsed?(url)
     Urls::Search::Decoder.new(url).valid?
   end
@@ -36,7 +34,6 @@ describe Urls::Search::Decoder do
         describe 'segments' do
           subject { @decoder.decoded.segments }
           it { should have(1).items }
-          it { should }
         end
       end
     end
@@ -176,17 +173,15 @@ describe Urls::Search::Decoder do
     specify('with cyrillic lowercase iatas') { parsed?('спб-PAR-8AUG').should be_true }
   end
 
-
   context 'invalid url with' do
-
-    next "not needed yet"
-
+    specify('incomplete segment') { parsed?('MOW-15Sep').should be_false }
     specify('completely wrong structure') { parsed?('foowalksintothebar').should be_false }
     specify('wrong month') { parsed?('MOW-AMS-Ju24').should be_false }
     specify('wrong adults value') { parsed?('MOW-AMS-Jul24-Aadults-2children-infant').should be_false }
-    specify('wrong children value') { parsed?('MOW-AMS-Jul24-2adults-Bchildren-infant').should be_false }
-    specify('wrong infants value') { parsed?('MOW-AMS-Jul24-3adults-2children-~infant').should be_false }
-    specify('7 segments') { parsed?('MOW-AMS-Jul24-PAR-Jul26-MIL-Jul31-PRG-Aug1-ROM-Aug8-MOW-Aug15-LED-Aug18').should be_false }
+    specify('wrong children value') { parsed?('MOW-AMS-Jul24-2adults-THEchildren-infant').should be_false }
+    specify('wrong infants value') { parsed?('MOW-AMS-Jul24-3adults-2children-Yinfant').should be_false }
+    # проверяется в PricerForm.valid?
+    #specify('7 segments') { parsed?('MOW-AMS-Jul24-PAR-Jul26-MIL-Jul31-PRG-Aug1-ROM-Aug8-MOW-Aug15-LED-Aug18').should be_false }
   end
 end
 
