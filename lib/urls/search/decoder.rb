@@ -50,7 +50,7 @@ module Urls
           case token
 
           # пришла дата, делаем сегмент из предыдущих локаций
-          when /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\d\d?)$/i
+          when /^(\d\d?)?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\d\d?)?$/i
             date = decode_date(token)
             from, to = location_stack
             if to.nil?
@@ -64,16 +64,16 @@ module Urls
             segments << { from: from, to: to, date: date }
 
           # классы
-          when 'business'
+          when /^business$/i
             cabin = 'C'
-          when 'first'
+          when /^first$/i
             cabin = 'F'
 
-          when /^(\d*)(adt|adults?)$/
+          when /^(\d*)(adt|adults?)$/i
             adults   = ($1.presence || 1).to_i
-          when /^(\d*)(chd|child|children)$/
+          when /^(\d*)(chd|child|children)$/i
             children = ($1.presence || 1).to_i
-          when /^(\d*)(inf|infants?)$/
+          when /^(\d*)(inf|infants?)$/i
             infants  = ($1.presence || 1).to_i
 
           # все остальное считаем пунктами назначения

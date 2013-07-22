@@ -181,3 +181,6 @@ search_urls:
   internal_separator: '-'
   short_rt: yes
   short_chains: yes
+  reversed_dates: no
+  short_pax_codes: no
+  upcase_all: no

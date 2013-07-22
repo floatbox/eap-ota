@@ -31,6 +31,7 @@ module Urls
           Array(encode_cabin(search.cabin)) +
           Array(encode_pax(search))
         ).compact.join(Conf.search_urls.segment_separator)
+        @url.upcase! if Conf.search_urls.upcase_all
         true
       end
 
@@ -51,7 +52,7 @@ module Urls
 
       def encode_date(date)
         # Sep1, no spaces
-        date.strftime('%b%e').tr(' ','')
+        date.strftime(Conf.search_urls.reversed_dates ? '%e%b' : '%b%e').tr(' ','')
       end
 
       def encode_cabin(cabin)
@@ -66,12 +67,18 @@ module Urls
       def encode_pax(search)
         return if search.adults == 1 && search.children == 0 && search.infants == 0
         result = []
-        result << "adult" if search.adults == 1
-        result << "#{search.adults}adults" if search.adults > 1
-        result << "child" if search.children == 1
-        result << "#{search.children}children" if search.children > 1
-        result << "infant" if search.infants == 1
-        result << "#{search.infants}infants" if search.infants > 1
+        if Conf.search_urls.short_pax_codes
+          result << "#{search.adults}adt" if search.adults > 0
+          result << "#{search.children}chd" if search.children > 0
+          result << "#{search.infants}inf" if search.infants > 0
+        else
+          result << "adult" if search.adults == 1
+          result << "#{search.adults}adults" if search.adults > 1
+          result << "child" if search.children == 1
+          result << "#{search.children}children" if search.children > 1
+          result << "infant" if search.infants == 1
+          result << "#{search.infants}infants" if search.infants > 1
+        end
         result
       end
     end
