@@ -32,7 +32,6 @@ class AutoTicketStuff
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
     no_dupe_orders? or return 'dupe'
     !group_booking? or return 'Скрытая группа'
-    (Order.where(email: order.email, ticket_status: ['booked', 'ticketed', 'processing_ticket', 'error_ticket']).where('created_at > ?', Time.now - 6.hours).count < 2) or return 'пользователь совершил 1 успешный заказ ранее'#текущий заказ уже попадает в count
     people.map{|p| [p.first_name, p.last_name]}.uniq.count == people.count or return 'есть 2 пассажира с совпадающими именем и фамилией'
     nil
   end
