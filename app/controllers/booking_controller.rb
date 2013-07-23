@@ -15,6 +15,7 @@ class BookingController < ApplicationController
   #   "marker"=>"",
   #   "variant_id"=>"1"
   def preliminary_booking
+    @coded_search = params[:query_key]
     if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       render :json => {
         :success => true,
@@ -31,7 +32,11 @@ class BookingController < ApplicationController
   #   "query_key"=>"ki1kri"
   def api_booking
     @query_key = params[:query_key]
-    @search = PricerForm.load_from_cache(params[:query_key])
+    @search = PricerForm.from_code(params[:query_key])
+    unless @search && @search.valid?
+      # необходимо очистить anchor вручную
+      return redirect_to '/#'
+    end
     #FIXME берем партнера из сохраненной PricerForm - надежно, но некрасиво
     @partner = Partner[@search.partner]
     @destination = get_destination
@@ -90,7 +95,7 @@ class BookingController < ApplicationController
     @order_form.recommendation.find_commission!
     @order_form.init_people
     @order_form.admin_user = admin_user
-    @search = PricerForm.load_from_cache(@order_form.query_key)
+    @search = PricerForm.from_code(@order_form.query_key)
 
     if params[:iphone]
       render :partial => 'iphone'
@@ -159,6 +164,7 @@ class BookingController < ApplicationController
         @error_message = :payment
       else
         strategy = Strategy.select(:order => @order)
+        strategy.lax = !!admin_user
 
         if  !strategy.delayed_ticketing?
           logger.info "Pay: ticketing"

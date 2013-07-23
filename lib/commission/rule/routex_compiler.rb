@@ -11,7 +11,7 @@ class Commission::Rule::RoutexCompiler
     @body, flags_string = @source.split('/')
     @flags = flags_string ? flags_string.split(',') : ['OW']
     @flags = %W[OW RT WO TR] if flags_string == 'ALL'
-    @tokens = @body.split(/(-|\.\.\.)/)
+    @tokens = @body.split(/(-|\.\.\.)/).reject(&:empty?)
     validate!
   end
 

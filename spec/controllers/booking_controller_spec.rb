@@ -109,7 +109,7 @@ describe BookingController do
         Recommendation.stub(:deserialize).and_return(recommendation)
         strategy = mock('Strategy', check_price_and_availability: nil).as_null_object
         Strategy.stub(:select).and_return(strategy)
-        PricerForm.stub(:load_from_cache).and_return(pricer)
+        PricerForm.stub(:from_code).and_return(pricer)
       end
 
       it 'saves both partner and marker if they present' do

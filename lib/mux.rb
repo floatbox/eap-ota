@@ -93,7 +93,8 @@ class Mux
         # regroup
         recommendations = Recommendation.corrected(recommendations)
       end
-      recommendations.every.clear_variants
+      # TODO пометить как непродаваемые, для админов?
+      recommendations.every.clear_variants unless admin_user
       recommendations.delete_if{|r| r.variants.blank?}
       recommendations
     end

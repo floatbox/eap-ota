@@ -176,3 +176,11 @@ riemann:
     request_performance: yes
     stat_counters: yes
     meter: yes
+search_urls:
+  segment_separator: '-'
+  internal_separator: '-'
+  short_rt: yes
+  short_chains: yes
+  reversed_dates: yes
+  short_pax_codes: no
+  upcase_all: no

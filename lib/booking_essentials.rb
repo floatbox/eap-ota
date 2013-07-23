@@ -5,10 +5,11 @@ module BookingEssentials
     @recommendation = Recommendation.deserialize(params[:recommendation])
     # FIXME среагировать @recommendation.sellable? == false
     @recommendation.find_commission!
-    recover_pricer_form
+    return unless recover_pricer_form
 
     track_partner(params[:partner], params[:marker])
     strategy = Strategy.select( :rec => @recommendation, :search => @search )
+    strategy.lax = !!admin_user
 
     StatCounters.inc %W[enter.preliminary_booking.total]
     StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
@@ -22,7 +23,7 @@ module BookingEssentials
         :recommendation => @recommendation,
         :people_count => @search.real_people_count,
         :variant_id => params[:variant_id],
-        :query_key => @search.query_key,
+        :query_key => @coded_search,
         :partner => partner,
         :marker => marker
       )
@@ -37,7 +38,7 @@ module BookingEssentials
 
   def recover_pricer_form
     if params[:query_key]
-      @search = PricerForm.load_from_cache(params[:query_key])
+      @search = PricerForm.from_code(params[:query_key])
     else
       @search = PricerForm.new
       @search.adults = params[:adults] if params[:adults]
@@ -79,6 +80,7 @@ module BookingEssentials
     end
 
     strategy = Strategy.select( :rec => @order_form.recommendation, :order_form => @order_form )
+    strategy.lax = !!admin_user
     booking_status = strategy.create_booking
 
     if booking_status == :failed
