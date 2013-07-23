@@ -28,8 +28,7 @@
         <th style="width: 120px;">Дата заказа</th>
         <th style="width: 240px;">Маршрут</th>
         <th style="width: 120px;">Дата вылета</th>
-        <th>Номер&nbsp;брони</th>
-        <!-- <th>Номер&nbsp;подтверждения</th> -->
+        <th>Номер&nbsp;брони&nbsp;/&nbsp;подтверждения</th>
         <th>Статус оплаты</th>
         <th class="ors-right">Стоимость</th>
     </tr>
@@ -39,8 +38,7 @@
             <p class="ors-route"><%= order.profile_route_smart %></p>
         </td>
         <td><%= l(order.departure_date, :format => :human_year) %></td>
-        <td><%= order.pnr_number %></td>
-        <!-- <td></td> -->
+        <td><%= order.pnr_number %><% if order.additional_pnr_number %>&nbsp;/&nbsp;<%= order.additional_pnr_number %><% end %></td>
         <td><%= order.profile_status %></td>
         <td class="ors-right"><%= decorate_price short_price(order.profile_payment_price) %></td>
     </tr>
