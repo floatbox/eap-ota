@@ -99,7 +99,9 @@ I18n.locale = '<%= I18n.locale %>';
     </div>
     <% end %>
 
+    <% if admin_user %>
     <%= render "profile/popup" %>
+    <% end %>
 
     <div class="ph-social">
         <a target="_blank" class="phs-icon phs-facebook" title="Фейсбук" href="https://www.facebook.com/eviterra/">&nbsp;</a>
