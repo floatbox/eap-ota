@@ -91,13 +91,5 @@ class Destination
     find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => search.rt)
   end
 
-  def self.get_by_iatas search
-    find_or_create_by(
-      from_iata: search.from_iata,
-      to_iata: search.to_iata,
-      rt: search.rt
-    )
-  end
-
 end
 

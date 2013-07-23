@@ -8,7 +8,7 @@ class PricerController < ApplicationController
 
   def pricer
     @search.partner = params[:partner]
-    @destination = Destination.get_by_iatas @search
+    @destination = Destination.get_by_search @search
     @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
     if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
       @destination.move_average_price @search, @recommendations.first, @code
