@@ -2,21 +2,20 @@
 class PricerController < ApplicationController
   layout false
 
-  before_filter :load_form_from_cache, :only => [:pricer, :calendar]
+  before_filter :parse_and_validate_url, :only => [:pricer, :calendar]
 
   include Monitoring::Benchmarkable
 
   def pricer
-    if @search.valid?
-      @destination = Destination.get_by_search @search
-      @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
-      if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
-        @destination.move_average_price @search, @recommendations.first, @query_key
-      end
-      @locations = @search.human_locations
-      @average_price = @destination.average_price * @search.people_count[:adults] if @destination && @destination.average_price
-      StatCounters.d_inc @destination, %W[search.total search.pricer.total] if @destination
+    @search.partner = params[:partner]
+    @destination = Destination.get_by_iatas @search
+    @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
+    if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
+      @destination.move_average_price @search, @recommendations.first, @code
     end
+    @locations = @search.human_locations
+    @average_price = @destination.average_price * @search.people_count[:adults] if @destination && @destination.average_price
+    StatCounters.d_inc @destination, %W[search.total search.pricer.total] if @destination
     render :partial => 'recommendations'
   ensure
     StatCounters.inc %W[search.pricer.total]
@@ -29,7 +28,7 @@ class PricerController < ApplicationController
     Flight.class
     file_name = Rails.root + 'data/recommendations/rec.dump'
     file = File.open(file_name, 'r')
-    @search = PricerForm.load_from_cache('pcu8mn')
+    @search = PricerForm.from_code('Y100MOWAMS17SEP')
 
     @recommendations = Marshal.load(file.read)
     @locations = @search.human_locations
@@ -50,7 +49,7 @@ class PricerController < ApplicationController
   end
 
   def calendar
-    if @search.valid? && @search.segments.size < 3
+    if @search.segments.size < 3
       @recommendations = Mux.new(:admin_user => admin_user).calendar(@search)
     end
     render :partial => 'matrix'
@@ -64,18 +63,16 @@ class PricerController < ApplicationController
   def validate
     result = {}
     if @query_key = params[:query_key]
-      @search = PricerForm.load_from_cache(@query_key)
-      #set_search_context_for_airbrake
+      @search = PricerForm.from_code(@query_key)
+      unless @search && @search.valid?
+        result[:errors] = ['parsing error']
+      end
       fragment_exist = fragment_exist?([:pricer, @query_key]) && fragment_exist?([:calendar, @query_key])
       result[:fragment_exist] = fragment_exist
       StatCounters.inc %W[validate.cached] if fragment_exist
     else
       @search = PricerForm.new(params[:search])
-      #set_search_context_for_airbrake
-      if @search.valid?
-        StatCounters.inc %W[validate.success]      
-        @search.save_to_cache
-      else
+      unless @search.valid?
         result[:errors] = @search.segments.map{|fs| fs.errors.keys}
       end
     end
@@ -84,7 +81,7 @@ class PricerController < ApplicationController
     end
     if @search.present? && @search.valid?
       result.merge!(search_details(@search))
-      result[:query_key] = @search.query_key
+      result[:query_key] = Urls::Search::Encoder.new(@search).url
       result[:short] = @search.human_short
       result[:valid] = true
     end
@@ -105,9 +102,8 @@ class PricerController < ApplicationController
     @search = PricerForm.simple(pricer_form_hash)
     
     StatCounters.inc %W[search.api.total search.api.#{partner4stat}.total]
-    
+
     if @search.valid?
-      @search.save_to_cache
       @destination = Destination.get_by_search @search
       suggested_limit =
         Partner[partner].suggested_limit ||
@@ -115,14 +111,14 @@ class PricerController < ApplicationController
         Conf.amadeus.recommendations_lite
       logger.info "Suggested limit: #{suggested_limit}"
 
-        @recommendations = Mux.new(:lite => true, :suggested_limit => suggested_limit).pricer(@search)
+      @recommendations = Mux.new(:lite => true, :suggested_limit => suggested_limit).pricer(@search)
 
       # измеряем рекомендации до фильтрации
       meter :api_total_unfiltered_recommendations, @recommendations.size
 
-      @query_key = @search.query_key
+      @code = @search.encode_url
       if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
-        @destination.move_average_price @search, @recommendations.first, @query_key
+        @destination.move_average_price @search, @recommendations.first, @code
       end
 
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
@@ -153,13 +149,13 @@ class PricerController < ApplicationController
 
   protected
 
-  def load_form_from_cache
+  def parse_and_validate_url
     StatCounters.inc %W[search.total]
-    unless (@query_key = params[:query_key]) && (@search = PricerForm.load_from_cache(@query_key))
-      StatCounters.inc %W[search.errors.pricer_form_not_found]
+    @code = params[:query_key]
+    unless @search = PricerForm.from_code(@code)
+      StatCounters.inc %W[search.errors.coded_url_is_broken]
       render :text => "404 Not found", :status => :not_found
     end
-    #set_search_context_for_airbrake
   end
 
 end
