@@ -31,19 +31,19 @@ describe Urls::Search::Encoder do
   specify 'one-way ticket search' do
     segments = [['MOW', 'PAR', '120913']]
     url = get_url(segments: segments)
-    url.should == 'MOW-PAR-Sep12'
+    url.should == 'MOW-PAR-12Sep'
   end
 
   specify 'two-way ticket search' do
     segments = [['MOW', 'PAR', '120913'], ['PAR', 'MOW', '170913']]
     url = get_url(segments: segments)
-    url.should == 'MOW-PAR-Sep12-Sep17'
+    url.should == 'MOW-PAR-12Sep-17Sep'
   end
 
   specify 'ground segment search' do
     segments = [['MOW', 'RTM', '120913'], ['AMS', 'MOW', '170913']]
     url = get_url(segments: segments)
-    url.should == 'MOW-RTM-Sep12-AMS-MOW-Sep17'
+    url.should == 'MOW-RTM-12Sep-AMS-MOW-17Sep'
   end
 
   specify 'complex route' do
@@ -56,7 +56,7 @@ describe Urls::Search::Encoder do
       ['PAR', 'MOW', '121013']
     ]
     url = get_url(segments: segments)
-    url.should == 'MOW-PAR-Sep12-AMS-Sep17-CHC-Sep18-AMS-Sep20-PAR-Sep30-MOW-Oct12'
+    url.should == 'MOW-PAR-12Sep-AMS-17Sep-CHC-18Sep-AMS-20Sep-PAR-30Sep-MOW-12Oct'
   end
 
   specify 'complex route with "segment breaks"' do
@@ -71,31 +71,31 @@ describe Urls::Search::Encoder do
       ['PAR', 'MOW', '121013']
     ]
     url = get_url(segments: segments)
-    url.should == 'MOW-PAR-Sep12-AMS-Sep17-RTM-CHC-Sep18-AMS-Sep20-PAR-Sep30-MOW-Oct12'
+    url.should == 'MOW-PAR-12Sep-AMS-17Sep-RTM-CHC-18Sep-AMS-20Sep-PAR-30Sep-MOW-12Oct'
   end
 
   specify 'short iatas' do
     segments = [['RU', 'US', '120913']]
     url = get_url(segments: segments)
-    url.should == "RU-US-Sep12"
+    url.should == "RU-US-12Sep"
   end
 
   specify 'business class' do
     segments = [['RU', 'US', '120913']]
     url = get_url(segments: segments, cabin: 'C')
-    url.should == "RU-US-Sep12-business"
+    url.should == "RU-US-12Sep-business"
   end
 
   specify 'passengers' do
     segments = [['MOW', 'PAR', '120913']]
     url = get_url(segments: segments, adults: 2, infants: 1)
-    url.should == "MOW-PAR-Sep12-2adults-infant"
+    url.should == "MOW-PAR-12Sep-2adults-infant"
   end
 
   specify 'more passengers' do
     segments = [['MOW', 'PAR', '120913']]
     url = get_url(segments: segments, adults: 1, children: 2)
-    url.should == "MOW-PAR-Sep12-adult-2children"
+    url.should == "MOW-PAR-12Sep-adult-2children"
   end
 end
 

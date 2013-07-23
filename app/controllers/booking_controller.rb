@@ -33,6 +33,10 @@ class BookingController < ApplicationController
   def api_booking
     @query_key = params[:query_key]
     @search = PricerForm.from_code(params[:query_key])
+    unless @search && @search.valid?
+      # необходимо очистить anchor вручную
+      return redirect_to '/#'
+    end
     #FIXME берем партнера из сохраненной PricerForm - надежно, но некрасиво
     @partner = Partner[@search.partner]
     @destination = get_destination

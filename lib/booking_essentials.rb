@@ -3,7 +3,7 @@ module BookingEssentials
   def preliminary_booking_result(forbid_class_changing)
     return if Conf.site.forbidden_booking
     @recommendation = Recommendation.deserialize(params[:recommendation])
-    recover_pricer_form
+    return unless recover_pricer_form
 
     track_partner(params[:partner], params[:marker])
     strategy = Strategy.select( :rec => @recommendation, :search => @search )
@@ -35,7 +35,6 @@ module BookingEssentials
 
   def recover_pricer_form
     if params[:query_key]
-      #@search = PricerForm.load_from_cache(params[:query_key])
       @search = PricerForm.from_code(params[:query_key])
     else
       @search = PricerForm.new

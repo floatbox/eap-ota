@@ -63,14 +63,15 @@ class PricerController < ApplicationController
   def validate
     result = {}
     if @query_key = params[:query_key]
-      #set_search_context_for_airbrake
       @search = PricerForm.from_code(@query_key)
+      unless @search && @search.valid?
+        result[:errors] = ['parsing error']
+      end
       fragment_exist = fragment_exist?([:pricer, @query_key]) && fragment_exist?([:calendar, @query_key])
       result[:fragment_exist] = fragment_exist
       StatCounters.inc %W[validate.cached] if fragment_exist
     else
       @search = PricerForm.new(params[:search])
-      #set_search_context_for_airbrake
       unless @search.valid?
         result[:errors] = @search.segments.map{|fs| fs.errors.keys}
       end

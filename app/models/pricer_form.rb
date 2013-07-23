@@ -21,8 +21,7 @@ class PricerForm
   def self.from_code(code)
     # затычка для старых урлов
     return load_from_cache(code) if code.size == 6
-    decoder = Urls::Search::Decoder.new(code)
-    decoder.decoded if decoder.valid?
+    Urls::Search::Decoder.new(code).decoded
   end
 
   def encode_url

@@ -261,7 +261,7 @@ class OrderForm
   end
 
   def update_price_and_counts
-    search = PricerForm.load_from_cache(query_key)
+    search = PricerForm.from_code(query_key)
     search.people_count = calculated_people_count
     strategy = Strategy.select( :rec => recommendation, :search => search )
     if strategy.check_price_and_availability
