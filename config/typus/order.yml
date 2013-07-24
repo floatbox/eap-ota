@@ -26,7 +26,7 @@ Order:
       - payment_status
       - charged_on
       - ticket_status
-      - contact
+      - contact_with_customer
       - name_in_card
       - pan
       - full_info
