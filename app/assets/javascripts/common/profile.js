@@ -1,17 +1,19 @@
 var User = {
 init: function() {
     this.el = $('#user');
-    var logout = this.el.find('.phu-logout form');
-    if (logout.length) {
-        this.el.find('.phul-logout').on('click', function() {
-            logout.submit();
-        });
-        this.show = $.noop;
-    } else {
-        this.initPopup();
-        this.authorization.init();
-        this.password.init();
-        this.initPlaceholders();
+    if (this.el.length) {
+        var logout = this.el.find('.phu-logout form');
+        if (logout.length) {
+            this.el.find('.phul-logout').on('click', function() {
+                logout.submit();
+            });
+            this.show = $.noop;
+        } else {
+            this.initPopup();
+            this.authorization.init();
+            this.password.init();
+            this.initPlaceholders();
+        }
     }
     this.init = $.noop;
 },
