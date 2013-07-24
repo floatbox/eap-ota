@@ -71,7 +71,6 @@ class BookingController < ApplicationController
     # FIXME если partner из @search не берется больше - переделать на before_filter save_partner_cookies
     track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?
-      @search.save_to_cache
       StatCounters.inc %W[enter.api_redirect.success]
       redirect_to "#{Conf.api.url_base}/##{@search.query_key}"
     else
