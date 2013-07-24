@@ -223,7 +223,7 @@ class Payu
 
   # FIXME найти более удачный способ прокидывать сюда конфирмационный урл
   def threeds_return_url
-    "#{Conf.site.host}/confirm_3ds"
+    Conf.site.ssl ? 'https://' : 'http://' + "#{Conf.site.host}/confirm_3ds"
   end
 
   # просто парсит 3дс ответ от гейтвея
