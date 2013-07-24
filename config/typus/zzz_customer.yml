@@ -1,3 +1,4 @@
+# так называется, чтобы быть в меню после заказов
 Customer:
   fields:
     default: email, status, created_at, orders_count_link
