@@ -16,6 +16,14 @@ class Customer < ActiveRecord::Base
 
   has_many :orders
 
+  def cancel_confirmation!
+      self.confirmation_token = nil
+      self.confirmation_sent_at = nil
+      self.confirmed_at = nil
+      self.last_sign_in_at = nil
+      save
+  end
+
   def password_required?
     super if confirmed?
   end

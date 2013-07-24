@@ -101,7 +101,7 @@ module TypusOrder
     if !parent_pnr_number.blank?
       "<a href='/admin/orders?search=#{parent_pnr_number}'>#{parent_pnr_number}</a>".html_safe
     elsif !pnr_number.blank?
-      "<a href='/admin/orders?search=#{pnr_number}'>→ <small>найти pnr number</small></a>".html_safe
+      "<a href='/admin/orders?search=#{pnr_number}'>→<small>найти pnr number</small></a>".html_safe
     else
       "—"
     end

@@ -1,0 +1,5 @@
+<table><tr>
+<% if @item.confirmed? || @item.pending_confirmation? %>
+  <td><%= button_to 'Отменить регистрацию', {:action => 'cancel_confirmation', :id => @item.id} %></td>
+<% end %>
+</tr> </table>
