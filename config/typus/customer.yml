@@ -1,0 +1,14 @@
+Customer:
+  fields:
+    default: email, status, created_at, orders_count_link
+    show: email, status, created_at, orders_count_link, confirmed?, confirm_link, confirmed_at, confirmation_token, confirmation_sent_at, last_sign_in_at, spyglass_link
+    options:
+      date_formats:
+        created_at: long
+        confirmed_at: long
+        last_sign_in_at: long
+        confirmation_sent_at: long
+  order_by: -created_at
+  filters: created_at
+  search: email
+  application: Orders, 1

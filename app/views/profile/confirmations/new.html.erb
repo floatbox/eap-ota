@@ -1,0 +1,27 @@
+<% content_for :title do %>Регистрация<% end %>
+<div class="up-form">
+<div class="upf-header">
+    <h3 class="upf-title">Регистрация</h3>
+    <p class="upf-description">Если вы&nbsp;не&nbsp;получили письмо в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, мы можем выслать письмо ещё раз.</p>
+</div>
+<%= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :method => :post }) do |f| %>
+
+    <div class="upf-field">
+        <h6 class="upff-label"><%= f.label :email, 'Электронный адрес' %></h6>
+        <%= f.email_field :email, :class => 'upff-input' %>
+    </div>
+    <div class="upf-submit">
+        <%= f.submit "Зарегистрироваться", :class => 'upf-button' %>
+    </div>
+
+    <% if !devise_error_messages!.empty? || !flash.empty? %>
+    <div class="upf-errors">
+        <%= devise_error_messages! %>
+        <% flash.each do |key, value| %>
+            <%= value %>
+        <% end %>
+    </div>
+    <% end %>    
+
+<% end %>
+</div>

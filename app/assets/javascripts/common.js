@@ -1,3 +1,4 @@
 //= require jquery.min
-//= require common/common
 //= require i18n_init
+//= require common/common
+//= require common/profile

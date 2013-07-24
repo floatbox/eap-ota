@@ -1,0 +1,83 @@
+# Личный кабинет
+
+- - -
+
+## Use Cases
+
+1. Отправка приглашения существующему катомеру
+	* action: customer.send_confirmation_instructions
+	* mailer view: customer_mailer/confirmation_instructions.html.erb	
+	* url: /profile/verification?confirmation_token=RT9z7fLdcQpWmsncskt6
+	* action: Profile::ConfirmationsController#show
+	* view: profile/confirmations/show.html.erb
+	
+	* url: /profile/confirm
+	* action: Profile::ConfirmationsController#confirm
+	* redirect: /profile
+
+
+2. Покупка билета несуществующим кастомером
+	Cоздание нового кастомера Customer.create
+	дальше все аналогично п.1
+
+
+3. Регистрация существующего кастомера !!
+	* url: /profile/sign_up/new
+	* action: Profile::RegistrationsController#new
+	* view: profile/registrations/new.html.erb
+	
+	* url:  /profile/sign_up
+	* action: Profile::RegistrationsController#create
+	* redirect:  /profile/success
+	* action: Profile::RegistrationsController#success
+	* view: profile/registrations/success.html.erb
+
+
+4. Регистрация несуществующего кастомера
+	* url: /profile/sign_up/new
+	* action: Profile::RegistrationsController#new
+	* view: profile/registrations/new.html.erb
+	
+	* url:  /profile/sign_up
+	* action: Profile::RegistrationsController#create
+	* redirect:  /profile/success
+	* action: Profile::RegistrationsController#success
+	* view: profile/registrations/success.html.erb
+
+	дальше все аналогично п.1
+
+
+5. Вход кастомера
+	* url:  /profile
+	* action: ProfileController#index
+	* redirect: /profile/login
+	* action: Profile::SessionsController#new
+	* view: profile/sessions/new.html.erb
+	* url: /profile/login		POST
+	* redirect:  /profile/success
+	* action: ProfileController#index
+	* view: profile/index.html.erb
+
+
+6. Напоминание пароля 
+	* url: /profile/secret/new
+	* action: Profile::PasswordsController#new
+	* view: profile/passwords/new.html.erb
+	
+	* url: /profile/secret		POST
+	* action: Profile::PasswordsController#create
+	* mailer view: customer_mailer/reset_password_instructions.html.erb
+	
+	* url: /profile/secret/edit?reset_password_token=BAzmWyKanpZbYUmoTZnd
+	* action: Profile::PasswordsController#edit
+	* view: profile/passwords/edit.html.erb
+	
+	* url: /profile/secret		PUT
+	* action: Profile::PasswordsController#update
+	* redirect: /profile
+
+
+7. Смена пароля кастомером
+	* url: profile/sign_up/edit
+	* action: Profile::RegistrationsController#edit
+	* view: profile/registrations/edit.html.erb

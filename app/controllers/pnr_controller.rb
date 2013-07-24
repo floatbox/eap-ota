@@ -30,6 +30,23 @@ class PNRController < ApplicationController
       render format
   end
 
+  def show_stored
+    order = Order[params[:id]] or raise ActiveRecord::RecordNotFound
+    tickets = order.sold_tickets
+    ticket = tickets.first
+    @last_pay_time = order.last_pay_time
+    @pnr = PNR.new(:email => order.email, :phone => order.phone, :number => order.pnr_number, :booking_classes => ticket.booking_classes)
+    @flights = ticket.flights.presence
+
+    @prices = order
+    @passengers = tickets.map do |t|
+      Person.new(:first_name => t.first_name, :last_name => t.last_name, :passport => t.passport, :tickets => [t])
+    end
+
+    get_data unless @flights
+    render "ticket"
+  end
+
   def show_as_booked
     render "booking"
   end

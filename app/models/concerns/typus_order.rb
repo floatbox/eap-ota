@@ -12,7 +12,7 @@ module TypusOrder
   end
 
   def contact
-    "#{email_searchable} #{phone}".html_safe
+    "#{email_searchable} #{phone} #{customer_link}".html_safe
   end
 
   #флаг для админки
@@ -83,6 +83,14 @@ module TypusOrder
   # FIXME отэскейпить емыл, воизбежание XSS
   def email_searchable
     "<a href='/admin/orders?search=#{email}'>#{email}</a>".html_safe
+  end
+
+  def customer_link
+    if !customer_id.blank?
+      "<a href='/admin/customers/show/#{customer_id}'>→ <small>Покупатель ##{customer_id}</small></a>".html_safe
+    else
+      "—"
+    end
   end
 
   def parent_pnr_number_searchable
