@@ -16,10 +16,13 @@ class BookingController < ApplicationController
   #   "variant_id"=>"1"
   def preliminary_booking
     @coded_search = params[:query_key]
+    @partner = Partner[params[:partner]]
+    logo_url = @partner.logo_exist? ? @partner.logo_url : ''
     if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       render :json => {
         :success => true,
         :number => @order_form.number,
+        :partner_logo_url => logo_url,
         :declared_price => @recommendation.declared_price
         }
     else
@@ -32,6 +35,8 @@ class BookingController < ApplicationController
   #   "query_key"=>"ki1kri"
   def api_booking
     @query_key = params[:query_key]
+    # оставил в таком виде, чтобы не ломалось при рендере
+    # если переделаем урлы и тут - заработает
     @partner = Partner[params[:partner]]
     @search = PricerForm.from_code(params[:query_key])
     unless @search && @search.valid?
