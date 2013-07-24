@@ -237,7 +237,10 @@ module DataMigration
   def self.fill_customers_for_orders
     Order.where("customer_id IS NULL").limit(200).each do |order|
       customer_email = order.email.strip.split(/[,; ]/).first
-      customer = Customer.find_or_create_by_email(customer_email)
+      #customer = Customer.find_or_create_by_email(customer_email)
+      customer = Customer.find_or_initialize_by_email(customer_email)
+      customer.skip_confirmation_notification!
+      customer.save unless customer.persisted?
       order.update_column(:customer_id, customer.id)
       #order.save
     end
