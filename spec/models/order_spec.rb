@@ -274,6 +274,7 @@ describe Order do
           :validator => '87823412'
         }}
         pnr_resp = stub('Amadeus::Response::PNRRetrieve')
+        pnr_resp.stub(:additional_pnr_numbers).and_return({})
         pnr_resp.should_receive(:tickets).and_return(new_ticket_hash)
         pnr_resp.stub(:flights).and_return(nil)
         pnr_resp.stub(:exchanged_tickets).and_return({})
