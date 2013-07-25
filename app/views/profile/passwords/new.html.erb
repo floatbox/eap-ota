@@ -1,0 +1,44 @@
+<% content_for :title do %>Сброс пароля<% end %>
+<div class="up-form">
+<div class="upf-header">
+    <h3 class="upf-title">Сброс пароля</h3>
+    <p class="upf-description">Если вы&nbsp;не&nbsp;получили письмо в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, мы можем выслать письмо для сброса пароля ещё раз.</p>
+</div>
+<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => {:id => 'profile-forgot', :novalidate => 'novalidate', :method => :post }) do |f| %>
+
+    <div class="upf-field">
+        <h6 class="upff-label"><%= f.label :email, 'Электронный адрес' %></h6>
+        <%= f.email_field :email, :class => 'upff-input' %>
+    </div>
+    <div class="upf-submit">
+        <%= f.submit "Сбросить пароль", :class => 'upf-button' %>
+    </div>
+
+    <% if !devise_error_messages!.empty? || !flash.empty? %>
+    <div class="upf-errors">
+        <%= devise_error_messages! %>
+        <% flash.each do |key, value| %>
+            <%= value %>
+        <% end %>
+    </div>
+    <% else %>
+    <div class="upf-errors phu-error" style="display: none;"></div>
+    <% end %> 
+
+<% end %>
+</div>
+<script>
+(function() {
+    var form = new profileForm($('#profile-forgot'));
+    form.add('#customer_email', function(value) {
+        if (!value) return 'Введите адрес электронной почты.';
+        if (/[а-яА-Я]/.test(value)) return 'Переключите раскладку и введите корректный адрес электронной почты.';
+        if (!/@\S+\.\w+/.test(value)) return 'Введите корректный адрес электронной почты.';
+    });
+    form.button = form.elem.find('.upf-button').prop('disabled', false);    
+    form.process = function(result) {
+        window.location = result.location;
+    };
+    form.errors['not_found'] = '<p>Нет зарегистрированных пользователей с таким адресом.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>'; 
+})();
+</script>

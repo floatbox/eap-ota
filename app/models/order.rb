@@ -1,9 +1,9 @@
 # encoding: utf-8
 class Order < ActiveRecord::Base
-
   include CopyAttrs
   include Pricing::Order
   include TypusOrder
+  include ProfileOrder
   include OrderAttrs
 
   scope :MOWR228FA, lambda { by_office_id 'MOWR228FA' }
@@ -555,6 +555,7 @@ class Order < ActiveRecord::Base
   def ticket!
     return false unless ticket_status.in? 'booked', 'processing_ticket', 'error_ticket'
     return false unless load_tickets(true)
+    update_attributes(:additional_pnr_number => tickets.first.additional_pnr_number) if tickets.first.additional_pnr_number
     update_attributes(:ticket_status => 'ticketed', :ticketed_date => Date.today)
     if fix_price?
       update_price_with_payment_commission_in_tickets
@@ -597,7 +598,12 @@ class Order < ActiveRecord::Base
   end
 
   def set_customer
-    self.customer = Customer.find_or_create_by_email(email)
+    if !email.blank?
+      self.customer = Customer.find_or_initialize_by_email(email)
+      # TODO этот вызов надо будет убрать при запуске ЛК
+      customer.skip_confirmation_notification!
+      customer.save unless customer.persisted?
+    end
   end
 
   def set_payment_status

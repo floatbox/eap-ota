@@ -41,6 +41,7 @@ ru:
       notification: 'Оповещение'
       partner: 'Партнер'
       version: 'История изменений'
+      customer: 'Покупатель'
     attributes:
       # общие атрибуты в заказах и билетах
       PRICING_ATTRIBUTES: &PRICING_ATTRIBUTES
@@ -219,6 +220,7 @@ ru:
   Orders: Заказы
   Hot Offers: Маркетинг
   Versions: История изменений
+  Customers: Покупатели
 
   'Show by %{attribute}': '-- %{attribute} --'
   'View all %{attribute}': '-- %{attribute} --'

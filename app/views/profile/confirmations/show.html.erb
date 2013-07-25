@@ -1,0 +1,32 @@
+<% content_for :title do %>Придумайте пароль<% end %>
+<div class="up-form">
+<div class="upf-header">
+    <h3 class="upf-title">Придумайте пароль</h3>
+</div>
+<%= form_for(resource, :as => resource_name, :url => customer_confirm_path, :html => { :method => :put }) do |f| %>
+
+    <%= f.hidden_field :confirmation_token %>
+
+    <div class="upf-field">
+        <h6 class="upff-label"><%= f.label :password, 'Ваш пароль' %></h6>
+        <%= f.password_field :password, :class => 'upff-input' %>
+    </div>
+    <div class="upf-field">
+        <h6 class="upff-label"><%= f.label :password_confirmation, 'Ещё разок пароль' %></h6>
+        <%= f.password_field :password_confirmation, :class => 'upff-input' %>
+    </div>
+    <div class="upf-submit">
+        <%= f.submit "Продолжить", :class => 'upf-button' %>
+    </div>
+    
+    <% if !devise_error_messages!.empty? || !flash.empty? %>
+    <div class="upf-errors">
+        <%= devise_error_messages! %>
+        <% flash.each do |key, value| %>
+            <%= value %>
+        <% end %>
+    </div>
+    <% end %>    
+
+<% end %>
+</div>

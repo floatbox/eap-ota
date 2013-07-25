@@ -1,6 +1,31 @@
 # encoding: utf-8
 Eviterra::Application.routes.draw do
 
+#  devise_for :customers, :controllers => { :sessions => "customers/sessions" }
+  devise_scope :customer do
+    put "profile/confirm", :to => "profile/confirmations#confirm", :as => 'customer_confirm'
+    get "profile/success", :to => "profile/registrations#success", :as => 'customer_success'
+  end
+
+  devise_for :customers, 
+    :controllers => { 
+      :sessions => 'profile/sessions', 
+      :confirmations => 'profile/confirmations',
+      :registrations => 'profile/registrations',
+      :passwords => 'profile/passwords'
+    },  
+    :path => "profile", 
+    :path_names => { 
+      :sign_in => 'login', 
+      :sign_out => 'logout', 
+      :password => 'secret', 
+      :confirmation => 'verification', 
+      :unlock => 'unblock', 
+      :registration => 'sign_up', 
+      :sign_up => 'new'
+    }
+
+
   match 'pricer' => 'pricer#pricer', :as => :pricer
   match 'calendar' => 'pricer#calendar', :as => :calendar
   match 'pricer/validate' => 'pricer#validate', :as => :pricer_validate
@@ -36,6 +61,7 @@ Eviterra::Application.routes.draw do
   post 'confirm_3ds' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
   match 'notice/:id' => 'PNR#show_notice', :as => :show_notice
+  match 'order_stored/:id' => 'PNR#show_stored', :as => :show_order_stored
   match 'order/:id/booked' => 'PNR#show_as_booked', :as => :show_booked_order
   match 'order/:id/order' => 'PNR#show_as_order', :as => :show_order_order
   match 'order/:id/ticketed' => 'PNR#show_as_ticketed', :as => :show_ticketed_order
@@ -75,6 +101,11 @@ Eviterra::Application.routes.draw do
   match "admin/new_hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
   match 'admin/notifications/show_sent_notice/:id' => 'admin/notifications#show_sent_notice', :as => :show_sent_notice
   match 'admin/reports/sales' => 'admin/reports#sales', :as => :admin_reports_sales
+
+  match 'profile' => 'profile#index', :as => :profile
+  match 'profile/itinerary/:id' => 'PNR#show_stored', :as => :profile_itinerary
+  match 'profile/spyglass/:id' => 'profile#spyglass', :as => :profile_spyglass
+  match 'profile/itinerary/:id/ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :profile_itinerary_for_ticket
 
   root :to => 'home#index'
 

@@ -170,15 +170,29 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
   end
 
   create_table "customers", :force => true do |t|
-    t.string   "email",                         :null => false
+    t.string   "email",                                                    :null => false
     t.string   "password"
     t.string   "status"
-    t.boolean  "enabled",    :default => false, :null => false
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.boolean  "enabled",                               :default => false, :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                         :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
+  add_index "customers", ["confirmation_token"], :name => "index_customers_on_confirmation_token", :unique => true
   add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
+  add_index "customers", ["reset_password_token"], :name => "index_customers_on_reset_password_token", :unique => true
 
   create_table "destinations", :force => true do |t|
     t.integer  "to_id"
@@ -372,6 +386,7 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.boolean  "auto_ticket",                                                 :default => false
     t.string   "no_auto_ticket_reason",                                       :default => ""
     t.boolean  "needs_visa_notification",                                     :default => false
+    t.string   "additional_pnr_number"
   end
 
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
@@ -556,6 +571,7 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.decimal  "price_operational_fee",        :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.decimal  "price_acquiring_compensation", :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.decimal  "price_difference",             :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.string   "additional_pnr_number"
   end
 
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"

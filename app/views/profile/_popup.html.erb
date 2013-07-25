@@ -1,0 +1,99 @@
+<div class="ph-user" id="user">
+<% if customer_signed_in? %>
+    <div class="phu-link">
+        <a href="<%= profile_path %>"><%= current_customer.email.downcase %></a> <span class="phul-logout" title="Выйти из личного кабинета"><img class="phul-icon" src="/images/common/exit.png" alt="Выйти"></span>
+    </div>
+    <div class="phu-logout">
+        <%= button_to('Выйти', destroy_customer_session_path, :method => :delete) %>    
+    </div>
+<% else %>
+<div class="phu-wrapper">
+    <div class="phu-control">Личный кабинет<span class="phuc-bar"></span></div>
+    <div class="phu-popup" id="phup-authorization">
+        <div class="phu-stator">
+        <div class="phu-slider">
+            <%= form_for("customer", :url => customer_session_path, :html => {:class => 'phu-section phu-signin', :novalidate => 'novalidate'}) do |f| %>
+                <h6 class="phus-title"><span class="phu-signin-link">Вход с паролем</span></h6>
+                <div class="phu-field">
+                    <label for="signin-email" class="phuf-placeholder">электронная почта</label>                
+                    <%= f.email_field :email, :class => 'phuf-input', :id => 'signin-email', :placeholder => 'электронная почта' %>
+                </div>
+                <div class="phu-field">
+                    <label for="signin-password" class="phuf-placeholder">пароль</label>
+                    <%= f.password_field :password, :class => 'phuf-input', :id => 'signin-password', :placeholder => 'пароль' %>
+                </div>
+                <div class="phu-submit">
+                    <span class="link phu-forgot-link">Забыли пароль?</span>
+                    <%= f.submit "Войти", :class => 'phu-button' %>
+                </div>
+                <div class="phu-error"></div>
+            <% end %>
+            <%= form_for("customer", :url => customer_password_path, :html => {:class => 'phu-section phu-forgot', :novalidate => 'novalidate'}) do |f| %>
+                <h6 class="phus-title">Сброс пароля</h6>
+                <div class="phu-forgot-fields">
+                    <p style="margin: 0 0 10px;">Мы пришлём на почту ссылку для получения нового пароля.</p>
+                    <div class="phu-field">
+                        <label for="forgot-email" class="phuf-placeholder">электронная почта</label>
+                        <%= f.email_field :email, :class => 'phuf-input', :id => 'forgot-email', :placeholder => 'электронная почта' %>
+                    </div>            
+                    <div class="phu-submit">
+                        <span class="link phu-remember-link">Вспомнили?</span>
+                        <%= f.submit "Сбросить пароль", :class => 'phu-button' %>
+                    </div>
+                    <div class="phu-error"></div>
+                </div>
+                <div class="phu-forgot-result">
+                    <p style="margin: 0 0 5px;">На ваш электронный адрес отправлено письмо. Для&nbsp;завершения сброса пароля перейдите по&nbsp;ссылке в&nbsp;письме.</p>
+                    <p class="phufr-what-link"><span class="link">Что делать, если ничего не пришло?</span></p>
+                    <p class="phufr-what">Если вы&nbsp;не&nbsp;получили письмо в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, мы можем выслать письмо для сброса пароля <span class="link">ещё раз</span>.</p>
+                </div>
+            <% end %>            
+        </div>
+        </div>
+        <div class="phu-section">
+            <h6 class="phus-title" style="margin-bottom: 5px;"><span class="phust-link phu-signup-link">Регистрация</span></h6>
+            <p>Нужна для того, чтобы хранить вашу историю заказов и данные пассажиров. После первого заказа у нас вы будете зарегистрированы автоматически.</p>
+            <%= form_for("customer", :url => customer_registration_path, :html => {:class => 'phu-signup', :novalidate => 'novalidate'}) do |f| %>
+            <div class="phu-signup-fields">
+                <div class="phu-field">
+                    <label for="signup-email" class="phuf-placeholder">электронная почта</label>
+                    <%= f.email_field :email, :class => 'phuf-input', :id => 'signup-email', :placeholder => 'электронная почта' %>
+                </div>            
+                <div class="phu-submit">
+                    <%= f.submit "Зарегистрироваться", :class => 'phu-button' %>
+                </div>
+                <div class="phu-error"></div>
+            </div>
+            <% end %>
+        </div>
+        <div class="phu-section phu-signup-result">
+            <h6 class="phus-title" style="margin: 0 0 5px;">Аккаунт создан</h6>
+            <p style="margin: 0 0 10px;">На ваш электронный адрес отправлено письмо-подтверждение. Для&nbsp;завершения регистрации перейдите по&nbsp;ссылке в&nbsp;письме.</p>
+            <p class="phusur-what-link"><span class="link">Что делать, если ничего не пришло?</span></p>
+            <p class="phusur-what">Если вы&nbsp;не&nbsp;получили письмо в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, мы можем выслать письмо <span class="link">ещё раз</span>.</p>           
+        </div>
+    </div>
+    <div class="phu-popup" id="phup-password">
+        <div class="phu-section">
+            <h6 class="phus-title">Придумайте пароль</h6>
+            <%= form_for("customer", :url => customer_confirm_path, :html => {:method => :put, :novalidate => 'novalidate'}) do |f| %>
+            <%= f.hidden_field :confirmation_token %>
+            <div class="phu-field">
+                <label for="new-password-1" class="phuf-placeholder">пароль</label>
+                <%= f.password_field :password, :class => 'phuf-input', :id => 'new-password-1', :placeholder => 'пароль' %>
+            </div>
+            <div class="phu-field">
+                <label for="new-password-2" class="phuf-placeholder">ещё разок пароль</label>
+                <%= f.password_field :password_confirmation, :class => 'phuf-input', :id => 'new-password-2', :placeholder => 'ещё разок пароль' %>
+            </div>
+            <div class="phu-submit">
+                <%= f.submit "Продолжить", :class => 'phu-button' %>
+            </div>
+            <div class="phu-error"></div>
+            <% end %>
+        </div>
+    </div>
+</div>
+<div class="phu-fade"></div>
+<% end %>
+</div>
