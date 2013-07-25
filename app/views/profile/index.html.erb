@@ -37,7 +37,7 @@
         <td>
             <p class="ors-route"><%= order.profile_route_smart %></p>
         </td>
-        <td><%= order.departure_date ? l(order.profile_departure_date, :format => :human_year) : '-' %></td>
+        <td><%= order.departure_date ? l(order.departure_date, :format => :human_year) : '-' %></td>
         <td><%= order.pnr_number %><% if order.additional_pnr_number %>&nbsp;/&nbsp;<%= order.additional_pnr_number %><% end %></td>
         <td><%= order.profile_status %></td>
         <td class="ors-right"><%= decorate_price short_price(order.profile_payment_price) %></td>
