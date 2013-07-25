@@ -14,6 +14,8 @@ init: function() {
             this.password.init();
             this.initPlaceholders();
         }
+    } else {
+        this.show = $.noop;
     }
     this.init = $.noop;
 },
@@ -48,6 +50,9 @@ show: function(id) {
     setTimeout(function() {
         $w.on('click keydown', that._hide);
     }, 10);
+    if (id === 'password') {
+        $('#new-password-1').focus();
+    }
 },
 hide: function() {
     this.el.removeClass('phu-active');
