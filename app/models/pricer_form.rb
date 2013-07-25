@@ -1,21 +1,63 @@
 # encoding: utf-8
 
 class PricerForm
-  include Mongoid::Document
-  include Mongoid::Timestamps
-  #store_in :pricer_forms
-  field :adults, :type => Integer, :default => 1
-  field :children, :type => Integer, :default => 0
-  field :infants, :type => Integer, :default => 0
-  field :cabin
-  field :query_key
-  field :partner
-  field :use_count, :type => Integer, :default => 1
-  embeds_many :segments, :class_name => 'PricerForm::Segment', :inverse_of => :form
-  #has_one :rambler_cache
-  accepts_nested_attributes_for :segments
+  include Virtus
+
+  attribute :errors, Array, :default => []
+  attribute :adults, Integer, :default => 1
+  attribute :children, Integer, :default => 0
+  attribute :infants, Integer, :default => 0
+  attribute :cabin
+  attribute :query_key
+  attribute :partner
+  attribute :use_count, Integer, :default => 1
+  attribute :segments, Array[Segment]
   delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
-  validate :check_people_total
+
+  # валидация
+  def valid?
+    fix_segments!
+    check_segments
+    check_people_total
+    errors.blank?
+  end
+
+  def check_segments
+    # может случаться во время проверки PricerController#validate
+    errors << 'Не содержит сегментов' unless segments.present?
+    errors << 'В сегменте не может отсутствовать место прибытия' unless segments.all? { |s| s.to }
+    errors << 'В сегменте не может отсутствовать дата вылета' unless segments.all? { |s| s.date }
+  end
+
+  def check_people_total
+    errors << 'Количество пассажиров не должно быть больше восьми' if people_total > 8
+  end
+
+  # заполняет невведенные from во втором и далее сегментах
+  def fix_segments!
+    if @segments
+      @segments.each_cons(2) do |a, b|
+        if b.from.empty?
+          b.from = a.to
+        end
+      end
+    end
+  end
+  #/валидация
+
+  def segments=(segments)
+    if segments.is_a?(Hash)
+      # для PricerController#validate
+      segments = segments.map do |k, v|
+        # FIXME: переписать как-нибудь нормально
+        next unless v[:date] || v[:to]
+        Segment.new(v)
+      end
+      segments.compact!
+    end
+    @segments = segments
+    fix_segments!
+  end
 
   # урлы
   def self.from_code(code)
@@ -37,10 +79,6 @@ class PricerForm
     else
       date_str
     end
-  end
-
-  def check_people_total
-    errors.add(:people_total, 'Количество пассажиров не должно быть больше восьми') if people_total > 8
   end
 
   def hash_for_rambler
@@ -87,14 +125,20 @@ class PricerForm
   end
 
   class Segment
-    include Mongoid::Document
-    embedded_in :form, :class_name => 'PricerForm', :inverse_of => :segments
-    field :from
-    field :to
-    field :date
+    include Virtus
+    attribute :errors, Array, :default => []
+    attribute :from
+    attribute :to
+    attribute :date
 
-    validates_presence_of :from_as_object, :to_as_object, :date, :date_as_date
-    validate :check_date
+    #validates_presence_of :from_as_object, :to_as_object, :date, :date_as_date
+    #validate :check_date
+
+    def valid?
+      valid = from_as_object && to_as_object && date && date_as_date
+      check_date
+      !!errors
+    end
 
     def to_as_object_iata
       to_as_object.iata if to_as_object.respond_to? :iata
@@ -175,12 +219,6 @@ class PricerForm
     end
   end
 
-  # FIXME обходит необходимость использовать segments_attributes в жаваскрипте
-  # но нет уверенности, что не создаю каких-то дополнительных проблем
-  #def segments=(attrs)
-    #self.segments_attributes = attrs
-  #end
-
   def date1
     segments.first.date
   end
@@ -192,11 +230,6 @@ class PricerForm
   def dates
     [date1, date2] if date2
     [date1]
-  end
-
-  def save_to_cache
-    self.query_key ||= ShortUrl.random_hash
-    with(safe: true).save
   end
 
   class << self
@@ -258,19 +291,6 @@ class PricerForm
 
   def people_count= count
     self.adults, self.children, self.infants = count[:adults] || 1, count[:children] || 0, count[:infants] || 0
-  end
-
-  # в этом порядке!
-  before_validation :fix_segments
-  validates_presence_of :segments
-
-  # заполняет невведенные from во втором и далее сегментах
-  def fix_segments
-    segments.each_cons(2) do |a, b|
-      if b.from.empty?
-        b.from = a.to
-      end
-    end
   end
 
   def date_from_month_and_day(month, day)
@@ -357,7 +377,7 @@ class PricerForm
       parts.join(', ')
     end  
   end  
-  
+
   def map_segments
     result = segments.map{|s|
       { 
@@ -417,7 +437,7 @@ class PricerForm
       return I18n.l(d, :format => '%e&nbsp;%B %Y')
     end
   end
-  
+
   def short_date(ds)
     ds[0,2] + '.' + ds[2,2]
   end  

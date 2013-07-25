@@ -51,7 +51,7 @@ module Urls
               to = segments.last[:from] if to.nil?
             end
             location_stack = []
-            segments << { from: from, to: to, date: date }
+            segments << PricerForm::Segment.new(from: from, to: to, date: date)
 
           # классы
           when /^business$/i
@@ -82,7 +82,7 @@ module Urls
           children: children,
           infants: infants,
           cabin: cabin,
-          segments: paramify_array(segments)
+          segments: segments
         )
         true
       # штатные случаи рейзятся с ParserError, нештатные - без,
@@ -90,10 +90,6 @@ module Urls
       rescue Exception
         with_warning
         return false
-      end
-
-      def paramify_array(array)
-        Hash[ array.each_with_index.map { |record, index| [index.to_s, record] } ]
       end
 
       def decode_date(coded_date)

@@ -73,13 +73,13 @@ class PricerController < ApplicationController
     else
       @search = PricerForm.new(params[:search])
       unless @search.valid?
-        result[:errors] = @search.segments.map{|fs| fs.errors.keys}
+        result[:errors] = @search.segments.flat_map(&:errors)
       end
     end
     if @search.present?
       result[:map_segments] = @search.map_segments
     end
-    if @search.present? && @search.valid?
+    if @search && @search.valid?
       result.merge!(search_details(@search))
       result[:query_key] = Urls::Search::Encoder.new(@search).url
       result[:short] = @search.human_short

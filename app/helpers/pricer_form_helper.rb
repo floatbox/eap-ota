@@ -14,7 +14,8 @@ module PricerFormHelper
       :cabin => search.cabin,
       :human => human.join(', ')
     }
-    result[:segments] = search.segments.map{|segment|
+    result[:segments] = search.segments.map do |segment|
+      # should call fix_segments before that
       dpt = segment.from_as_object
       arv = segment.to_as_object 
       {
@@ -26,10 +27,9 @@ module PricerFormHelper
         :dpt => {:name => dpt.name},
         :arv => {:name => arv.name},
       }
-    }
+    end
     result[:segments][1][:rt] = true if search.rt
     result
   end
   
 end
-  
