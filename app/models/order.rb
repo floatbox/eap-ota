@@ -501,7 +501,7 @@ class Order < ActiveRecord::Base
   end
 
   def charge!
-    res = last_payment.charge!
+    res = (last_payment.status == 'charged') || last_payment.charge!
     update_attribute(:payment_status, 'charged') if res
     res
   end
