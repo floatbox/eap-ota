@@ -57,12 +57,9 @@ class Commission::Page
   ########################
 
   def find_rule(recommendation)
-    rule = @index.find do |r|
+    @index.find do |r|
       r.applicable?(recommendation)
     end
-    return unless rule
-    return if rule.disabled?
-    rule
   end
 
   # Применяет каждое правило в странице к рекомендации.

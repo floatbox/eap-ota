@@ -20,7 +20,7 @@ describe Commission do
     match_for_should_not do |example|
       @recommendation = example.recommendation
       @proposed = page.find_rule(@recommendation)
-      !@proposed
+      @proposed.nil? || !@proposed.sellable?
     end
 
     failure_message_for_should do |example|
