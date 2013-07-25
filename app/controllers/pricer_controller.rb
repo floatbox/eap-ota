@@ -80,7 +80,7 @@ class PricerController < ApplicationController
       result[:map_segments] = @search.map_segments
     end
     if @search && @search.valid?
-      result.merge!(search_details(@search))
+      result.merge!(@search.details)
       result[:query_key] = Urls::Search::Encoder.new(@search).url
       result[:short] = @search.human_short
       result[:valid] = true
