@@ -59,7 +59,6 @@ class PricerController < ApplicationController
   
   #FIXME сделать презентер
   include TranslationHelper
-  include PricerFormHelper
   def validate
     result = {}
     if @query_key = params[:query_key]

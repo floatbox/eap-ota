@@ -51,8 +51,8 @@ module RamblerApi
     recommendation = recommendation.serialize
     if search.valid?
       "#{Conf.api.url_base}/api/booking/#{search.query_key}#recommendation=#{recommendation}&type=api&partner=#{search.partner}&marker=#{params[:marker]}"
-    elsif search.segments.first.errors.messages.first
-      raise ArgumentError, "#{ search.segments.first.errors.messages.first[1][0] }"
+    elsif !search.segments.first.valid?
+      raise ArgumentError, "#{ search.segments.first.errors.first }"
     else
       raise ArgumentError, "#{ 'Unknown error' }"
     end

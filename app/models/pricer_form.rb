@@ -11,14 +11,15 @@ class PricerForm
   attribute :query_key
   attribute :partner
   attribute :use_count, Integer, :default => 1
-  attribute :segments, Array[Segment]
+  attribute :segments, Array[SearchSegment]
   delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
 
   # валидация
   def valid?
     fix_segments!
     check_segments
-    check_people_total
+    # валидируем сегменты
+    errors.concat(segments.flat_map { |s| s.valid?; s.errors } )
     errors.blank?
   end
 
@@ -48,10 +49,11 @@ class PricerForm
   def segments=(segments)
     if segments.is_a?(Hash)
       # для PricerController#validate
+      # TODO: убрать
       segments = segments.map do |k, v|
         # FIXME: переписать как-нибудь нормально
         next unless v[:date] || v[:to]
-        Segment.new(v)
+        SearchSegment.new(v)
       end
       segments.compact!
     end
@@ -108,11 +110,12 @@ class PricerForm
       raise ArgumentError, "Lack of required parameter(s)  - \"#{lack_of_parameters.join(', ')}\""
     end
     return if !(Location[args[:from]] || Location[args[:to]])
-    segments = {}
-    segments["0"] = {:from => args[:from], :to => args[:to], :date => convert_api_date(args[:date1])}
+
+    segments = [SearchSegment.new(from: args[:from], to: args[:to], date: convert_api_date(args[:date1]))]
     if args[:date2].present?
-      segments["1"] = {:from => args[:to], :to => args[:from], :date => convert_api_date(args[:date2])}
+      segments << SearchSegment.new(from: args[:to], to: args[:from], date: convert_api_date(args[:date2]))
     end
+
     adults = (args[:adults] || 1).to_i
     children = args[:children].to_i
     infants = args[:infants].to_i + args[:seated_infants].to_i
@@ -122,101 +125,6 @@ class PricerForm
     new :segments => segments,
       :adults => adults, :children => children, :infants => infants, :cabin => cabin,
       :partner => partner
-  end
-
-  class Segment
-    include Virtus
-    attribute :errors, Array, :default => []
-    attribute :from
-    attribute :to
-    attribute :date
-
-    #validates_presence_of :from_as_object, :to_as_object, :date, :date_as_date
-    #validate :check_date
-
-    def valid?
-      valid = from_as_object && to_as_object && date && date_as_date
-      check_date
-      !!errors
-    end
-
-    def to_as_object_iata
-      to_as_object.iata if to_as_object.respond_to? :iata
-    end
-
-    def from_as_object_iata
-      from_as_object.iata if from_as_object.respond_to? :iata
-    end
-
-    def check_date
-      errors.add :date, 'Первый вылет слишком рано' if date_as_date.present? && !TimeChecker.ok_to_show(date_as_date + 1.day)
-    end
-
-    def as_json(args = nil)
-      args ||= {}
-      args[:methods] = (args[:methods].to_a + [:to_as_object, :from_as_object]).uniq
-      super(args)
-    end
-
-    def location_from_string name
-      Completer.object_from_string(name)
-    end
-
-    def from_country_or_region?
-      [Country, Region].include? from_as_object.class
-    end
-
-    def search_around_from
-      from_as_object.class == City && from_as_object.search_around
-    end
-
-    def search_around_to
-      to_as_object.class == City && to_as_object.search_around
-    end
-
-    def to_country_or_region?
-      [Country, Region].include? to_as_object.class
-    end
-
-    def multicity?
-      from_country_or_region? || to_country_or_region?
-    end
-
-    def date_as_date
-      begin
-        @date_as_date ||= Date.strptime(date, '%d%m%y')
-      rescue
-        nil
-      end
-    end
-
-    def to_as_object
-      @to_as_object ||= location_from_string(to)
-    end
-
-    def from_as_object
-      @from_as_object ||= location_from_string(from)
-    end
-
-    def to_iata
-      to_as_object_iata
-    end
-
-    def from_iata
-      from_as_object_iata
-    end
-
-    def nearby_cities
-      [from_as_object, to_as_object].map do |location|
-        if location.class == City
-          location.nearby_cities
-        elsif location.class == Airport
-          location.city.nearby_cities
-        else
-          []
-        end
-      end
-    end
   end
 
   def date1
@@ -230,18 +138,6 @@ class PricerForm
   def dates
     [date1, date2] if date2
     [date1]
-  end
-
-  class << self
-    def load_from_cache(query_key)
-      pricer_form = PricerForm.where(:query_key => query_key).last
-      raise Mongoid::Errors::DocumentNotFound.new(PricerForm, :query_key => query_key) if pricer_form.nil?
-      if pricer_form
-        pricer_form.inc(:use_count, 1)
-      end
-      pricer_form
-    end
-    alias :[] load_from_cache
   end
 
   def as_json(args)
@@ -369,14 +265,14 @@ class PricerForm
       complex = segments.length > 1
       segments.each do |segment|
         if complex
-            parts << "#{segment.from_as_object.iata} &rarr; #{segment.to_as_object.iata} #{short_date(segment.date)}"        
-        else 
+          parts << "#{segment.from_as_object.iata} &rarr; #{segment.to_as_object.iata} #{short_date(segment.date)}"
+        else
           parts << "#{segment.from_as_object.name} &rarr; #{segment.to_as_object.name} #{short_date(segment.date)}"
         end
-      end      
+      end
       parts.join(', ')
-    end  
-  end  
+    end
+  end
 
   def map_segments
     result = segments.map{|s|
@@ -442,4 +338,6 @@ class PricerForm
     ds[0,2] + '.' + ds[2,2]
   end  
 
+
 end
+

@@ -14,12 +14,30 @@ describe PricerForm do
       {"infants"=>"0", "adults"=>"1", "children"=>"0"}
     end
 
-    context "when filled" do
+    context "when filled with segment hash" do
       let :attrs do
-        { "people_count" => people_attrs,
-          "segments" => {
-            "0" => {"from"=>"Москва", "date"=>"2104#{yy}", "to"=>"Париж"},
-            "1" => {"from"=>"Париж", "date"=>"2804#{yy}", "to"=>"Москва"}}
+        {
+          :people_count => people_attrs,
+          :segments => {
+            "0" => {:from => "MOW", :date => "2104#{yy}", :to => "PAR"},
+            "1" => {:from =>"PAR", :date =>"2804#{yy}", :to =>"MOW"}
+          }
+        }
+      end
+
+      it do
+        should be_valid
+      end
+    end
+
+    context "when filled with SearchSegment classes" do
+      let :attrs do
+        {
+          :people_count => people_attrs,
+          :segments => [
+            SearchSegment.new(from: 'MOW', to: 'PAR', date: "2104#{yy}"),
+            SearchSegment.new(from: 'PAR', to: 'MOW', date: "2804#{yy}")
+          ]
         }
       end
 
@@ -32,8 +50,8 @@ describe PricerForm do
       let :attrs do
         { "people_count" => people_attrs,
           "segments"=> {
-            "0" => {"from"=>"Москва", "date"=>"2104#{yy}", "to"=>"Париж"},
-            "1" => {"from"=>"",     "date"=>"2804#{yy}", "to"=>"Москва"}}
+            "0" => {:from => "Москва", :date => "2104#{yy}", :to =>"Париж"},
+            "1" => {:from => "", :date=>"2804#{yy}", "to"=>"Москва"}}
         }
       end
 

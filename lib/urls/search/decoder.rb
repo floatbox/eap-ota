@@ -51,7 +51,7 @@ module Urls
               to = segments.last[:from] if to.nil?
             end
             location_stack = []
-            segments << PricerForm::Segment.new(from: from, to: to, date: date)
+            segments << SearchSegment.new(from: from, to: to, date: date)
 
           # классы
           when /^business$/i
