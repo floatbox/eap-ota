@@ -177,33 +177,29 @@
     background: #fdfbea;
     line-height: 16px;
 }
-.bfp-hint {
-    position: absolute;
-    top: 0;
-    margin-left: -10px;
-    padding: 0 10px;
-    background: #fbf4cb;    
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 13px;
-    color: #777;
-}
-#bfph-passport {
-    left: 645px;
-}
-#bfph-expiration {
-    left: 805px;
-}
-.bfph-link {
-    text-decoration: underline;
-    cursor: pointer;
-}
 .bfp-control {
     padding-right: 10px;
 }
 .bfp-spacer {
     height: 14px;
 }
+.bfpl-hint {
+    cursor: pointer;
+}
+.bfpl-hint:after {
+    position: relative;
+    left: 5px;
+    content: '?';
+    color: #777;
+}
+.bfpl-underline {
+    text-decoration: underline;
+    color: #777;
+}
+.bfplu-text {
+    color: #333;
+}
+
 
 /* Add/remove person */
 .bfp-add {
