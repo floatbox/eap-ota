@@ -26,8 +26,6 @@ class PricerForm
   def check_segments
     # может случаться во время проверки PricerController#validate
     errors << 'Не содержит сегментов' unless segments.present?
-    errors << 'В сегменте не может отсутствовать место прибытия' unless segments.all? { |s| s.to }
-    errors << 'В сегменте не может отсутствовать дата вылета' unless segments.all? { |s| s.date }
   end
 
   def check_people_total

@@ -14,7 +14,12 @@ class SearchSegment
     errors.blank?
   end
 
+  def check_arrival
+    errors << 'В сегменте не может отсутствовать место прибытия' unless s.to
+  end
+
   def check_date
+    errors << 'В сегменте не может отсутствовать дата вылета' unless date
     if date_as_date.present? && !TimeChecker.ok_to_show(date_as_date + 1.day)
       errors << 'Первый вылет слишком рано'
     end
