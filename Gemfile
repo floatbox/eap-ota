@@ -65,7 +65,7 @@ gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
 gem "devise", "~> 2.2.3"
-gem 'virtus'
+gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 #gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'

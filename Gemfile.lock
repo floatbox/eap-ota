@@ -34,9 +34,20 @@ GIT
     sax-machine (0.0.16)
       nokogiri (> 0.0.0)
 
+GIT
+  remote: https://github.com/solnic/virtus.git
+  revision: 28b1c35b75dae05a9b1d61ae2f5de4e3931dcafd
+  specs:
+    virtus (1.0.0.beta0)
+      abstract_type (~> 0.0.5)
+      adamantium (~> 0.0.7)
+      coercible (~> 0.2)
+      descendants_tracker (~> 0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
+    abstract_type (0.0.6)
     actionmailer (3.2.12)
       actionpack (= 3.2.12)
       mail (~> 2.4.4)
@@ -64,6 +75,8 @@ GEM
     activesupport (3.2.12)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    adamantium (0.0.11)
+      ice_nine (~> 0.8.0)
     addressable (2.2.7)
     airbrake (3.1.12)
       activesupport
@@ -99,6 +112,9 @@ GEM
       ffi (~> 1.0.6)
     chronic (0.6.7)
     coderay (1.0.9)
+    coercible (0.2.0)
+      backports (~> 3.0, >= 3.1.0)
+      descendants_tracker (~> 0.0.1)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -177,6 +193,7 @@ GEM
       multi_json
       multi_xml
     i18n (0.6.4)
+    ice_nine (0.8.0)
     journey (1.0.4)
     jquery-rails (2.0.2)
       railties (>= 3.2.0, < 5.0)
@@ -366,9 +383,6 @@ GEM
       rack
       raindrops (~> 0.7)
     vcr (1.11.3)
-    virtus (0.5.5)
-      backports (~> 3.3)
-      descendants_tracker (~> 0.0.1)
     warden (1.2.1)
       rack (>= 1.0)
     webmock (1.7.10)
@@ -461,7 +475,7 @@ DEPENDENCIES
   uglifier
   unicorn
   vcr
-  virtus
+  virtus!
   webmock
   webrat
   whenever
