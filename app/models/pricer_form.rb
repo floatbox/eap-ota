@@ -140,12 +140,6 @@ class PricerForm
     [date1]
   end
 
-  def as_json(args)
-    args ||= {}
-    args[:methods] = (args[:methods].to_a + [:people_count, :complex_to_parse_results, :segments, :rt]).uniq
-    super(args)
-  end
-
   def rt
     (segments.length == 2) && (segments[0].to_as_object == segments[1].from_as_object) && (segments[1].to_as_object == segments[0].from_as_object)
   end
@@ -173,29 +167,8 @@ class PricerForm
     [adults, children, infants].compact.sum
   end
 
-  def cabin_list
-    case cabin
-    when 'C'
-      return ['C', 'F']
-    when nil
-      return []
-    else
-      return [cabin]
-    end
-  end
-
   def people_count= count
     self.adults, self.children, self.infants = count[:adults] || 1, count[:children] || 0, count[:infants] || 0
-  end
-
-  def date_from_month_and_day(month, day)
-    self.segments[0].date = (Date.today > Date.new(Date.today.year, month, day)) ?
-      Date.new(Date.today.year+1, month, day).strftime('%d%m%y') :
-      Date.new(Date.today.year, month, day).strftime('%d%m%y')
-  end
-
-  def to_key
-    []
   end
 
   def complex_route?

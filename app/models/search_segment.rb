@@ -25,12 +25,6 @@ class SearchSegment
     end
   end
 
-  def as_json(args = nil)
-    args ||= {}
-    args[:methods] = (args[:methods].to_a + [:to_as_object, :from_as_object]).uniq
-    super(args)
-  end
-
   def location_from_string name
     Completer.object_from_string(name)
   end
