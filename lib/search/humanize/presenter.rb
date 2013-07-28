@@ -41,8 +41,8 @@ module Search
         }
 
         result[:segments] = segments.map{|segment|
-          dpt = segment.from_as_object
-          arv = segment.to_as_object 
+          dpt = segment.from
+          arv = segment.to 
           {
             :title => "#{ dpt.case_from } #{ arv.case_to }",
             :short => "#{ dpt.iata } &rarr; #{ arv.iata }",
@@ -60,15 +60,15 @@ module Search
 
       def human_short
         if rt
-          "#{segments[0].from_as_object.name} &harr; #{segments[0].to_as_object.name}, #{short_date(segments[0].date)} — #{short_date(segments[1].date)}"
+          "#{segments[0].from.name} &harr; #{segments[0].to.name}, #{short_date(segments[0].date)} — #{short_date(segments[1].date)}"
         else
           parts = []
           complex = segments.length > 1
           segments.each do |segment|
             if complex
-              parts << "#{segment.from_as_object.iata} &rarr; #{segment.to_as_object.iata} #{short_date(segment.date)}"
+              parts << "#{segment.from.iata} &rarr; #{segment.to.iata} #{short_date(segment.date)}"
             else
-              parts << "#{segment.from_as_object.name} &rarr; #{segment.to_as_object.name} #{short_date(segment.date)}"
+              parts << "#{segment.from.name} &rarr; #{segment.to.name} #{short_date(segment.date)}"
             end
           end
           parts.join(', ')
@@ -78,9 +78,9 @@ module Search
       def human_locations
         result = {}
         segments.each_with_index do |fs, i|
-          if fs.from_as_object && fs.to_as_object
-            result['dpt_' + i.to_s] = fs.from_as_object.case_from
-            result['arv_' + i.to_s] = fs.to_as_object.case_to
+          if fs.from && fs.to
+            result['dpt_' + i.to_s] = fs.from.case_from
+            result['arv_' + i.to_s] = fs.to.case_to
           end
         end
         result
@@ -96,7 +96,7 @@ module Search
       end
 
       def human_lite
-        segments[0].from_as_object.name + (rt ? ' ⇄ ' : ' → ') + segments[0].to_as_object.name
+        segments[0].from.name + (rt ? ' ⇄ ' : ' → ') + segments[0].to.name
       end
 
     end

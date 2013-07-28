@@ -194,12 +194,8 @@ class BookingController < ApplicationController
   end
 
   def get_destination
-    return if !@search.segments
-    segment = @search.segments[0]
-    return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
-    to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
-    from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
-    Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
+    return unless @search.segments?
+    Destination.get_by_search @search
   end
 
   def log_referrer

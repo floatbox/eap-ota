@@ -284,7 +284,7 @@ module PricerHelper
     index = {}
     segments.each_with_index do |segment, s|
       segment.nearby_cities.each_with_index do |cities, c|
-        title = c == 0 ? segment.from_as_object.name_ru : segment.to_as_object.name_ru
+        title = c == 0 ? segment.from.name_ru : segment.to.name_ru
         field = "#{c == 0 ? 'from' : 'to'}-#{s}"
         if index[title]
           index[title]['fields'] << field

@@ -59,8 +59,8 @@ describe Search::Urls::Decoder do
 
           subject { @decoder.decoded.segments.second }
 
-          its(:from) { should == 'PAR' }
-          its(:to) { should == 'MOW' }
+          its(:from) { should == City.find_by_iata('PAR') }
+          its(:to) { should == City.find_by_iata('MOW') }
           its(:date) { should == '160813' }
         end
       end
@@ -102,8 +102,8 @@ describe Search::Urls::Decoder do
 
           subject { @decoder.decoded.segments[4] }
 
-          its(:from) { should == 'AMS' }
-          its(:to) { should == 'PAR' }
+          its(:from) { should == City.find_by_iata('AMS') }
+          its(:to) { should == City.find_by_iata('PAR') }
           its(:date) { should == '010913' }
         end
       end
@@ -131,8 +131,8 @@ describe Search::Urls::Decoder do
 
           subject { @decoder.decoded.segments[4] }
 
-          its(:from) { should == 'AMS' }
-          its(:to) { should == 'PAR' }
+          its(:from) { should == City.find_by_iata('AMS') }
+          its(:to) { should == City.find_by_iata('PAR') }
           its(:date) { should == '010913' }
         end
       end

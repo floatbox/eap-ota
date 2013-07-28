@@ -49,7 +49,7 @@ class Destination
     if (!search.complex_route? &&
         search.people_count.values.sum == search.people_count[:adults] &&
         ([nil, '', 'Y'].include? search.cabin) &&
-        search.segments[0].to_as_object.class == City && search.segments[0].from_as_object.class == City)
+        search.segments[0].to.class == City && search.segments[0].from.class == City)
       price = recommendation.price_with_payment_commission / search.people_count.values.sum
       logger.info "Destination: (#{from_iata}-#{to_iata}) rt=#{rt} average_price = #{average_price}. New price = #{price}"
 
@@ -85,9 +85,9 @@ class Destination
 
   def self.get_by_search search
     segment = search.segments[0]
-    return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || search.complex_route?
-    to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
-    from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
+    return if ([segment.to.class, segment.from.class] - [City, Airport]).present? || search.complex_route?
+    to = segment.to.class == Airport ? segment.to.city : segment.to
+    from = segment.from.class == Airport ? segment.from.city : segment.from
     find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => search.rt)
   end
 

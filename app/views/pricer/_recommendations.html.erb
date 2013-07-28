@@ -26,7 +26,7 @@
 <div class="rfg-column">
     <% if times[:dpt].length > 1 %>
     <div class="rf-list" data-key="dpt<%= i + 1 %>t">
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => dict(@search.segments[i].from_as_object, :from) %></h6>    
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => dict(@search.segments[i].from, :from) %></h6>    
         <ul class="rf-values">
             <li class="rfv-empty rfv-selected"><%= t('filters.time.any') %></li>
             <% times[:dpt].each do |time| %>
@@ -37,7 +37,7 @@
     <% end %>
     <% if times[:arv].length > 1 %>
     <div class="rf-list" data-key="arv<%= i + 1 %>t">
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => dict(@search.segments[i].to_as_object, :to) %></h6>
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => dict(@search.segments[i].to, :to) %></h6>
         <ul class="rf-values">
             <li class="rfv-empty rfv-selected"><%= t 'filters.time.any' %></li>
             <% times[:arv].each do |time| %>
@@ -61,7 +61,7 @@
 <div class="rfg-column">
     <% if segment[:dpt][:airports].length > 1 || segment[:dpt][:cities].length > 1 %>
     <div class="rf-list" data-key="dpt<%= i + 1 %>">    
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => dict(@search.segments[i].from_as_object, :from) %></h6>        
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.dpt', :from => dict(@search.segments[i].from, :from) %></h6>        
         <% if segment[:dpt][:cities].length > 1 %>
             <% locations_title[:cities] = true %>
             <ul class="rf-values">
@@ -83,7 +83,7 @@
     <% end %>
     <% if segment[:arv][:airports].length > 1 || segment[:arv][:cities].length > 1 %>
     <div class="rf-list" data-key="arv<%= i + 1 %>">    
-        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => dict(@search.segments[i].to_as_object, :to) %></h6>        
+        <h6 class="rfgc-title rfgct-segment<%= i + 1 %>"><%= t 'filters.arv', :to => dict(@search.segments[i].to, :to) %></h6>        
         <% if segment[:arv][:cities].length > 1 %>
             <% locations_title[:cities] = true %>        
             <ul class="rf-values">
@@ -212,8 +212,8 @@
     <div class="o-segment segment<%= scounter + 1 %>">
         <% segment_rt = scounter == 1 && @search.rt %>
         <% segment_country = {
-          :dpt => @search.segments[scounter].from_as_object.class == Country,
-          :arv => @search.segments[scounter].to_as_object.class == Country          
+          :dpt => @search.segments[scounter].from.class == Country,
+          :arv => @search.segments[scounter].to.class == Country
         } %>
         <% segments.each do |segment| %>
             <%= render :partial => 'summary', :locals => {

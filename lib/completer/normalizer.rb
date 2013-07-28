@@ -3,7 +3,7 @@ module Completer
   module Normalizer
     NONWORD = /[^[:alnum:]]+/
     def normalize(word)
-      word.mb_chars.downcase.gsub(NONWORD, ' ').strip
+      ::Unicode.downcase(word).gsub(NONWORD, ' ').strip
     end
   end
 end

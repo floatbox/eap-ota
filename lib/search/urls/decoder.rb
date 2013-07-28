@@ -42,6 +42,7 @@ module Search
           # пришла дата, делаем сегмент из предыдущих локаций
           when /^(\d\d?)?(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\d\d?)?$/i
             date = decode_date(token)
+
             from, to = location_stack
             if to.nil?
               raise ParserError, "first segment can't be shortened" if segments.empty?

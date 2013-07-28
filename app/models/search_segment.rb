@@ -1,12 +1,32 @@
 # encoding: utf-8
+class SearchLocation < Virtus::Attribute::Object
+  class LocationWriter < Virtus::Attribute::Writer::Coercible
+    def coerce(value)
+      case value
+      when String 
+        begin
+          Location[value]
+        rescue ::IataStash::NotFound 
+          Completer.object_from_string(value)
+        end
+      when ActiveRecord::Base then value
+      else return
+      end
+    end
+  end
+
+  def self.writer_class(*)
+    LocationWriter
+  end
+end
 
 # non-persistent model
 # используется для валидации поисковых сегментов
 class SearchSegment
   include Virtus
   attribute :errors, Array, :default => []
-  attribute :from, String
-  attribute :to, String
+  attribute :from, SearchLocation
+  attribute :to, SearchLocation
   attribute :date, String
 
   def valid?
@@ -25,24 +45,20 @@ class SearchSegment
     end
   end
 
-  def location_from_string name
-    Completer.object_from_string(name)
-  end
-
   def from_country_or_region?
-    [Country, Region].include? from_as_object.class
+    [Country, Region].include? from.class
   end
 
   def search_around_from
-    from_as_object.class == City && from_as_object.search_around
+    from.class == City && from.search_around
   end
 
   def search_around_to
-    to_as_object.class == City && to_as_object.search_around
+    to.class == City && to.search_around
   end
 
   def to_country_or_region?
-    [Country, Region].include? to_as_object.class
+    [Country, Region].include? to.class
   end
 
   def multicity?
@@ -55,32 +71,16 @@ class SearchSegment
     return nil
   end
 
-  def to_as_object
-    @to_as_object ||= location_from_string(to)
-  end
-
-  def from_as_object
-    @from_as_object ||= location_from_string(from)
-  end
-
   def to_iata
-    to_as_object_iata
+    to.iata
   end
 
   def from_iata
-    from_as_object_iata
-  end
-
-  def to_as_object_iata
-    to_as_object.iata if to_as_object.respond_to? :iata
-  end
-
-  def from_as_object_iata
-    from_as_object.iata if from_as_object.respond_to? :iata
+    from.iata
   end
 
   def nearby_cities
-    [from_as_object, to_as_object].map do |location|
+    [from, to].map do |location|
       if location.class == City
         location.nearby_cities
       elsif location.class == Airport

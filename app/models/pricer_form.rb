@@ -8,12 +8,12 @@ class PricerForm
   attribute :adults, Integer, :default => 1
   attribute :children, Integer, :default => 0
   attribute :infants, Integer, :default => 0
-  attribute :cabin
-  attribute :query_key
-  attribute :partner
+  attribute :cabin, String
+  attribute :query_key, String
+  attribute :partner, String
   attribute :use_count, Integer, :default => 1
   attribute :segments, Array[SearchSegment]
-  delegate :to, :from, :from_iata, :to_iata, :to => 'segments.first'
+  delegate :to, :from, :from_iata, :to_iata, :date, :to => 'segments.first'
 
   # валидация
   def valid?
@@ -24,8 +24,12 @@ class PricerForm
 
   def check_segments
     # может случаться во время проверки PricerController#validate
-    errors << 'Не содержит сегментов' unless segments.present?
+    errors << 'Не содержит сегментов' unless segments?
     errors.concat(segments.flat_map { |s| s.valid?; s.errors } )
+  end
+
+  def segments?
+    segments.present?
   end
 
   def check_people_total
@@ -134,7 +138,7 @@ class PricerForm
   end
 
   def rt
-    (segments.length == 2) && (segments[0].to_as_object == segments[1].from_as_object) && (segments[1].to_as_object == segments[0].from_as_object)
+    (segments.length == 2) && (segments[0].to == segments[1].from) && (segments[1].to == segments[0].from)
   end
 
   # для рассчета тарифов
@@ -171,13 +175,13 @@ class PricerForm
   def map_segments
     result = segments.map{|s|
       { 
-        :dpt => map_point(s.from_as_object),
-        :arv => map_point(s.to_as_object)
+        :dpt => map_point(s.from),
+        :arv => map_point(s.to)
       }
     }
     if result.length == 1
-      dpt = segments.first.from_as_object
-      arv = segments.first.to_as_object
+      dpt = from
+      arv = to
       if dpt && arv
         dpt_alpha2 = dpt.class == Country ? dpt.alpha2 : dpt.country.alpha2
         arv_alpha2 = arv.class == Country ? arv.alpha2 : arv.country.alpha2
