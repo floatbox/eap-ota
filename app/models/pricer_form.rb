@@ -17,17 +17,15 @@ class PricerForm
 
   # валидация
   def valid?
-    fix_segments!
+    #fix_segments!
     check_segments
-    # FIXME убрать бы отсюда
-    # валидируем сегменты
-    errors.concat(segments.flat_map { |s| s.valid?; s.errors } )
     errors.blank?
   end
 
   def check_segments
     # может случаться во время проверки PricerController#validate
     errors << 'Не содержит сегментов' unless segments.present?
+    errors.concat(segments.flat_map { |s| s.valid?; s.errors } )
   end
 
   def check_people_total
@@ -35,16 +33,23 @@ class PricerForm
   end
 
   # заполняет невведенные from во втором и далее сегментах
-  def fix_segments!
-    if @segments
-      @segments.each_cons(2) do |a, b|
-        if b.from.empty?
-          b.from = a.to
-        end
-      end
-    end
-  end
+  #def fix_segments!
+    #if @segments
+      #@segments.each_cons(2) do |a, b|
+        #if b.from.empty?
+          #b.from = a.to
+        #end
+      #end
+    #end
+  #end
   #/валидация
+
+  # конструкторы
+  def self.from_code(code)
+    # затычка для старых урлов
+    return load_from_cache(code) if code.size == 6
+    Search::Urls::Decoder.new(code).decoded
+  end
 
   def self.from_js(params_raw)
     params_raw = HashWithIndifferentAccess.new(params_raw)
@@ -54,44 +59,6 @@ class PricerForm
     params[:segments] = params[:segments].values
 
     new(params)
-  end
-
-  # урлы
-  def self.from_code(code)
-    # затычка для старых урлов
-    return load_from_cache(code) if code.size == 6
-    Search::Urls::Decoder.new(code).decoded
-  end
-
-  def encode_url
-    encoder = Search::Urls::Encoder.new(self)
-    encoder.url
-  end
-  # /урлы
-
-  # перенести в хелпер
-  def self.convert_api_date(date_str)
-    if date_str =~ /^20(\d\d)-(\d\d?)-(\d\d?)$/
-      "%02d%02d%02d" % [$3, $2, $1].map(&:to_i)
-    else
-      date_str
-    end
-  end
-
-  def hash_for_rambler
-    return if complex_route?
-    res = {
-      :src => from_iata,
-      :dst => to_iata,
-      :dir => segments[0].date_as_date.strftime('%Y-%m-%d'),
-      :cls => RamblerCache::CABINS_MAPPING[cabin] || 'E',
-      :adt => adults,
-      :cnn => children,
-      :inf => infants,
-      :wtf => 0
-    }
-    res.merge!({:ret => segments[1].date_as_date.strftime('%Y-%m-%d')}) if segments[1]
-    res
   end
 
   def self.simple(args)
@@ -120,6 +87,37 @@ class PricerForm
     new :segments => segments,
       :adults => adults, :children => children, :infants => infants, :cabin => cabin,
       :partner => partner
+  end
+  # /конструкторы
+
+  def encode_url
+    encoder = Search::Urls::Encoder.new(self)
+    encoder.url
+  end
+
+  # перенести в хелпер
+  def self.convert_api_date(date_str)
+    if date_str =~ /^20(\d\d)-(\d\d?)-(\d\d?)$/
+      "%02d%02d%02d" % [$3, $2, $1].map(&:to_i)
+    else
+      date_str
+    end
+  end
+
+  def hash_for_rambler
+    return if complex_route?
+    res = {
+      :src => from_iata,
+      :dst => to_iata,
+      :dir => segments[0].date_as_date.strftime('%Y-%m-%d'),
+      :cls => RamblerCache::CABINS_MAPPING[cabin] || 'E',
+      :adt => adults,
+      :cnn => children,
+      :inf => infants,
+      :wtf => 0
+    }
+    res.merge!({:ret => segments[1].date_as_date.strftime('%Y-%m-%d')}) if segments[1]
+    res
   end
 
   def date1
