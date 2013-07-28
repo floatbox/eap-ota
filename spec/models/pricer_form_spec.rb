@@ -99,7 +99,7 @@ describe PricerForm do
       end
 
       it { should be_valid }
-      its(:real_people_count) { should == {:children=>0, :adults=>1, :infants=>0} }
+      its(:tariffied) { should == {:children=>0, :adults=>1, :infants=>0} }
     end
   end
 

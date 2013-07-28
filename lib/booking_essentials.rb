@@ -21,7 +21,7 @@ module BookingEssentials
     if strategy.check_price_and_availability(forbid_class_changing)
       @order_form = OrderForm.new(
         :recommendation => @recommendation,
-        :people_count => @search.real_people_count,
+        :people_count => @search.tariffied,
         :variant_id => params[:variant_id],
         :query_key => @coded_search,
         :partner => partner,

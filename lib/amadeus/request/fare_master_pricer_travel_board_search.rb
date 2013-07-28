@@ -6,7 +6,7 @@ module Amadeus
       def initialize(*args)
         unless args.first.is_a?(Hash)
           form = args.shift
-          @people_count = form.real_people_count
+          @people_count = form.tariffied
           @cabin = form.cabin
           @segments = form.segments
         end

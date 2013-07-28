@@ -19,6 +19,7 @@ class PricerForm
   def valid?
     fix_segments!
     check_segments
+    # FIXME убрать бы отсюда
     # валидируем сегменты
     errors.concat(segments.flat_map { |s| s.valid?; s.errors } )
     errors.blank?
@@ -151,8 +152,7 @@ class PricerForm
 
   # для рассчета тарифов
   # младенцы с местом считаются детьми
-  # FIXME переименовать во что-то типа tariff_count
-  def real_people_count
+  def tariffied
     {
       :adults => adults,
       :children => children + ((adults < infants) ? (infants - adults) : 0 ),
@@ -162,7 +162,7 @@ class PricerForm
 
   # понадобится мест в самолете
   def seat_total
-    real_people_count.values_at(:adults, :children).sum
+    tariffied.values_at(:adults, :children).sum
   end
 
   def people_count

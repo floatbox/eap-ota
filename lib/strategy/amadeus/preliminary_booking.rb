@@ -45,7 +45,8 @@ module Strategy::Amadeus::PreliminaryBooking
     begin
       resp = amadeus.fare_informative_best_pricing_without_pnr(
         :recommendation => @rec,
-        :people_count => @search.real_people_count)
+        :people_count => @search.tariffied
+      )
 
       if resp.success?
         #дебажный вывод цен
@@ -95,7 +96,7 @@ module Strategy::Amadeus::PreliminaryBooking
   def get_price_and_rules(amadeus)
     info_resp = amadeus.fare_informative_pricing_without_pnr(
         :recommendation => @rec,
-        :people_count => @search.real_people_count
+        :people_count => @search.tariffied
       )
     @rec.price_fare, @rec.price_tax = info_resp.prices
     @rec.baggage_array = info_resp.baggage
