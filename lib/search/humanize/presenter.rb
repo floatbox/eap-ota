@@ -94,6 +94,11 @@ module Search
           return I18n.l(d, :format => '%e&nbsp;%B %Y')
         end
       end
+
+      def human_lite
+        segments[0].from_as_object.name + (rt ? ' ⇄ ' : ' → ') + segments[0].to_as_object.name
+      end
+
     end
   end
 end
