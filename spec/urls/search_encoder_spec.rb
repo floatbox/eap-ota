@@ -56,7 +56,7 @@ describe Urls::Search::Encoder do
       ['PAR', 'MOW', '121013']
     ]
     url = get_url(segments: segments)
-    url.should == 'MOW-PAR-12Sep-AMS-17Sep-CHC-18Sep-AMS-20Sep-PAR-30Sep-MOW-12Oct'
+    url.should == 'MOW-PAR-12Sep-PAR-AMS-17Sep-AMS-CHC-18Sep-CHC-AMS-20Sep-AMS-PAR-30Sep-PAR-MOW-12Oct'
   end
 
   specify 'complex route with "segment breaks"' do
@@ -71,7 +71,7 @@ describe Urls::Search::Encoder do
       ['PAR', 'MOW', '121013']
     ]
     url = get_url(segments: segments)
-    url.should == 'MOW-PAR-12Sep-AMS-17Sep-RTM-CHC-18Sep-AMS-20Sep-PAR-30Sep-MOW-12Oct'
+    url.should == 'MOW-PAR-12Sep-PAR-AMS-17Sep-RTM-CHC-18Sep-CHC-AMS-20Sep-AMS-PAR-30Sep-PAR-MOW-12Oct'
   end
 
   specify 'short iatas' do
