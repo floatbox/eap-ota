@@ -50,11 +50,9 @@ class SearchSegment
   end
 
   def date_as_date
-    begin
-      @date_as_date ||= Date.strptime(date, '%d%m%y')
-    rescue
-      nil
-    end
+    @date_as_date ||= Date.strptime(date, '%d%m%y')
+  rescue
+    return nil
   end
 
   def to_as_object
