@@ -1,7 +1,7 @@
 # encoding: utf-8
 
-module Urls
-  module Search
+module Search
+  module Urls
     module Defaults
       CABIN = 'Y'
       ADULTS = 1
@@ -11,6 +11,6 @@ module Urls
   end
 end
 
-require 'urls/search/decoder'
-require 'urls/search/encoder'
+require 'search/urls/decoder'
+require 'search/urls/encoder'
 

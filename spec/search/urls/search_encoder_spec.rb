@@ -1,9 +1,9 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Urls::Search::Encoder do
+describe Search::Urls::Encoder do
 
-  let(:filler) { Urls::Search::FILLER_CHARACTER }
+  let(:filler) { Search::Urls::FILLER_CHARACTER }
 
   def get_url(params={})
 

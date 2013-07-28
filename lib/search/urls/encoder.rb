@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'urls/search'
+require 'search/urls'
 
-module Urls
-  module Search
+module Search
+  module Urls
 
     class Encoder
       attr_reader :url

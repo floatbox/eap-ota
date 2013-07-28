@@ -1,13 +1,13 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Urls::Search::Decoder do
+describe Search::Urls::Decoder do
   before do
     Time.stub(:now).and_return(Date.parse('14JUL2013'))
   end
 
   def parsed?(url)
-    Urls::Search::Decoder.new(url).valid?
+    Search::Urls::Decoder.new(url).valid?
   end
 
   context 'valid' do
@@ -16,7 +16,7 @@ describe Urls::Search::Decoder do
 
       before(:all) do
         @url = 'MOW-PAR-Aug8'
-        @decoder = Urls::Search::Decoder.new(@url)
+        @decoder = Search::Urls::Decoder.new(@url)
       end
 
       subject { @decoder }
@@ -42,7 +42,7 @@ describe Urls::Search::Decoder do
 
       before(:all) do
         @url = 'MOW-PAR-Aug8;Aug16'
-        @decoder = Urls::Search::Decoder.new(@url)
+        @decoder = Search::Urls::Decoder.new(@url)
       end
 
       subject { @decoder }
@@ -70,13 +70,13 @@ describe Urls::Search::Decoder do
     context 'implicit date' do
       it 'should be current year' do
         url = 'MOW-PAR-Sep8'
-        decoder = Urls::Search::Decoder.new(url)
+        decoder = Search::Urls::Decoder.new(url)
         decoder.decoded.segments.last.date.should == '080913'
       end
 
       it 'should be next year' do
         url = 'MOW-PAR-Feb8'
-        decoder = Urls::Search::Decoder.new(url)
+        decoder = Search::Urls::Decoder.new(url)
         decoder.decoded.segments.last.date.should == '080214'
       end
     end
@@ -85,7 +85,7 @@ describe Urls::Search::Decoder do
 
       before(:all) do
         @url = 'MOW-PAR-Aug8;PAR-AMS-Aug16;AMS-CHC-Aug18;CHC-AMS-Aug25;AMS-PAR-Sep1;PAR-MOW-Sep5'
-        @decoder = Urls::Search::Decoder.new(@url)
+        @decoder = Search::Urls::Decoder.new(@url)
       end
 
       subject { @decoder }
@@ -114,7 +114,7 @@ describe Urls::Search::Decoder do
 
       before(:all) do
         @url = 'MOW-PAR-Aug8;AMS-Aug16;CHC-Aug18;AMS-Aug25;PAR-Sep1;MOW-Sep5'
-        @decoder = Urls::Search::Decoder.new(@url)
+        @decoder = Search::Urls::Decoder.new(@url)
       end
 
       subject { @decoder }
@@ -143,7 +143,7 @@ describe Urls::Search::Decoder do
 
       before(:all) do
         @url = 'MOW-PAR-Aug8;PAR-AMS-Aug16;2adults;infant;business'
-        @decoder = Urls::Search::Decoder.new(@url)
+        @decoder = Search::Urls::Decoder.new(@url)
       end
 
       subject { @decoder }

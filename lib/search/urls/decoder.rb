@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-require 'urls/search'
+require 'search/urls'
 
-module Urls
-  module Search
+module Search
+  module Urls
 
     class ParserError < Exception
     end
@@ -11,7 +11,7 @@ module Urls
     class Decoder
       attr_reader :decoded
 
-      include Urls::Search::Defaults
+      include Search::Urls::Defaults
 
       def initialize(url)
         @decoded = nil
