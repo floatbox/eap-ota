@@ -46,19 +46,14 @@ class PricerForm
   end
   #/валидация
 
-  def segments=(segments)
-    if segments.is_a?(Hash)
-      # для PricerController#validate
-      # TODO: убрать
-      segments = segments.map do |k, v|
-        # FIXME: переписать как-нибудь нормально
-        next unless v[:date] || v[:to]
-        SearchSegment.new(v)
-      end
-      segments.compact!
-    end
-    @segments = segments
-    fix_segments!
+  def self.from_js(params_raw)
+    params_raw = HashWithIndifferentAccess.new(params_raw)
+    people_count = params_raw[:people_count]
+    params = params_raw.merge(people_count) if people_count
+    params.except!(:people_count)
+    params[:segments] = params[:segments].values
+
+    new(params)
   end
 
   # урлы

@@ -70,7 +70,7 @@ class PricerController < ApplicationController
       result[:fragment_exist] = fragment_exist
       StatCounters.inc %W[validate.cached] if fragment_exist
     else
-      @search = PricerForm.new(params[:search])
+      @search = PricerForm.from_js(params[:search])
       unless @search.valid?
         result[:errors] = @search.segments.flat_map(&:errors)
       end

@@ -7,14 +7,9 @@ describe Search::Urls::Encoder do
 
   def get_url(params={})
 
-    segments_hash = {}
-    params[:segments].each_with_index do |segment, index|
+    segments = params[:segments].map do |segment|
       from, to, date = segment
-      segments_hash[index.to_s] = {
-        from: from,
-        to: to,
-        date: date
-      }
+      SearchSegment.new(from: from, to: to, date: date)
     end
 
     pricer_form = PricerForm.new(
@@ -22,7 +17,7 @@ describe Search::Urls::Encoder do
       children: params[:children] || 0,
       infants: params[:infants] || 0,
       cabin: params[:cabin] || 'Y',
-      segments: segments_hash
+      segments: segments
     )
 
     pricer_form.encode_url

@@ -7,7 +7,7 @@ describe PricerForm do
 
   context "filled via ajax" do
     subject do
-      described_class.new( attrs )
+      described_class.from_js( attrs )
     end
 
     let :people_attrs do
@@ -22,22 +22,6 @@ describe PricerForm do
             "0" => {:from => "MOW", :date => "2104#{yy}", :to => "PAR"},
             "1" => {:from =>"PAR", :date =>"2804#{yy}", :to =>"MOW"}
           }
-        }
-      end
-
-      it do
-        should be_valid
-      end
-    end
-
-    context "when filled with SearchSegment classes" do
-      let :attrs do
-        {
-          :people_count => people_attrs,
-          :segments => [
-            SearchSegment.new(from: 'MOW', to: 'PAR', date: "2104#{yy}"),
-            SearchSegment.new(from: 'PAR', to: 'MOW', date: "2804#{yy}")
-          ]
         }
       end
 
@@ -64,6 +48,18 @@ describe PricerForm do
   context "filled via api" do
     subject do
       described_class.simple( attrs )
+    end
+
+    context "when filled with SearchSegment classes" do
+      let :attrs do
+        {
+          :people_count => people_attrs,
+          :segments => [
+            SearchSegment.new(from: 'MOW', to: 'PAR', date: "2104#{yy}"),
+            SearchSegment.new(from: 'PAR', to: 'MOW', date: "2804#{yy}")
+          ]
+        }
+      end
     end
 
     context "when oneway" do
