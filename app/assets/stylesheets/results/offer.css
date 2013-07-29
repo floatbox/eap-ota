@@ -654,6 +654,9 @@
     letter-spacing: -0.03em;    
     color: #777;
 }
+.osd-cabins {
+    margin: 12px 14px 4px 196px;
+}
 .osd-flight {
     padding: 8px 0 2px;
 }
@@ -709,6 +712,10 @@
 .osdn-hl {
     padding: 2px 4px;
     background: #e2ea5f;
+}
+.osdn-hlcab {
+    padding: 2px 4px;
+    background: #ff9eb6;
 }
 .osdn-hll {
     position: relative;
