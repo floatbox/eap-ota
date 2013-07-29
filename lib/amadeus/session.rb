@@ -16,6 +16,7 @@ module Amadeus
   TICKETING = office_for_alias(:ticketing)
   DOWNTOWN = office_for_alias(:downtown)
   ZAGORYE = office_for_alias(:zagorye)
+  LVIV = office_for_alias(:lviv)
 
   cattr_accessor :logger do
     Rails.logger

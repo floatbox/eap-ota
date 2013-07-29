@@ -69,6 +69,10 @@ amadeus:
       alias: zagorye
       organization: NMC-UKRAIN
       password: AMADEUS
+    LWOU228AP:
+      alias: lviv
+      organization: NMC-UKRAIN
+      password: AMADEUS
 payment:
   skip_checksum_validation: yes
   # payture, payu, or no
