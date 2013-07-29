@@ -3,9 +3,9 @@ module BookingEssentials
   def preliminary_booking_result(forbid_class_changing)
     return if Conf.site.forbidden_booking
     @recommendation = Recommendation.deserialize(params[:recommendation])
-    # FIXME среагировать @recommendation.sellable? == false
     @recommendation.find_commission!
     return unless recover_pricer_form
+    return unless @recommendation.sellable?
 
     track_partner(params[:partner], params[:marker])
     strategy = Strategy.select( :rec => @recommendation, :search => @search )
@@ -58,11 +58,13 @@ module BookingEssentials
     end
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
-    # Среагировать на изменение продаваемости/цены
+    # Среагировать на изменение цены
     @order_form.recommendation.find_commission!
+    return :failed_booking unless @order_form.recommendation.sellable?
     @order_form.admin_user = admin_user
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
+
 
     if @order_form.counts_contradiction
       StatCounters.inc %W[pay.errors.counts_contradiction]
@@ -73,6 +75,11 @@ module BookingEssentials
       end
     end
 
+    if @order_form.price_with_payment_commission != @order_form.recommendation.price_with_payment_commission
+      @order_form.price_with_payment_commission = @order_form.recommendation.price_with_payment_commission
+      @order_form.update_in_cache
+      return :new_price
+    end
     if !@order_form.valid?
       StatCounters.inc %W[pay.errors.form]
       logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"

@@ -113,11 +113,10 @@ class BookingController < ApplicationController
   def recalculate_price
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
-    # Среагировать на изменение продаваемости/цены
     @order_form.recommendation.find_commission!
     @order_form.admin_user = admin_user
     @order_form.valid?
-    if @order_form.update_price_and_counts
+    if @order_form.recommendation.sellable? && @order_form.update_price_and_counts
       render :partial => 'newprice'
     else
       render :partial => 'failed_booking'
