@@ -59,7 +59,7 @@ Eviterra::Application.configure do
     :user_name => "eviterra",
     :password => "flywithme"
   }
-
+  config.action_mailer.default_url_options = { :host => Conf.site.host, :protocol => Conf.site.ssl ? 'https' : 'http' }
 
   config.action_controller.perform_caching = true
   config.cache_store = :file_store, Rails.root + "tmp/cache/"
@@ -121,6 +121,6 @@ Eviterra::Application.configure do
   # автоматически включает мониторинг GC в newrelic, когда включен GC::Profiler
   # ручку в конфиге не делал
   # закомментить, чтобы выключить
-  #GC::Profiler.enable
+  GC::Profiler.enable
 end
 

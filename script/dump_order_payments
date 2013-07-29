@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+# выгружает мэппинг заказов и платежей
+
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+
+csv = CSV.new(
+  STDOUT,
+  write_headers: true,
+  headers: %W[
+    payment_type payment_id payment_ref payment_their_ref
+    order_id order_pnr_number
+    ])
+Payment.charged.includes(:order).find_each do |p|
+  order = p.order.parent_or_self
+  next unless order
+  csv << [p.type, p.id, p.ref, p.their_ref, order.id, order.pnr_number]
+end
+
+csv.close

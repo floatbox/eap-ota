@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130625125539) do
+ActiveRecord::Schema.define(:version => 20130718131818) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -170,15 +170,29 @@ ActiveRecord::Schema.define(:version => 20130625125539) do
   end
 
   create_table "customers", :force => true do |t|
-    t.string   "email",                         :null => false
+    t.string   "email",                                                    :null => false
     t.string   "password"
     t.string   "status"
-    t.boolean  "enabled",    :default => false, :null => false
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.boolean  "enabled",                               :default => false, :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                         :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
 
+  add_index "customers", ["confirmation_token"], :name => "index_customers_on_confirmation_token", :unique => true
   add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
+  add_index "customers", ["reset_password_token"], :name => "index_customers_on_reset_password_token", :unique => true
 
   create_table "destinations", :force => true do |t|
     t.integer  "to_id"
@@ -372,6 +386,8 @@ ActiveRecord::Schema.define(:version => 20130625125539) do
     t.boolean  "auto_ticket",                                                 :default => false
     t.string   "no_auto_ticket_reason",                                       :default => ""
     t.boolean  "old_downtown_booking",                                        :default => false
+    t.boolean  "needs_visa_notification",                                     :default => false
+    t.string   "additional_pnr_number"
   end
 
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
@@ -381,6 +397,14 @@ ActiveRecord::Schema.define(:version => 20130625125539) do
   add_index "orders", ["payment_type"], :name => "index_orders_on_payment_type"
   add_index "orders", ["pnr_number"], :name => "index_orders_on_pnr_number"
   add_index "orders", ["ticket_status"], :name => "index_orders_on_ticket_status"
+
+  create_table "orders_stored_flights", :id => false, :force => true do |t|
+    t.integer "stored_flight_id"
+    t.integer "order_id"
+  end
+
+  add_index "orders_stored_flights", ["order_id", "stored_flight_id"], :name => "index_orders_stored_flights_on_order_id_and_stored_flight_id"
+  add_index "orders_stored_flights", ["stored_flight_id", "order_id"], :name => "index_orders_stored_flights_on_stored_flight_id_and_order_id"
 
   create_table "partners", :force => true do |t|
     t.string   "token",                                  :null => false
@@ -555,6 +579,7 @@ ActiveRecord::Schema.define(:version => 20130625125539) do
     t.string   "original_price_tax_currency",     :limit => 3
     t.integer  "original_price_penalty_cents"
     t.string   "original_price_penalty_currency", :limit => 3
+    t.string   "additional_pnr_number"
   end
 
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"

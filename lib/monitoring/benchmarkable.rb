@@ -14,5 +14,18 @@ module Monitoring
         key: key
       result
     end
+
+    def meter(key, value=nil)
+      if block_given?
+        result = yield
+        return result
+      else
+        ActiveSupport::Notifications.instrument :meter,
+          value: result = value,
+          key: "meter.#{key}"
+      end
+      result
+    end
   end
 end
+

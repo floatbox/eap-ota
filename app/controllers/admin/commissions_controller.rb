@@ -20,7 +20,7 @@ class Admin::CommissionsController < Admin::BaseController
       # elsif params[:terminal].present?
       #
       end
-    @commissions_with_reasons = book.all_with_reasons_for(@recommendation)
+    @rules_with_reasons = book.all_with_reasons_for(@recommendation)
   end
 
   private

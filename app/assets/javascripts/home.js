@@ -1,4 +1,4 @@
-//= require common/hint.js
+//= require common/hint
 
 //= require home/page.js
 

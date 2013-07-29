@@ -181,14 +181,14 @@ class OrderForm
   def save_to_cache
     cache = OrderFormCache.new
     copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
-    cache.save
+    cache.with(safe: true).save
     self.number = cache.id.to_s
   end
 
   def update_in_cache
     cache = OrderFormCache.find(number) or raise(NotFound, "#{number} not found")
     copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
-    cache.save
+    cache.with(safe: true).save
   end
 
   class NotFound < StandardError; end
@@ -215,6 +215,12 @@ class OrderForm
     else
       order.update_attributes(no_auto_ticket_reason: auto_ticket_stuff.turndown_reason)
     end
+  end
+
+  def needs_visa_notification
+    recommendation.flights.any?{|f| f.arrival.country.alpha2 == 'US' &&
+                                    f.departure.country.alpha2 != 'US'} &&
+      people.any?{|p| ['RU', 'BY', 'UA', 'KZ'].include?(p.nationality.alpha2)}
   end
 
   def variant
@@ -261,7 +267,7 @@ class OrderForm
   end
 
   def update_price_and_counts
-    search = PricerForm.load_from_cache(query_key)
+    search = PricerForm.from_code(query_key)
     search.people_count = calculated_people_count
     strategy = Strategy.select( :rec => recommendation, :search => search )
     if strategy.check_price_and_availability

@@ -55,7 +55,7 @@ load 'lib/recipes/unicorn'
   role :web, 'vm3.eviterra.com', 'vm1.eviterra.com', 'vm2.eviterra.com'
   role :db, 'vm1.eviterra.com', :primary => true
   role :daemons, 'vm2.eviterra.com'
-#  set :branch, 'staging'
+  #set :branch, 'staging'
 end
 
 task :eviterra do

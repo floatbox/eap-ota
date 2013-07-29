@@ -43,6 +43,9 @@ class PaymentsController < ApplicationController
       )
       payment_response = @order.block_money(card, custom_fields, gateway: params[:gateway])
       if payment_response.success?
+        if @order.ok_to_auto_ticket?
+          AutoTicketStuff.new(order: @order).create_auto_ticket_job
+        end
         logger.info "Pay: payment succesful"
         render :partial => 'success'
       elsif payment_response.threeds?

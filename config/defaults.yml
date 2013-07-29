@@ -5,14 +5,17 @@ site:
   forbidden_cash: no
   forbidden_delivery: no
   store_flights: no
-  host: 'http://localhost:3000'
+  host: 'localhost:3000'
+  ssl: no
   fee_scheme: v2
   production:
-    host: 'https://eviterra.com'
+    host: 'eviterra.com'
+    ssl: yes
   staging:
-    host: 'https://staging.eviterra.com'
+    host: 'staging.eviterra.com'
+    ssl: yes
   test:
-    host: 'http://localhost:3000'
+    host: 'localhost:3000'
   auto_ticketing:
     enabled: no
     exclude_list:
@@ -46,6 +49,7 @@ amadeus:
   ignored_carriers: []
   forbid_class_changing: no
   default_office: MOWR228FA
+  search_sax: yes
   offices:
     MOWR228FA:
       alias: booking
@@ -153,6 +157,8 @@ mail:
   subscription_reply_to: operator@eviterra.com
   subscription_cc: subscription@eviterra.com
   invoice_to: bills@eviterra.com
+  profile_reply_to: profile@eviterra.com
+  profile_cc: profile@eviterra.com
 ohmystats:
   enabled: yes
   project_id: tyjrlhjuionhuxvojzbravinzfejcnsdgcoyjsks

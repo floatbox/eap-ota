@@ -25,8 +25,9 @@ module IataStash
       unless iata.nil?
         data = find_by_iata(iata) || find_by_iata_ru(iata)
         if data
-          hash[data.iata] = data if data.iata.present?
-          hash[data.iata_ru] = data if data.iata_ru.present?
+          hash[iata] = data
+          # hash[data.iata] = data if data.iata.present?
+          # hash[data.iata_ru] = data if data.iata_ru.present?
           data
         else
           IataStash.logger.info "#{name} #{iata} #{Time.now.strftime("%H:%M %d.%m.%Y")}"

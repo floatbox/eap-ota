@@ -39,6 +39,8 @@ module Strategy::Amadeus::Booking
       end
       logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
       @order_form.save_to_order
+      #binding.pry
+      @order_form.order.save_stored_flights(@rec.flights)
 
       set_people_numbers(add_multi_elements.passengers)
 
@@ -50,6 +52,7 @@ module Strategy::Amadeus::Booking
       amadeus.pnr_commit_really_hard do
         pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
         @rec.last_tkt_date = pricing.last_tkt_date
+        # FIXME отреагировать на изменение цены/продаваемости
         new_rec = @rec.dup_with_new_prices(pricing.prices)
         unless @order_form.price_with_payment_commission == new_rec.price_with_payment_commission
           logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@order_form.price_with_payment_commission} -> #{new_rec.price_with_payment_commission}"
@@ -61,7 +64,7 @@ module Strategy::Amadeus::Booking
           return :price_changed
         end
 
-        unless TimeChecker.ok_to_sell(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
+        if !lax && !TimeChecker.ok_to_sell(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
           logger.error "Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           amadeus.pnr_cancel

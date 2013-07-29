@@ -40,6 +40,7 @@ gem 'central_bank_of_russia'
 gem 'kaminari'
 gem 'daemons'
 gem 'nokogiri'
+gem 'sax-machine', :git => 'https://github.com/gregwebs/sax-machine.git'
 gem 'yajl-ruby'
 gem 'whenever', :require => false
 gem 'cucumber'
@@ -63,6 +64,7 @@ gem 'newrelic_rpm'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
+gem "devise", "~> 2.2.3"
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 #gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'

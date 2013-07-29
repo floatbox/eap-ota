@@ -14,6 +14,7 @@ module Strategy::Amadeus::Tickets
     end
     tickets = []
     exchanged_tickets = pnr_resp.exchanged_tickets
+    add_number = pnr_resp.additional_pnr_numbers[@order.commission_carrier]
     # FIXME перенести обработку багажа в парсер ticket_display_tst или pnr_retrieve
     pnr_resp.tickets.deep_merge(prices).each do |k, ticket_hash|
       if ticket_hash[:number]
@@ -32,7 +33,8 @@ module Strategy::Amadeus::Tickets
           :source => 'amadeus',
           :baggage_info => baggage_info,
           :pnr_number => @order.pnr_number,
-          :original_price_penalty => "0 RUB"
+          :original_price_penalty => "0 RUB",
+          :additional_pnr_number => add_number
         })
       end
     end
@@ -45,6 +47,7 @@ module Strategy::Amadeus::Tickets
     # Для выписки в американском офисе нужно убедится, что текуший офис - 2233
     raise Strategy::TicketError, 'Заказ не в состоянии booked' unless @order.ticket_status == 'booked'
     @order.update_attributes :ticket_status => 'processing_ticket'
+    add_to_visa_queue if @order.needs_visa_notification
     case @order.commission_ticketing_method
     when 'aviacenter'
       amadeus_ticket('MOWR2233B')
@@ -75,6 +78,17 @@ module Strategy::Amadeus::Tickets
         amadeus.pnr_commit_and_retrieve.or_fail!
       end
       amadeus.doc_issuance_issue_ticket.or_fail!
+
+    end
+  end
+
+  def add_to_visa_queue
+    # отправляем в очередь для получения данных о визе в америку
+    ::Amadeus.ticketing do |amadeus|
+      if @order.needs_visa_notification?
+        amadeus.pnr_retrieve(:number => @order.pnr_number).or_fail!
+        amadeus.cmd('QE8C21') if @order.needs_visa_notification?
+      end
     end
   end
 

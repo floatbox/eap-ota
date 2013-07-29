@@ -10,6 +10,13 @@ module Commission::Rule::Matching
     cattr_accessor :skip_interline_validity_check
   end
 
+  # можно ли показывать клиентам и продавать предложения
+  # по данному комиссинному правилу?
+  # TODO Переместить в другой модуль?
+  def sellable?
+    !disabled?
+  end
+
   def disabled?
     disabled || not_implemented || no_commission
   end
@@ -25,7 +32,6 @@ module Commission::Rule::Matching
   def turndown_reason recommendation
     skipped? and return "правило не проверяется"
     # carrier == recommendation.validating_carrier_iata and
-    applicable_date? or return "прошел/не наступил период действия"
     applicable_interline?(recommendation) or return "интерлайн/не интерлайн"
     valid_interline?(recommendation) or return "нет интерлайн договора между авиакомпаниями"
     applicable_classes?(recommendation) or return "не подходит класс бронирования"
@@ -97,21 +103,8 @@ module Commission::Rule::Matching
 
   def applicable_routes? recommendation
     return true unless routes
-    routes.include? recommendation.route
-  end
-
-  def applicable_date?
-    !expired? && !future?
-  end
-
-  def expired?
-    return unless expr_date
-    expr_date.past?
-  end
-
-  def future?
-    return unless strt_date
-    strt_date.future?
+    route = recommendation.route
+    compiled_routes.any? {|routex| routex === route }
   end
 
 end

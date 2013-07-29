@@ -58,15 +58,11 @@ class Commission::Rule
   # маршруты, на которых применимо правило.
   # @note FIXME никто не использует. научить!
   # @return [Array<String>]
-  attr_accessor :routes
+  attr_reader :routes
 
-  # дата начала действия правила
-  # @return [Date]
-  attr_accessor :expr_date
-
-  # дата окончания действия правила
-  # @return [Date]
-  attr_accessor :strt_date
+  # скомпилированные до регексов маршруты
+  # @return [Array<String,Regexp>]
+  attr_reader :compiled_routes
 
   # последнее средство сравнения - текст блока на ruby.
   # будет выполнен в контексте рекомендации.
@@ -122,6 +118,10 @@ class Commission::Rule
   # @return [String]
   attr_accessor :subagent_comments
 
+  # текст наших комментариев, для внутреннего пользования
+  # @return [String]
+  attr_accessor :comments
+
   # ремарка для выписки некоторых авиакомпаний в downtown
   # @return [String]
   attr_accessor :designator
@@ -132,7 +132,7 @@ class Commission::Rule
 
   # @!group Дебажная информация
 
-  # место (сейчас - номер строки в файле комиссиий) где было определено правило
+  # место (сейчас - имя файла и строка комиссиий) где было определено правило
   # @return [String]
   attr_accessor :source
 
@@ -140,23 +140,11 @@ class Commission::Rule
   # @return [Fixnum]
   attr_accessor :number
 
-  # поправляет комиссию в соответствии с вычисленными дефолтами.
-  # @see Commission::Correctors
-  # @note TODO попробовать избавиться.
-  # @return [Symbol]
-  attr_accessor :corrector
-
   # массив примеров рекомендаций, которые должны получить именно эту комиссию.
   # @return [Array<Commission::Example>]
   attr_reader :examples
 
   # @!endgroup
-
-  def initialize(*)
-    # дефолты
-    @interline = [:no]
-    super
-  end
 
   def examples=(example_array)
     @examples = example_array.collect do |code, source|
@@ -164,15 +152,15 @@ class Commission::Rule
     end
   end
 
-  def inspect
-    "<commission #{carrier}##{number} :#{source}>"
+  def routes=(routex_array)
+    @routes = routex_array
+    @compiled_routes = routex_array.flat_map do |routex|
+      Commission::Rule::RoutexCompiler.new(routex).compiled
+    end
   end
 
-  # @note FIXME документировать
-  def correct!
-    # FIXME временно выключаю, потому что корректоры у нас пока работают только с числами
-    # а их тут нет.
-    Commission::Correctors.apply(self, corrector)
+  def inspect
+    "<Commission::Rule #{carrier}##{number} at #{source}>"
   end
 
 end

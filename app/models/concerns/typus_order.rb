@@ -15,6 +15,10 @@ module TypusOrder
     "#{email_searchable} #{phone}".html_safe
   end
 
+  def contact_with_customer
+    "#{email_searchable} #{phone} #{customer_link}".html_safe
+  end
+
   #флаг для админки
   def urgent
     if  payment_status == 'blocked' && ticket_status == 'booked' &&
@@ -85,11 +89,19 @@ module TypusOrder
     "<a href='/admin/orders?search=#{email}'>#{email}</a>".html_safe
   end
 
+  def customer_link
+    if !customer_id.blank?
+      "<a href='/admin/customers/show/#{customer_id}'>→<small>покупатель ##{customer_id}</small></a>".html_safe
+    else
+      "—"
+    end
+  end
+
   def parent_pnr_number_searchable
     if !parent_pnr_number.blank?
       "<a href='/admin/orders?search=#{parent_pnr_number}'>#{parent_pnr_number}</a>".html_safe
     elsif !pnr_number.blank?
-      "<a href='/admin/orders?search=#{pnr_number}'>→ <small>найти pnr number</small></a>".html_safe
+      "<a href='/admin/orders?search=#{pnr_number}'>→<small>найти pnr number</small></a>".html_safe
     else
       "—"
     end

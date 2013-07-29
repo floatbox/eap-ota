@@ -4,7 +4,7 @@ module Strategy::Amadeus::PreliminaryBooking
 
   def check_price_and_availability(forbid_class_changing = Conf.amadeus.forbid_class_changing)
     @forbid_class_changing = forbid_class_changing
-    unless TimeChecker.ok_to_book(@rec.dept_date + 1.day)
+    if !lax && !TimeChecker.ok_to_book(@rec.dept_date + 1.day)
       logger.error 'Strategy::Amadeus::Check: time criteria missed'
       return
     end
@@ -22,7 +22,7 @@ module Strategy::Amadeus::PreliminaryBooking
       # amadeus.pnr_ignore
 
     end
-    unless TimeChecker.ok_to_book(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
+    if !lax && !TimeChecker.ok_to_book(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
       logger.error "Strategy::Amadeus::Check: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
       dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
       return

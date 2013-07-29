@@ -3,6 +3,55 @@ require 'spec_helper'
 
 describe OrderForm do
 
+  describe '#needs_visa_notification' do
+
+    subject {
+      OrderForm.new(recommendation: recommendation, people: people)
+    }
+
+    context 'with flight to usa' do
+      let(:recommendation) {
+          Recommendation.example 'CDGJFK'
+      }
+      context 'with passenger from KZ' do
+        let(:people){
+          [Person.new(nationality_id: Country['KZ'].id)]
+        }
+        its(:needs_visa_notification) {should be_true}
+
+      end
+
+      context 'with one passenger from GB' do
+        let(:people){
+          [Person.new(nationality_id: Country['GB'].id)]
+        }
+        its(:needs_visa_notification) {should be_false}
+      end
+
+    end
+
+    context 'one flight from usa' do
+      let(:recommendation) {
+          Recommendation.example 'LAXAMS'
+      }
+
+      context 'with passenger from UA' do
+        let(:people){
+          [Person.new(nationality_id: Country['UA'].id)]
+        }
+        its(:needs_visa_notification) {should be_false}
+      end
+
+      context 'with one passenger from GB' do
+        let(:people){
+          [Person.new(nationality_id: Country['GB'].id)]
+        }
+        its(:needs_visa_notification) {should be_false}
+      end
+    end
+
+  end
+
   describe '#infants' do
     subject do
       o = OrderForm.new(:people => people)

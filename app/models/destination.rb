@@ -45,7 +45,7 @@ class Destination
     200
   end
 
-  def move_average_price search, recommendation, query_key
+  def move_average_price search, recommendation, code
     if (!search.complex_route? &&
         search.people_count.values.sum == search.people_count[:adults] &&
         ([nil, '', 'Y'].include? search.cabin) &&
@@ -65,7 +65,7 @@ class Destination
       if average_price > price
         logger.info "Create Hot Offer for Destination"
         hot_offers.create(
-          :code => query_key,
+          :code => code,
           :search => search,
           :recommendation => recommendation,
           :price => price)

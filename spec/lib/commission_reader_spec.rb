@@ -7,7 +7,7 @@ describe Commission::Reader do
   include Commission::Fx
 
   context "just one commission" do
-    let :commission_class do
+    subject :book do
       Commission::Reader.new.define do
         carrier 'FV'
         commission '2%/3'
@@ -15,17 +15,17 @@ describe Commission::Reader do
     end
 
     it "should have one commission" do
-      commission_class.all.should have(1).item
+      book.rules.should have(1).item
     end
 
     it "should find a commission for correct recommendation" do
       recommendation = Recommendation.example('SVOCDG', :carrier => 'FV')
-      commission_class.find_for(recommendation).should be_a(Commission::Rule)
+      book.find_for(recommendation).should be_a(Commission::Rule)
     end
   end
 
-  context "two carriers, three simple commissions" do
-    let :commission_class do
+  context "two carriers, three simple rules" do
+    subject :book do
       Commission::Reader.new.define do
         carrier 'FV'
         commission '2%/3'
@@ -37,26 +37,70 @@ describe Commission::Reader do
     end
 
     it "should have two airlines" do
-      commission_class.all_carriers.should have(2).items
+      book.carriers.should == ['FV', 'AB']
     end
 
-    it "should have registered three commissions" do
-      commission_class.all.should have(3).items
+    it "should have registered three rules" do
+      book.should have(3).rules
     end
 
     describe "#exists_for?" do
       specify do
-        commission_class.exists_for?(Recommendation.new(:validating_carrier_iata => 'AB')).should be_true
+        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'AB')).should be_true
       end
 
       specify do
-        commission_class.exists_for?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
+        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
+      end
+    end
+  end
+
+  context "two carriers, four pages" do
+    let :book do
+      Commission::Reader.new.define do
+        carrier 'FV'
+        commission '2%/3'
+        commission '1%/0'
+
+        carrier 'FV', start_date: '2013-05-01'
+        commission '4%/3'
+
+        carrier 'FV', start_date: '2013-08-01'
+
+        carrier 'AB'
+        commission '0/0'
+      end
+    end
+
+    it "should have two airlines" do
+      book.carriers.should == ['FV', 'AB']
+    end
+
+    it "should have registered four rules" do
+      book.should have(4).rules
+    end
+
+    it "should define four pages" do
+      book.should have(4).pages
+    end
+
+    describe "active_pages" do
+      pending
+    end
+
+    describe "#exists_for?" do
+      specify do
+        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'FV')).should be_true
+      end
+
+      specify do
+        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
       end
     end
   end
 
   context "all the rules" do
-    let :commission_class do
+    let :book do
       Commission::Reader.new.define do
         carrier 'FV'
         consolidator '1%'
@@ -64,18 +108,16 @@ describe Commission::Reader do
         discount '2%'
         our_markup '1%'
         disabled "because of Caturday, that's why"
-        check { true }
+        check %{ true }
         tour_code "FOOBAR"
         designator "PP10"
         commission '2%/3'
       end
     end
 
-    let :commission do
-      commission_class.all.first
+    subject :rule do
+      book.rules.first
     end
-
-    subject {commission}
 
     its(:agent) {should == Fx('2%')}
     its(:subagent) {should == Fx(3)}
@@ -91,25 +133,9 @@ describe Commission::Reader do
   end
 
   describe "#check" do
-    describe "given as code (DEPRECATED)" do
-      let :commission_class do
-        Commission::Reader.new.define do
-          carrier 'SU'
-          check {true}
-          commission '0/0'
-        end
-      end
-
-      subject :commission do
-        commission_class.all.first
-      end
-
-      its(:check) {should eq("# COMPILED")}
-      its(:check_proc) {should be_an_instance_of(Proc)}
-    end
 
     describe "given as text" do
-      let :commission_class do
+      let :book do
         Commission::Reader.new.define do
           carrier 'SU'
           check "true"
@@ -117,15 +143,15 @@ describe Commission::Reader do
         end
       end
 
-      subject :commission do
-        commission_class.all.first
+      subject :rule do
+        book.rules.first
       end
 
       its(:check) {should eq("true")}
       its(:check_proc) {should be_an_instance_of(Proc)}
 
       it "should return currect value on custom_check" do
-        commission.applicable_custom_check?(stub(:recommendation)).should == true
+        rule.applicable_custom_check?(stub(:recommendation)).should == true
       end
     end
 
@@ -133,7 +159,7 @@ describe Commission::Reader do
 
       let(:expected_error_source) { "#{__FILE__}:#{__LINE__ + 7}" }
 
-      let :commission_class do
+      subject :book do
         Commission::Reader.new.define do
           carrier 'SU'
           check %[
@@ -146,13 +172,14 @@ describe Commission::Reader do
       end
 
       it "should raise it while reading" do
-        expect {commission_class}.to raise_error(SyntaxError)
+        expect {book}.to raise_error(SyntaxError)
       end
 
       it "should raise error with correct_file and line" do
+        pending "some problem with Commission::Reader.new.define?"
         message = 'nothing raised?'
         begin
-          commission_class
+          book
         rescue SyntaxError => e
           message = e.message
         end
@@ -162,127 +189,63 @@ describe Commission::Reader do
 
   end
 
-  context "setting defaults" do
+  context "reader defaults" do
 
-    let :commission_class do
+    let :book do
       Commission::Reader.new.define do
-        defaults :system => :amadeus,
-          :ticketing_method => :aviacenter,
-          :consolidator => '2%',
-          :blanks => 23,
-          :discount => '5%',
-          :our_markup => 0
-
         carrier 'FV'
         commission '2%/3'
 
-        carrier 'AB'
-        carrier_defaults :system => :sirena,
-          :ticketing_method => :direct,
-          :consolidator => '1%',
-          :blanks => 0,
-          :discount => '1%',
-          :our_markup => '1%'
+        carrier 'UN', start_date: "1.2.2013"
         commission '1%/1%'
+
+        carrier 'UN', "Transaero"
         commission '2%/2%'
-
-        carrier 'UN', "Transaero", expr_date: "31.1.2013"
-        commission '2%/2%'
-
-        carrier 'UN', strt_date: "1.2.2013"
-        commission '1%/1%'
       end
     end
 
-    describe ".defaults" do
-      context "called correctly" do
-        subject { commission_class.for_carrier('FV').first }
+    subject { book.pages_for(carrier: 'FV').first.rules.first }
 
-        its(:system) { should eq(:amadeus) }
-        its(:ticketing_method) { should eq(:aviacenter) }
-        its(:consolidator) { should eq(Fx('2%')) }
-        its(:blanks) { should eq(Fx(23)) }
-        its(:discount) { should eq(Fx('5%')) }
-        its(:our_markup) { should eq(Fx('0')) }
-      end
+    its(:system) { should eq(:amadeus) }
+    its(:consolidator) { should eq(Fx(0)) }
+    its(:blanks) { should eq(Fx(0)) }
+    its(:discount) { should eq(Fx(0)) }
+    its(:our_markup) { should eq(Fx('0')) }
+    its(:interline) { should eq([:no]) }
 
-      context "called with wrong key" do
-        it "should raise error" do
-          expect {
-            Commission::Reader.new.define do
-              defaults :wrongkey => :wrongvalue
-            end
-          }.to raise_error(ArgumentError)
-        end
-      end
-    end
 
-    describe ".carrier_defaults" do
-      context "called correctly" do
-        subject { commission_class.for_carrier('AB').last }
-
-        its(:system) { should eq(:sirena) }
-        its(:ticketing_method) { should eq(:direct) }
-        its(:consolidator) { should eq(Fx('1%')) }
-        its(:blanks) { should eq(Fx(0)) }
-        its(:discount) { should eq(Fx('1%')) }
-        its(:our_markup) { should eq(Fx('1%')) }
-      end
-
-      context "called with wrong key" do
-        it "should raise error" do
-          expect {
-            Commission::Reader.new.define do
-              carrier 'FV'
-              carrier_defaults :wrongkey => :wrongvalue
-            end
-          }.to raise_error(ArgumentError)
-        end
-      end
-    end
-
-    describe ".carrier defaults on repetitive blocks" do
+    describe "carrier defaults on repetitive blocks" do
       context "should set defaults correctly" do
-        subject :commission do
-          commission_class.for_carrier('UN').first
+        subject :page do
+          book.pages_for(carrier: 'UN').last
         end
 
-        its(:expr_date) { should eq(Date.new(2013,1,31))}
-        its(:strt_date) { should be_nil}
+        its(:start_date) { should be_nil }
       end
 
       context "should set defaults for second occurence" do
-        subject :commission do
-          commission_class.for_carrier('UN').last
+        subject :page do
+          book.pages_for(carrier: 'UN').first
         end
 
-        its(:strt_date) { should eq(Date.new(2013,2,1))}
-        its(:expr_date) { should be_nil}
-        it "should have single per carrier numeration, for now" do
-          commission.number.should eq(2)
+        its(:start_date) { should eq(Date.new(2013,2,1))}
+        it "should have per page numeration" do
+          page.rules.first.number.should eq(1)
         end
       end
     end
 
-
-    describe ".for_carrier" do
-      subject { commission_class.for_carrier('AB') }
+    describe ".rules" do
+      subject { book.rules }
       it {should be_an(Array)}
-      its(:size) { should == 2 }
-      its(:first) { should be_a(Commission::Rule) }
-    end
-
-    describe ".all" do
-      subject { commission_class.all }
-      it {should be_an(Array)}
-      its(:size) { should == 5 }
+      its(:size) { should == 3 }
       its(:first) { should be_a(Commission::Rule) }
     end
   end
 
-  context "several commissions for a company" do
+  context "several rules for a company" do
 
-    let :commission_class do
+    let :book do
       Commission::Reader.new.define do
         carrier 'FV'
         commission '2%/3'
@@ -314,23 +277,23 @@ describe Commission::Reader do
     end
 
     specify {
-      commission_class.exists_for?(recommendation).should be_true
+      book.exists_for?(recommendation).should be_true
     }
 
     specify {
-      commission_class.find_for(recommendation).should be_a(Commission::Rule)
+      book.find_for(recommendation).should be_a(Commission::Rule)
     }
 
     specify {
-      commission_class.all_for(recommendation).should have(4).items
+      book.pages_for(carrier: 'AB').first.should have(4).rules
     }
 
     describe ".all_with_reasons_for" do
-      subject { commission_class.all_with_reasons_for(recommendation) }
+      subject { book.all_with_reasons_for(recommendation) }
 
       it {should have(4).items}
 
-      it "should display all commissions in order of importance" do
+      it "should display all rules in order of importance" do
         subject.map {|row| row[0].agent_comments.strip}.should == %W[third first second fourth]
       end
 
@@ -342,27 +305,27 @@ describe Commission::Reader do
         subject[2][2].should be_nil
       end
 
-      it "should display as successful really applied commission" do
-        subject.find {|row| row[1] == :success}[0].should == commission_class.find_for(recommendation)
+      it "should display as successful really applied rule" do
+        subject.find {|row| row[1] == :success}[0].should == book.find_for(recommendation)
       end
     end
 
     describe "#number" do
-      it "should auto number commissions for every carrier according to source position from 1" do
-        commission_class.all.every.number.should == [1, 1, 2, 3, 4]
+      it "should auto number rules for every carrier according to source position from 1" do
+        book.rules.every.number.should == [1, 1, 2, 3, 4]
       end
 
-      it "should apply commissions according to importance" do
-        commission_class.all_with_reasons_for(recommendation).every.first.every.number.should == [3, 1, 2, 4]
+      it "should apply rules according to importance" do
+        book.all_with_reasons_for(recommendation).every.first.every.number.should == [3, 1, 2, 4]
       end
 
     end
 
   end
 
-  context "no_commission commissions for a company" do
+  context "no_commission rules for a company" do
 
-    let :commission_class do
+    let :book do
       Commission::Reader.new.define do
         carrier 'AB'
 
@@ -385,19 +348,19 @@ describe Commission::Reader do
     end
 
     specify {
-      commission_class.exists_for?(recommendation).should be_true
+      book.exists_for?(recommendation).should be_true
     }
 
-    it "should not find no_commission commission" do
-      commission_class.find_for(recommendation).should be_nil
+    it "should find no_commission rule" do
+      book.find_for(recommendation).should_not be_sellable
     end
 
     specify {
-      commission_class.all_for(recommendation).should have(3).items
+      book.pages_for(carrier: 'AB').first.should have(3).rules
     }
 
     describe ".all_with_reasons_for" do
-      subject { commission_class.all_with_reasons_for(recommendation) }
+      subject { book.all_with_reasons_for(recommendation) }
 
       it {should have(3).items}
 
@@ -409,7 +372,7 @@ describe Commission::Reader do
         subject[1][2].should be_nil
       end
 
-      it "should display as successful really applied commission" do
+      it "should display as successful really applied rules" do
         subject.find {|row| row[1] == :success}[0].agent_comments.strip.should == "second"
       end
     end
@@ -418,28 +381,28 @@ describe Commission::Reader do
 
   describe "commission definitions" do
     context "unknown agent commission" do
-      let :commission_class do
+      let :book do
         Commission::Reader.new.define do
           carrier 'FV'
           commission '/2%'
         end
       end
 
-      subject { commission_class.all.first }
+      subject { book.rules.first }
 
       its(:agent) { should be_blank }
       its(:subagent) { should == Fx('2%') }
     end
 
     context "unknown subagent commission" do
-      let :commission_class do
+      let :book do
         Commission::Reader.new.define do
           carrier 'FV'
           commission '2%/'
         end
       end
 
-      subject { commission_class.all.first }
+      subject { book.rules.first }
 
       its(:agent) { should == Fx('2%') }
       its(:subagent) { should be_blank }

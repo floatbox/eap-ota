@@ -8,80 +8,77 @@ class Commission::Book
     @index = {}
   end
 
-  # Добавляет комиссию в соответствующую книгу. Создает новую книгу, если надо.
-  def register commission
-    page = find_or_create_page commission
-    page.register commission
-  end
-
   # Inspection
   ############
 
-  def all_for(recommendation)
-    for_carrier(recommendation.validating_carrier_iata) || []
-  end
-
   def exists_for?(recommendation)
-    for_carrier(recommendation.validating_carrier_iata).present?
+    pages_for(carrier: recommendation.validating_carrier_iata).present?
   end
 
-  def for_carrier(validating_carrier_iata)
-    page = @index[validating_carrier_iata] or return
-    page.commissions
+  def rules
+    pages.map(&:rules).flatten.sort_by(&:source)
   end
 
-  # Временный метод для получения диапазонов действия комиссий
-  def start_dates_for_carrier(validating_carrier_iata)
-    ( for_carrier(validating_carrier_iata).map {|c| c.strt_date }.compact +
-      for_carrier(validating_carrier_iata).map {|c| c.expr_date }.compact.map(&:tomorrow)
-    ).sort.uniq
-  end
-
-  def all
-    pages.map(&:all).flatten.sort_by {|c| c.source.to_i }
-  end
-
-  def all_carriers
+  def carriers
     @index.keys
   end
 
   def pages
-    @index.values
+    @index.values.flatten
+  end
+
+  def pages_for(opts)
+    carrier = opts[:carrier] or raise ArgumentError, "carrier not specified"
+    @index[carrier]
+  end
+
+  # временный метод, отображающий только активные страницы
+  def current_pages
+    carriers.map do |carrier|
+      find_page(carrier: carrier)
+    end
   end
 
   # Recommendation finders
   ########################
 
   def find_for(recommendation)
-    page = find_page(recommendation) or return
-    page.find_commission(recommendation)
+    page = find_page(carrier: recommendation.validating_carrier_iata) or return Commission::Rule::Null
+    page.find_rule(recommendation) or return Commission::Rule::Null
   end
 
-  def find_page(recommendation)
-    @index[recommendation.validating_carrier_iata]
+  # выбирает активную страницу для
+  # FIXME выбирает активну
+  def find_page(opts)
+    pages = pages_for(opts) or return
+    page = pages.find {|p| p.start_date.nil? || p.start_date <= Date.today }
   end
 
-  def find_page_for_commission(commission)
-    @index[commission.carrier]
-  end
-
-  # создает и вносит в индекс страницу, подходящую для переданной комиссии
-  def create_page(commission)
-    page = Commission::Page.new carrier: commission.carrier
+  # создает и вносит в индекс страницу
+  # @return Commission::Page
+  def create_page(opts)
+    page = Commission::Page.new opts
     register_page page
   end
 
+  LONG_TIME_AGO = Date.new(2000,1,1)
   # вносит в индекс страницу
+  # TODO ugly and untested
+  # @return Commission::Page
   def register_page(page)
-    @index[page.carrier] = page
-  end
-
-  def find_or_create_page(commission)
-    find_page_for_commission(commission) || create_page(commission)
+    pages = @index[page.carrier] || []
+    pages += [page]
+    pages.sort_by! {|p| p.start_date || LONG_TIME_AGO }
+    pages.reverse!
+    if pages.map(&:start_date).uniq.size != pages.size
+      raise ArgumentError, "#{page} with #{page.start_date} already registered in book"
+    end
+    @index[page.carrier] = pages
+    page
   end
 
   def all_with_reasons_for(recommendation)
-    page = find_page(recommendation) or return []
+    page = find_page(carrier: recommendation.validating_carrier_iata) or return []
     page.all_with_reasons_for(recommendation)
   end
 end

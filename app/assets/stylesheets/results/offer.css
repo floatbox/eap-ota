@@ -107,9 +107,6 @@
 .ob-placeholder .o-book {
     margin-left: 0;
 }
-.ob-placeholder .o-book .ob-line {
-    display: none;
-}
 .ob-shadow {
     display: none;
     position: absolute;
@@ -122,25 +119,14 @@
 .ob-fixed .o-book {
     position: fixed;
     left: 50%;
+    bottom: 0;
     width: 960px;
     margin-left: -494px;
     z-index: 1;
 }
-.ob-tfixed .o-book {
-    top: 128px;
-}
-.ob-bfixed .o-book {
-    bottom: 30px;
-    bottom: 0;    
-}
-.ob-fixed .ob-shadow, 
 .ob-fixed .ob-shadow {
     display: block;
 }
-.ob-tfixed .ob-shadow {
-    top: 52px;
-    background-position: 0 -13px;
-} 
 
 /* Details control */
 .od-control {
@@ -162,7 +148,8 @@
     background: #EDEDE3;
     color: #505050;
 }
-.o-complex .od-scroll {
+.o-complex .od-scroll,
+.o-matrix .od-scroll {
     visibility: hidden;
 }
 .ob-subfixed .od-scroll {
@@ -593,23 +580,23 @@
     position: absolute;
     top: 18px;
     left: -16px;
-    width: 15px;
+    width: 14px;
     height: 2000px;
-    border: 1px solid #FFF;
-    border-width: 1px 0 0 1px;
+    border: 2px solid #FFF;
+    border-width: 2px 0 0 2px;
 }
 .ob-line {
     position: absolute;
     top: 0;
     left: -16px;
-    width: 15px;
+    width: 14px;
     height: 26px;
-    border: 1px solid #FFF;
-    border-width: 0 0 1px 1px;
+    border: 2px solid #FFF;
+    border-width: 0 0 2px 2px;
 }
 .ob-overlay {
     position: absolute;
-    top: 27px;
+    top: 28px;
     left: -16px;
     width: 16px;
     height: 26px;
@@ -768,11 +755,11 @@
 
 /* Offer details */
 .o-details {
-    margin-left: 16px;
-    background: #F8F8F6;
+    padding-left: 14px;
+    border-left: 2px solid #FFF;
 }
 .od-segments {
-    /*border-top: 1px solid #EDEDED;*/
+    background: #F8F8F6;
     padding: 6px 0 2px;
 }
 .od-segments .os-details {
@@ -780,8 +767,8 @@
     display: block;
 }
 .od-comments {
-    margin: 0 20px 0 200px;
-    padding: 0 0 16px;
+    padding: 0 20px 16px 200px;
+    background: #F8F8F6;
     font-size: 12px;
     line-height: 14px;
 }

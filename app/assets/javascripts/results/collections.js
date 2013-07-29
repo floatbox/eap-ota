@@ -87,7 +87,7 @@ filter: function(check) {
                 offer.select(selected);
                 offer.showCompatible();
                 offer.otherCarriers();
-            }            
+            }
             offer.el.show();
         }
     }
@@ -175,7 +175,7 @@ parse: function() {
     this.upgradeOffer();
     this.countDates();
     this.showPrices();
-    var table = this.table.get(0);    
+    var table = this.table.get(0);
     var index = Number($(table.rows[4].cells[4]).find('.rmp-item').attr('data-index'));
     this.offer.select(isNaN(index) ? 0 : index);
 },
@@ -196,12 +196,17 @@ upgradeOffer: function() {
         var details = this.selected.el.find('.rmv-details');
         this.details.html(details.html());
     };
+    this.offer.el.addClass('o-matrix');
+    this.offer.details = $('<div class="o-details" style="border-left-color: transparent;"></div>').appendTo(this.offer.el);
     this.offer.addBook();
     var book = this.offer.el.find('.o-book');
+    book.find('.ob-line').remove();
     book.wrap('<div class="ob-placeholder"></div>');
     book.append('<div class="ob-shadow"></div>');
-    this.offer.details = $('<div class="o-details">').appendTo(this.offer.el);
-    this.offer.el.find('.od-control').remove();    
+    this.offer.el.find('.od-show').show().removeClass('od-show').addClass('od-scroll').click(function() {
+        $w.smoothScrollTo(book.closest('.offer').find('.o-details').offset().top - 148);
+    });
+    this.offer.el.find('.od-hide').remove();
 },
 countDates: function() {
     var table = this.table.get(0);
@@ -245,7 +250,7 @@ showPrices: function() {
         }
         $(this.table.get(0).rows[r].cells[c]).append(item);
     }
-    this.updateLabel(I18n.t('results.tabs.matrix'));   
+    this.updateLabel(I18n.t('results.tabs.matrix'));
 },
 humanDate: function(date, segment) {
     var d = I18n.l('date.formats.human', date);
@@ -273,7 +278,7 @@ merge: function(variants) {
     var sorting = function(a, b) {
         return a.dpt - b.dpt;
     };
-    offer.complex = true;    
+    offer.complex = true;
     offer.variants = variants;
     offer.el.find('.o-segment').each(function(s) {
         var segment = $(this), items = [], used = {};
@@ -331,9 +336,9 @@ update: function(variants, lid) {
         var book = this.offer.el.find('.o-book');
         book.wrap('<div class="ob-placeholder"></div>');
         book.append('<div class="ob-shadow"></div>');
-        book.after('<div class="ob-line"></div>');
+        book.append('<div class="ob-overlay"></div>');
         this.offer.el.find('.od-show').show().removeClass('od-show').addClass('od-scroll').click(function() {
-            $w.smoothScrollTo(book.closest('.ob-placeholder').offset().top - 148);    
+            $w.smoothScrollTo(book.closest('.offer').find('.o-details').offset().top - 148);
         });
         this.offer.el.find('.od-hide').remove();
     } else {

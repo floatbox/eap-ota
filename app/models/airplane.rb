@@ -14,4 +14,8 @@ class Airplane < ActiveRecord::Base
   def name
     name_ru.presence || name_en.presence || iata
   end
+
+  def inspect
+    "#<#{self.class}:#{id||new}:(#{iata})>"
+  end
 end

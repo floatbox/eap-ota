@@ -2,6 +2,7 @@
 class Country < ActiveRecord::Base
   include HasSynonyms
   include Cases
+  extend IataStash
 
   has_paper_trail
 
@@ -23,10 +24,11 @@ class Country < ActiveRecord::Base
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
 
-  # синтаксис вместо iata_stash
-  def self.[] arg
-    arg && find_by_alpha2(arg)
+  # для работы iata_stash
+  def self.find_by_iata iata
+    iata && find_by_alpha2(iata)
   end
+  def self.find_by_iata_ru iata_ru; return; end
 
   def iata
     alpha2
@@ -52,6 +54,10 @@ class Country < ActiveRecord::Base
 
   def main_city_iatas
     City.all(:conditions => ['country_id = ? AND disabled != ?', self.id, true], :order => 'importance DESC', :limit => 5).every.iata
+  end
+
+  def city_iatas
+    @city_iatas ||= cities.pluck(:iata).compact
   end
 
   # FIXME WTF? хотя бы iata коды использовать. не айдишники из базы!1

@@ -26,7 +26,7 @@ Order:
       - payment_status
       - charged_on
       - ticket_status
-      - contact
+      - contact_with_customer
       - name_in_card
       - pan
       - full_info
@@ -79,6 +79,7 @@ Order:
       - display_fee_details
       - auto_ticket
       - no_auto_ticket_reason
+      - needs_visa_notification
     form:
       - section_general_info
       - description
@@ -176,6 +177,7 @@ Order:
       - income_payment_gateways
       - sold_tickets_numbers
       - refund_date
+      - first_payment_ref
       - partner
     options:
       selectors: payment_type, source, ticket_status, pricing_method, commission_ticketing_method, fee_scheme

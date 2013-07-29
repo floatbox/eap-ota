@@ -1,0 +1,44 @@
+/* Content */
+.page-wrapper {
+    min-height: 100%;
+    margin-bottom: -153px;
+}
+.page-buffer {
+    height: 153px;
+}
+
+/* Return to search */
+#back2search {
+    background: url(/images/common/dark.jpg) #373941;
+}
+.bs-content {
+    width: 960px;
+    margin: 0 auto;
+    padding: 26px 0;
+}
+.bs-link {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 18px;
+    color: #CECBA1;
+    text-decoration: none;
+}
+.bs-link:hover {
+    color: #CECBA1;
+}
+
+/* Content */
+.page-content {
+    width: 960px;
+    margin: 26px auto 50px;
+    font-size: 14px;
+    line-height: 19px;
+    color: #333;    
+}
+.page-title {
+    margin: 0 0 12px;
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 30px;
+    letter-spacing: -0.035em;
+}

@@ -1,11 +1,16 @@
 # encoding: utf-8
 module Amadeus
   module Response
+
     class FareMasterPricerTravelBoardSearch < Amadeus::Response::Base
       include Monitoring::Benchmarkable
+      include FareMasterPricerTravelBoardSearchSax
 
       def recommendations
-        benchmark 'search recommendations' do
+        recommendations = benchmark 'search recommendations' do
+
+          return(recommendations_sax) if Conf.amadeus.search_sax
+
           xpath("//r:recommendation").map do |rec|
             price_total, price_tax =
               rec.xpath("r:recPriceInfo/r:monetaryDetail/r:amount").every.to_f
@@ -60,17 +65,24 @@ module Amadeus
             )
           end
         end
+        recommendations
       end
 
+      # xpath
       def error_message
+        error_message_sax if Conf.amadeus.search_sax
+
         xpath('//r:errorMessage/r:errorMessageText/r:description').to_s
       end
 
       def error_code
+        error_code_sax if Conf.amadeus.search_sax
+
         xpath('//r:errorMessage/r:applicationError/r:applicationErrorDetail/r:error').to_s
       end
 
       private
+
 
       def flight_indexes
         @flight_indexes ||= xpath('//r:flightIndex').map do |flight_index|
@@ -142,10 +154,9 @@ module Amadeus
               }
             )
           end
-
         end
-
       end
+      # /xpath
 
     end
   end

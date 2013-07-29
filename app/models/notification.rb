@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 class Notification < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::TextHelper
@@ -18,6 +19,10 @@ class Notification < ActiveRecord::Base
     .where(
     :method => 'email',
     :status => '')
+
+  scope :sent_pnr, where(:status => 'sent', :method => 'email', :attach_pnr => true)
+  scope :first_sent_order_pnr, where(:status => 'sent', :method => 'email', :attach_pnr => true, :format => ["order","booking"]).limit(1)
+  scope :last_sent_ticket_pnr, where(:status => 'sent', :method => 'email', :attach_pnr => true, :format => "ticket").order("created_at DESC").limit(1)
 
   alias_attribute :email, :destination
 
@@ -91,12 +96,12 @@ class Notification < ActiveRecord::Base
   end
 
   def create_visa_notice
-    message = PNRMailer.visa_notice()
-    self.attach_pnr = false
-    self.subject = message.subject
-    self.comment = message.body.to_s
     self.status = 'delayed'
-    save
+    self.attach_pnr = true
+    self.subject = 'Информация о визе для вашего авиабилета'
+    self.format = 'ticket'
+    self.comment = CustomTemplate.new.render(:template => "notifications/visa_notice")
+    self.delay(queue: 'notification', run_at: 11.minutes.from_now, priority: 2).send_notice if save
   end
 
   def set_order_data

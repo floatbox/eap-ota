@@ -88,23 +88,28 @@ I18n.locale = '<%= I18n.locale %>';
         </div>
         </div>
     </div>
+
+    <% if admin_user %>
+    <div class="ph-lang">
+        <% if I18n.locale == :en %>
+            <span class="link">RU</span>
+        <% else %>
+            <span class="link" data-locale="en">EN</span>
+        <% end %>    
+    </div>
+    <% end %>
+
+    <% if admin_user %>
+    <%= render "profile/popup" %>
+    <% end %>
+
     <div class="ph-social">
         <a target="_blank" class="phs-icon phs-facebook" title="Фейсбук" href="https://www.facebook.com/eviterra/">&nbsp;</a>
         <a target="_blank" class="phs-icon phs-vkontakte" title="ВКонтакте" href="http://vk.com/eviterra">&nbsp;</a>
         <a target="_blank" class="phs-icon phs-twitter" title="Твиттер" href="https://twitter.com/eviterra">&nbsp;</a>
         <a target="_blank" class="phs-icon phs-google" title="Блог" href="https://plus.google.com/103322039453589743139">&nbsp;</a>    
     </div>
-    <% if admin_user %>
-    <div class="ph-lang">
-    <% if I18n.locale == :en %>
-        <span class="link">RU</span>
-    <% else %>
-        <span class="link" data-locale="en">EN</span>
-    <% end %>
-    </div>
-    <% else %>
     <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
-    <% end %>
 </div>
 </div>
 <div class="ph-placeholder">

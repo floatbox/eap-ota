@@ -1,3 +1,6 @@
+doc
+!doc/*.txt
+.yardoc
 config/database.yml
 config/mongoid.yml
 log/*
@@ -22,4 +25,3 @@ tags
 config/newrelic.yml
 public/javascripts/all.js
 mydoc
-problems

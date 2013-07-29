@@ -10,12 +10,9 @@
 module WithWarning
 
   def with_warning(exception=$!)
-    Rails.logger.warn(
-      "Continued after #{exception.class}: #{exception.message} " +
-      "at #{exception.backtrace[0]}"
-    )
+    Rails.logger.warn("Continued after #{exception.class}: #{exception.message}")
+    (0...10).each { |i| Rails.logger.warn("#{exception.backtrace[i]}") }
     Airbrake.notify(exception)
-
   rescue => e
     Rails.logger.error("Can't notify Airbrake about warning #{exception.class}: #{exception.message} because of #{e.class}: #{e.message}")
   end

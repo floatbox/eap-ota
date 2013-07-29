@@ -4,7 +4,7 @@ module Amadeus
     class MongoStore
 
       cattr_accessor :collection do
-        Mongoid.default_session['amadeus_sessions']
+        Mongoid.default_session.with(safe: true)['amadeus_sessions']
       end
 
     public

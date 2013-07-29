@@ -5,13 +5,22 @@ class Commission::Reader
 
   attr_accessor :opts
   attr_accessor :default_opts
-  attr_accessor :carrier_default_opts
   attr_accessor :book
+
+  # FIXME interline не клонируется с помощью .dup
+  # в рельсах 4.0 будет .deep_dup
+  READER_DEFAULTS = {
+    interline: [:no],
+    system: :amadeus,
+    consolidator: 0,
+    blanks: 0,
+    discount: 0,
+    our_markup: 0
+  }
 
   def initialize(book = Commission::Book.new)
     self.book = book
-    self.default_opts = {}
-    self.carrier_default_opts = {}
+    self.default_opts = READER_DEFAULTS.dup
   end
 
   # выполняет определения в блоке и возвращает готовую "книгу"
@@ -20,51 +29,47 @@ class Commission::Reader
     book
   end
 
-  # считывает определения из файла и возвращает готовую "книгу"
-  def read_file(filename)
-    instance_eval(File.read(filename), filename)
+  # считывает определения из строки и возвращает готовую "книгу"
+  def read(book_string)
+    instance_eval(book_string)
     book
   end
 
-  ALLOWED_KEYS_FOR_DEFS = %W[
-    system ticketing_method consolidator blanks discount our_markup
-    corrector disabled not_implemented no_commission
-  ].map(&:to_sym)
-
-  def defaults def_opts={}
-    def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
-    self.default_opts = def_opts
+  # считывает определения из файла (или каталога) и возвращает готовую "книгу"
+  def read_file(filename)
+    if test ?d, filename
+      Dir["#{filename}/**/*.rb"].each do |file|
+        read_file(file)
+      end
+    else
+      instance_eval(File.read(filename), filename)
+    end
+    book
   end
 
-  def carrier_defaults def_opts={}
-    def_opts.to_options!.assert_valid_keys(ALLOWED_KEYS_FOR_DEFS)
-    self.carrier_default_opts = def_opts
-  end
-
-  # Открывает блок правил по конкретной авиакомпании
+  # Открывает страницу правил по конкретной авиакомпании/периоду времени
   # @param carrier [String] IATA код авиакомпании
   # @param carrier_name [String] вторым аргументом может быть название авиакомпании. Это просто комментарий сейчас.
   #   Выкидываем.
-  # @param opts [Hash] carrier_defaults
-  def carrier carrier, *opts
-    opts.shift if opts.first.is_a? String
-    if carrier =~ /\A..\Z/
-      @carrier = carrier
-      self.opts={}
-      self.carrier_default_opts = opts.last || {}
-    else
-      raise ArgumentError, "strange carrier: #{carrier}"
-    end
+  # @param page_opts [Hash]
+  def carrier carrier, *possible_page_opts
+    raise ArgumentError, "strange carrier: #{carrier}" unless carrier =~ /\A..\Z/
+    possible_page_opts.shift if possible_page_opts.first.is_a? String
+    @carrier = carrier
+    page_opts = possible_page_opts.last || {}
+    cast_attrs! page_opts
+    @page = @book.create_page( page_opts.merge(carrier: carrier) )
+    self.opts={}
   end
 
-  # один аргумент, разделенный пробелами или /; или два аргумента
+  # один аргумент, разделенный пробелами или /
   def commission arg
     vals = arg.strip.split(/[ \/]+/, -1)
     if vals.size != 2
       raise ArgumentError, "strange commission: #{arg}"
     end
 
-    make_commission(
+    make_rule(
       :carrier => @carrier,
       :agent => vals[0],
       :subagent => vals[1],
@@ -75,27 +80,22 @@ class Commission::Reader
   # заглушка для example который _не должны_ найти комиссию
   def no_commission(reason=true)
     # opts здесь по идее содержит только examples
-    make_commission(
+    make_rule(
       :carrier => @carrier,
       :source => caller_address,
       :no_commission => reason
     )
   end
 
-  def make_commission(attrs)
-    attrs = attrs.merge(opts).reverse_merge(carrier_default_opts).reverse_merge(default_opts)
-    cast_attrs! attrs
-    commission = Commission::Rule.new(attrs)
-    commission.correct!
-
+  def make_rule(attrs)
+    attrs = attrs.merge(opts).reverse_merge(default_opts)
     self.opts = {}
-    book.register commission
+    @page.create_rule(attrs)
   end
-  private :make_commission
+  private :make_rule
 
   def cast_attrs!(attrs)
-    attrs[:strt_date] &&= attrs[:strt_date].to_date
-    attrs[:expr_date] &&= attrs[:expr_date].to_date
+    attrs[:start_date] &&= attrs[:start_date].to_date
   end
   private :cast_attrs!
 
@@ -130,6 +130,12 @@ class Commission::Reader
     opts[:subagent_comments] += line + "\n"
   end
 
+  # произвольные комментарии к правилу
+  def comment line
+    opts[:comments] ||= ""
+    opts[:comments] += line + "\n"
+  end
+
   # tkt designator, используется при выписке в downtown
   def designator designator
     opts[:designator] = designator
@@ -151,7 +157,7 @@ class Commission::Reader
   end
 
   # пока принимает уже готовый массив
-  def routes routes
+  def routes *routes
     opts[:routes] = routes
   end
 
@@ -173,8 +179,7 @@ class Commission::Reader
   end
 
   def check(check_text=nil, &block)
-    # TODO включить после перехода
-    # raise ArgumentError, "check block should be given as String" unless check_text
+    raise ArgumentError, "check block should be given as String" unless check_text
     block_text =
       "lambda do |recommendation|
         #{ check_text }
@@ -183,14 +188,6 @@ class Commission::Reader
     block = eval(block_text, nil, caller_file, caller_line - 1) if check_text
     opts[:check] = check_text || '# COMPILED'
     opts[:check_proc] = block
-  end
-
-  def expr_date date
-    opts[:expr_date] = date.to_date
-  end
-
-  def strt_date date
-    opts[:strt_date] = date.to_date
   end
 
   # дополнительные опции, пока без обработки
@@ -222,7 +219,7 @@ class Commission::Reader
   private
 
   def caller_address level=1
-    caller[level] =~ /:(\d+)/
+    caller[level] =~ /^(.*?:\d+)/
     # по каким-то причинам тут приходит US-ASCII
     # конвертирую для yaml
     ($1 || 'unknown').encode('UTF-8')

@@ -7,7 +7,7 @@ class City < ActiveRecord::Base
   has_paper_trail
 
   def self.timezones
-    TZInfo::Timezone.all_identifiers
+    TZInfo::Timezone.all_country_zone_identifiers
   end
 
   has_many :airports
@@ -63,6 +63,10 @@ class City < ActiveRecord::Base
   def utc_offset date=Date.today
     time = date.to_time.utc
     (time - tz.local_to_utc(time)).to_i
+  end
+
+  def inspect
+    "#<#{self.class}:#{id||new}:(#{iata})>"
   end
 
 end

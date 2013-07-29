@@ -118,7 +118,7 @@ class HotOffer
     @search = val
     self.for_stats_only = @search.people_count.values.sum > 1
     self.description = @search.human_lite
-    self.url = Conf.site.host + '/#' + code
+    self.url = Conf.site.ssl ? 'https://' : 'http://' + Conf.site.host + '/#' + @search.encode_url
   end
 
   private

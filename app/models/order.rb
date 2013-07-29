@@ -5,6 +5,7 @@ class Order < ActiveRecord::Base
   include Pricing::Order
   extend MoneyColumns
   include TypusOrder
+  include ProfileOrder
   include OrderAttrs
 
   scope :MOWR228FA, lambda { by_office_id 'MOWR228FA' }
@@ -13,9 +14,9 @@ class Order < ActiveRecord::Base
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
   scope :for_manual_ticketing, lambda { where("orders.payment_status IN ('blocked', 'charged') AND
-    ticket_status IN ('booked', 'processing_ticket') AND
+    ticket_status = 'booked' AND
     orders.pnr_number != '' AND
-    (NOT auto_ticket OR orders.created_at < ?)", Time.now - 40.minutes ) }
+    (NOT auto_ticket OR orders.updated_at < ?)", Time.now - 40.minutes ) }
 
   has_money_helpers :original_price_fare, :original_price_tax
 
@@ -66,6 +67,10 @@ class Order < ActiveRecord::Base
     Partner.pluck :token
   end
 
+  def save_stored_flights(flights)
+    self.stored_flights = flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights if flights.all? &:dept_date #костыль, для билетов с открытой датой
+  end
+
   def show_vat
     has_data_in_tickets? && sold_tickets.all?(&:show_vat)
   end
@@ -105,6 +110,7 @@ class Order < ActiveRecord::Base
   end
 
   def make_payable_by_card
+    update_attributes(auto_ticket: true, no_auto_ticket_reason: '') if pnr_number.present? && ['delivery', 'cash'].include?(payment_type)
     update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending' && (pnr_number.present? || parent_pnr_number.present?)
   end
 
@@ -113,6 +119,7 @@ class Order < ActiveRecord::Base
   has_many :payments
   has_many :secured_payments, conditions: { status: %W[ blocked charged processing_charge ]}, class_name: 'Payment'
   belongs_to :customer
+  has_and_belongs_to_many :stored_flights
 
   # не_рефанды
   def last_payment
@@ -185,6 +192,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def create_visa_notice
+    if needs_visa_notification? && ticket_status == 'ticketed'
+      notifications.new.create_visa_notice
+    end
+  end
+
   def baggage_array
     return [] unless sold_tickets.all?{|t| t.baggage_info.present?}
     sold_tickets.map do |t|
@@ -237,6 +250,10 @@ class Order < ActiveRecord::Base
 
   def sold_tickets_numbers
     tickets.to_a.select(&:ticketed?).every.number_with_code.join('; ')
+  end
+
+  def first_payment_ref
+    secured_payments.first.try(&:ref)
   end
 
   def tickets_office_ids_array
@@ -295,7 +312,8 @@ class Order < ActiveRecord::Base
       :delivery,
       :last_pay_time,
       :partner,
-      :marker
+      :marker,
+      :needs_visa_notification
 
     copy_attrs recommendation, self,
       :source,
@@ -488,7 +506,7 @@ class Order < ActiveRecord::Base
   end
 
   def charge!
-    res = last_payment.charge!
+    res = last_payment.charged? || last_payment.charge!
     update_attribute(:payment_status, 'charged') if res
     res
   end
@@ -562,10 +580,17 @@ class Order < ActiveRecord::Base
   def ticket!
     return false unless ticket_status.in? 'booked', 'processing_ticket', 'error_ticket'
     return false unless load_tickets(true)
+    update_attributes(:additional_pnr_number => tickets.first.additional_pnr_number) if tickets.first.additional_pnr_number
     update_attributes(:ticket_status => 'ticketed', :ticketed_date => Date.today)
-    update_price_with_payment_commission_in_tickets
-    update_prices_from_tickets
+    if fix_price?
+      update_price_with_payment_commission_in_tickets
+      update_prices_from_tickets
+    else
+      recalculate_prices
+    end
     create_ticket_notice
+    create_visa_notice if needs_visa_notification?
+    true
   end
 
   def update_price_with_payment_commission_in_tickets
@@ -598,7 +623,12 @@ class Order < ActiveRecord::Base
   end
 
   def set_customer
-    self.customer = Customer.find_or_create_by_email(email)
+    if !email.blank?
+      self.customer = Customer.find_or_initialize_by_email(email)
+      # TODO этот вызов надо будет убрать при запуске ЛК
+      customer.skip_confirmation_notification!
+      customer.save unless customer.persisted?
+    end
   end
 
   def set_payment_status

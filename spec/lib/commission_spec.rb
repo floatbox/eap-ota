@@ -4,13 +4,13 @@ require 'spec_helper'
 # TODO написать rspec_matcher для комиссий, с более внятным выводом причин
 describe Commission do
 
-  RSpec::Matchers.define(:match_commission) do |commission|
+  RSpec::Matchers.define(:match_rule) do |page, rule|
 
     match_for_should do |example|
       @recommendation = example.recommendation
-      @proposed = Commission.find_for(@recommendation)
-      if @proposed != commission
-        @reason = commission.turndown_reason(@recommendation)
+      @proposed = page.find_rule(@recommendation)
+      if @proposed != rule
+        @reason = rule.turndown_reason(@recommendation)
         false
       else
         true
@@ -19,8 +19,8 @@ describe Commission do
 
     match_for_should_not do |example|
       @recommendation = example.recommendation
-      @proposed = Commission.find_for(@recommendation)
-      !@proposed
+      @proposed = page.find_rule(@recommendation)
+      @proposed.nil? || !@proposed.sellable?
     end
 
     failure_message_for_should do |example|
@@ -38,7 +38,7 @@ describe Commission do
     end
 
     description do
-      "match commission"
+      "match rule"
     end
   end
 
@@ -52,50 +52,39 @@ describe Commission do
   Commission.reload!
 
   book = Commission.default_book
-  carriers = book.all_carriers
-  carriers.each do |carrier|
-    # проверка всех диапазонов дат для авиакомпании
-    start_dates = ( book.start_dates_for_carrier(carrier) + [Date.today] ).reject(&:past?).uniq
-    # start_dates = [Date.today]
+  book.pages.each do |page|
 
-    commissions = book.for_carrier(carrier)
+    describe "#{page.carrier} on #{page.start_date || 'beginning of time'}" do
+      page.rules.each do |rule|
 
-    start_dates.each do |start_date|
-      describe "#{carrier} on #{start_date}" do
+        describe rule.inspect do
 
-        before do
-          Timecop.freeze(start_date)
-        end
+          if rule.skipped?
+            specify { pending "disabled or not implemented, skipping examples" }
+            next
+          end
 
-        after do
-          Timecop.return
-        end
+          if rule.examples.blank?
+            specify { pending "no examples" }
+            next
+          end
 
-        commissions.each do |commission|
+          rule.examples.each do |example|
 
-          describe commission.inspect do
+            context example.inspect do
 
-            if Timecop.freeze(start_date) { commission.applicable_date? }
+              subject {example}
 
-              next if commission.examples.blank?
-              commission.examples.each do |example|
-
-                context example.inspect do
-
-                  subject {example}
-
-                  if commission.disabled?
-                    it {
-                      should_not match_commission
-                    }
-                  else
-                    it {
-                      should match_commission(commission)
-                    }
-                  end
-
-                end
+              if rule.disabled?
+                it {
+                  should_not match_rule(page)
+                }
+              else
+                it {
+                  should match_rule(page, rule)
+                }
               end
+
             end
           end
         end

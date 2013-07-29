@@ -8,6 +8,21 @@ require 'csv'
 
 module DataMigration
 
+  def self.get_cancelled_flights
+    order_ids = StoredFlight.where('dept_date > ?', Date.today).every.tickets.flatten.every.order_id.uniq
+    result = []
+    Amadeus.ticketing do |amadeus|
+      Order.where(ticket_status: 'ticketed', id: order_ids, source: 'amadeus').each do |order|
+        if order.pnr_number.present? &&
+           amadeus.pnr_retrieve(number: order.pnr_number).has_cancelled_flights?
+          puts order.pnr_number
+          result << order.pnr_number
+        end
+      end
+    end
+    result
+  end
+
   def self.create_payments_csv
     PaperTrail.controller_info = {:done => 'Payu status sync'}
     d = Date.parse('2012-12-01')
@@ -300,10 +315,14 @@ def self.fill_in_morpher_fields(klass, first_id = 0)
   end
 
   def self.fill_customers_for_orders
-    Order.where("customer_id IS NULL").limit(20).each do |order|
+    Order.where("customer_id IS NULL").limit(200).each do |order|
       customer_email = order.email.strip.split(/[,; ]/).first
-      order.customer = Customer.find_or_create_by_email(customer_email)
-      order.save
+      #customer = Customer.find_or_create_by_email(customer_email)
+      customer = Customer.find_or_initialize_by_email(customer_email)
+      customer.skip_confirmation_notification!
+      customer.save unless customer.persisted?
+      order.update_column(:customer_id, customer.id)
+      #order.save
     end
   end
 

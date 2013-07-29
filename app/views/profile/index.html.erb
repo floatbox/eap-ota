@@ -1,0 +1,172 @@
+<% content_for :title do %>Личный кабинет <%= current_customer.email.downcase %><% end %>
+
+<% content_for :tabs do %>
+<div id="profile-tabs">
+<ul class="pt-content wrap">
+    <li class="pt-item pt-selected">Заказы</li>
+    <li class="pt-item">Пассажиры</li>
+    <li class="pt-item">Подписки</li>
+</ul>
+</div>
+<% end %>
+
+<%#= link_to "Change your password", edit_customer_registration_path %>
+<%#= debug @orders.first %>
+
+<div id="orders">
+<% if @orders.empty? %>
+    <p class="orders-empty">Вы еще ничего не заказывали. Хотите <a href="/">купить билет</a>?</p>
+<% else %>
+<% @orders.each do |order| %>
+<% if order.profile_alive_tickets_exists?|| order.profile_all_tickets_returned?  || admin_user%>
+<div class="order"
+  <% if order.profile_all_tickets_returned? %> style="background-color: #ddd;"
+  <% elsif !order.profile_alive_tickets_exists? %> style="background-color: transparent; border: 1px dotted #454752"
+  <% end %>>
+<table class="order-summary">
+    <tr>
+        <th style="width: 120px;">Дата заказа</th>
+        <th style="width: 240px;">Маршрут</th>
+        <th style="width: 120px;">Дата вылета</th>
+        <th>Номер&nbsp;брони&nbsp;/&nbsp;подтверждения</th>
+        <th>Статус оплаты</th>
+        <th class="ors-right">Стоимость</th>
+    </tr>
+    <tr>
+        <td><%= l(order.created_at, :format => :human_year) %></td>
+        <td>
+            <p class="ors-route"><%= order.profile_route_smart %></p>
+        </td>
+        <td><%= order.departure_date ? l(order.departure_date, :format => :human_year) : '-' %></td>
+        <td><%= order.pnr_number %><% if order.additional_pnr_number %>&nbsp;/&nbsp;<%= order.additional_pnr_number %><% end %></td>
+        <td><%= order.profile_status %></td>
+        <td class="ors-right"><%= decorate_price short_price(order.profile_payment_price) %></td>
+    </tr>
+</table>
+<div class="order-controls">
+  <div class="orc-show">Показать детали</div>
+  <div class="orc-hide">Скрыть детали</div>
+  <% if order.profile_alive_tickets_exists? || !order.profile_ticketed? %>
+    <% if order.profile_stored? && order.profile_arrival_in_future? %>
+    <div class="orc-pnr">
+        <span class="orc-links">Маршрутная квитанция: <a class="orc-link" href="<%= profile_itinerary_path(:id => order.pnr_number) %>" target="_blank">на русском</a>
+        <a class="orc-link" href="<%= profile_itinerary_path(:id => order.pnr_number, :lang =>'en') %>" target="_blank">in English</a>
+        </span>
+    </div>
+    <% end %>
+  <% end %>
+</div>
+
+<% if order.profile_ticketed? %>
+
+<% if order.profile_alive_tickets_exists? || order.profile_all_tickets_returned? || admin_user%>
+<div class="order-details">
+
+  <div class="ord-passengers">
+    <table>
+    <tr>
+        <th style="width: 294px;">Пассажир</th>
+        <th style="width: 200px;">Номер билета</th>
+        <th style="width: 200px;">Статус билета</th>
+        <th>Распечатать</th>
+    </tr>
+    <% order.profile_tickets.each do |ticket| %>
+        <tr <% if !ticket.profile_active? %>style="color: #999"<% end %>>
+            <td><%= ticket.profile_name %></td>
+            <td><%= ticket.number_with_code %></td>
+            <td><%= ticket.profile_status %>
+              <% if admin_user %>
+              <span class="order-debug-info">[<%= ticket.kind %>: <%= ticket.status %>]
+              <% end %>
+            </td>
+            <td>
+            <% if ticket.status == 'ticketed' && ticket.flights.present? %>
+                <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a>
+                <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id, :lang=> 'en') %>" target="_blank">in English</a>
+            <% end %>                
+            </td>
+        </tr>
+    <% end %>
+    </table>
+  </div>
+
+<% if order.profile_stored? && order.profile_alive_tickets_exists? %>
+    <%= render :partial => 'flights', :locals => { :order => order } %>
+<% end %>
+
+</div>
+<% end %>
+
+<% else %>
+
+<div class="order-details">
+  <div class="ord-passengers">
+    <table class="ordp-table">
+      <tr>
+        <th style="width: 294px;">Пассажир</th>
+        <th>Статус билета</th>
+      </tr>
+    <% order.profile_people.each do |person| %>
+      <tr>
+        <td><%= person[:name] %></td>
+        <td><%= person[:status] %></td>
+      </tr>
+    <% end %>
+    </table>
+  </div>
+</div>
+
+<% end %>
+
+
+<% if admin_user %>
+<div class="order-debug">
+  <p class="ors-route-raw"><% if order.profile_alive_tickets_exists? %> Живой!
+    <% else %> Мертвый! <% end %>
+    <% if order.profile_all_tickets_returned? %> Возврат! <% end %>
+    
+    <%= order.profile_sold_tickets_count %>=<%= order.profile_ticketed? %></p>
+  <p class="ors-route-raw">Route: <%= order.profile_route %></p>
+  <p class="ors-route-raw">Статусы заказа: <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %></p>
+  <% if order.profile_ticketed? %>
+  <p class="ors-route-raw">Статусы билетов: <% order.tickets.each do |t| %> <%= t.kind %>: <%= t.status %> / <% end %></p>
+  <% end %>
+</div>
+<% end %>
+</div>
+
+<% end %>
+<% end %>
+<% end %>
+</div>
+
+<script type="text/javascript">
+var ordersTable = {
+init: function() {
+    var that = this;
+    var context = $('#orders');
+    context.on('click', '.order-summary, .order-controls', function() {
+        var elem = $(this).closest('.order');
+        if (elem.find('.order-details').is(':visible')) {
+            that.hide(elem);
+        } else {
+            that.show(elem);
+        }
+    });
+    context.find('.orc-link').on('click', function(event) {
+        event.stopPropagation();
+    });
+},
+show: function(elem) {
+    elem.find('.orc-show').hide();
+    elem.find('.orc-hide').show();        
+    elem.find('.order-details').slideDown(250);
+},
+hide: function(elem) {
+    elem.find('.orc-hide').hide();
+    elem.find('.orc-show').show();
+    elem.find('.order-details').slideUp(250);
+}
+};
+ordersTable.init();
+</script>

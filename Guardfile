@@ -37,7 +37,7 @@ guard 'rspec', :cli => "--drb", :version => 2 do
   watch('app/controllers/application_controller.rb')  { "spec/controllers" }
   # Capybara request specs
   watch(%r{^app/views/(.+)/.*\.(erb|haml)$})          { |m| "spec/requests/#{m[1]}_spec.rb" }
-  watch('config/commissions.rb')                      { 'spec/lib/commission_spec.rb'}
+  watch(%r{^config/commissions})                      { 'spec/lib/commission_spec.rb'}
   # TODO сделать спеки для amadeus и сирены
 end
 

@@ -8,6 +8,7 @@ init: function() {
     search.init();
     results.init();
     booking.init();
+    User.init();    
 
     preloadImages('/images/search/dates.png');
     preloadImages('/images/results/progress.gif', '/images/results/fshadow.png', '/images/results/slider.png');
@@ -15,6 +16,13 @@ init: function() {
 
     if (this.location.booking) {
         this.restoreBooking(this.location.search, this.location.booking);
+    } else if (this.location.search.indexOf('confirmation_token') == 0) {
+        var token = this.location.search.replace('confirmation_token=', '');
+        User.password.use(token);
+        User.show('password');
+        search.map.resize();
+        /*this.reset();
+        this.loadLocation();*/
     } else if (this.location.search) {
         this.restoreResults(this.location.search);
     } else {

@@ -2,6 +2,7 @@
 class StoredFlight < ActiveRecord::Base
 
   has_and_belongs_to_many :tickets
+  has_and_belongs_to_many :orders
 
   KEY_COLUMNS = [
     :marketing_carrier_iata,

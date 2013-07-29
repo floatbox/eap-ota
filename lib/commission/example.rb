@@ -16,7 +16,7 @@ class Commission::Example
   end
 
   def inspect
-    "<example '#{code}' :#{source}>"
+    "<example '#{code}' at #{source}>"
   end
 
 end

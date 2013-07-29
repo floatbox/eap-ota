@@ -15,10 +15,14 @@ class BookingController < ApplicationController
   #   "marker"=>"",
   #   "variant_id"=>"1"
   def preliminary_booking
+    @coded_search = params[:query_key]
+    @partner = Partner[params[:partner]]
+    logo_url = @partner.logo_exist? ? @partner.logo_url : ''
     if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       render :json => {
         :success => true,
         :number => @order_form.number,
+        :partner_logo_url => logo_url,
         :declared_price => @recommendation.declared_price
         }
     else
@@ -31,9 +35,14 @@ class BookingController < ApplicationController
   #   "query_key"=>"ki1kri"
   def api_booking
     @query_key = params[:query_key]
-    @search = PricerForm.load_from_cache(params[:query_key])
-    #FIXME берем партнера из сохраненной PricerForm - надежно, но некрасиво
-    @partner = Partner[@search.partner]
+    # оставил в таком виде, чтобы не ломалось при рендере
+    # если переделаем урлы и тут - заработает
+    @partner = Partner[params[:partner]]
+    @search = PricerForm.from_code(params[:query_key])
+    unless @search && @search.valid?
+      # необходимо очистить anchor вручную
+      return redirect_to '/#'
+    end
     @destination = get_destination
 
     StatCounters.inc %W[enter.api.success]
@@ -67,7 +76,6 @@ class BookingController < ApplicationController
     # FIXME если partner из @search не берется больше - переделать на before_filter save_partner_cookies
     track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?
-      @search.save_to_cache
       StatCounters.inc %W[enter.api_redirect.success]
       redirect_to "#{Conf.api.url_base}/##{@search.query_key}"
     else
@@ -86,9 +94,11 @@ class BookingController < ApplicationController
 
   def index
     @order_form = OrderForm.load_from_cache(params[:number])
+    # Среагировать на изменение продаваемости/цены
+    @order_form.recommendation.find_commission!
     @order_form.init_people
     @order_form.admin_user = admin_user
-    @search = PricerForm.load_from_cache(@order_form.query_key)
+    @search = PricerForm.from_code(@order_form.query_key)
 
     if params[:iphone]
       render :partial => 'iphone'
@@ -103,9 +113,10 @@ class BookingController < ApplicationController
   def recalculate_price
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
+    @order_form.recommendation.find_commission!
     @order_form.admin_user = admin_user
     @order_form.valid?
-    if @order_form.update_price_and_counts
+    if @order_form.recommendation.sellable? && @order_form.update_price_and_counts
       render :partial => 'newprice'
     else
       render :partial => 'failed_booking'
@@ -155,8 +166,9 @@ class BookingController < ApplicationController
         @error_message = :payment
       else
         strategy = Strategy.select(:order => @order)
+        strategy.lax = !!admin_user
 
-        unless strategy.delayed_ticketing?
+        if  !strategy.delayed_ticketing?
           logger.info "Pay: ticketing"
 
           unless strategy.ticket
@@ -164,6 +176,10 @@ class BookingController < ApplicationController
             logger.info "Pay: ticketing failed"
             @error_message = :ticketing
             @order.unblock!
+          end
+        else
+          if @order.ok_to_auto_ticket?
+            AutoTicketStuff.new(order: @order).create_auto_ticket_job
           end
         end
       end

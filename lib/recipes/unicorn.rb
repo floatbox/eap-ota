@@ -24,4 +24,8 @@ namespace :deploy do
     run "sudo /usr/bin/sv restart /etc/service/unicorn_eviterra"
   end
 
+  task :reload, :roles => :app, :except => { :no_release => true } do
+    run "sudo /usr/bin/sv restart /etc/service/unicorn_eviterra"
+  end
+
 end
