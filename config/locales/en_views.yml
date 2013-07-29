@@ -344,7 +344,7 @@ en:
         delivery: "On delivery (+%{sum})"
         both: "At our office or on delivery (+%{sum})"
     card:
-      safety: "Your bank card data is processed by PayU payment center and is protected with the 256-bit security key, provided by Digicert."
+      safety: "Your bank card data is processed by Promsvyazbank payment center and is protected with the 256-bit security key, provided by Digicert."
       cvv_description: "CVV (or CVC) is the 3-digit code on the back side of the card. Normally it is located on the right of signature strip, after 4 digits of card number. If your card has no such code, it is not suitable for online payments."
       or: "or"
       number:
