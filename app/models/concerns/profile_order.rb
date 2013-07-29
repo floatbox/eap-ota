@@ -79,10 +79,6 @@ module ProfileOrder
     sold_tickets.first.booking_classes
   end
 
-  def profile_baggage_array
-    sold_tickets.first.baggage_array
-  end
-
   def profile_ticketed?
     tickets_count > 0
   end
