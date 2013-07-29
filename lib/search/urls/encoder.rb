@@ -43,13 +43,13 @@ module Search
             prev_segment.to_iata == segment.from_iata and
               tokens = []
 
-          tokens << encode_date(segment.date_as_date)
+          tokens << encode_date(segment.date)
           tokens.join(INTERNAL_SEPARATOR)
         end
       end
 
       def encode_date(date)
-        # Sep1, no spaces
+        # 1Sep, no spaces
         date.strftime('%e%b').tr(' ','')
       end
 

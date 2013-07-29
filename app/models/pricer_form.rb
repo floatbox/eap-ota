@@ -201,16 +201,12 @@ class PricerForm
       :lat => obj.lat,
       :lng => obj.lng
     }
-  end      
+  end
 
   def nearby_cities
     #FIXME
     segments[0].nearby_cities
   end
-
-  def short_date(ds)
-    ds[0,2] + '.' + ds[2,2]
-  end  
 
 end
 

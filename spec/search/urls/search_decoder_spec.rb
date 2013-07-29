@@ -61,7 +61,7 @@ describe Search::Urls::Decoder do
 
           its(:from) { should == City.find_by_iata('PAR') }
           its(:to) { should == City.find_by_iata('MOW') }
-          its(:date) { should == '160813' }
+          its(:date) { should == Date.parse('16th Aug 2013') }
         end
       end
 
@@ -71,13 +71,13 @@ describe Search::Urls::Decoder do
       it 'should be current year' do
         url = 'MOW-PAR-Sep8'
         decoder = Search::Urls::Decoder.new(url)
-        decoder.decoded.segments.last.date.should == '080913'
+        decoder.decoded.segments.last.date.should == Date.parse('8th Sep 2013')
       end
 
       it 'should be next year' do
         url = 'MOW-PAR-Feb8'
         decoder = Search::Urls::Decoder.new(url)
-        decoder.decoded.segments.last.date.should == '080214'
+        decoder.decoded.segments.last.date.should == Date.parse('8th Feb 2014')
       end
     end
 
@@ -104,7 +104,7 @@ describe Search::Urls::Decoder do
 
           its(:from) { should == City.find_by_iata('AMS') }
           its(:to) { should == City.find_by_iata('PAR') }
-          its(:date) { should == '010913' }
+          its(:date) { should == Date.parse('1st Sep 2013') }
         end
       end
 
@@ -133,7 +133,7 @@ describe Search::Urls::Decoder do
 
           its(:from) { should == City.find_by_iata('AMS') }
           its(:to) { should == City.find_by_iata('PAR') }
-          its(:date) { should == '010913' }
+          its(:date) { should == Date.parse('1st Sep 2013') }
         end
       end
 

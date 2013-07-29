@@ -60,15 +60,15 @@ module Search
 
       def human_short
         if rt
-          "#{segments[0].from.name} &harr; #{segments[0].to.name}, #{short_date(segments[0].date)} — #{short_date(segments[1].date)}"
+          "#{segments[0].from.name} &harr; #{segments[0].to.name}, #{segments[0].short_date} — #{segments[1].short_date}"
         else
           parts = []
           complex = segments.length > 1
           segments.each do |segment|
             if complex
-              parts << "#{segment.from.iata} &rarr; #{segment.to.iata} #{short_date(segment.date)}"
+              parts << "#{segment.from.iata} &rarr; #{segment.to.iata} #{segment.short_date}"
             else
-              parts << "#{segment.from.name} &rarr; #{segment.to.name} #{short_date(segment.date)}"
+              parts << "#{segment.from.name} &rarr; #{segment.to.name} #{segment.short_date}"
             end
           end
           parts.join(', ')

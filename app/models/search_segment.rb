@@ -1,14 +1,10 @@
 # encoding: utf-8
+
 class SearchLocation < Virtus::Attribute::Object
   class LocationWriter < Virtus::Attribute::Writer::Coercible
     def coerce(value)
       case value
-      when String 
-        begin
-          Location[value]
-        rescue ::IataStash::NotFound 
-          Completer.object_from_string(value)
-        end
+      when String then Completer.object_from_string(value)
       when ActiveRecord::Base then value
       else return
       end
@@ -20,6 +16,28 @@ class SearchLocation < Virtus::Attribute::Object
   end
 end
 
+class SearchDate < Virtus::Attribute::Object
+  class SearchDateWriter < Virtus::Attribute::Writer::Coercible
+    def coerce(value)
+      case value
+      when String
+        case value
+        when /^\d{6}$/ then Date.strptime(value, '%d%m%y')
+        when /%\d{2}\-\d{2}\-\d{2,4}$/ then Date.strptime(value, '%y-%m-%d')
+        end
+      when Date then value
+      else return
+      end
+    ensure
+    end
+  end
+
+  def self.writer_class(*)
+    SearchDateWriter
+  end
+
+end
+
 # non-persistent model
 # используется для валидации поисковых сегментов
 class SearchSegment
@@ -27,7 +45,7 @@ class SearchSegment
   attribute :errors, Array, :default => []
   attribute :from, SearchLocation
   attribute :to, SearchLocation
-  attribute :date, String
+  attribute :date, SearchDate
 
   def valid?
     check_date
@@ -40,7 +58,7 @@ class SearchSegment
 
   def check_date
     errors << 'В сегменте не может отсутствовать дата вылета' unless date
-    if date_as_date.present? && !TimeChecker.ok_to_show(date_as_date + 1.day)
+    if date.present? && !TimeChecker.ok_to_show(date + 1.day)
       errors << 'Первый вылет слишком рано'
     end
   end
@@ -65,18 +83,20 @@ class SearchSegment
     from_country_or_region? || to_country_or_region?
   end
 
-  def date_as_date
-    @date_as_date ||= Date.strptime(date, '%d%m%y')
-  rescue
-    return nil
-  end
-
   def to_iata
     to.iata
   end
 
   def from_iata
     from.iata
+  end
+
+  def date_for_render
+    date.strftime('%d%m%y')
+  end
+
+  def short_date
+    date.strftime('%d.%m')
   end
 
   def nearby_cities
