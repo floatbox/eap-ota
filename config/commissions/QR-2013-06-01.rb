@@ -4,7 +4,7 @@ example "cdgpek/business pekcdg/business"
 agent "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :first, :business
-discount "1.75%"
+discount "2.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 
@@ -21,7 +21,7 @@ example "jfkled ledcdg"
 agent "с сегодня на QR если в маршруте есть Россия (OW/RT, origin/destination) - агентская 5%"
 subagent "у нас 3%"
 important!
-discount "1.5%"
+discount "3%"
 ticketing_method "downtown"
 tour_code "USAN002"
 check %{ includes(country_iatas, 'RU') }

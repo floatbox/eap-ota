@@ -8,7 +8,7 @@ subagent "3% от всех опубл.тарифов на собств. рейс
 subagent "Перевозки на короткие расстояния: Между Fiji & Pacific Islands, AU, NZ"
 interline :no, :yes
 routes "FJ-FJ,AU,NZ,KI,MH,FM,NR,PH,WS,SB,TO,TV,VU,CK,AS,PF,GU,NC,NU,NF,MP,PW/ALL"
-discount "1.5%"
+discount "2.5%"
 ticketing_method "aviacenter"
 commission "5%/3%"
 
@@ -19,7 +19,7 @@ agent "Перевозки на дальние расстояния: Между F
 subagent "5% от всех опубл.тарифов на собств. рейсы FJ для перевозки на дальние расстояния,"
 subagent "Перевозки на дальние расстояния: Между Fiji & всеми другими пунктами назначения маршрутной сети авиакомпании FJ."
 interline :no, :yes
-discount "2.5%"
+discount "4%"
 ticketing_method "aviacenter"
 commission "7%/5%"
 

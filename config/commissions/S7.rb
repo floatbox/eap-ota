@@ -335,7 +335,7 @@ comment "general dtt для горячей замены"
 agent "1% dtt"
 subagent "3.5% dtt"
 interline :no_codeshare
-discount "1.75%"
+discount "3.5%"
 ticketing_method "downtown"
 commission "1%/3.5%"
 

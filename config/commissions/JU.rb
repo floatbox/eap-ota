@@ -3,7 +3,7 @@ carrier "JU"
 example "svocdg"
 agent "С 15.02.2011г. 7% от опубл. тарифов на собств. рейсы JU"
 subagent "JU  С 21.02.2011г. 5% от опубл. тарифов на собств. рейсы JU"
-discount "2.5%"
+discount "4%"
 ticketing_method "aviacenter"
 commission "7%/5%"
 

@@ -6,7 +6,7 @@ agent "9% Все международные перелеты рейсами СА
 subagent "7.5% Все международные перелеты рейсами СА из России"
 routes "RU..."
 important!
-discount "3.75%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7.5%"
 
@@ -17,7 +17,7 @@ example "peksgn"
 agent "3%  от опубл. тарифов на все остальные рейсы СА при обязательном наличии собств.сегмента СА;"
 subagent "2.5% от опубл. тарифов на все остальные рейсы СА при обязательном наличии собств.сегмента СА;"
 interline :no, :yes
-discount "1.25%"
+discount "0%"
 ticketing_method "aviacenter"
 commission "3%/2.5%"
 
