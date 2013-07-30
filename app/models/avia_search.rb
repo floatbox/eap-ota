@@ -2,13 +2,14 @@
 
 class AviaSearch
   include Virtus
+  include Search::Defaults
   include Search::Humanize::Presenter
 
   attribute :errors, Array, :default => []
-  attribute :adults, Integer, :default => 1
-  attribute :children, Integer, :default => 0
-  attribute :infants, Integer, :default => 0
-  attribute :cabin, String
+  attribute :adults, Integer, :default => ADULTS
+  attribute :children, Integer, :default => CHILDREN
+  attribute :infants, Integer, :default => INFANTS
+  attribute :cabin, String, :default => CABIN
   attribute :query_key, String
   attribute :partner, String
   attribute :use_count, Integer, :default => 1
