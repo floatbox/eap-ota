@@ -9,7 +9,6 @@ module Search
 
         human_parts = []
         person_parts = []
-        # FIXME? почему тут нет gettext?
         if adults > 1
           person_parts << ['вдвоем', 'втроем', 'вчетвером', 'впятером', 'вшестером', 'всемером', 'ввосьмером'][adults-2]
         end
@@ -48,7 +47,7 @@ module Search
             :short => "#{ dpt.iata } &rarr; #{ arv.iata }",
             :arvto => "#{ arv.case_to }",
             :arvto_short => "в #{ arv.iata }",
-            :date => segment.date,
+            :date => segment.date_for_render,
             :dpt => {:name => dpt.name},
             :arv => {:name => arv.name},
           }
