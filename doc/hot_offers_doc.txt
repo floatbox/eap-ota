@@ -7,9 +7,9 @@
 -в качестве рекомендации для hot_offer выбирается первая из массива @recommendations.
 -вычисляется hot_offer.price, как цена с комиссией из этой первой рекомендации, поделенная на всех пассажиров.
 
-  При создании hot_offer вызывается метод hot_offer.set_some_vars, который срабатывает, если есть @pricer_form и @recommendation
+  При создании hot_offer вызывается метод hot_offer.set_some_vars, который срабатывает, если есть @avia_search и @recommendation
 В нем:
--копируются данные из pricer_form (from, to, rt, date1, date2)
+-копируются данные из avia_search (from, to, rt, date1, date2)
 -вычисляется time_delta (количество дней от сегодня до вылета)
 -ищется или создается(sic!) destination по трем полям: from_iata, to_iata, rt.
 -вычисляется price_variation: разница текущей цены и средней цены по направлению
