@@ -4,7 +4,7 @@ example "svogmp"
 agent "С 01.04.2011г. 5% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
 subagent "С 01.04.2011г. 3% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
 routes "RU..."
-discount "1.5%"
+discount "2.5%"
 ticketing_method "aviacenter"
 commission "5%/3%"
 

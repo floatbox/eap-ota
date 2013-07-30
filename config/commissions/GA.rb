@@ -4,7 +4,7 @@ example "jogsoq soqjog"
 agent "5% (Пять) от всех опубл. тарифов на собств.рейсы GA на местные перелёты;"
 subagent "3% от всех опубл. тарифов на собств.рейсы GA на местные перелёты;"
 domestic
-discount "1.5%"
+discount "2.5%"
 ticketing_method "aviacenter"
 commission "5%/3%"
 
@@ -21,7 +21,7 @@ commission "1/0.05"
 example "jogsvo"
 agent "ИНДОНЕЗИЯ: 7% - если пункт назначения любой город, кроме JED/RUH"
 subagent "ИНДОНЕЗИЯ: 5% от тарифа если пункт назначения любой город, кроме JED/RUH"
-discount "2.5%"
+discount "4%"
 ticketing_method "aviacenter"
 check %{ includes(country_iatas.first, 'ID') and not includes(city_iatas.last, %W(JED RUH)) }
 commission "7%/5%"
@@ -70,7 +70,7 @@ example "okorse"
 agent "5%  - SWP, 5%  - MEL/PER/SYD"
 subagent "3% -SWP 3% - MEL/PER/SYD"
 important!
-discount "1.5%"
+discount "2.5%"
 ticketing_method "aviacenter"
 check %{ includes(country_iatas.first, 'JP') and includes(city_iatas.last, %W(SWP MEL PER SYD)) }
 commission "5%/3%"
@@ -83,7 +83,7 @@ agent "7% - SEL, 7% - JED/RUH, 7% - DXB"
 subagent "5% - SEL 5% - JED/RUH 5% - DXB"
 routes "JP-SEL,JED,RUH,DXB"
 important!
-discount "2.5%"
+discount "4%"
 ticketing_method "aviacenter"
 commission "7%/5%"
 
@@ -94,7 +94,7 @@ agent "9% - BKK, 9% - BJS/CAN/SHA"
 subagent "7% - BKK 7% - BJS/CAN/SHA"
 routes "JP-BKK,BJS,CAN,SHA"
 important!
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 

@@ -3,7 +3,7 @@ carrier "CY"
 example "svocdg"
 agent "9% от всех опубл. тарифов на рейсы CY. (В договоре Interline не прописан.)"
 subagent "7% от опубликованных тарифов на рейсы CY."
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 
