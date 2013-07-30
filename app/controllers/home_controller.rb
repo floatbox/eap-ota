@@ -19,16 +19,27 @@ class HomeController < ApplicationController
   end
 
   def revision
-    revision =
-      if File.exists? 'REVISION'
-        File.read 'REVISION'
-      else
-        `git log -1 --pretty=format:%H`
-      end
-    render text: revision
+    render text: sha
+  end
+
+  def pending
+    redirect_to "https://github.com/Eviterra/eviterra/compare/#{sha}...master"
+  end
+
+  def current
+    redirect_to "https://github.com/Eviterra/eviterra/commits/#{sha}"
   end
 
   protected
+
+  # текущая ревизия в деплое или локально
+  def sha
+    if File.exists? 'REVISION'
+      File.read 'REVISION'
+    else
+      `git log -1 --pretty=format:%H`
+    end
+  end
 
 end
 
