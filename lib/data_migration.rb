@@ -113,50 +113,6 @@ module DataMigration
     end
   end
 
-  # set price acquiring compensation and price difference
-  def self.upgrade_to_fee_schemas
-    PaperTrail.controller_info = {:done => 'upgrade_to_fee_schemas second run'}
-    Order.where(fee_scheme: '').order('created_at DESC').map do |o|
-      o.fee_scheme = Conf.site.fee_scheme
-      o.tickets.every.save!
-      o.update_prices_from_tickets || o.save
-    end
-  end
-
-  def self.fill_in_parent_pnr_number
-    PaperTrail.controller_info = {:done => 'fill_in_parent_pnr_number'}
-    orders = Order.where('(pnr_number is null or pnr_number = "") and (parent_pnr_number is null or parent_pnr_number = "") and payment_type = "card" and payment_status = "charged"').includes(:order_comments)
-    orders.each do |o|
-      parent_pnr_from_desc = o.description.scan(/\b([A-ZА-Я\d]{6})\b/)
-      comment_text =  o.order_comments.every.text.join(' ')
-      parent_ids = comment_text.scan(/\/orders\/show\/(\d+)/)
-      raw_pnr_number = comment_text.scan(/\b([A-ZА-Я\d]{6})\b/)
-
-      parent_pnr = ''
-      if parent_pnr_from_desc.count == 1
-        parent_pnr = parent_pnr_from_desc[0][0]
-      elsif parent_ids.count == 1 && (parent = Order.find_by_id(parent_ids[0][0]))
-        parent_pnr = parent.pnr_number
-      elsif raw_pnr_number.count == 1
-        parent_pnr = raw_pnr_number[0][0]
-      end
-      if parent_pnr.present?
-        o.update_attributes(parent_pnr_number: parent_pnr)
-      else
-        print "** Got nothing #{o.id}: ", o.description, comment_text, "\n"
-      end
-    end
-  end
-
-  def self.set_price_with_payment_commission_in_tickets
-    Order.order('id DESC').every.update_price_with_payment_commission_in_tickets
-  end
-
-  def self.set_status_in_refunds
-    Ticket.update_all('status = "processed"', 'kind = "refund" AND processed = 1')
-    Ticket.update_all('status = "pending"', 'kind = "refund" AND processed = 0')
-  end
-
   def self.ticket_original_prices(order)
     if order.sold_tickets.every.office_id.uniq.include?('FLL1S212V')
       ticket_hashes = order.strategy.get_tickets
@@ -182,27 +138,51 @@ module DataMigration
     end
   end
 
-  def self.price_migration_for_russian_offices
+
+  def self.downtown_prices_migration
     Ticket.update_all "original_price_fare_cents = (price_fare * 100),
                        original_price_fare_currency = 'RUB',
                        original_price_tax_cents = (price_tax * 100),
                        original_price_tax_currency = 'RUB'", "office_id != 'FLL1S212V' or kind = 'refund'"
     Ticket.update_all "original_price_penalty_cents = (price_penalty * 100),
                        original_price_penalty_currency = 'RUB'"
-  end
-
-  def self.downtown_prices_migration
-    price_migration_for_russian_offices
-    Order.update_all('old_downtown_booking = 1', 'commission_ticketing_method = "downtown" and payment_type != "card"')
+    Order.update_all('old_downtown_booking = 1', 'commission_ticketing_method = "downtown"')
     Order.update_all('fee_scheme = "v3"', 'commission_ticketing_method = "downtown" and payment_type = "card"')
-    load_ticket_prices_from_csv #Предполагаем, что в tickets.csv лежат цены всех билетов
-    set_corrected_price_in_downtown_tickets
+    load_ticket_prices_from_amadeus(Date.today - 1.day)
+    #load_ticket_prices_from_csv #Предполагаем, что в tickets.csv лежат цены всех билетов
   end
 
-  def self.load_ticket_prices_form_csv
+  def self.load_ticket_prices_from_csv
     PaperTrail.controller_info = {:done => 'filling in prices in downtown tickets'}
     CSV.foreach('tickets.csv') do |id, fare, total|
-      Ticket.find(id).update_attributes(:original_price_total => total.to_money, :original_price_fare => fare.to_money)
+      load_downtown_price(id, fare, total)
+    end
+  end
+
+  def self.load_downtown_price(id, fare, total)
+    t = Ticket.find(id)
+    t.update_attributes(:original_price_total => total.to_money, :original_price_fare => fare.to_money)
+    o = t.order
+    if o.tickets.present? && o.tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed' && t.original_price_fare_currency.present? && t.corrected_price == 0}
+      o.update_attributes(old_downtown_booking: false) if o.payment_type == "card"
+      o.tickets.each do |t|
+        t.corrected_price = t.calculated_price_with_payment_commission
+        t.save
+      end
+      o.update_prices_from_tickets
+    end
+  end
+
+  def self.load_ticket_prices_from_amadeus(date = Date.today)
+    PaperTrail.controller_info = {:done => 'filling in prices in downtown tickets'}
+    ticket_hashes = Order.by_office_id('FLL1S212V').where(:ticket_status => 'ticketed').where('orders.created_at >= ?', date).order('created_at DESC').each do |o|
+      print o.id
+      begin
+        ticket_original_prices(o).each do |ph|
+          load_downtown_price(ph[:id], ph[:original_price_fare], ph[:original_price_total])
+        end
+      rescue
+      end
     end
   end
 
@@ -220,8 +200,8 @@ module DataMigration
     end
   end
 
-  def self.create_price_migration_csv
-    ticket_hashes = Order.by_office_id('FLL1S212V').where(:ticket_status => 'ticketed').where('orders.created_at >= ?', Date.today - 11.month).inject([]) do |memo ,o|
+  def self.create_price_migration_csv(date = Date.today - 11.month)
+    ticket_hashes = Order.by_office_id('FLL1S212V').where(:ticket_status => 'ticketed').where('orders.created_at >= ?', date).inject([]) do |memo ,o|
       print o.id
       begin
         memo + ticket_original_prices(o).compact
@@ -230,7 +210,6 @@ module DataMigration
       end
     end
     CSV.open("tickets.csv", "wb") do |csv|
-      csv << ticket_hashes[0].keys
       ticket_hashes.each do |t|
         csv << t.values
       end
