@@ -2,7 +2,7 @@
 
 # non-persistent model
 # используется для валидации поисковых сегментов
-class SearchSegment
+class AviaSearchSegment
   include Virtus
 
   attribute :errors, Array, :default => []

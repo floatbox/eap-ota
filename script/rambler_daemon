@@ -21,7 +21,7 @@ Daemons.run_proc('/tmp/pids/rambler_daemon') do
         retry
       end
       if doc
-        data_to_send << {:request => doc['pricer_form_hash'], :variants => doc['data']}
+        data_to_send << {:request => doc['avia_search_hash'], :variants => doc['data']}
         if data_to_send.size >= Conf.api.rambler_hash_size
           json_string = Yajl::Encoder.encode(data_to_send)
           begin

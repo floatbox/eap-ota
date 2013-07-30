@@ -28,7 +28,7 @@ class PricerController < ApplicationController
     Flight.class
     file_name = Rails.root + 'data/recommendations/rec.dump'
     file = File.open(file_name, 'r')
-    @search = PricerForm.from_code('Y100MOWAMS17SEP')
+    @search = AviaSearch.from_code('Y100MOWAMS17SEP')
 
     @recommendations = Marshal.load(file.read)
     @locations = @search.human_locations
@@ -62,7 +62,7 @@ class PricerController < ApplicationController
   def validate
     result = {}
     if @query_key = params[:query_key]
-      @search = PricerForm.from_code(@query_key)
+      @search = AviaSearch.from_code(@query_key)
       unless @search && @search.valid?
         result[:errors] = ['parsing error']
       end
@@ -70,7 +70,7 @@ class PricerController < ApplicationController
       result[:fragment_exist] = fragment_exist
       StatCounters.inc %W[validate.cached] if fragment_exist
     else
-      @search = PricerForm.from_js(params[:search])
+      @search = AviaSearch.from_js(params[:search])
       unless @search.valid?
         result[:errors] = @search.segments.flat_map(&:errors)
       end
@@ -97,8 +97,8 @@ class PricerController < ApplicationController
       render 'api/error', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
     end
-    pricer_form_hash = params.dup.delete_if {|key, value| %W[controller action format].include?(key)}
-    @search = PricerForm.simple(pricer_form_hash)
+    avia_search_hash = params.dup.delete_if {|key, value| %W[controller action format].include?(key)}
+    @search = AviaSearch.simple(avia_search_hash)
     
     StatCounters.inc %W[search.api.total search.api.#{partner4stat}.total]
 
@@ -136,7 +136,7 @@ class PricerController < ApplicationController
       render 'api/variants'
     else
       StatCounters.inc %W[search.api.invalid search.api.#{partner4stat}.invalid]
-      logger.info "Invalid API search with params #{pricer_form_hash} validation errors: #{@search.errors.full_messages}"
+      logger.info "Invalid API search with params #{avia_search_hash} validation errors: #{@search.errors.full_messages}"
       @recommendations = []
       render 'api/variants'
     end
@@ -151,7 +151,7 @@ class PricerController < ApplicationController
   def parse_and_validate_url
     StatCounters.inc %W[search.total]
     @code = params[:query_key]
-    unless @search = PricerForm.from_code(@code)
+    unless @search = AviaSearch.from_code(@code)
       StatCounters.inc %W[search.errors.coded_url_is_broken]
       render :text => "404 Not found", :status => :not_found
     end

@@ -52,7 +52,7 @@ module Search
               to = segments.last[:from] if to.nil?
             end
             location_stack = []
-            segments << SearchSegment.new(from: from, to: to, date: date)
+            segments << AviaSearchSegment.new(from: from, to: to, date: date)
 
           # классы
           when /^business$/i
@@ -78,7 +78,7 @@ module Search
           raise ParserError, "unknown token or missing date for IATA #{location_stack.inspect}"
         end
 
-        @decoded = PricerForm.new(
+        @decoded = AviaSearch.new(
           adults: adults,
           children: children,
           infants: infants,

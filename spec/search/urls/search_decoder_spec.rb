@@ -180,7 +180,7 @@ describe Search::Urls::Decoder do
     specify('wrong adults value') { parsed?('MOW-AMS-Jul24-Aadults-2children-infant').should be_false }
     specify('wrong children value') { parsed?('MOW-AMS-Jul24-2adults-THEchildren-infant').should be_false }
     specify('wrong infants value') { parsed?('MOW-AMS-Jul24-3adults-2children-Yinfant').should be_false }
-    # проверяется в PricerForm.valid?
+    # проверяется в AviaSearch.valid?
     #specify('7 segments') { parsed?('MOW-AMS-Jul24-PAR-Jul26-MIL-Jul31-PRG-Aug1-ROM-Aug8-MOW-Aug15-LED-Aug18').should be_false }
   end
 end

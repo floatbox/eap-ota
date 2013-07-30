@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-class PricerForm
+class AviaSearch
   include Virtus
   include Search::Humanize::Presenter
 
@@ -12,7 +12,7 @@ class PricerForm
   attribute :query_key, String
   attribute :partner, String
   attribute :use_count, Integer, :default => 1
-  attribute :segments, Array[SearchSegment]
+  attribute :segments, Array[AviaSearchSegment]
   delegate :to, :from, :from_iata, :to_iata, :date, :to => 'segments.first'
 
   # валидация
@@ -22,7 +22,6 @@ class PricerForm
   end
 
   def check_segments
-    # может случаться во время проверки PricerController#validate
     errors << 'Не содержит сегментов' unless segments?
     errors.concat(segments.flat_map { |s| s.valid?; s.errors } )
   end
@@ -42,6 +41,8 @@ class PricerForm
     Search::Urls::Decoder.new(code).decoded
   end
 
+  # нужен для PricerController#validate
+  # если от него избавимся - можно удалять
   def self.from_js(params_raw)
     params_raw = HashWithIndifferentAccess.new(params_raw)
     people_count = params_raw[:people_count]
@@ -64,9 +65,9 @@ class PricerForm
     end
     return if !(Location[args[:from]] || Location[args[:to]])
 
-    segments = [SearchSegment.new(from: args[:from], to: args[:to], date: convert_api_date(args[:date1]))]
+    segments = [AviaSearchSegment.new(from: args[:from], to: args[:to], date: convert_api_date(args[:date1]))]
     if args[:date2].present?
-      segments << SearchSegment.new(from: args[:to], to: args[:from], date: convert_api_date(args[:date2]))
+      segments << AviaSearchSegment.new(from: args[:to], to: args[:from], date: convert_api_date(args[:date2]))
     end
 
     adults = (args[:adults] || 1).to_i
@@ -174,7 +175,7 @@ class PricerForm
     end
     result
   end
-  
+
   def map_point obj
     obj && {
       :name => obj.name,

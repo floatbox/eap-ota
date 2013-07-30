@@ -11,7 +11,7 @@ module Amadeus
       attr_accessor :pnr_action
       attr_accessor :recommendation #сейчас не используется
 
-      # может принимать PricerForm
+      # можно научить принимать Recommendation
       def initialize(opts)
         # defaults
         @pnr_action = :ER

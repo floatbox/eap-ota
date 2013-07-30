@@ -6,7 +6,8 @@ class PricerDump
   def self.create_dump
     FileUtils.touch 'log/pricer_dump.txt'
     File.open('log/pricer_dump.txt', 'w') do |f|
-       PricerForm.all.desc(:created_at).each_with_index do |pf, i|
+      # не тестировано после рефакторинга PricerForm в AviaSearch
+       AviaSearch.all.desc(:created_at).each_with_index do |pf, i|
          begin
          if pf.from_iata.present? && pf.to_iata.present?
            print "." if i % 100 == 0

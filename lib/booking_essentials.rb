@@ -4,7 +4,8 @@ module BookingEssentials
     return if Conf.site.forbidden_booking
     @recommendation = Recommendation.deserialize(params[:recommendation])
     @recommendation.find_commission!
-    return unless recover_pricer_form
+
+    return unless recover_avia_search
     return unless @recommendation.sellable?
 
     track_partner(params[:partner], params[:marker])
@@ -36,11 +37,11 @@ module BookingEssentials
     end
   end
 
-  def recover_pricer_form
+  def recover_avia_search
     if params[:query_key]
-      @search = PricerForm.from_code(params[:query_key])
+      @search = AviaSearch.from_code(params[:query_key])
     else
-      @search = PricerForm.new
+      @search = AviaSearch.new
       @search.adults = params[:adults] if params[:adults]
       @search.children = params[:children] if params[:children]
       @search.infants = params[:infants] if params[:infants]

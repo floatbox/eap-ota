@@ -9,10 +9,10 @@ describe Search::Urls::Encoder do
 
     segments = params[:segments].map do |segment|
       from, to, date = segment
-      SearchSegment.new(from: from, to: to, date: date)
+      AviaSearchSegment.new(from: from, to: to, date: date)
     end
 
-    pricer_form = PricerForm.new(
+    avia_search = AviaSearch.new(
       adults: params[:adults] || 1,
       children: params[:children] || 0,
       infants: params[:infants] || 0,
@@ -20,7 +20,7 @@ describe Search::Urls::Encoder do
       segments: segments
     )
 
-    pricer_form.encode_url
+    avia_search.encode_url
   end
 
   specify 'one-way ticket search' do

@@ -38,7 +38,7 @@ module RamblerApi
       :variants => [ Variant.new(:segments => segments) ]
     )
 
-    pricer_form_hash = {
+    avia_search_hash = {
         :from => segments.first.departure.city.iata,
         :to => segments.first.arrival.city.iata,
         :date1 => segments[0].departure_date,
@@ -47,7 +47,7 @@ module RamblerApi
         :cabin => recommendation.cabins.first,
         :partner => 'rambler'}
 
-    search = PricerForm.simple(pricer_form_hash)
+    search = AviaSearch.simple(avia_search_hash)
     recommendation = recommendation.serialize
     if search.valid?
       "#{Conf.api.url_base}/api/booking/#{search.query_key}#recommendation=#{recommendation}&type=api&partner=#{search.partner}&marker=#{params[:marker]}"

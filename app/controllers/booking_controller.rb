@@ -38,7 +38,7 @@ class BookingController < ApplicationController
     # оставил в таком виде, чтобы не ломалось при рендере
     # если переделаем урлы и тут - заработает
     @partner = Partner[params[:partner]]
-    @search = PricerForm.from_code(params[:query_key])
+    @search = AviaSearch.from_code(params[:query_key])
     unless @search && @search.valid?
       # необходимо очистить anchor вручную
       return redirect_to '/#'
@@ -72,7 +72,7 @@ class BookingController < ApplicationController
   end
 
   def api_redirect
-    @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
+    @search = AviaSearch.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
     # FIXME если partner из @search не берется больше - переделать на before_filter save_partner_cookies
     track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?
@@ -98,7 +98,7 @@ class BookingController < ApplicationController
     @order_form.recommendation.find_commission!
     @order_form.init_people
     @order_form.admin_user = admin_user
-    @search = PricerForm.from_code(@order_form.query_key)
+    @search = AviaSearch.from_code(@order_form.query_key)
 
     if params[:iphone]
       render :partial => 'iphone'

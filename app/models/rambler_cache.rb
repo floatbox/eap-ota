@@ -11,14 +11,14 @@ class RamblerCache
   include Mongoid::Document
   include Mongoid::Timestamps
   field :data, :type => Array
-  field :pricer_form_hash, :type => Hash
+  field :avia_search_hash, :type => Hash
 
   def self.create_from_form_and_recs(form, recommendations)
     if form.adults == 1 && form.children == 0 && form.infants == 0
       data = recommendations.each_with_object([]) do |rec, res|
         res.concat(rec.variants.map { |v| variant_hash(v, rec, form)})
       end
-      res = self.new(:data => data, :pricer_form_hash => form.hash_for_rambler)
+      res = self.new(:data => data, :avia_search_hash => form.hash_for_rambler)
       res.save
       res
     end

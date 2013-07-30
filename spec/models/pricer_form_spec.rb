@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe PricerForm do
+describe AviaSearch do
 
   let(:yy) {1.year.from_now.strftime('%y')}
 
@@ -50,13 +50,13 @@ describe PricerForm do
       described_class.simple( attrs )
     end
 
-    context "when filled with SearchSegment classes" do
+    context "when filled with AviaSearchSegment classes" do
       let :attrs do
         {
           :people_count => people_attrs,
           :segments => [
-            SearchSegment.new(from: 'MOW', to: 'PAR', date: "2104#{yy}"),
-            SearchSegment.new(from: 'PAR', to: 'MOW', date: "2804#{yy}")
+            ::AviaSearchSegment.new(from: 'MOW', to: 'PAR', date: "2104#{yy}"),
+            ::AviaSearchSegment.new(from: 'PAR', to: 'MOW', date: "2804#{yy}")
           ]
         }
       end
@@ -108,7 +108,7 @@ describe PricerForm do
               :childrens => 1,
               :cabin => 'C'}
 
-      expect{ PricerForm.simple(args) }.to raise_error(ArgumentError, 'Unknown parameter(s) - "childrens"')
+      expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError, 'Unknown parameter(s) - "childrens"')
      end
     it "should raise ArgumentError if from and to are not iatas" do
       args = {
@@ -116,13 +116,13 @@ describe PricerForm do
               :to => 'LON',
               :date1 => "0910#{yy}",
               :cabin => 'C'}
-       expect{ PricerForm.simple(args) }.to raise_error(IataStash::NotFound,"Couldn't find Airport with IATA 'Зимбабве'")
+       expect{ AviaSearch.simple(args) }.to raise_error(IataStash::NotFound,"Couldn't find Airport with IATA 'Зимбабве'")
     end
     it "should raise ArgumentError if from, to or data1 are not there" do
       args = {
               :date1 => "0910#{yy}",
               :cabin => 'C'}
-       expect{ PricerForm.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s)  - "from, to"')
+       expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s)  - "from, to"')
     end
   end
 end

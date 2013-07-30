@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'date conversion' do
 
   def convert(date_str)
-    PricerForm.convert_api_date(date_str)
+    AviaSearch.convert_api_date(date_str)
   end
 
   context "should convert parameter dates in our internal format" do
