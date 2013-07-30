@@ -164,16 +164,39 @@ loadSummary: function(values, process) {
                 }
             }
             if (values.query_key) {
-                that.restoreValues(data);
-                if (process !== false && results.data) {
-                    results.load();
+                if (data.valid) {
+                    that.restoreValues(data);
+                    if (process !== false && results.data) {
+                        results.load();
+                    }
+                } else {
+                    setTimeout(function() {
+                        results.message.el.hide();
+                        results.content.el.hide();
+                        results.filters.hide();
+                        results.header.edit.hide();                    
+                        results.header.buttonEnabled.hide();
+                        results.header.button.show();
+                        results.header.el.removeClass('rh-fixed');
+                        search.el.show()
+                        search.map.resize();
+                        search.map.load();
+                        search.setValues(search.defaultValues);
+                        search.mode.select('rt');
+                        search.active = true;
+                        search.validate();
+                        page.loadLocation();
+                        $w.scrollTop(0);                        
+                    }, 100);
                 }
             }
-            that.locations.toggleLeave(data.map_segments[0].leave);
-            if (that.map.api) {
-                that.map.showSegments(data.map_segments);
-            } else {
-                that.map.deferred = data.map_segments;
+            if (data.map_segments) {
+                that.locations.toggleLeave(data.map_segments[0].leave);
+                if (that.map.api) {
+                    that.map.showSegments(data.map_segments);
+                } else {
+                    that.map.deferred = data.map_segments;
+                }
             }
         },
         error: function() {
