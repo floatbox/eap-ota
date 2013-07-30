@@ -59,6 +59,6 @@ ru:
       confirmation_instructions:
         subject: 'Регистрация в личном кабинете'
       reset_password_instructions:
-        subject: 'Изменить пароль в личном кабинете'
+        subject: 'Смена пароля в личном кабинете'
       unlock_instructions:
         subject: 'Unlock Instructions'
