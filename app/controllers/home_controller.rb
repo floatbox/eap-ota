@@ -18,6 +18,16 @@ class HomeController < ApplicationController
     render text: 'ok'
   end
 
+  def revision
+    revision =
+      if File.exists? 'REVISION'
+        File.read 'REVISION'
+      else
+        `git log -1 --pretty=format:%H`
+      end
+    render text: revision
+  end
+
   protected
 
 end

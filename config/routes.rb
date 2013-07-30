@@ -91,6 +91,7 @@ Eviterra::Application.routes.draw do
 
   match "whereami" => 'home#whereami', :as => :whereami
   match 'status' => 'home#status'
+  match 'revision' => 'home#revision'
   match "subscribe" => 'subscription#subscribe', :as => 'subscribe'
   match "unsubscribe" => 'subscription#unsubscribe', :as => 'unsubscribe'
   match "unsubscribe/:destination_id" => 'subscription#unsubscribe_by_destination', :as => 'unsubscribe_by_destination'
