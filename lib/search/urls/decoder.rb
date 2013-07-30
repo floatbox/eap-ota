@@ -11,7 +11,7 @@ module Search
     class Decoder
       attr_reader :decoded
 
-      include Search::Urls::Defaults
+      include Search::Defaults
 
       def initialize(url)
         @decoded = nil
