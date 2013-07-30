@@ -17,7 +17,6 @@ class PricerForm
 
   # валидация
   def valid?
-    #fix_segments!
     check_segments
     errors.blank?
   end
@@ -35,18 +34,6 @@ class PricerForm
   def check_people_total
     errors << 'Количество пассажиров не должно быть больше восьми' if people_total > 8
   end
-
-  # заполняет невведенные from во втором и далее сегментах
-  #def fix_segments!
-    #if @segments
-      #@segments.each_cons(2) do |a, b|
-        #if b.from.empty?
-          #b.from = a.to
-        #end
-      #end
-    #end
-  #end
-  #/валидация
 
   # конструкторы
   def self.from_code(code)
@@ -130,11 +117,6 @@ class PricerForm
 
   def date2
     segments[1].date if segments[1]
-  end
-
-  def dates
-    [date1, date2] if date2
-    [date1]
   end
 
   def rt
