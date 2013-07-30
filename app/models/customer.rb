@@ -37,11 +37,6 @@ class Customer < ActiveRecord::Base
   def confirmation_required?
     !@skip_confirmation_notification
   end
-  # этот метод уже рализован в devise но еще не выложен в gem
-  # https://github.com/plataformatec/devise/commit/72cfaad6185332857cb5860a1d812f573efadaf7
-  def skip_confirmation_notification!
-    @skip_confirmation_notification = true
-  end
 
   def pending_confirmation?
     confirmation_token.present?

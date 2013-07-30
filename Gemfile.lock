@@ -125,7 +125,7 @@ GEM
     delayed_job_mongoid (2.0.0)
       delayed_job (~> 3.0)
       mongoid (~> 3.0)
-    devise (2.2.3)
+    devise (2.2.4)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (~> 3.1)
@@ -361,7 +361,7 @@ GEM
       rack
       raindrops (~> 0.7)
     vcr (1.11.3)
-    warden (1.2.1)
+    warden (1.2.3)
       rack (>= 1.0)
     webmock (1.7.10)
       addressable (~> 2.2, > 2.2.5)
@@ -399,7 +399,7 @@ DEPENDENCIES
   daemons
   database_cleaner
   delayed_job_mongoid
-  devise (~> 2.2.3)
+  devise (~> 2.2.4)
   evergreen
   every
   factory_girl_rails
