@@ -32,14 +32,19 @@ class Customer < ActiveRecord::Base
     !confirmation_sent_at
   end
 
-  # TODO этот метод надо будет убрать при запуске ЛК
-  # он отключает отсылку приглашения при создании кастомера
-  def confirmation_required?
-    !@skip_confirmation_notification
-  end
-
   def pending_confirmation?
     confirmation_token.present?
+  end
+
+  # Send confirmation instructions by email
+  def send_registration_instructions
+    self.confirmation_token = nil if reconfirmation_required?
+    @reconfirmation_required = false
+
+    generate_confirmation_token! if self.confirmation_token.blank?
+
+    opts = pending_reconfirmation? ? { :to => unconfirmed_email } : { }
+    send_devise_notification(:registration_instructions, opts)
   end
 
   def password_match?

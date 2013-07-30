@@ -8,6 +8,8 @@ class Profile::RegistrationsController < Devise::RegistrationsController
     if exist_resource.nil? ## такого кастомера нет в базе
 
       build_resource
+      resource.skip_confirmation_notification!
+      resource.send_registration_instructions
       if resource.save
         if resource.active_for_authentication?
           set_flash_message :notice, :signed_up if is_navigational_format?
@@ -24,7 +26,7 @@ class Profile::RegistrationsController < Devise::RegistrationsController
       end
 
     elsif exist_resource.not_registred?   ## кастомер есть но не создавал ЛК
-      exist_resource.send_confirmation_instructions
+      exist_resource.send_registration_instructions
       success
     elsif exist_resource.pending_confirmation?    ## кастомер зарегистрировался но не конфермил ЛК по ссылке
       not_confirmed
