@@ -1,0 +1,2 @@
+<h2 id="<%= @page.carrier %>"><%= "(#{@page.carrier})" %> <%= Carrier[@page.carrier].name  rescue '' %></h2>
+<%= render 'page', page: @page %>

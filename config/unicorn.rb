@@ -7,7 +7,6 @@ stdout_path project_home + "/log/unicorn.stdout.log"
 
 listen  (ENV['UNICORN_PORT'] || 8001).to_i, backlog: (ENV['UNICORN_BACKLOG'] || 100).to_i
 
-
 # What the timeout for killing busy workers is, in seconds
 timeout (ENV['UNICORN_TIMEOUT'] || 60).to_i
 
@@ -20,12 +19,12 @@ worker_processes (ENV['UNICORN_WORKERS'] || 1).to_i
 # Where to drop a pidfile
 pid project_home + '/tmp/pids/unicorn.pid'
 
+# блок вызывается в мастере перед форком КАЖДОГО воркера
 before_fork do |server,worker|
+  server.logger.info "forking in #{Dir.pwd}"
   Completer.preload!
-  Commission.reload!
-  if defined?(ActiveRecord::Base)
-    ActiveRecord::Base.connection.disconnect!
-  end
+  Commission.preload!
+  ActiveRecord::Base.connection.disconnect!
 
   # graceful shutdown. если все нормально загрузилось, убивает старый юникорн
   old_pid = project_home + '/tmp/pids/unicorn.pid.oldbin'

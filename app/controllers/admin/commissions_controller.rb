@@ -23,6 +23,12 @@ class Admin::CommissionsController < Admin::BaseController
     @rules_with_reasons = book.all_with_reasons_for(@recommendation)
   end
 
+  def page
+    date = params[:date] && Date.parse(params[:date])
+    carrier = params[:carrier]
+    @page = book.find_page(carrier: carrier, date: date)
+  end
+
   private
 
   # TODO задел на работу с несколькими коллекциями
