@@ -12,7 +12,6 @@ class AviaSearch
   attribute :cabin, String, :default => CABIN
   attribute :query_key, String
   attribute :partner, String
-  attribute :use_count, Integer, :default => 1
   attribute :segments, Array[AviaSearchSegment]
   delegate :to, :from, :from_iata, :to_iata, :date, :to => 'segments.first'
 
