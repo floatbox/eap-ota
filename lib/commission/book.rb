@@ -47,11 +47,12 @@ class Commission::Book
     page.find_rule(recommendation) or return Commission::Rule::Null
   end
 
-  # выбирает активную страницу для
-  # FIXME выбирает активну
+  # выбирает страницу с указанным перевозчиком
+  # по умолчанию - действующую в данный момент
   def find_page(opts)
     pages = pages_for(opts) or return
-    page = pages.find {|p| p.start_date.nil? || p.start_date <= Date.today }
+    date = opts[:date] || Date.today
+    page = pages.find {|p| p.start_date.nil? || p.start_date <= date }
   end
 
   # создает и вносит в индекс страницу
