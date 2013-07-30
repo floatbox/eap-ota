@@ -1,51 +1,14 @@
 # encoding: utf-8
 
-class SearchLocation < Virtus::Attribute::Object
-  class LocationWriter < Virtus::Attribute::Writer::Coercible
-    def coerce(value)
-      case value
-      when String then Completer.object_from_string(value)
-      when ActiveRecord::Base then value
-      else return
-      end
-    end
-  end
-
-  def self.writer_class(*)
-    LocationWriter
-  end
-end
-
-class SearchDate < Virtus::Attribute::Object
-  class SearchDateWriter < Virtus::Attribute::Writer::Coercible
-    def coerce(value)
-      case value
-      when String
-        case value
-        when /^\d{6}$/ then Date.strptime(value, '%d%m%y')
-        when /%\d{2}\-\d{2}\-\d{2,4}$/ then Date.strptime(value, '%y-%m-%d')
-        end
-      when Date then value
-      else return
-      end
-    ensure
-    end
-  end
-
-  def self.writer_class(*)
-    SearchDateWriter
-  end
-
-end
-
 # non-persistent model
 # используется для валидации поисковых сегментов
 class SearchSegment
   include Virtus
+
   attribute :errors, Array, :default => []
-  attribute :from, SearchLocation
-  attribute :to, SearchLocation
-  attribute :date, SearchDate
+  attribute :from, Search::Coercers::Location
+  attribute :to, Search::Coercers::Location
+  attribute :date, Search::Coercers::Date
 
   def valid?
     check_date
@@ -110,5 +73,6 @@ class SearchSegment
       end
     end
   end
+
 end
 
