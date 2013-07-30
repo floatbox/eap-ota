@@ -4,25 +4,20 @@
 # используется для валидации поисковых сегментов
 class AviaSearchSegment
   include Virtus
+  include ActiveModel::Validations
 
-  attribute :errors, Array, :default => []
   attribute :from, Search::Coercers::Location
   attribute :to, Search::Coercers::Location
   attribute :date, Search::Coercers::Date
 
-  def valid?
-    check_date
-    errors.blank?
-  end
+  validates_presence_of :from, :to
+  validate :date_validity
 
-  def check_arrival
-    errors << 'В сегменте не может отсутствовать место прибытия' unless s.to
-  end
-
-  def check_date
-    errors << 'В сегменте не может отсутствовать дата вылета' unless date
-    if date.present? && !TimeChecker.ok_to_show(date + 1.day)
-      errors << 'Первый вылет слишком рано'
+  def date_validity
+    if date.present?
+      errors.add(:date, 'invalid') unless TimeChecker.ok_to_show(date + 1.day)
+    else
+      errors.add(:date, "can't be blank")
     end
   end
 

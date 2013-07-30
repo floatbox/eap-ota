@@ -29,20 +29,6 @@ describe AviaSearch do
         should be_valid
       end
     end
-
-    context "when second row 'from' is not filled" do
-      let :attrs do
-        { "people_count" => people_attrs,
-          "segments"=> {
-            "0" => {:from => "Москва", :date => "2104#{yy}", :to =>"Париж"},
-            "1" => {:from => "", :date=>"2804#{yy}", "to"=>"Москва"}}
-        }
-      end
-
-      it do
-        should be_valid
-      end
-    end
   end
 
   context "filled via api" do

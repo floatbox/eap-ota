@@ -194,7 +194,7 @@ class BookingController < ApplicationController
   end
 
   def get_destination
-    return unless @search.segments?
+    return if @search.segments.blank?
     Destination.get_by_search @search
   end
 

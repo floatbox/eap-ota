@@ -4,40 +4,29 @@ class AviaSearch
   include Virtus
   include Search::Defaults
   include Search::Humanize::Presenter
+  include ActiveModel::Validations
 
-  attribute :errors, Array, :default => []
   attribute :adults, Integer, :default => ADULTS
   attribute :children, Integer, :default => CHILDREN
   attribute :infants, Integer, :default => INFANTS
   attribute :cabin, String, :default => CABIN
-  attribute :query_key, String
   attribute :partner, String
   attribute :segments, Array[AviaSearchSegment]
   delegate :to, :from, :from_iata, :to_iata, :date, :to => 'segments.first'
 
-  # валидация
-  def valid?
-    check_segments
-    errors.blank?
-  end
+  validates_presence_of :segments
+  validates_numericality_of :adults, :children, in: 1..6
+  validates_numericality_of :infants, in: 1..4
+  validates_numericality_of :people_total, less_than_or_equal_to: 8
+  validate :segments_validity
 
-  def check_segments
-    errors << 'Не содержит сегментов' unless segments?
-    errors.concat(segments.flat_map { |s| s.valid?; s.errors } )
-  end
-
-  def segments?
-    segments.present?
-  end
-
-  def check_people_total
-    errors << 'Количество пассажиров не должно быть больше восьми' if people_total > 8
+  def segments_validity
+    segments_errors = segments.flat_map { |s| s.valid?; s.errors.full_messages }
+    errors.add(:segments, segments_errors.join('; ')) if segments_errors.present?
   end
 
   # конструкторы
   def self.from_code(code)
-    # затычка для старых урлов
-    return load_from_cache(code) if code.size == 6
     Search::Urls::Decoder.new(code).decoded
   end
 
@@ -86,6 +75,7 @@ class AviaSearch
     encoder = Search::Urls::Encoder.new(self)
     encoder.url
   end
+  alias_method :query_key, :encode_url
 
   # перенести в хелпер
   def self.convert_api_date(date_str)
