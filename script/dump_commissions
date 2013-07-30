@@ -63,7 +63,6 @@ if $opts[:discounts]
     #puts "changing #{rule.discount} to #{discount}"
     rule.discount = discount
   end
-  binding.pry
 end
 
 if $opts[:yaml]
