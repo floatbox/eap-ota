@@ -3,6 +3,8 @@ require 'spec_helper'
 
 describe Sirena::Response::Order, :sirena do
 
+  next "skipping sirena tests"
+
   pending "#recommendation"
 
   describe 'with one adult, unpaid' do
