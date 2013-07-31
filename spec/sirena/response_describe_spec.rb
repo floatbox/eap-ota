@@ -1,11 +1,11 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Response::Describe do
+describe Sirena::Response::Describe, sirena: true do
 
   subject { described_class.new( File.read(response) ) }
 
-  describe 'with one adult, unpaid' do
+  describe 'with one adult, unpaid', tag: 'sirena' do
 
     let(:response) { 'spec/sirena/xml/describe_fail.xml' }
 

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Request::PricingVariant do
+describe Sirena::Request::PricingVariant, sirena: true do
 
   describe '#initialize' do
 

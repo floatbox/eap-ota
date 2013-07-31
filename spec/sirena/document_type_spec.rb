@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe 'проверяем, правильно ли угадывается тип документа' do
+describe 'проверяем, правильно ли угадывается тип документа', sirena: true do
   def convert(passport, nationality_code, birthday, document_noexpiration)
     p = Person.new(
       :passport => passport,

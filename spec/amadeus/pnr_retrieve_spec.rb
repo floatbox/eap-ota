@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::PNRRetrieve do
+describe Amadeus::Response::PNRRetrieve, amadeus: true  do
 
   describe 'with complex exchange' do
 

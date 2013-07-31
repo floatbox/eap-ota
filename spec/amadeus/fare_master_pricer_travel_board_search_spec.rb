@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
+describe Amadeus::Response::FareMasterPricerTravelBoardSearch, amadeus: true  do
   let_once! :response do
     amadeus_response('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_simple_case.xml')
   end

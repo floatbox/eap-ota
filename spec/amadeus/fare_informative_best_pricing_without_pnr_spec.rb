@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::FareInformativeBestPricingWithoutPNR do
+describe Amadeus::Response::FareInformativeBestPricingWithoutPNR, amadeus: true  do
   context 'check the parser' do
     let_once! :response do
       amadeus_response('spec/amadeus/xml/Fare_InformativeBestPricingWithoutPNR_adults_complex.xml')

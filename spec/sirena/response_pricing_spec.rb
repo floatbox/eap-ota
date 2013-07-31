@@ -1,10 +1,10 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Response::Pricing do
+describe Sirena::Response::Pricing, sirena: true do
 
 
-  context 'with one adult, two way' do
+  context 'with one adult, two way'do
 
     let(:xml) { 'spec/sirena/xml/pricing_two_way.xml' }
     let_once!(:response) { described_class.new( File.read(xml) ) }

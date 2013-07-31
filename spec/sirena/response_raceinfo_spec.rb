@@ -1,8 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Response::Raceinfo do
-
+describe Sirena::Response::Raceinfo, sirena: true do
 
   describe "with no errors" do
 

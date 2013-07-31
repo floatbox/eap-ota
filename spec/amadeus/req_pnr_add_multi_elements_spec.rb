@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-describe Amadeus::Request::PNRAddMultiElements do
+describe Amadeus::Request::PNRAddMultiElements, amadeus: true  do
 
   context "FM record" do
     subject { described_class.new(:agent_commission => agent_commission) }
