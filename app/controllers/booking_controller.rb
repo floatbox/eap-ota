@@ -63,7 +63,7 @@ class BookingController < ApplicationController
     redirect_to uri
 
   # FIXME можно указать :formats => [:xml], но я задал дефолтный формат в роутинге
-  rescue IataStash::NotFound => iata_error
+  rescue CodeStash::NotFound => iata_error
     render 'api/rambler_failure', :status => :not_found, :locals => { :message => iata_error.message }
   rescue ArgumentError => argument_error
     render 'api/rambler_failure', :status => :bad_request, :locals => { :message => argument_error.class }
@@ -81,7 +81,7 @@ class BookingController < ApplicationController
     else
       redirect_to "#{Conf.api.url_base}/"
     end
-  rescue # IataStash::NotFound, ArgumentError, etc
+  rescue # CodeStash::NotFound, ArgumentError, etc
     redirect_to "#{Conf.api.url_base}/"
   ensure
     StatCounters.inc %W[enter.api_redirect.total]

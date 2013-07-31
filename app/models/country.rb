@@ -2,7 +2,7 @@
 class Country < ActiveRecord::Base
   include HasSynonyms
   include Cases
-  extend IataStash
+  extend CodeStash
 
   has_paper_trail
 
@@ -25,7 +25,7 @@ class Country < ActiveRecord::Base
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
 
-  # для работы iata_stash
+  # для работы CodeStash
   def self.find_by_iata iata
     iata && find_by_alpha2(iata)
   end

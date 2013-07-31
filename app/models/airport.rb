@@ -2,7 +2,7 @@
 class Airport < ActiveRecord::Base
   include HasSynonyms
   include Cases
-  extend IataStash
+  extend CodeStash
 
   has_paper_trail
 

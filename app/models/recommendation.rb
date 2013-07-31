@@ -158,7 +158,7 @@ class Recommendation
     #проверяем, что все аэропорты и авиакомпании есть в базе
     flights.map {|f| f.arrival; f.departure; f.operating_carrier; f.marketing_carrier; f.equipment_type}
     false
-  rescue IataStash::NotFound => e
+  rescue CodeStash::NotFound => e
     return true
   end
 

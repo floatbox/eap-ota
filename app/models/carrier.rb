@@ -1,6 +1,6 @@
 # encoding: utf-8
 class Carrier < ActiveRecord::Base
-  extend IataStash
+  extend CodeStash
 
   has_paper_trail
 

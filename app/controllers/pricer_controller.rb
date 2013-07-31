@@ -140,7 +140,7 @@ class PricerController < ApplicationController
       @recommendations = []
       render 'api/variants'
     end
-  rescue IataStash::NotFound => iata_error
+  rescue CodeStash::NotFound => iata_error
     render 'api/error', :status => 404, :locals => {:message => iata_error.message}
   rescue ArgumentError => argument_error
     render 'api/error', :status => 400, :locals => {:message => argument_error.message}
