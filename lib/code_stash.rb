@@ -20,23 +20,30 @@ module CodeStash
   # ActiveRecord's query cache нааамного медленнее
   delegate :[], :to => :code_stash
 
-  # @returns инстанс объекта по коду, если он есть
-  # @returns nil если объект в базе отсутствует
-  # @returns nil если code.nil?
+  # @return инстанс объекта по коду, если он есть
+  # @return nil если объект в базе отсутствует
+  # @return nil если code.nil?
   def fetch_by_code(code)
-    raise "please,define method #{self}.fetch_by_code"
+    raise "please, define method #{self}.fetch_by_code"
     # sample implementation:
     # return unless code
     # find_by_iata(code) || find_by_iata_ru(code)
   end
 
+  # если класс позволяет создать новый объект имея только его код,
+  # надо оверрайднуть этот метод, и вернуть этот объект.
+  # @return nil, если объект создать нельзя
+  def make_by_code(code)
+    nil
+  end
+
   def code_stash
     CodeStash.stash[name.to_s] ||= Hash.new do |hash, code|
       unless code.nil?
-        data = fetch_by_code(code)
-        if data
-          hash[code] = data
-          data
+        object = fetch_by_code(code) || make_by_code(code)
+        if object
+          hash[code] = object
+          object
         else
           CodeStash.logger.info "#{name} #{code} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           raise NotFound, "Couldn't find #{name} with code '#{code}'"
