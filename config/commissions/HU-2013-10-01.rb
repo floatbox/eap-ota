@@ -1,4 +1,4 @@
-carrier "HU", start_date: "2013-08-01"
+carrier "HU", start_date: "2013-10-01"
 
 example "pekxmn xmnweh"
 agent "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
