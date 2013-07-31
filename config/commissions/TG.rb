@@ -4,7 +4,7 @@ example "svobkk"
 agent "С 01.02.2011г. 5% от всех опубл.и конфиденциальных тарифов на международные рейсы TG"
 subagent "С 01.02.2011г. 3% от опубл. и конфиде.тарифов на международные рейсы TG"
 international
-discount "2.5%"
+discount "3%"
 ticketing_method "aviacenter"
 commission "5%/3%"
 

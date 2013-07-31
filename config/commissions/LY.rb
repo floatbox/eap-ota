@@ -4,7 +4,7 @@ example "svocdg"
 agent "5% от опубл. тарифов Эконом класса на рейсы LY"
 subagent "3,5% от опубл. тарифов Эконом класса на рейсы LY"
 classes :economy
-discount "2.5%"
+discount "3.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 
@@ -13,7 +13,7 @@ agent "5% от опубл. тарифов Бизнес класса J на ре�
 subagent "3,5% от опубл. тарифов Бизнес класса J на рейсы LY"
 subclasses "J"
 important!
-discount "2.5%"
+discount "3.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 
@@ -21,7 +21,7 @@ example "svocdg/business cdgsvo/business"
 agent "9,7% от опубл. тарифов Бизнес класса на рейсы LY"
 subagent "6,7% от опубл. тарифов Бизнес класса на рейсы LY"
 classes :business
-discount "5.5%"
+discount "6.7%"
 ticketing_method "aviacenter"
 commission "9.7%/6.7%"
 

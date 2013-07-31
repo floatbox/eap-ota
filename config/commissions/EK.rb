@@ -6,7 +6,7 @@ agent "5% от тарифов Первого и Бизнес классов на
 subagent "3,5% от тарифов Первого и Бизнес классов на рейсы EK;"
 classes :first, :business
 routes "RU..."
-discount "2.5%"
+discount "3.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 
@@ -15,7 +15,7 @@ example "svocdg/first cdgsvo"
 agent "5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
 subagent "3,5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
 routes "RU..."
-discount "2.5%"
+discount "3.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 
@@ -41,7 +41,7 @@ subagent "3.5%"
 interline :less_than_half
 classes :first, :business
 routes "RU..."
-discount "2.5%"
+discount "3.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 

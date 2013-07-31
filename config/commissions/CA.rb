@@ -6,7 +6,7 @@ agent "9% Все международные перелеты рейсами СА
 subagent "7.5% Все международные перелеты рейсами СА из России"
 routes "RU..."
 important!
-discount "5.5%"
+discount "7.5%"
 ticketing_method "aviacenter"
 commission "9%/7.5%"
 

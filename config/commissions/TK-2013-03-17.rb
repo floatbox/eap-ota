@@ -4,7 +4,7 @@ example "istsvo svoist"
 agent "7% от полного опубл. тарифа IATA на рейсы TK;"
 agent "+ 7% от тарифа Эконом класса на рейсы TK;"
 subagent "5% от тарифа экономического класса на рейсы TK;"
-discount "4%"
+discount "5%"
 ticketing_method "aviacenter"
 commission "7%/5%"
 
@@ -14,7 +14,7 @@ subagent "нет? ставлю 10%"
 classes :business
 routes "RU..."
 important!
-discount "8%"
+discount "10%"
 ticketing_method "aviacenter"
 commission "12%/10%"
 
@@ -23,7 +23,7 @@ agent "7% от тарифа Бизнес класса на рейсы TK с вы
 subagent "нет? ставлю 5%"
 classes :business
 important!
-discount "4%"
+discount "5%"
 ticketing_method "aviacenter"
 check %{ not includes(country_iatas.first, 'RU') and not includes_only(country_iatas, 'TR') }
 commission "7%/5%"
@@ -35,7 +35,7 @@ subagent "3,5% от тарифа эконом и бизнес класса пр�
 classes :business, :economy
 important!
 domestic
-discount "2.5%"
+discount "3.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 
@@ -43,7 +43,7 @@ example "svoist istsvo/ab"
 agent "Как обычная 7% (Билеты «Интерлайн» под кодом TK могут быть выписаны только в случае существования опубл. тарифов и только при условии, если TK выполняет первый рейс)"
 subagent "Как обычная 5%"
 interline :first
-discount "4%"
+discount "5%"
 ticketing_method "aviacenter"
 commission "7%/5%"
 

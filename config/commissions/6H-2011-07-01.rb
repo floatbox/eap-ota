@@ -3,7 +3,7 @@ carrier "6H", start_date: "2011-07-01"
 example "svocdg"
 agent "С 01.07.11г. 5% от всех опубл. тарифов на рейсы 6H (В договоре Interline отдельно не прописан.)"
 subagent "С 01.07.11г. 3% от опубл. тарифов на собств.рейсы 6H"
-discount "2.5%"
+discount "3%"
 ticketing_method "aviacenter"
 commission "5%/3%"
 

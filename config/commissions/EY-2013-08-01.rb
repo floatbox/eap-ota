@@ -6,7 +6,7 @@ agent "C 01.08.13г. по 30.09.13г. 10% от опубл. тарифов Пер
 subagent "8%"
 interline :no, :yes
 classes :first, :business
-discount "6.5%"
+discount "3.5%"
 commission "10%/8%"
 
 example "svocdg"

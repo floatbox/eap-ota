@@ -5,7 +5,7 @@ agent "правила для выписки авиакомпании SU в DTT"
 agent "При вылете из США - все классы - агентская 9%, субагентская 8%, скидка 7%"
 subagent "8%"
 routes "US..."
-discount "8%"
+discount "6%"
 ticketing_method "downtown"
 commission "9%/8%"
 
@@ -13,7 +13,7 @@ example "cdgsvo svocdg"
 agent "правила для выписки авиакомпании SU в DTT"
 agent "При вылете НЕ из России - все классы - агентская 5%, субагентская   4.5%, скидка 4%"
 subagent "4.5%"
-discount "4.5%"
+discount "3.5%"
 ticketing_method "downtown"
 check %{ not includes(country_iatas.first, 'RU') and not includes(city_iatas, 'TLV') }
 commission "5%/4.5%"
@@ -34,7 +34,7 @@ agent "4%  от тарифа на собств. рейсы SU с началом 
 subagent "3%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 interline :no, :yes
 routes "RU..."
-discount "2.5%"
+discount "4%"
 ticketing_method "aviacenter"
 commission "4%/3%"
 

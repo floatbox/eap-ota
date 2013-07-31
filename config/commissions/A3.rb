@@ -4,7 +4,7 @@ example "scocdg cdgsvo"
 agent " 7% для тарифов Экономического класса"
 subagent "5% для тарифов Эконом класса"
 international
-discount "4%"
+discount "5%"
 ticketing_method "aviacenter"
 commission "7%/5%"
 
@@ -14,7 +14,7 @@ subagent "7% для тарифов Бизнес класса"
 classes :business
 important!
 international
-discount "5.5%"
+discount "7%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 
