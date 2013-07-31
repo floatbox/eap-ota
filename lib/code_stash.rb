@@ -16,22 +16,30 @@ module CodeStash
     stash.clear
   end
 
-  # добавляет метод SomeClass[iata], который кэширует записи в текущем thread/request
+  # добавляет метод SomeClass[code], который кэширует записи в текущем thread/request
   # ActiveRecord's query cache нааамного медленнее
   delegate :[], :to => :code_stash
 
+  # @returns инстанс объекта по коду, если он есть
+  # @returns nil если объект в базе отсутствует
+  # @returns nil если code.nil?
+  def fetch_by_code(code)
+    raise "please,define method #{self}.fetch_by_code"
+    # sample implementation:
+    # return unless code
+    # find_by_iata(code) || find_by_iata_ru(code)
+  end
+
   def code_stash
-    CodeStash.stash[name.to_s] ||= Hash.new do |hash, iata|
-      unless iata.nil?
-        data = find_by_iata(iata) || find_by_iata_ru(iata)
+    CodeStash.stash[name.to_s] ||= Hash.new do |hash, code|
+      unless code.nil?
+        data = fetch_by_code(code)
         if data
-          hash[iata] = data
-          # hash[data.iata] = data if data.iata.present?
-          # hash[data.iata_ru] = data if data.iata_ru.present?
+          hash[code] = data
           data
         else
-          CodeStash.logger.info "#{name} #{iata} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
-          raise NotFound, "Couldn't find #{name} with IATA '#{iata}'"
+          CodeStash.logger.info "#{name} #{code} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
+          raise NotFound, "Couldn't find #{name} with code '#{code}'"
         end
       end
     end

@@ -9,6 +9,7 @@ describe CodeStash do
   end
 
   it "should not raise when searching for russian code" do
+    pending "sirena is disabled for now"
     expect { Airport['ДМД'] }.to_not raise_error(CodeStash::NotFound)
   end
 
@@ -17,7 +18,7 @@ describe CodeStash do
   end
 
   it "exception trying to find unknown iata" do
-    (Airport['FFFF'] rescue $!.message).should == "Couldn't find Airport with IATA 'FFFF'"
+    (Airport['FFFF'] rescue $!.message).should == "Couldn't find Airport with code 'FFFF'"
   end
 end
 

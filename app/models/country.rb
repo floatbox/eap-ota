@@ -4,6 +4,10 @@ class Country < ActiveRecord::Base
   include Cases
   extend CodeStash
 
+  def self.fetch_by_code code
+    code && find_by_alpha2(code)
+  end
+
   has_paper_trail
 
   # FIXME убрать order, лишнее замедление
@@ -24,12 +28,6 @@ class Country < ActiveRecord::Base
 
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
-
-  # для работы CodeStash
-  def self.find_by_iata iata
-    iata && find_by_alpha2(iata)
-  end
-  def self.find_by_iata_ru iata_ru; return; end
 
   def iata
     alpha2

@@ -102,7 +102,7 @@ describe AviaSearch do
               :to => 'LON',
               :date1 => "0910#{yy}",
               :cabin => 'C'}
-       expect{ AviaSearch.simple(args) }.to raise_error(IataStash::NotFound,"Couldn't find Airport with IATA 'Зимбабве'")
+       expect{ AviaSearch.simple(args) }.to raise_error(CodeStash::NotFound,"Couldn't find Airport with code 'Зимбабве'")
     end
     it "should raise ArgumentError if from, to or data1 are not there" do
       args = {

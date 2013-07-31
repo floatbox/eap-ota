@@ -4,6 +4,11 @@ class Airport < ActiveRecord::Base
   include Cases
   extend CodeStash
 
+  def self.fetch_by_code(code)
+    return unless code
+    find_by_iata(code)  # || find_by_iata_ru(code)
+  end
+
   has_paper_trail
 
   belongs_to :city
@@ -32,7 +37,6 @@ class Airport < ActiveRecord::Base
     name_ru.presence || name_en.presence || iata
 
   end
-
 
   def equal_to_city
     city && city.name_ru == name_ru && city.iata == iata

@@ -2,6 +2,11 @@
 class Carrier < ActiveRecord::Base
   extend CodeStash
 
+  def self.fetch_by_code(code)
+    return unless code
+    find_by_iata(code)  # || find_by_iata_ru(code)
+  end
+
   has_paper_trail
 
   belongs_to :alliance, :foreign_key => 'airline_alliance_id', :class_name => 'AirlineAlliance'
