@@ -6,7 +6,7 @@ agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C
 subagent "3%"
 subclasses "JCDZI"
 routes "MOW-AR,BO,BR,VE,GY,CO,PY,PE,SR,UY,FK,GF,CL,EC/OW,RT"
-discount "1.5%"
+discount "3%"
 ticketing_method "downtown"
 tour_code "RULAPREM"
 commission "5%/3%"
@@ -16,7 +16,7 @@ agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C
 subagent "3%"
 subclasses "JCDZI"
 routes "MOW-GY,BB,JM,TT/OW,RT"
-discount "1.5%"
+discount "3%"
 ticketing_method "downtown"
 tour_code "RUMCBREM"
 commission "5%/3%"
@@ -26,7 +26,7 @@ agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C
 subagent "3%"
 subclasses "JCDZI"
 routes "MOW-MX/OW,RT"
-discount "1.5%"
+discount "3%"
 ticketing_method "downtown"
 tour_code "RUMXPREM"
 commission "5%/3%"
@@ -47,7 +47,7 @@ agent "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C
 subagent "3%"
 subclasses "JCDZI"
 routes "MOW-US,CA/OW,RT"
-discount "1.5%"
+discount "3%"
 ticketing_method "downtown"
 tour_code "RUUSPREM"
 commission "5%/3%"
@@ -61,7 +61,7 @@ subagent "6%"
 subclasses "CDZIYBMSHQWKLUTXV"
 routes "RU-US/ALL"
 important!
-discount "3%"
+discount "6%"
 ticketing_method "downtown"
 commission "8%/6%"
 
@@ -72,7 +72,7 @@ agent "5%"
 subagent "3%"
 subclasses "SIQKLUT"
 routes "SN,GH-US,SN,GH/OW,RT"
-discount "1.5%"
+discount "3%"
 ticketing_method "downtown"
 commission "5%/3%"
 
@@ -94,7 +94,7 @@ agent "5%"
 subagent "3%"
 subclasses "DIKVTNSL"
 important!
-discount "1.5%"
+discount "3%"
 ticketing_method "downtown"
 check %{ includes_only(country_iatas.first, 'SN GH') and includes_only(country_iatas, 'US SN GH') and includes_only(operating_carrier_iatas, 'AZ') }
 commission "5%/3%"
@@ -109,7 +109,7 @@ subagent "0,5% от опубл. тарифа DL на трансатлантич�
 subagent "0,5% от опубл. тарифа других авиакомпаний в комбинации с опубл. тарифом DL на трансатлант.перелет при перевозке, нач.в Европе, Азии или Африке;"
 subagent "0,5% от опубл. тарифа DL при внутренних перелетах по США"
 interline :no, :yes
-discount "0.25%"
+discount "0%"
 ticketing_method "aviacenter"
 check %{ includes(%W(europe asia africa), Country[country_iatas.first].continent ) }
 commission "1%/0.5%"
@@ -121,7 +121,7 @@ subagent "0,5% от опубл. тарифа DL при внутренних пе
 interline :no, :yes
 important!
 domestic
-discount "0.25%"
+discount "0%"
 ticketing_method "aviacenter"
 commission "1%/0.5%"
 
@@ -129,7 +129,7 @@ example "cdgsvo/ab"
 agent "1% от опубл. тарифа на рейсы Interline без участка DL."
 subagent "0,5% от опубл. тарифа на рейсы Interline без участка DL."
 interline :absent
-discount "0.25%"
+discount "0%"
 ticketing_method "aviacenter"
 commission "1%/0.5%"
 

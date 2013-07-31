@@ -5,7 +5,7 @@ example "ledwaw/business wawbcn/business"
 agent "5%(3%)(3%) с вылетом из России от опубликованных прямых и трансферных тарифов Эконом и Бизнес класса на собств. рейсы LO (кроме прямых перелетов из Санкт-Петербурга в Варшаву и из Варшавы в Санкт-Петербург), и кроме тарифов: промо и групповых: L, O, U, G; (Например: 5% от трансферного тарифа Санкт-Петербург-Варшава-Барселона);"
 subagent "3%"
 classes :economy, :business
-discount "1.5%"
+discount "2.5%"
 ticketing_method "aviacenter"
 check %{ includes(country_iatas.first, "RU") and not includes(booking_classes, "L O U G") and 
   (
@@ -32,7 +32,7 @@ agent "7%(5%)(5%) с вылетом из России только на даль
 subagent "5%"
 interline :no, :yes
 subclasses "ZCDAP"
-discount "2.5%"
+discount "4%"
 ticketing_method "aviacenter"
 check %{ includes(country_iatas.first, 'RU') and includes_only(operating_carrier_iatas, 'LO SU') }
 commission "7%/5%"

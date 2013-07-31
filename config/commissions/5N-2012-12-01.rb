@@ -3,7 +3,7 @@ carrier "5N", start_date: "2012-12-01"
 example "svocdg"
 agent " 4% от всех опубликованных тарифов на рейсы 5N"
 subagent "3% от всех опубликованных тарифов на рейсы 5N"
-discount "1.5%"
+discount "2.5%"
 ticketing_method "aviacenter"
 commission "4%/3%"
 

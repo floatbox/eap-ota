@@ -4,7 +4,7 @@ example "svocai caisvo"
 agent "9% от тарифа на рейсы MS из Москвы"
 subagent "7% от тарифа на рейсы MS из Москвы"
 routes "MOW..."
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 
@@ -13,7 +13,7 @@ agent "5% от тарифа на рейсы MS из Египта"
 subagent "3,5% от тарифа на рейсы MS из Египта"
 routes "EG..."
 international
-discount "1.75%"
+discount "2.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 
@@ -22,7 +22,7 @@ example "KULCAI"
 agent "5% от тарифа для иных международных рейсов MS"
 subagent "3,5% от тарифа для иных международных рейсов MS"
 international
-discount "1.75%"
+discount "2.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 

@@ -5,7 +5,7 @@ example "svocdg cdgsvo/ab"
 agent "4% (2%) (2%) от опубл. тарифов на собств. (включая code-share) рейсы FV и рейсы Interline c участком FV"
 subagent "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
-discount "1%"
+discount "0%"
 ticketing_method "aviacenter"
 commission "4%/2%"
 

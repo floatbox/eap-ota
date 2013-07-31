@@ -4,7 +4,7 @@ example "svocdg/business cdgsvo/business"
 agent "4% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 subagent "3% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 classes :business
-discount "1.5%"
+discount "2.5%"
 ticketing_method "aviacenter"
 commission "4%/3%"
 

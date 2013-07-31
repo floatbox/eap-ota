@@ -7,7 +7,7 @@ subagent "18% от опубл.тарифов по классу С на собс�
 interline :no, :yes
 subclasses "C"
 routes "MOW-CN/OW,RT"
-discount "9%"
+discount "15%"
 ticketing_method "aviacenter"
 commission "20%/18%"
 
@@ -19,7 +19,7 @@ subagent "13% от опубл.тарифов по классу D на собст
 interline :no, :yes
 subclasses "DI"
 routes "MOW-CN/OW,RT"
-discount "6.5%"
+discount "10%"
 ticketing_method "aviacenter"
 commission "15%/13%"
 
@@ -30,7 +30,7 @@ subagent "7% от опубл.тарифов по классам Z, а также
 interline :no, :yes
 subclasses "Z"
 routes "MOW-CN/OW,RT"
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 
@@ -42,7 +42,7 @@ agent "9% от опубл.тарифов по классам Z, а также н
 subagent "7% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 interline :no, :yes
 routes "MOW-CN/OW,RT"
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 
@@ -54,7 +54,7 @@ subagent "13% от опубл.тарифов по классу С,D на соб�
 interline :no, :yes
 subclasses "CD"
 routes "LED-CN/OW,RT"
-discount "6.5%"
+discount "10%"
 ticketing_method "aviacenter"
 commission "15%/13%"
 
@@ -65,7 +65,7 @@ subagent "7% от опубликованных на I, Z, а также на Э�
 interline :no, :yes
 subclasses "IZ"
 routes "LED-CN/OW,RT"
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 
@@ -76,7 +76,7 @@ agent "9% от на Эконом классы на собств.рейсы HU п
 subagent "7% на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или LED-CHINA-LED"
 interline :no, :yes
 routes "LED-CN/OW,RT"
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 
@@ -93,7 +93,7 @@ subagent "7% от опубл.тарифов по классу С,D,I,Z, а та�
 interline :no, :yes
 subclasses "CDIZ"
 routes "KJA,OVB,IKT-CN/OW,RT"
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 
@@ -110,7 +110,7 @@ subagent "7% от опубл.тарифов по классу С,D,I,Z, а та�
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Красноярск-CHINA или Красноярск-CHINA-Красноярск"
 interline :no, :yes
 routes "KJA,OVB,IKT-CN/OW,RT"
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "9%/7%"
 
@@ -123,7 +123,7 @@ subagent "7% от опубл.тарифов по классу С,D,I,Z, а та�
 interline :no, :yes
 subclasses "CDIZ"
 routes "ALA-CN/OW,RT"
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "7%/7%"
 
@@ -136,7 +136,7 @@ agent "7% от опубл.тарифов по классу С,D,I,Z, а такж
 subagent "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 interline :no, :yes
 routes "ALA-CN/OW,RT"
-discount "3.5%"
+discount "5.5%"
 ticketing_method "aviacenter"
 commission "7%/7%"
 

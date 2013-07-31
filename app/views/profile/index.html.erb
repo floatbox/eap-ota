@@ -125,7 +125,7 @@
     <% else %> Мертвый! <% end %>
     <% if order.profile_all_tickets_returned? %> Возврат! <% end %>
     
-    <%= order.profile_sold_tickets_count %>=<%= order.profile_ticketed? %></p>
+    sold_tickets=<%= order.profile_sold_tickets_count %> / ticketed?=<%= order.profile_ticketed? %> / stored?=<%= order.profile_stored? %></p>
   <p class="ors-route-raw">Route: <%= order.profile_route %></p>
   <p class="ors-route-raw">Статусы заказа: <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %></p>
   <% if order.profile_ticketed? %>

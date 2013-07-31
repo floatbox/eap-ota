@@ -5,9 +5,9 @@
     <th style="width: 294px;">Маршрут</th>
     <th style="width: 200px;">Отправление</th>
     <th style="width: 200px;">Прибытие</th>
-    <th>Класс обслуживания и багаж</th>
+    <th>Класс тарифа и багаж</th>
 </tr>
-<% for flight, booking_class, baggage_limitations in order.profile_flights.zip( order.profile_booking_classes, order.profile_baggage_array) %>
+<% for flight, booking_class, baggage_limitations in order.profile_flights.zip( order.profile_booking_classes, order.baggage_array) %>
 <tr>
     <td>
         <h6 class="ordf-route"><%= flight.departure.city.name %> — <%= flight.arrival.city.name %></h6>

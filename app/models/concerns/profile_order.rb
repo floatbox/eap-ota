@@ -45,10 +45,10 @@ module ProfileOrder
 
   def profile_status
     # FIXME некрасиво, переписать надо
-    return 'оплачен' if ticket_status == 'ticketed'
     return 'денежные средства заблокированы на карте' if payment_type == 'card' && payment_status == 'blocked'
     return 'денежные средства списаны с карты' if payment_type == 'card' && payment_status == 'charged'
     return 'оплачен' if ['cash','invoice'].include?(payment_type) && payment_status == 'charged'
+    return 'оплачен' if payment_type == 'card' && ticket_status == 'ticketed'
     return 'ожидает оплаты' if payment_status == 'pending'
     return 'ожидает оплаты'
   end
@@ -77,10 +77,6 @@ module ProfileOrder
 
   def profile_booking_classes
     sold_tickets.first.booking_classes
-  end
-
-  def profile_baggage_array
-    sold_tickets.first.baggage_array
   end
 
   def profile_ticketed?

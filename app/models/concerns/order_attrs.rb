@@ -153,6 +153,12 @@ module OrderAttrs
   # Номер карты с "замазанными" центральными цифрами
   # @return [String]
 
+  # @!attribute commission_agent_comments
+  #   @return [Text]
+
+  # @!attribute commission_subagent_comments
+  #   @return [Text]
+
   # @!attribute source
   # Название GDS, в которой сделан заказ
   # @return [String]          :default => "other"

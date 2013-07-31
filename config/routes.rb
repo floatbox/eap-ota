@@ -91,12 +91,16 @@ Eviterra::Application.routes.draw do
 
   match "whereami" => 'home#whereami', :as => :whereami
   match 'status' => 'home#status'
+  match 'revision' => 'home#revision'
+  match 'revision/pending' => 'home#pending'
+  match 'revision/current' => 'home#current'
   match "subscribe" => 'subscription#subscribe', :as => 'subscribe'
   match "unsubscribe" => 'subscription#unsubscribe', :as => 'unsubscribe'
   match "unsubscribe/:destination_id" => 'subscription#unsubscribe_by_destination', :as => 'unsubscribe_by_destination'
 
   match "admin/commissions/check" => 'admin/commissions#check', :as => 'check_admin_commissions'
   match "admin/commissions/table" => 'admin/commissions#table', :as => 'table_admin_commissions'
+  match "admin/commissions/page" => 'admin/commissions#page', :as => 'admin_commissions_page'
   match "admin/commissions" => 'admin/commissions#index', :as => 'admin_commissions'
   match "admin/new_hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
   match 'admin/notifications/show_sent_notice/:id' => 'admin/notifications#show_sent_notice', :as => :show_sent_notice
