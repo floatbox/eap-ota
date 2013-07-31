@@ -92,7 +92,7 @@ module CodeStash
     def call(env)
       @app.call(env)
     ensure
-      ::CodeStash.clear
+      ::CodeStash.clear if Conf.performance.clear_code_stash
     end
   end
 end

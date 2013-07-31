@@ -181,3 +181,7 @@ riemann:
     request_performance: yes
     stat_counters: yes
     meter: yes
+performance:
+  # очищать ли CodeStash между запросами?
+  # поведение для "no" не тестировано, возможны проблемы с ActiveRecord::IdentityMap
+  clear_code_stash: yes
