@@ -143,10 +143,10 @@ module DataMigration
     Ticket.update_all "original_price_fare_cents = (price_fare * 100),
                        original_price_fare_currency = 'RUB',
                        original_price_tax_cents = (price_tax * 100),
-                       original_price_tax_currency = 'RUB'", "office_id != 'FLL1S212V' or kind = 'refund'"
+                       original_price_tax_currency = 'RUB'"
     Ticket.update_all "original_price_penalty_cents = (price_penalty * 100),
                        original_price_penalty_currency = 'RUB'"
-    Order.update_all('old_downtown_booking = 1', 'commission_ticketing_method = "downtown"')
+    Order.update_all('old_downtown_booking = 1', 'commission_ticketing_method = "downtown" and ticket_status = "ticketed"')
     Order.update_all('fee_scheme = "v3"', 'commission_ticketing_method = "downtown" and payment_type = "card"')
     load_ticket_prices_from_amadeus(Date.today - 1.day)
     #load_ticket_prices_from_csv #Предполагаем, что в tickets.csv лежат цены всех билетов
@@ -163,7 +163,7 @@ module DataMigration
     t = Ticket.find(id)
     t.update_attributes(:original_price_total => total.to_money, :original_price_fare => fare.to_money)
     o = t.order
-    if o.tickets.present? && o.tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed' && t.original_price_fare_currency.present? && t.corrected_price == 0}
+    if o.tickets.present? && o.tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed' && t.original_price_fare_currency.present? && t.original_price_fare_currency != 'RUB' && t.corrected_price == 0}
       o.update_attributes(old_downtown_booking: false) if o.payment_type == "card"
       o.tickets.each do |t|
         t.corrected_price = t.calculated_price_with_payment_commission
