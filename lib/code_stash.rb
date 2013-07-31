@@ -1,4 +1,33 @@
 # encoding: utf-8
+#
+# Добавляет очищаемый in memory кэш для активрекордных и прочих справочников,
+# адресуемых по произвольному коду.
+# ActiveRecord's query cache нааамного медленнее. Плюс, экономит память
+#
+# @usage
+#   class SomeModel
+#     extend CodeStash
+#
+#     # required. Должен возвращать nil, если пока такого объекта нет.
+#     def self.fetch_by_code(code)
+#        find(code: code)
+#     end
+#
+#     # optional. Если можно автоматически добавлять новые объекты, зная только их код.
+#     def self.make_by_code(code)
+#        create(code: code)
+#     end
+#
+#     # optional. Если кодов у объекта несколько, можно вернуть их все,
+#     # и объект займет слоты в хранилище по всем своим кодам, заранее.
+#     def codes
+#       [code, code2, code.upcase]
+#     end
+#   end
+#
+#   => SomeModel[code]
+#
+#   бросит CodeStash::NotFound, если объект не найдет и не может быть создан
 module CodeStash
 
   class NotFound < RuntimeError
@@ -16,13 +45,12 @@ module CodeStash
     stash.clear
   end
 
-  # добавляет метод SomeClass[code], который кэширует записи в текущем thread/request
-  # ActiveRecord's query cache нааамного медленнее
+  # добавляет метод SomeClass[code], который кэширует записи в текущем thread/request.
+  # @raise CodeStash::NotFound если объект не найден.
   delegate :[], :to => :code_stash
 
-  # @return инстанс объекта по коду, если он есть
+  # @return объект по коду, если он есть
   # @return nil если объект в базе отсутствует
-  # @return nil если code.nil?
   def fetch_by_code(code)
     raise "please, define method #{self}.fetch_by_code"
     # sample implementation:
