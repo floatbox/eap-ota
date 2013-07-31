@@ -5,7 +5,7 @@ class Country < ActiveRecord::Base
   extend CodeStash
 
   def self.fetch_by_code code
-    code && find_by_alpha2(code)
+    find_by_alpha2(code)
   end
 
   def codes

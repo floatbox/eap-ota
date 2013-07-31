@@ -5,7 +5,6 @@ class Airport < ActiveRecord::Base
   extend CodeStash
 
   def self.fetch_by_code(code)
-    return unless code
     find_by_iata(code)  # || find_by_iata_ru(code)
   end
 
