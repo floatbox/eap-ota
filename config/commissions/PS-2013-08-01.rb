@@ -4,7 +4,7 @@ example "svocdg"
 example "svocdg cdgsvo"
 agent "Для перевозок, содержащих участок в/из пунктов РФ:"
 agent "5% (3%) (3%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в Москвы;"
-discount "1.5%"
+discount "2.5%"
 ticketing_method "aviacenter"
 check %{ includes(country_iatas, 'RU') and includes(city_iatas, 'MOW LED') }
 commission "5%/3%"
@@ -12,7 +12,7 @@ commission "5%/3%"
 example "svxcdg"
 example "svxcdg cdgsvx"
 agent "7% (5%) (5%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в пунктов в РФ, кроме Москвы;"
-discount "2.5%"
+discount "4%"
 ticketing_method "aviacenter"
 check %{ includes(country_iatas, 'RU') and not includes(city_iatas, 'MOW LED') }
 commission "7%/5%"
@@ -23,7 +23,7 @@ agent "7% от тарифа Бизнес класса на собств. и со
 subagent "5%"
 classes :business
 important!
-discount "2.5%"
+discount "4%"
 ticketing_method "aviacenter"
 check %{ includes(country_iatas, 'RU') }
 commission "7%/5%"
@@ -32,7 +32,7 @@ example "cdgsvo svocdg/ab"
 agent "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 subagent "3% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 interline :yes
-discount "1.5%"
+discount "2.5%"
 ticketing_method "aviacenter"
 check %{ includes(country_iatas, 'RU') }
 commission "5%/3%"
