@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::TicketDisplayTST, amadeus: true  do
+describe Amadeus::Response::TicketDisplayTST, :amadeus do
 
   describe '#baggage_with_refs' do
     context 'with different baggage' do

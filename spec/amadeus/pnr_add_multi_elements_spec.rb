@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::PNRAddMultiElements, amadeus: true  do
+describe Amadeus::Response::PNRAddMultiElements, :amadeus do
 
   context 'with srfoid error' do
 

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::AirSellFromRecommendation, amadeus: true do
+describe Amadeus::Response::AirSellFromRecommendation, :amadeus do
 
   describe "#date_shift" do
     subject { described_class.allocate }

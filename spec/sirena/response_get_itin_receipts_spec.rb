@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Response::GetItinReceipts, sirena: true do
+describe Sirena::Response::GetItinReceipts, :sirena do
 
   subject { described_class.new( File.read(response) ) }
 

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::FarePricePNRWithBookingClass, amadeus: true  do
+describe Amadeus::Response::FarePricePNRWithBookingClass, :amadeus do
   describe 'adult with infant' do
 
     let_once! :response do

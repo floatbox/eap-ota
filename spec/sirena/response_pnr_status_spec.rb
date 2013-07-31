@@ -2,7 +2,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Response::PNRStatus, sirena: true do
+describe Sirena::Response::PNRStatus, :sirena do
 
   subject { described_class.new( File.read(response) ) }
 

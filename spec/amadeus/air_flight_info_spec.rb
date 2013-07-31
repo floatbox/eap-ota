@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::AirFlightInfo, amadeus: true do
+describe Amadeus::Response::AirFlightInfo, :amadeus do
   describe 'with technical stop' do
 
     let_once!(:flight_info) { amadeus_response('spec/amadeus/xml/Air_FlightInfo.xml') }

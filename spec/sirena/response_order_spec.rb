@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Response::Order, sirena: true do
+describe Sirena::Response::Order, :sirena do
 
   pending "#recommendation"
 

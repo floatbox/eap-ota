@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Response::Pricing, sirena: true do
+describe Sirena::Response::Pricing, :sirena do
 
 
   context 'with one adult, two way'do

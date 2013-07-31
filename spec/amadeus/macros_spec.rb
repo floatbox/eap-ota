@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Macros, amadeus: true  do
+describe Amadeus::Macros, :amadeus do
   describe "#cmd_full" do
     # надо проверить, что не обвалим обычное добавление документов, и проч.
     # нужна выборка ответов Command_CrypticReply.xml

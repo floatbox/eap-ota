@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Request::AddRemark, sirena: true do
+describe Sirena::Request::AddRemark, :sirena do
 
   describe 'common case' do
 

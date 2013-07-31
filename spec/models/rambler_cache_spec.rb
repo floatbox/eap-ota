@@ -1,9 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe RamblerCache do
-
-  next "выключаю, не пользуемся уже год"
+describe RamblerCache, :rambler do
 
   describe '#rambler_data_from_recs' do
 

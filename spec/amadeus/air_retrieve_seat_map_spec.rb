@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::AirRetrieveSeatMap, amadeus: true do
+describe Amadeus::Response::AirRetrieveSeatMap, :amadeus do
   describe "simple parsing" do
     let_once! :seat_map do
       amadeus_response('spec/amadeus/xml/Air_RetrieveSeatMap.xml').seat_map

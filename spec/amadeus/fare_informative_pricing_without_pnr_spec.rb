@@ -1,6 +1,6 @@
 # encoding: utf-8
 require 'spec_helper'
-describe Amadeus::Response::FareInformativePricingWithoutPNR, amadeus: true  do
+describe Amadeus::Response::FareInformativePricingWithoutPNR, :amadeus do
 
   let_once! :recommendation do
     Recommendation.example("MOWPAR PARMOW")
