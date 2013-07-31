@@ -26,7 +26,6 @@ module CodeStash
   def fetch_by_code(code)
     raise "please, define method #{self}.fetch_by_code"
     # sample implementation:
-    # return unless code
     # find_by_iata(code) || find_by_iata_ru(code)
   end
 
@@ -42,7 +41,11 @@ module CodeStash
       unless code.nil?
         object = fetch_by_code(code) || make_by_code(code)
         if object
-          hash[code] = object
+          # вносим объект в стэш по запрошенному коду и по всем его остальным кодам,
+          # если они есть
+          codes = [code]
+          codes << Array(object.codes).compact if object.respond_to?(:codes)
+          codes.each {|c| hash[c] = object }
           object
         else
           CodeStash.logger.info "#{name} #{code} #{Time.now.strftime("%H:%M %d.%m.%Y")}"

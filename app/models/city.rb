@@ -9,6 +9,10 @@ class City < ActiveRecord::Base
     find_by_iata(code)  # || find_by_iata_ru(code)
   end
 
+  def codes
+    [iata, iata_ru]
+  end
+
   has_paper_trail
 
   def self.timezones

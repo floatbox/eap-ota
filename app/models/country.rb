@@ -8,6 +8,10 @@ class Country < ActiveRecord::Base
     code && find_by_alpha2(code)
   end
 
+  def codes
+    [alpha2]
+  end
+
   has_paper_trail
 
   # FIXME убрать order, лишнее замедление
