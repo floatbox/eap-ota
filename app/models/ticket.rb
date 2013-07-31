@@ -174,7 +174,7 @@ class Ticket < ActiveRecord::Base
     if parent_number
       if exchanged_ticket = order.tickets.select{|t| t.code.to_s == parent_code.to_s && t.number.to_s[0..9] == parent_number.to_s}.first
         self.parent = exchanged_ticket
-        if price_fare_base && price_fare_base > 0
+        if price_fare_base && price_fare_base.to_f > 0
           self.original_price_tax = original_price_total - price_fare_base + parent.price_fare_base #в противном случае tax может получиться отрицательным
           self.original_price_fare = price_fare_base - parent.price_fare_base
         end
