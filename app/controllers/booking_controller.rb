@@ -77,7 +77,7 @@ class BookingController < ApplicationController
     track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?
       StatCounters.inc %W[enter.api_redirect.success]
-      redirect_to "#{Conf.api.url_base}/##{@search.query_key}"
+      redirect_to "#{Conf.api.url_base}/##{@search.encode_url}"
     else
       redirect_to "#{Conf.api.url_base}/"
     end
