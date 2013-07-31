@@ -177,6 +177,8 @@ class Ticket < ActiveRecord::Base
         if price_fare_base && price_fare_base.to_f > 0
           self.original_price_tax = original_price_total - price_fare_base + parent.price_fare_base #в противном случае tax может получиться отрицательным
           self.original_price_fare = price_fare_base - parent.price_fare_base
+        else
+          self.original_price_tax = original_price_total - original_price_fare
         end
       end
     else
