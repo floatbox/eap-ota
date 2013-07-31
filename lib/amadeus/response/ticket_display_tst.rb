@@ -130,7 +130,11 @@ module Amadeus
       def parse_money_element(node)
         amount = node.xpath('r:fareAmount').to_f
         currency = node.xpath('r:fareCurrency').to_s
-        amount.to_money(currency)
+        if amount
+          amount.to_money(currency)
+        else
+          Money.from_string("0 RUB")
+        end
       end
 
     end
