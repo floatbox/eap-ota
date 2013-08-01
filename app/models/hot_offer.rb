@@ -131,8 +131,8 @@ class HotOffer
         self.from_iata = @search.from.iata
         self.to_iata = @search.to.iata
         self.rt = @search.rt
-        self.date1 = @search.segments.first.date_for_render
-        self.date2 = @search.segments.second.date_for_render if @search.segments.second
+        self.date1 = @search.segments.first.date
+        self.date2 = @search.segments.second.date if @search.segments.second
         self.time_delta = (@search.date - Date.today).to_i
         self.price_variation =  price - destination.average_price
         self.price_variation_percent = ((price / destination.average_price.to_f - 1)*100)
