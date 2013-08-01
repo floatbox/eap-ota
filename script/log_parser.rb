@@ -3,28 +3,32 @@
 
 # Скрипт проверяет к каким валидным перевозчикам не применяются правила.
 
+$opts = {
+  interactive: false
+}
 require_relative '../config/environment'
 
 filename = ARGV.first || 'log/rec_short.log'
 
-i ||= 0
-carriers = {}
 totals = {}
-
+unsellables = {}
+total_recs = 0
+unsellable_recs = 0
 log_file = File.open(filename).each_line do |log_line_file|
 
   next if log_line_file =~ /^#/
 
   rec = Recommendation.example(log_line_file)
-
   carrier = rec.validating_carrier_iata
+  total_recs += 1
   totals[carrier] ||= 0
   totals[carrier] += 1
   begin
-    if rec.commission.nil?
-      i += 1
-      carriers[carrier] ||= 0
-      carriers[carrier] += 1
+    rec.find_commission!
+    unless rec.commission.sellable?
+      unsellable_recs += 1
+      unsellables[carrier] ||= 0
+      unsellables[carrier] += 1
     end
   rescue IataStash::NotFound
     next
@@ -32,17 +36,18 @@ log_file = File.open(filename).each_line do |log_line_file|
 
 end
 
-puts ""
-puts "---Скрипт проверяет к каким валидным перевозчикам не применяются правила---"
-puts ""
-
-carriers.each do |carrier, count|
+totals.keys.sort.each do |carrier|
   total = totals[carrier]
-  percentage = (count.to_f / total * 100).round(2)
-  puts "К валид. перевозчику: #{carrier} не применяется правил: #{percentage}% (#{count}/#{total})"
+  unsellable = unsellables[carrier] || 0
+  percentage = (unsellable.to_f / total * 100).round(2)
+  if $opts[:interactive]
+    puts "#{carrier}: #{'%6.2f' % percentage}%  (#{unsellable}/#{total})"
+  else
+    puts [carrier, '%.2f' % percentage, unsellable, total].map(&:to_s).join("\t")
+  end
 end
-
-puts '--------------------------------------------------'
-
-puts "Всего не применяется правил: #{i}"
-puts ""
+if $opts[:interactive]
+  puts
+  puts "total recs: #{total_recs}"
+  puts "unsellable recs: #{unsellable_recs}"
+end
