@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+require 'search/coercers/location'
+require 'search/coercers/date'
+
 # non-persistent model
 # используется для валидации поисковых сегментов
 class AviaSearchSegment
