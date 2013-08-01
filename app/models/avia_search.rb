@@ -133,6 +133,11 @@ class AviaSearch
     { :adults => adults, :children => children, :infants => infants }
   end
 
+  def people_count= count
+    self.adults, self.children, self.infants = count[:adults] || 1, count[:children] || 0, count[:infants] || 0
+  end
+
+
   def people_total
     [adults, children, infants].compact.sum
   end
