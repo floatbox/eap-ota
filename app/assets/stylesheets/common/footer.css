@@ -42,7 +42,7 @@
 }
 .pfp-iata,
 .pfp-other {
-    background: url(/images/common/partners.png) no-repeat;
+    background: url(/images/common/partners.png?2) no-repeat;
 }
 .pfp-iata {
     height: 26px;
@@ -52,7 +52,7 @@
     line-height: 13px;
 }
 .pfp-other {
-    width: 345px;
+    width: 241px;
     height: 31px;
     background-position: 0 -45px;
 }
