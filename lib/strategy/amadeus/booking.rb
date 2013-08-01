@@ -39,8 +39,19 @@ module Strategy::Amadeus::Booking
       end
       logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
       @order_form.save_to_order
-      #binding.pry
-      @order_form.order.save_stored_flights(@rec.flights)
+
+      # важно для дальнейшего cancel
+      @order = @order_form.order
+      @order.save_stored_flights(@rec.flights)
+
+      # Выставляем флаг автовыписки
+      auto_ticket_stuff = AutoTicketStuff.new(order: @order, people: @order_form.people, recommendation: @order_form.recommendation)
+      if auto_ticket_stuff.auto_ticket
+        @order.update_attributes(auto_ticket: true)
+        auto_ticket_stuff.create_auto_ticket_job
+      else
+        @order.update_attributes(no_auto_ticket_reason: auto_ticket_stuff.turndown_reason)
+      end
 
       set_people_numbers(add_multi_elements.passengers)
 
@@ -85,8 +96,6 @@ module Strategy::Amadeus::Booking
       #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
       # FIXME вынести в контроллер
       @order_form.save_to_order
-      # важно для дальнейшего cancel
-      @order = @order_form.order
 
       #Еще раз проверяем, что все сегменты доступны
       # вообще говоря, pnr_really_hard тоже получает эти данные. сэкономить транзакцию?
