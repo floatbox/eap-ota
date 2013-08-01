@@ -43,7 +43,7 @@ describe CodeStash do
       end
 
       it "should raise an exception trying to find unknown city by iata" do
-        expect { City['ZZZ'] }.should raise_error(CodeStash::NotFound)
+        expect { City['ZZZ'] }.to raise_error(CodeStash::NotFound)
       end
 
       it "should raise an exception trying to find unknown country iata" do
@@ -65,8 +65,10 @@ describe CodeStash do
   end
 
   pending it "should not raise an exception then searching for unknown airplane" do
-    expect { Airplane['BBQ'] }.to_not raise_error(CodeStash::NotFound)
-    Airplane.where(iata: 'BBQ', auto_save: true).should_not be_nil
+    code = 'BBQ'
+    expect { Airplane[code] }.to_not raise_error(CodeStash::NotFound)
+    Airplane.should_receive(:make_by_code).with(code)
+    Airplane.where(iata: code, auto_save: true).should_not be_nil
   end
 
 end

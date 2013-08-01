@@ -40,9 +40,9 @@ Carrier:
 
 Airplane:
   fields:
-    default: iata, name_ru, name_en, engine_type
-    list: iata, name_ru, name_en, engine_type
-    form: iata, iata_ru, icao, name_ru, name_en, engine_type
+    default: iata, name_ru, name_en, engine_type, auto_save
+    list: iata, name_ru, name_en, engine_type, auto_save
+    form: iata, iata_ru, icao, name_ru, name_en, engine_type, auto_save
     options:
       selectors: engine_type
 
@@ -51,6 +51,7 @@ Airplane:
   filters: engine_type
   search: ^iata, name_ru, name_en
   application: Base, 5
+  scopes: autosaved
 
 Airport:
   fields:

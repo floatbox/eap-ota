@@ -2,8 +2,16 @@
 class Airplane < ActiveRecord::Base
   extend CodeStash
 
-  def self.fetch_by_code(code)
-    find_by_iata(code)  # || find_by_iata_ru(code)
+  scope :autosaved, -> { where(auto_save: true) }
+
+  class << self
+    def fetch_by_code(code)
+      find_by_iata(code)  # || find_by_iata_ru(code)
+    end
+
+    def make_by_code(code)
+      Airplane.autosaved.create(iata: code)
+    end
   end
 
   def codes
