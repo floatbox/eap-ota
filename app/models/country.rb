@@ -6,6 +6,7 @@ class Country < ActiveRecord::Base
 
   has_paper_trail
 
+  # FIXME убрать order, лишнее замедление
   has_many :cities, :order => 'cities.name_ru'
 
   has_many :airports, :through => :cities
