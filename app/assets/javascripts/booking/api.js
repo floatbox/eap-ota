@@ -23,6 +23,9 @@ booking.prebook = function(query_key, hash, partner, marker) {
         url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker + '&variant_id=1',
         success: function(result) {
             if (result && result.success) {
+                if (result.partner_logo_url) {
+                    $('#parther-logo').html('<img src="' + result.partner_logo_url + '" alt="">').closest('.bd-column').show();
+                }
                 _kmq.push(['record', 'PRE-BOOKING: success']);
                 that.load(result.number, result.changed_booking_classes);
             } else {
