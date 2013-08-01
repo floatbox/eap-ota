@@ -69,8 +69,21 @@
         <div class="phu-section phu-signup-result">
             <h6 class="phus-title" style="margin: 0 0 5px;">Аккаунт создан</h6>
             <p style="margin: 0 0 10px;">На ваш электронный адрес отправлено письмо-подтверждение. Для&nbsp;завершения регистрации перейдите по&nbsp;ссылке в&nbsp;письме.</p>
-            <p class="phusur-what-link"><span class="link">Что делать, если ничего не пришло?</span></p>
-            <p class="phusur-what">Если вы&nbsp;не&nbsp;получили письмо в&nbsp;течение <nobr>10-15 минут,</nobr> проверьте папку &laquo;Спам&raquo; в&nbsp;вашей почте. Если и&nbsp;там его нет, мы можем выслать письмо <span class="link">ещё раз</span>.</p>           
+            <p><span class="link phu-confirm-link">Что делать, если ничего не пришло?</span></p>
+        </div>
+        <div class="phu-section" style="display: none;">
+            <h6 class="phus-title" style="margin: 0 0 5px;">Подтверждение регистрации</h6>        
+            <p style="margin: 0 0 10px;">Если вы не получили письмо в течение 10-15 минут, проверьте папку «Спам» в вашей почте. Если и там его нет, мы можем выслать письмо ещё раз.</p>
+            <%= form_for("customer", :url => customer_confirmation_path, :html => { :method => :post, :class => 'phu-confirm', :novalidate => 'novalidate' }) do |f| %>
+                <div class="phu-field">
+                    <label for="signup-email" class="phuf-placeholder">электронная почта</label>
+                    <%= f.email_field :email, :class => 'phuf-input', :id => 'confirm-email', :placeholder => 'электронная почта' %>
+                </div>
+                <div class="phu-submit">
+                    <%= f.submit "Выслать", :class => 'phu-button' %>
+                </div>
+                <div class="phu-error"></div>                
+            <% end %>
         </div>
     </div>
     <div class="phu-popup" id="phup-password">
