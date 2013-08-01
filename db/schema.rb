@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130718131818) do
+ActiveRecord::Schema.define(:version => 20130731152906) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.datetime "updated_at"
     t.string   "engine_type", :default => "jet"
     t.string   "iata_ru"
+    t.boolean  "auto_save",   :default => false, :null => false
   end
 
   add_index "airplanes", ["iata"], :name => "index_airplanes_on_iata"
