@@ -2,6 +2,18 @@ class Profile::ConfirmationsController < Devise::ConfirmationsController
 
   layout "profile"
 
+  # POST /resource/confirmation
+  def create
+    self.resource = resource_class.send_confirmation_instructions(resource_params)
+
+    if successfully_sent?(resource)
+      return render :json => {:success => true, :location => after_resending_confirmation_instructions_path_for(resource_name)}
+    else
+      return render :json => {:success => false, :errors => resource.errors.full_messages}
+    end
+  end
+
+  # GET /resource/confirmation?confirmation_token=abcdef
   def show
     self.resource = resource_class.find_by_confirmation_token(params[:confirmation_token])
     super if resource.nil? or resource.confirmed?
