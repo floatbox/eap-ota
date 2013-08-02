@@ -29,6 +29,18 @@ describe AviaSearch do
         should be_valid
       end
     end
+
+    context "when filled with incomplete data" do
+
+      let :attrs do
+        { people_count: people_attrs }
+      end
+
+      it do
+        should_not be_valid
+      end
+
+    end
   end
 
   context "filled via api" do

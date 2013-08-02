@@ -37,7 +37,7 @@ class AviaSearch
     people_count = params_raw[:people_count]
     params = params_raw.merge(people_count) if people_count
     params.except!(:people_count)
-    params[:segments] = params[:segments].values
+    params[:segments] = params[:segments] ? params[:segments].values : []
 
     new(params)
   end
