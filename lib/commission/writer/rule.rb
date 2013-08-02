@@ -8,101 +8,102 @@ class Commission::Writer::Rule
   end
 
   def write
-    str = ""
+    clear_buffer
 
-    @rule.examples.each do |ex|
-      str << %[example #{ex.to_s.inspect}\n]
-    end if @rule.examples.present?
-
-    @rule.comments.split("\n").each do |line|
-      str << %[comment #{line.inspect}\n]
-    end if @rule.comments
-
-    @rule.agent_comments.split("\n").each do |line|
-      str << %[agent #{line.inspect}\n]
-    end if @rule.agent_comments
-
-    @rule.subagent_comments.split("\n").each do |line|
-      str << %[subagent #{line.inspect}\n]
-    end if @rule.subagent_comments
-
-    if @rule.interline != WRITER_DEFAULTS[:interline]
-      str << %[interline #{@rule.interline.map(&:inspect).join(", ")}\n]
+    Array(@rule.examples).each do |ex|
+      line %[example #{ex.to_s.inspect}]
     end
 
-    if @rule.classes
-      str << %[classes #{@rule.classes.map(&:inspect).join(", ")}\n]
-    end
+    lines 'comment', @rule.comments
+    lines 'agent', @rule.agent_comments
+    lines 'subagent', @rule.subagent_comments
 
-    if @rule.subclasses
-      str << %[subclasses #{@rule.subclasses.join.inspect}\n]
-    end
+    @rule.interline != WRITER_DEFAULTS[:interline] and
+      line %[interline #{@rule.interline.map(&:inspect).join(", ")}]
 
-    if @rule.routes
-      str << %[routes #{@rule.routes.map(&:inspect).join(", ")}\n]
-    end
+    @rule.classes and
+      line %[classes #{@rule.classes.map(&:inspect).join(", ")}]
 
-    str << %[important!\n] if @rule.important
+    @rule.subclasses and
+      line %[subclasses #{@rule.subclasses.join.inspect}]
 
-    str << %[domestic\n] if @rule.domestic
-    str << %[international\n] if @rule.international
+    @rule.routes and
+      line %[routes #{@rule.routes.map(&:inspect).join(", ")}]
 
+    @rule.important and
+      line %[important!]
 
-    str << commission_if_needed(:consolidator)
-    str << commission_if_needed(:blanks)
-    str << commission_if_needed(:discount)
-    str << commission_if_needed(:our_markup)
+    @rule.domestic and
+      line %[domestic]
+    @rule.international and
+      line %[international]
 
-    if @rule.ticketing_method
-      str << %[ticketing_method #{@rule.ticketing_method.inspect}\n]
-    end
+    line commission_if_needed(:consolidator)
+    line commission_if_needed(:blanks)
+    line commission_if_needed(:discount)
+    line commission_if_needed(:our_markup)
 
-    if @rule.tour_code
-      str << %[tour_code #{@rule.tour_code.inspect}\n]
-    end
+    @rule.ticketing_method and
+      line %[ticketing_method #{@rule.ticketing_method.inspect}]
 
-    if @rule.designator
-      str << %[designator #{@rule.designator.inspect}\n]
-    end
+    @rule.tour_code and
+      line %[tour_code #{@rule.tour_code.inspect}]
+    @rule.designator and
+      line %[designator #{@rule.designator.inspect}]
 
     if @rule.check
       if @rule.check['\\']
         raise ArgumentError, "check in #{@rule.inspect} contains backslashes"
       end
       # FIXME проверить еще на парность скобок
-      str << %[check %{#{@rule.check}}\n]
+      line %[check %{#{@rule.check}}]
     end
 
-    str << bool_or_reason("disabled", @rule.disabled)
-    str << bool_or_reason("not_implemented", @rule.not_implemented)
+    line bool_or_reason("disabled", @rule.disabled)
+    line bool_or_reason("not_implemented", @rule.not_implemented)
 
     if @rule.no_commission
-      if @rule.no_commission.is_a? String
-        str << %[no_commission #{@rule.no_commission.inspect}\n]
-      else
-        str << %[no_commission\n]
-      end
+      line bool_or_reason("no_commission", @rule.no_commission)
     else
-      str << %[commission "#{@rule.agent}/#{@rule.subagent}"\n]
+      line %[commission "#{@rule.agent}/#{@rule.subagent}"]
     end
-    str
+    buffer
   end
 
   private
 
     def bool_or_reason token, value
-      return "" unless value
+      return unless value
       if value.is_a? String
-        %[#{token} #{value.inspect}\n]
+        %[#{token} #{value.inspect}]
       else
-        %[#{token}\n]
+        token
       end
     end
 
     def commission_if_needed token
       fx = @rule.send token
-      return "" if fx == Commission::Formula.new( WRITER_DEFAULTS[token] )
-      %[#{token} #{fx.to_s.inspect}\n]
+      return if fx == Commission::Formula.new( WRITER_DEFAULTS[token] )
+      %[#{token} #{fx.to_s.inspect}]
+    end
+
+    def buffer
+      @buffer
+    end
+
+    def clear_buffer
+      @buffer = ""
+    end
+
+    def line(arg)
+      @buffer << "#{arg}\n" if arg
+    end
+
+    def lines(arg, multiline_value)
+      return unless multiline_value
+      multiline_value.split("\n").each do |l|
+        line %[#{arg} #{l.inspect}]
+      end
     end
 
 end
