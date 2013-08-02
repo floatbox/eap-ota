@@ -37,6 +37,10 @@ every :day, :at => '5:00 am' do
   runner 'Tripster.load_cities'
 end
 
+every :day, :at => '6:00 pm' do
+  runner 'CBR.preload_rate'
+end
+
 ### FILL CUSTOMERS Table From ORDERS
 #every 5.minutes do
 #  runner 'DataMigration.fill_customers_for_orders'
