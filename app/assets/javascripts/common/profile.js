@@ -112,6 +112,7 @@ openSignIn: function() {
 openSignUp: function() {
     var elem = this.el;
     $('#signup-email').val($('#signin-email').val()).trigger('blur');
+    elem.find('.phu-signup .phu-button').prop('disabled', false);
     elem.find('.phus-title .phu-signup-link').removeClass('phust-link');
     elem.find('.phu-signup').slideDown(150);
     elem.find('.phu-stator').animate({height: 41}, 150, function() {
@@ -123,6 +124,7 @@ showConfirm: function() {
     this.el.find('.phu-signup-result').hide();
     this.el.find('.phu-signup').closest('.phu-section').hide();
     this.el.find('.phu-confirm').closest('.phu-section').show();
+    this.el.find('.phu-confirm .phu-button').prop('disabled', false);
 },
 initForms: function() {
 
@@ -173,6 +175,7 @@ initForms: function() {
     signUp.add('#signup-email', checkEmail);
     signUp.process = function(result) {
         that.el.find('.phu-signup').closest('.phu-section').hide();
+        that.el.find('.phu-signup-result .phus-title').html('Аккаунт создан');        
         that.el.find('.phu-signup-result').show();
     };
     signUp.messages['not_confirmed'] = notConfirmed;
@@ -187,8 +190,18 @@ initForms: function() {
     confirm.add('#confirm-email', checkEmail);
     confirm.process = function(result) {
         that.el.find('.phu-confirm').closest('.phu-section').hide();
+        that.el.find('.phu-signup-result .phus-title').html('Подтверждение регистрации');
         that.el.find('.phu-signup-result').show();
     };    
+    confirm.messages['Email was already confirmed, please try signing in'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
+    confirm.messages['Email not found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="link phu-signup-link">Зарегистрироваться</span></p>';
+    confirm.elem.find('.phu-error').on('click', '.phu-signup-link', function() {
+        $('#signup-email').val($('#confirm-email').val()).trigger('blur');
+        confirm.error.hide();
+        that.el.find('.phu-confirm').closest('.phu-section').hide();
+        that.el.find('.phu-signup').closest('.phu-section').show();
+        that.el.find('.phu-signup .phu-button').prop('disabled', false);        
+    });
     
     var forgot = new profileForm(this.el.find('.phu-forgot'));
     forgot.add('#forgot-email', checkEmail);
