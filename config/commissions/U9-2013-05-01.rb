@@ -30,3 +30,4 @@ interline :no, :yes
 consolidator "2%"
 ticketing_method "aviacenter"
 commission "1%/5"
+

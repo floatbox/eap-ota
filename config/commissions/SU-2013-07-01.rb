@@ -34,7 +34,7 @@ agent "4%  от тарифа на собств. рейсы SU с началом 
 subagent "3%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 interline :no, :yes
 routes "RU..."
-discount "4%"
+discount "2%"
 ticketing_method "aviacenter"
 commission "4%/3%"
 
