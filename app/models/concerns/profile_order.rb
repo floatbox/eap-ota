@@ -113,6 +113,10 @@ module ProfileOrder
     profile_arrival_date && profile_arrival_date > DateTime.now
   end
 
+  def profile_active?
+    profile_alive_tickets_exists? || ticket_status == 'booked'
+  end
+
   def profile_alive_tickets_exists?
     profile_tickets.each do |t|
       return true if t.profile_alive?
@@ -121,6 +125,7 @@ module ProfileOrder
   end
 
   def profile_all_tickets_returned?
+    return false unless profile_ticketed?
     profile_tickets.each do |t|
       return false unless t.profile_returned?
     end

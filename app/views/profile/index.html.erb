@@ -18,10 +18,10 @@
     <p class="orders-empty">Вы еще ничего не заказывали. Хотите <a href="/">купить билет</a>?</p>
 <% else %>
 <% @orders.each do |order| %>
-<% if order.profile_alive_tickets_exists?|| order.profile_all_tickets_returned?  || admin_user%>
+<% if order.profile_active? || order.profile_all_tickets_returned? || admin_user %>
 <div class="order"
   <% if order.profile_all_tickets_returned? %> style="background-color: #ddd;"
-  <% elsif !order.profile_alive_tickets_exists? %> style="background-color: transparent; border: 1px dotted #454752"
+  <% elsif !order.profile_active? %> style="background-color: transparent; border: 1px dotted #454752"
   <% end %>>
 <table class="order-summary">
     <tr>
@@ -121,7 +121,7 @@
 
 <% if admin_user %>
 <div class="order-debug">
-  <p class="ors-route-raw"><% if order.profile_alive_tickets_exists? %> Живой!
+  <p class="ors-route-raw"><% if order.profile_active? %> Живой!
     <% else %> Мертвый! <% end %>
     <% if order.profile_all_tickets_returned? %> Возврат! <% end %>
     
