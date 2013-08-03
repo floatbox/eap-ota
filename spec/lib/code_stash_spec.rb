@@ -52,7 +52,7 @@ describe CodeStash do
     end
   end
 
-  context 'fetch_by_code on Models' do
+  pending 'fetch_by_code on Models' do
     specify { Airport.fetch_by_code(nil).should be_nil }
     specify { City.   fetch_by_code(nil).should be_nil }
     specify { Carrier.fetch_by_code(nil).should be_nil }
