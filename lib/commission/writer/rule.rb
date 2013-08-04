@@ -10,13 +10,15 @@ class Commission::Writer::Rule
   def write
     clear_buffer
 
+    line %[rule #{@rule.number} do]
+
     Array(@rule.examples).each do |ex|
       line %[example #{ex.to_s.inspect}]
     end
 
     lines 'comment', @rule.comments
-    lines 'agent', @rule.agent_comments
-    lines 'subagent', @rule.subagent_comments
+    lines 'agent_comment', @rule.agent_comments
+    lines 'subagent_comment', @rule.subagent_comments
 
     @rule.interline != WRITER_DEFAULTS[:interline] and
       line %[interline #{@rule.interline.map(&:inspect).join(", ")}]
@@ -62,11 +64,12 @@ class Commission::Writer::Rule
     line bool_or_reason("disabled", @rule.disabled)
     line bool_or_reason("not_implemented", @rule.not_implemented)
 
-    if @rule.no_commission
-      line bool_or_reason("no_commission", @rule.no_commission)
-    else
-      line %[commission "#{@rule.agent}/#{@rule.subagent}"]
-    end
+    line bool_or_reason("no_commission", @rule.no_commission)
+    line commission_if_needed(:agent)
+    line commission_if_needed(:subagent)
+
+    line %[end]
+
     buffer
   end
 

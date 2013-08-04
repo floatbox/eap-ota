@@ -13,14 +13,15 @@ describe Commission::Writer::Book do
     book_string = unindent(<<-END)
       carrier "AB"
 
+      rule 1 do
       example "SVOCDG/AB"
       example "SVOCDG CDGSVO/AB"
       comment "есть проблемы"
       comment "и не одна"
-      agent "* Какой-то текст"
-      agent "продолжается и здесь"
-      subagent "* Какой-то текст со странными правками"
-      subagent "продолжается и здесь"
+      agent_comment "* Какой-то текст"
+      agent_comment "продолжается и здесь"
+      subagent_comment "* Какой-то текст со странными правками"
+      subagent_comment "продолжается и здесь"
       classes :business, :economy
       subclasses "ABCDEFGH"
       routes "MOW...US/ALL", "MOW-PAR-MOW"
@@ -35,20 +36,29 @@ describe Commission::Writer::Book do
         includes_only(operating_carrier_iatas.first, 'AB HG') and
           includes(city_iatas, 'MOW NYC')
       }
-      commission "2%/0.05"
+      agent "2%"
+      subagent "0.05"
+      end
 
+      rule 2 do
       example "SVOLED/AB"
       important!
       domestic
       no_commission "Катя просила выключить"
+      end
 
       carrier "FV", start_date: "2013-06-30"
 
+      rule 1 do
       no_commission
+      end
 
       carrier "FV"
 
-      commission "3%/1%"
+      rule 1 do
+      agent "3%"
+      subagent "1%"
+      end
 
     END
     book = Commission::Reader.new.read book_string

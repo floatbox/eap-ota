@@ -15,7 +15,9 @@ class Commission::Reader
     consolidator: 0,
     blanks: 0,
     discount: 0,
-    our_markup: 0
+    our_markup: 0,
+    agent: "",
+    subagent:""
   }
 
   def initialize(book = Commission::Book.new)
