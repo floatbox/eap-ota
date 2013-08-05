@@ -1,7 +1,7 @@
 # encoding: utf-8
 module MoneyColumns
   extend ActiveSupport::Concern
-  MONEY_VALIDATION_REGEXP = / \d+ (?:.\d{2})? \s* (?:USD|EUR|RUB) $/x
+  MONEY_VALIDATION_REGEXP = / \d+ (?:\.\d{2})? \s* (?:USD|EUR|RUB) $/x
 
   def has_money_columns *columns
     money_columns = columns.every.to_sym
