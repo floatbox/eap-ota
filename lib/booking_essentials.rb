@@ -14,6 +14,7 @@ module BookingEssentials
 
     StatCounters.inc %W[enter.preliminary_booking.total]
     StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
+    StatCounters.inc %W[enter.preliminary_booking.#{@recommendation.validating_carrier_iata}.total]
 
     @destination = get_destination
     StatCounters.d_inc @destination, %W[enter.api.total] if @destination
@@ -31,6 +32,7 @@ module BookingEssentials
       @order_form.save_to_cache
       StatCounters.inc %W[enter.preliminary_booking.success]
       StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
+      StatCounters.inc %W[enter.preliminary_booking.#{@recommendation.validating_carrier_iata}.success]
       return true
     else
       return
