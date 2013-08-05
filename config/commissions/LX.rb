@@ -43,6 +43,7 @@ agent "(Билеты Interline под кодом LX могут быть выпи
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы LX и рейсы Interline с уч. LX."
 interline :no, :yes
 routes "...ES,FR,IT,CZ,PT,NL,CH..."
+discount "1.5%"
 ticketing_method "aviacenter"
 commission "1/0.05"
 
@@ -51,6 +52,7 @@ agent "1 руб. с билета по опубл. тарифам на собст
 agent "(Билеты Interline под кодом LX могут быть выписаны только в случае существования опубл. тарифов и только при условии, что LX выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы LX и рейсы Interline с уч. LX."
 interline :no, :yes
+discount "1.5%"
 ticketing_method "aviacenter"
 commission "1/0.05"
 

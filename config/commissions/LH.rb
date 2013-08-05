@@ -44,6 +44,7 @@ agent "1 руб. с билета по опубл. тарифам на собст
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
 interline :no, :yes
 routes "...ES,FR,IT,CZ,PT,NL,CH..."
+discount "1.5%"
 ticketing_method "aviacenter"
 commission "1/0.05"
 
@@ -53,6 +54,7 @@ example "dmejfk jfkdme/US"
 agent "1 руб. с билета по опубл. тарифам на собств. рейсы LH и рейсы Interline с участком LH. (Билеты Interline под кодом LH могут быть выписаны только в случае существования опубл. тарифов и только при условии, что LH выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа. Исключение составляют рейсы авиакомпаний-партнёров: LX, EW, CL, IQ, C3 и 4U (Germanwings), а также сегменты авиакомпаний STAR Alliance в случае оформления билетов по тарифам STAR Round the World и Star Airpass Fares)"
 subagent "5 коп. с билета по опубл. тарифам на собственные рейсы LH и рейсы Interline с участком LH."
 interline :no, :yes
+discount "1.5%"
 ticketing_method "aviacenter"
 commission "1/0.05"
 
@@ -64,6 +66,7 @@ example "svocdg/C3"
 agent "1 руб. с билета на рейсы 4U, LX, EW, CL, IQ, C3 на бланках LH (подразделение)"
 subagent "5 коп. с билета на рейсы 4U, LX, EW, CL, IQ, C3 на бланках LH (подразделение)"
 interline :absent
+discount "1.5%"
 ticketing_method "aviacenter"
 check %{ includes_only(marketing_carrier_iatas, %W[LX EW CL IQ C3]) }
 commission "1/0.05"

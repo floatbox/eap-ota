@@ -25,6 +25,7 @@ subagent "5 коп. с билета по опубл.тарифам Эконом 
 classes :economy
 routes "RU..."
 important!
+discount "2%"
 ticketing_method "aviacenter"
 commission "1/0.05"
 

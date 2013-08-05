@@ -43,6 +43,7 @@ agent "(Билеты Interline под кодом OS могут быть выпи
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS."
 interline :no, :yes
 routes "...ES,FR,IT,CZ,PT,NL,CH..."
+discount "1.5%"
 our_markup "10"
 ticketing_method "aviacenter"
 commission "1/0.05"
@@ -53,6 +54,7 @@ agent "1 руб. с билета по опубл. тарифам на собст
 agent "(Билеты Interline под кодом OS могут быть выписаны только в случае существования опубликованных тарифов и только при условии, что OS выполняет как минимум один рейс. В противном случае по билету должна быть сделана доплата до полного опублик. IATA тарифа)"
 subagent "5 коп. с билета по опубл. тарифам на собств.рейсы OS и рейсы Interline с участком OS."
 interline :no, :yes
+discount "1.5%"
 ticketing_method "aviacenter"
 commission "1/0.05"
 
