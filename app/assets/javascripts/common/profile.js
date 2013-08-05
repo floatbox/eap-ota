@@ -99,6 +99,7 @@ openSignIn: function() {
     var elem = this.el;
     $('#signin-email').val($('#signup-email').val()).trigger('blur');
     elem.find('.phus-title .phu-signin-link').removeClass('phust-link');
+    elem.find('.phu-signup-result').hide();
     elem.find('.phu-confirm').closest('.phu-section').hide();        
     elem.find('.phu-signup').closest('.phu-section').show();
     elem.find('.phu-signup').slideUp(150);
@@ -175,7 +176,8 @@ initForms: function() {
     signUp.add('#signup-email', checkEmail);
     signUp.process = function(result) {
         that.el.find('.phu-signup').closest('.phu-section').hide();
-        that.el.find('.phu-signup-result .phus-title').html('Аккаунт создан');        
+        that.el.find('.phu-signup-result .phus-title').html('Аккаунт создан');
+        that.el.find('.phu-signup-result .phu-confirm-link').closest('p').show();
         that.el.find('.phu-signup-result').show();
     };
     signUp.messages['not_confirmed'] = notConfirmed;
@@ -191,6 +193,7 @@ initForms: function() {
     confirm.process = function(result) {
         that.el.find('.phu-confirm').closest('.phu-section').hide();
         that.el.find('.phu-signup-result .phus-title').html('Подтверждение регистрации');
+        that.el.find('.phu-signup-result .phu-confirm-link').closest('p').hide();
         that.el.find('.phu-signup-result').show();
     };    
     confirm.messages['Email was already confirmed, please try signing in'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
