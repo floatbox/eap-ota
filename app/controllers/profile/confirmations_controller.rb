@@ -2,13 +2,28 @@ class Profile::ConfirmationsController < Devise::ConfirmationsController
 
   layout "profile"
 
+  # POST /resource/confirmation
+  def create
+    self.resource = resource_class.send_confirmation_instructions(resource_params)
+
+    if successfully_sent?(resource)
+      return render :json => {:success => true, :location => after_resending_confirmation_instructions_path_for(resource_name)}
+    else
+      return render :json => {:success => false, :errors => resource.errors.full_messages}
+    end
+  end
+
+  # GET /resource/confirmation?confirmation_token=abcdef
   def show
     self.resource = resource_class.find_by_confirmation_token(params[:confirmation_token])
-    super if resource.nil? or resource.confirmed?
+    return fake_token if resource.nil?
+    return render :json => {:success => true, :resource => {:email => resource.email}}
+    #super if resource.nil? or resource.confirmed?
   end
 
   def confirm
     self.resource = resource_class.find_by_confirmation_token(params[resource_name][:confirmation_token])
+    return fake_token if resource.nil?
     if resource.update_attributes(params[resource_name].except(:confirmation_token)) && resource.password_match?
       self.resource = resource_class.confirm_by_token(params[resource_name][:confirmation_token])
       set_flash_message :notice, :confirmed
@@ -23,6 +38,10 @@ class Profile::ConfirmationsController < Devise::ConfirmationsController
     resource ||= resource_or_scope
     sign_in(scope, resource) unless warden.user(scope) == resource
     return render :json => {:success => true, :location => after_sign_in_path_for(resource)}
+  end
+
+  def fake_token
+    return render :json => {:success => false, :errors => ["fake_token"]}
   end
 
   def failure

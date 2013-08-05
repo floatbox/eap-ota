@@ -57,8 +57,10 @@ ru:
       failure: 'Could not authorize you from %{kind} because "%{reason}".'
     mailer:
       confirmation_instructions:
+        subject: 'Приглашение в личный кабинет'
+      registration_instructions:
         subject: 'Регистрация в личном кабинете'
       reset_password_instructions:
-        subject: 'Задать пароль в личном кабинете'
+        subject: 'Смена пароля в личном кабинете'
       unlock_instructions:
         subject: 'Unlock Instructions'

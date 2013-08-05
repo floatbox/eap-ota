@@ -1,0 +1,9 @@
+<h3>Добро пожаловать на Эвитерру!</h3>
+
+<p>Чтобы завершить регистрацию аккаунта <%= @resource.email %>, перейдите по ссылке ниже.</p>
+
+<p><%= link_to 'Подтвердить регистрацию', profile_confirm_url(:confirmation_token => @resource.confirmation_token) %></p>
+
+<p>Если вы не регистрировались на сайте <%= link_to 'eviterra.com', 'https://eviterra.com' %>, просто проигнорируйте это письмо.</p>
+
+<%= render :partial => 'signature' %>

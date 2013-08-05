@@ -99,6 +99,8 @@ openSignIn: function() {
     var elem = this.el;
     $('#signin-email').val($('#signup-email').val()).trigger('blur');
     elem.find('.phus-title .phu-signin-link').removeClass('phust-link');
+    elem.find('.phu-confirm').closest('.phu-section').hide();        
+    elem.find('.phu-signup').closest('.phu-section').show();
     elem.find('.phu-signup').slideUp(150);
     elem.find('.phu-stator').animate({
         height: elem.find('.phu-slider').height()
@@ -110,12 +112,19 @@ openSignIn: function() {
 openSignUp: function() {
     var elem = this.el;
     $('#signup-email').val($('#signin-email').val()).trigger('blur');
+    elem.find('.phu-signup .phu-button').prop('disabled', false);
     elem.find('.phus-title .phu-signup-link').removeClass('phust-link');
     elem.find('.phu-signup').slideDown(150);
     elem.find('.phu-stator').animate({height: 41}, 150, function() {
         elem.find('.phus-title .phu-signin-link').addClass('phust-link');
         elem.find('.phu-slider').css('left', 0);
     });
+},
+showConfirm: function() {
+    this.el.find('.phu-signup-result').hide();
+    this.el.find('.phu-signup').closest('.phu-section').hide();
+    this.el.find('.phu-confirm').closest('.phu-section').show();
+    this.el.find('.phu-confirm .phu-button').prop('disabled', false);
 },
 initForms: function() {
 
@@ -128,6 +137,10 @@ initForms: function() {
             if (/[а-яА-Я]/.test(value)) return 'Адрес электронной почты может содержать только латинские символы.';
         }
     };
+    
+    var notConfirmed = '\
+        <p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p>\
+        <p><span class="link phu-confirm-link">Что делать, если ничего не&nbsp;пришло?</span></p>';
 
     var signIn = new profileForm(this.el.find('.phu-signin'));
     signIn.add('#signin-email', checkEmail);
@@ -137,7 +150,7 @@ initForms: function() {
     signIn.process = function(result) {
         window.location = result.location;
     };
-    signIn.messages['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
+    signIn.messages['not_confirmed'] = notConfirmed;
     signIn.messages['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';
     signIn.messages['failed'] = function() {
         return 'Неправильная пара логин-пароль. Попробуйте еще раз.';
@@ -150,37 +163,53 @@ initForms: function() {
             signIn.caps = undefined;
         }
         signIn.validate();        
-    });    
-    
+    });
+    signIn.elem.find('.phu-error').on('click', '.phu-confirm-link', function() {
+        $('#confirm-email').val($('#signin-email').val()).trigger('blur');
+        signIn.error.hide();
+        that.showConfirm();
+        that.openSignUp();
+    });
     
     var signUp = new profileForm(this.el.find('.phu-signup'));
     signUp.add('#signup-email', checkEmail);
     signUp.process = function(result) {
         that.el.find('.phu-signup').closest('.phu-section').hide();
+        that.el.find('.phu-signup-result .phus-title').html('Аккаунт создан');        
+        that.el.find('.phu-signup-result').show();
+    };
+    signUp.messages['not_confirmed'] = notConfirmed;
+    signUp.messages['exist'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
+    signUp.elem.find('.phu-error').on('click', '.phu-confirm-link', function() {
+        $('#confirm-email').val($('#signup-email').val()).trigger('blur');
+        signUp.error.hide();
+        that.showConfirm();
+    });
+
+    var confirm = new profileForm(this.el.find('.phu-confirm'));
+    confirm.add('#confirm-email', checkEmail);
+    confirm.process = function(result) {
+        that.el.find('.phu-confirm').closest('.phu-section').hide();
+        that.el.find('.phu-signup-result .phus-title').html('Подтверждение регистрации');
         that.el.find('.phu-signup-result').show();
     };    
-    signUp.messages['exist'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
-    signUp.messages['not_confirmed'] = '<p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p><p><a href="/profile/verification/new">Что делать, если ничего не&nbsp;пришло?</a></p>';
-
-    this.el.find('.phusur-what-link .link').on('click', function() {
-        that.el.find('.phusur-what-link').hide();
-        that.el.find('.phusur-what').show();
-    });
-    this.el.find('.phusur-what .link').on('click', function() {
-        that.el.find('.phu-signup-result').hide();
-        that.el.find('.phusur-what-link').show();
-        that.el.find('.phusur-what').hide();
+    confirm.messages['Email was already confirmed, please try signing in'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
+    confirm.messages['Email not found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="link phu-signup-link">Зарегистрироваться</span></p>';
+    confirm.elem.find('.phu-error').on('click', '.phu-signup-link', function() {
+        $('#signup-email').val($('#confirm-email').val()).trigger('blur');
+        confirm.error.hide();
+        that.el.find('.phu-confirm').closest('.phu-section').hide();
         that.el.find('.phu-signup').closest('.phu-section').show();
-        signUp.button.prop('disabled', false);        
+        that.el.find('.phu-signup .phu-button').prop('disabled', false);        
     });
-
+    
     var forgot = new profileForm(this.el.find('.phu-forgot'));
     forgot.add('#forgot-email', checkEmail);
     forgot.process = function() {
         that.el.find('.phu-forgot-fields').hide();
         that.el.find('.phu-forgot-result').show();
     };
-    forgot.messages['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';    
+    forgot.messages['not_found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="phu-signup-link phust-link">Зарегистрироваться</span></p>';
 
     this.el.find('.phufr-what-link .link').on('click', function() {
         that.el.find('.phufr-what-link').hide();
@@ -194,7 +223,12 @@ initForms: function() {
         forgot.button.prop('disabled', false);
     });
     
-    $('#signin-email, #signup-email, #forgot-email').on('focus', function() {
+    this.el.find('.phu-signup-result .phu-confirm-link').on('click', function() {
+        $('#confirm-email').val($('#signup-email').val()).trigger('blur');
+        that.showConfirm();        
+    });
+    
+    $('#signin-email, #signup-email, #forgot-email, #confirm-email').on('focus', function() {
         if (this.value && /[а-яА-Я]/.test(this.value)) $(this).val('').trigger('input');
     }).on('change', function() {
         $(this).val($.trim(this.value));
