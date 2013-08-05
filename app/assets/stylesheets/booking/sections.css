@@ -187,19 +187,16 @@
     cursor: pointer;
 }
 .bfpl-hint:after {
-    position: relative;
-    left: 5px;
-    content: '?';
-    color: #777;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: -1px 0 0 3px;
+    background: url('/images/booking/hint.png') no-repeat;
+    content: ' ';
 }
 .bfpl-underline {
-    text-decoration: underline;
-    color: #777;
+    border-bottom: 1px dashed #777;
 }
-.bfplu-text {
-    color: #333;
-}
-
 
 /* Add/remove person */
 .bfp-add {
