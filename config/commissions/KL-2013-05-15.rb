@@ -8,7 +8,7 @@ agent "Только перелеты в Америку из России и на
 subagent "6%"
 subclasses "CDZIWSYMUKHALQTNRV"
 routes "RU-US/ALL"
-discount "4.5%"
+discount "6%"
 our_markup "0.1%"
 ticketing_method "downtown"
 commission "8%/6%"

@@ -7,7 +7,7 @@ subagent "через DTT из России в США и наоборот - 10%"
 interline :no, :yes
 subclasses "CDYSEHM"
 routes "...US,CA..."
-discount "8%"
+discount "10%"
 ticketing_method "downtown"
 commission "12%/10%"
 
@@ -18,7 +18,7 @@ agent "через DTT из России в США и наоборот - 8%"
 subagent "через DTT из России в США и наоборот - 6%"
 interline :no, :yes
 routes "...US,CA..."
-discount "4.5%"
+discount "6%"
 ticketing_method "downtown"
 commission "8%/6%"
 

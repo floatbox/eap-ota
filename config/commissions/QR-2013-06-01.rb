@@ -21,7 +21,7 @@ example "jfkled ledcdg"
 agent "с сегодня на QR если в маршруте есть Россия (OW/RT, origin/destination) - агентская 5%"
 subagent "у нас 3%"
 important!
-discount "2%"
+discount "3%"
 ticketing_method "downtown"
 tour_code "USAN002"
 check %{ includes(country_iatas, 'RU') }

@@ -6,7 +6,7 @@ agent "C 01.08.13г. по 30.09.13г. 10% от опубл. тарифов Пер
 subagent "8%"
 interline :no, :yes
 classes :first, :business
-discount "3.5%"
+discount "8%"
 ticketing_method "aviacenter"
 commission "10%/8%"
 
@@ -15,7 +15,7 @@ example "svocdg cdgsvo/ab"
 agent "5% от опубл. тарифов Эконом класса на собств.рейсы EY, а также на сквозные рейсы Interline с обязательным участием EY."
 subagent "3.5%"
 interline :no, :yes
-discount "2.5%"
+discount "3.5%"
 ticketing_method "aviacenter"
 commission "5%/3.5%"
 

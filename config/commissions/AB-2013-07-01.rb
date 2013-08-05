@@ -4,7 +4,7 @@ example "cdgfra/m fracdg/s"
 comment "только собственные рейсы AB и HG"
 agent "8% по всем направлениям через DTT"
 subagent "6% по всем направлениям через DTT"
-discount "4.5%"
+discount "6%"
 ticketing_method "downtown"
 check %{ includes_only(operating_carrier_iatas, 'AB HG 4T') }
 commission "8%/6%"
