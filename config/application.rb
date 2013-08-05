@@ -79,6 +79,8 @@ module Eviterra
       Object.send :include, AdminLink
     end
 
+    require 'money/bank/zero_exchange'
+    Money.default_bank = Money::Bank::ZeroExchange.new
     Money.default_currency = Money::Currency.new("RUB")
 
   end
