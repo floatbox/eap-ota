@@ -49,6 +49,6 @@ end
 before_exec do |server|
   server.logger.info("forked child re-executing...")
   # попытка починить gem reload
-  server.logger.info("setting BUNDLE_GEMFILE (was #{ENV["BUNDLE_GEMFILE"})")
+  server.logger.info("setting BUNDLE_GEMFILE (was #{ENV['BUNDLE_GEMFILE']})")
   ENV["BUNDLE_GEMFILE"] = project_home + "/Gemfile"
 end
