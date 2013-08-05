@@ -127,13 +127,14 @@ module Amadeus
 
       private
 
+      # FIXME надо отдавать пустые элементы в правильной валюте.
       def parse_money_element(node)
         amount = node.xpath('r:fareAmount').to_f
         currency = node.xpath('r:fareCurrency').to_s
         if amount
           amount.to_money(currency)
         else
-          Money.from_string("0 RUB")
+          "0 RUB".to_money
         end
       end
 
