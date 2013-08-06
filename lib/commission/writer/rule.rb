@@ -12,13 +12,37 @@ class Commission::Writer::Rule
 
     line %[rule #{@rule.number} do]
 
-    Array(@rule.examples).each do |ex|
-      line %[example #{ex.to_s.inspect}]
-    end
+    # в каком порядке проверять, и проверять ли вообще данное правило?
+
+    line bool_or_reason("disabled", @rule.disabled)
+    line bool_or_reason("not_implemented", @rule.not_implemented)
+    line bool_or_reason("no_commission", @rule.no_commission)
+
+    @rule.important and
+      line %[important!]
+
+    # полезная нагрузка: метод выписки, формулы, комментарии
+
+    @rule.ticketing_method and
+      line %[ticketing_method #{@rule.ticketing_method.inspect}]
+
+    line commission_if_needed(:agent)
+    line commission_if_needed(:subagent)
+    line commission_if_needed(:discount)
+    line commission_if_needed(:our_markup)
+    line commission_if_needed(:consolidator)
+    line commission_if_needed(:blanks)
+
+    @rule.tour_code and
+      line %[tour_code #{@rule.tour_code.inspect}]
+    @rule.designator and
+      line %[designator #{@rule.designator.inspect}]
 
     lines 'comment', @rule.comments
     lines 'agent_comment', @rule.agent_comments
     lines 'subagent_comment', @rule.subagent_comments
+
+    # свойства для сверки с рекомендацией
 
     @rule.interline != WRITER_DEFAULTS[:interline] and
       line %[interline #{@rule.interline.map(&:inspect).join(", ")}]
@@ -32,26 +56,10 @@ class Commission::Writer::Rule
     @rule.routes and
       line %[routes #{@rule.routes.map(&:inspect).join(", ")}]
 
-    @rule.important and
-      line %[important!]
-
     @rule.domestic and
       line %[domestic]
     @rule.international and
       line %[international]
-
-    line commission_if_needed(:consolidator)
-    line commission_if_needed(:blanks)
-    line commission_if_needed(:discount)
-    line commission_if_needed(:our_markup)
-
-    @rule.ticketing_method and
-      line %[ticketing_method #{@rule.ticketing_method.inspect}]
-
-    @rule.tour_code and
-      line %[tour_code #{@rule.tour_code.inspect}]
-    @rule.designator and
-      line %[designator #{@rule.designator.inspect}]
 
     if @rule.check
       if @rule.check['\\']
@@ -61,12 +69,11 @@ class Commission::Writer::Rule
       line %[check %{#{@rule.check}}]
     end
 
-    line bool_or_reason("disabled", @rule.disabled)
-    line bool_or_reason("not_implemented", @rule.not_implemented)
+    # отладка: примеры
 
-    line bool_or_reason("no_commission", @rule.no_commission)
-    line commission_if_needed(:agent)
-    line commission_if_needed(:subagent)
+    Array(@rule.examples).each do |ex|
+      line %[example #{ex.to_s.inspect}]
+    end
 
     line %[end]
 

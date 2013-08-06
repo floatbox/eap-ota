@@ -14,8 +14,15 @@ describe Commission::Writer::Book do
       carrier "AB"
 
       rule 1 do
-      example "SVOCDG/AB"
-      example "SVOCDG CDGSVO/AB"
+      ticketing_method "aviacenter"
+      agent "2%"
+      subagent "0.05"
+      discount "4%"
+      our_markup "1eur"
+      consolidator "2%"
+      blanks "50"
+      tour_code "FOOBAR"
+      designator "123"
       comment "есть проблемы"
       comment "и не одна"
       agent_comment "* Какой-то текст"
@@ -25,26 +32,19 @@ describe Commission::Writer::Book do
       classes :business, :economy
       subclasses "ABCDEFGH"
       routes "MOW...US/ALL", "MOW-PAR-MOW"
-      consolidator "2%"
-      blanks "50"
-      discount "4%"
-      our_markup "1eur"
-      ticketing_method "aviacenter"
-      tour_code "FOOBAR"
-      designator "123"
       check %{
         includes_only(operating_carrier_iatas.first, 'AB HG') and
           includes(city_iatas, 'MOW NYC')
       }
-      agent "2%"
-      subagent "0.05"
+      example "SVOCDG/AB"
+      example "SVOCDG CDGSVO/AB"
       end
 
       rule 2 do
-      example "SVOLED/AB"
+      no_commission "Катя просила выключить"
       important!
       domestic
-      no_commission "Катя просила выключить"
+      example "SVOLED/AB"
       end
 
       carrier "FV", start_date: "2013-06-30"
