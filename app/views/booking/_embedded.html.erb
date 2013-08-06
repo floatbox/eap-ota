@@ -9,6 +9,10 @@
 <div class="b-details">
 <div class="od-segments">
 <% cabins = different_cabins(recommendation, @search.cabin) %>
+<% diffCabins = cabins.flatten.compact %>
+<% unless diffCabins.empty? %>
+    <div class="osd-cabins"><span class="osdn-hlcab">Обратите внимание: некоторые сегменты выполняются <%= t(diffCabins.first, :scope => 'offer.details.cabin_ins') %></span></div>
+<% end %>
 <% recommendation.variants.first.segments.each_with_index do |segment, scounter| %>
     <%= render :partial => '/pricer/details', :locals => {
         :segment => segment,
