@@ -10,7 +10,9 @@ describe Commission::Reader do
     subject :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
+        rule 1 do
+          agent "2%"
+        end
       end
     end
 
@@ -28,11 +30,20 @@ describe Commission::Reader do
     subject :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
-        commission '1%/0'
+
+        rule 1 do
+        agent "2%"
+        end
+
+        rule 2 do
+        agent "1%"
+        end
 
         carrier 'AB'
-        commission '0/0'
+
+        rule 1 do
+        agent "0"
+        end
       end
     end
 
@@ -59,16 +70,24 @@ describe Commission::Reader do
     let :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
-        commission '1%/0'
+        rule 1 do
+          agent "2%"
+        end
+        rule 2 do
+          agent "1%"
+        end
 
         carrier 'FV', start_date: '2013-05-01'
-        commission '4%/3'
+        rule 1 do
+          agent "4%"
+        end
 
         carrier 'FV', start_date: '2013-08-01'
 
         carrier 'AB'
-        commission '0/0'
+        rule 1 do
+          agent "0"
+        end
       end
     end
 
@@ -103,6 +122,7 @@ describe Commission::Reader do
     let :book do
       Commission::Reader.new.define do
         carrier 'FV'
+        rule 1 do
         consolidator '1%'
         blanks 50
         discount '2%'
@@ -111,7 +131,9 @@ describe Commission::Reader do
         check %{ true }
         tour_code "FOOBAR"
         designator "PP10"
-        commission '2%/3'
+        agent "2%"
+        subagent "3"
+        end
       end
     end
 
@@ -138,8 +160,10 @@ describe Commission::Reader do
       let :book do
         Commission::Reader.new.define do
           carrier 'SU'
+          rule 1 do
           check "true"
-          commission '0/0'
+          agent "0"
+          end
         end
       end
 
@@ -162,12 +186,14 @@ describe Commission::Reader do
       subject :book do
         Commission::Reader.new.define do
           carrier 'SU'
+          rule 1 do
           check %[
             false
             1here_should_be_error
             true
           ]
-          commission '0/0'
+          agent "0"
+          end
         end
       end
 
@@ -194,13 +220,22 @@ describe Commission::Reader do
     let :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
+        rule 1 do
+        agent "2%"
+        subagent "3"
+        end
 
         carrier 'UN', start_date: "1.2.2013"
-        commission '1%/1%'
+        rule 1 do
+        agent "1%"
+        subagent "1%"
+        end
 
-        carrier 'UN', "Transaero"
-        commission '2%/2%'
+        carrier 'UN'
+        rule 1 do
+        agent "2%"
+        subagent "2%"
+        end
       end
     end
 
@@ -248,27 +283,43 @@ describe Commission::Reader do
     let :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
+
+        rule 1 do
+        agent "2%"
+        subagent "3"
+        end
 
         carrier 'AB'
 
-        agent "first"
+        rule 1 do
+        agent_comment "first"
         interline :first
-        commission '1%/1%'
+        agent "1%"
+        subagent "1%"
+        end
 
-        agent "second"
+        rule 2 do
+        agent_comment "second"
         interline :yes
-        commission '2%/2%'
+        agent "2%"
+        subagent "2%"
+        end
 
-        agent "third"
+        rule 3 do
+        agent_comment "third"
         interline :no
         important!
-        commission '3%/3%'
+        agent "3%"
+        subagent "3%"
+        end
 
-        agent "fourth"
+        rule 4 do
+        agent_comment "fourth"
         interline :possible
         disabled "just because"
-        commission "4%/4%"
+        agent "4%"
+        subagent "4%"
+        end
       end
     end
 
@@ -329,17 +380,25 @@ describe Commission::Reader do
       Commission::Reader.new.define do
         carrier 'AB'
 
-        agent "first"
+        rule 1 do
+        agent_comment "first"
         classes :economy
-        commission '1%/1%'
+        agent "1%"
+        subagent "1%"
+        end
 
-        agent "second"
+        rule 2 do
+        agent_comment "second"
         classes :business
         no_commission '2%/2% forbidden to sale'
+        end
 
-        agent "third"
+        rule 3 do
+        agent_comment "third"
         classes :business
-        commission '3%/3%'
+        agent "3%"
+        subagent "3%"
+        end
       end
     end
 
@@ -384,7 +443,9 @@ describe Commission::Reader do
       let :book do
         Commission::Reader.new.define do
           carrier 'FV'
-          commission '/2%'
+          rule 1 do
+          subagent '2%'
+          end
         end
       end
 
@@ -398,7 +459,9 @@ describe Commission::Reader do
       let :book do
         Commission::Reader.new.define do
           carrier 'FV'
-          commission '2%/'
+          rule 1 do
+          agent "2%"
+          end
         end
       end
 

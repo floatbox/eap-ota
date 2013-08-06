@@ -31,18 +31,10 @@ describe Commission::Rule::Matching do
       end
     end
 
-    # определяет класс комиссий с единственным правилом и возвращает это правило
+    # считывает одно единственное правило
+    # FIXME может быть, прокинуть в define перевозчика?
     def rule(&block)
-
-      Commission::Reader.new.define do
-        # FIXME дефолт для Recommendation.example
-        carrier 'SU'
-        # здесь как бы выполняется блок определения комиссии
-        instance_eval &block
-        # неопределенная агентская/субагентская комиссия
-        commission '/'
-      end.rules.first
-
+      Commission::Reader::Rule.new.define(&block)
     end
 
     let(:no_interline)             { Recommendation.example('SVOCDG CDGSVO') }

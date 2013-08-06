@@ -28,6 +28,7 @@ class Commission::Page
   # вносит в книгу готовую комиссию
   def register rule
     rule.number = @index.size + 1
+    rule.carrier = carrier
     if rule.important
       @index.unshift rule
     else
