@@ -11,6 +11,10 @@ every 5.minutes do
   runner 'Order.cancel_stale!'
 end
 
+every 5.minutes do
+  runner 'Order.set_error_ticket_status!'
+end
+
 every 10.minutes do
 #  runner 'Notification.process_queued_emails!'
 end

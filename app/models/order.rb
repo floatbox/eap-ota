@@ -623,6 +623,14 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def self.set_error_ticket_status!
+    where(ticket_status: 'processing_ticket').
+      where('updated_at < ?', 30.minutes.ago).
+      map do |o|
+        o.ticket! || o.update_attributes(ticket_status: 'error_ticket')
+      end
+  end
+
   def set_customer
     if !email.blank?
       self.customer = Customer.find_or_initialize_by_email(email)
