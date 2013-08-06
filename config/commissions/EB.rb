@@ -1,8 +1,11 @@
 carrier "EB"
 
-agent "1 руб от всех опубл. тарифов на собств. рейсы"
-subagent "0.05 руб от всех опубл. тарифов на собств. рейсы"
+rule 1 do
+agent_comment "1 руб от всех опубл. тарифов на собств. рейсы"
+subagent_comment "0.05 руб от всех опубл. тарифов на собств. рейсы"
 consolidator "2%"
 ticketing_method "aviacenter"
-commission "1/0.05"
+agent "1"
+subagent "0.05"
+end
 

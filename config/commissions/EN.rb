@@ -1,8 +1,11 @@
 carrier "EN"
 
-agent "1% от всех опубл. тарифов"
-subagent "5 руб. от всех опубл. тарифов"
+rule 1 do
+agent_comment "1% от всех опубл. тарифов"
+subagent_comment "5 руб. от всех опубл. тарифов"
 consolidator "2%"
 ticketing_method "aviacenter"
-commission "1%/5"
+agent "1%"
+subagent "5"
+end
 

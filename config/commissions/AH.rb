@@ -1,8 +1,11 @@
 carrier "AH"
 
-agent "5% от всех опубл. тарифов;"
-subagent "3% от всех опубл. тарифов"
+rule 1 do
+agent_comment "5% от всех опубл. тарифов;"
+subagent_comment "3% от всех опубл. тарифов"
 ticketing_method "aviacenter"
 disabled "PROHIBITED TICKETING CARRIER"
-commission "5%/3%"
+agent "5%"
+subagent "3%"
+end
 

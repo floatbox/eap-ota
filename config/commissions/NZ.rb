@@ -1,18 +1,24 @@
 carrier "NZ"
 
+rule 1 do
 example "svocdg cdgsvo"
-agent "7% от тарифа на международные перелеты на рейсы NZ;"
-subagent "5% от тарифа на международные перелеты на рейсы NZ;"
+agent_comment "7% от тарифа на международные перелеты на рейсы NZ;"
+subagent_comment "5% от тарифа на международные перелеты на рейсы NZ;"
 international
 discount "5%"
 ticketing_method "aviacenter"
-commission "7%/5%"
+agent "7%"
+subagent "5%"
+end
 
+rule 2 do
 example "dudbhe bhedud"
-agent "5% от тарифа на внутренние перелеты на рейсы NZ."
-subagent "3,5% от тарифа на внутренние перелеты на рейсы NZ."
+agent_comment "5% от тарифа на внутренние перелеты на рейсы NZ."
+subagent_comment "3,5% от тарифа на внутренние перелеты на рейсы NZ."
 domestic
 discount "3.5%"
 ticketing_method "aviacenter"
-commission "5%/3.5%"
+agent "5%"
+subagent "3.5%"
+end
 

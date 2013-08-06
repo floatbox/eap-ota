@@ -1,9 +1,12 @@
 carrier "9U"
 
+rule 1 do
 example "dmekiv"
-agent "5 (пять) % от всех опубликованных тарифов."
-subagent "3% от опубл. тарифов на рейсы 9U"
+agent_comment "5 (пять) % от всех опубликованных тарифов."
+subagent_comment "3% от опубл. тарифов на рейсы 9U"
 discount "3%"
 ticketing_method "aviacenter"
-commission "5%/3%"
+agent "5%"
+subagent "3%"
+end
 

@@ -1,44 +1,59 @@
 carrier "MS"
 
+rule 1 do
 example "svocai caisvo"
-agent "9% от тарифа на рейсы MS из Москвы"
-subagent "7% от тарифа на рейсы MS из Москвы"
+agent_comment "9% от тарифа на рейсы MS из Москвы"
+subagent_comment "7% от тарифа на рейсы MS из Москвы"
 routes "MOW..."
 discount "7%"
 ticketing_method "aviacenter"
-commission "9%/7%"
+agent "9%"
+subagent "7%"
+end
 
+rule 2 do
 example "caisvo svocai"
-agent "5% от тарифа на рейсы MS из Египта"
-subagent "3,5% от тарифа на рейсы MS из Египта"
+agent_comment "5% от тарифа на рейсы MS из Египта"
+subagent_comment "3,5% от тарифа на рейсы MS из Египта"
 routes "EG..."
 international
 discount "3.5%"
 ticketing_method "aviacenter"
-commission "5%/3.5%"
+agent "5%"
+subagent "3.5%"
+end
 
+rule 3 do
 example "cdgcai"
 example "KULCAI"
-agent "5% от тарифа для иных международных рейсов MS"
-subagent "3,5% от тарифа для иных международных рейсов MS"
+agent_comment "5% от тарифа для иных международных рейсов MS"
+subagent_comment "3,5% от тарифа для иных международных рейсов MS"
 international
 discount "3.5%"
 ticketing_method "aviacenter"
-commission "5%/3.5%"
+agent "5%"
+subagent "3.5%"
+end
 
+rule 4 do
 example "caihrg"
-agent "0% от тарифа на рейсы MS внутри Египта"
-subagent "0% от тарифа на рейсы MS внутри Египта"
+agent_comment "0% от тарифа на рейсы MS внутри Египта"
+subagent_comment "0% от тарифа на рейсы MS внутри Египта"
 domestic
 consolidator "2%"
 ticketing_method "aviacenter"
-commission "0%/0%"
+agent "0%"
+subagent "0%"
+end
 
+rule 5 do
 example "caisvo svocai/su"
-agent "0% от тарифа на все иные сектора авиабилетов Interline"
-subagent "0% от тарифа на все иные сектора авиабилетов Interline"
+agent_comment "0% от тарифа на все иные сектора авиабилетов Interline"
+subagent_comment "0% от тарифа на все иные сектора авиабилетов Interline"
 interline :yes
 consolidator "2%"
 ticketing_method "aviacenter"
-commission "0%/0%"
+agent "0%"
+subagent "0%"
+end
 

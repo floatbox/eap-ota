@@ -1,9 +1,12 @@
 carrier "UT"
 
+rule 1 do
 example "svocdg cdgsvo"
-agent "5% DTT"
-subagent "3% DTT"
+agent_comment "5% DTT"
+subagent_comment "3% DTT"
 discount "3%"
 ticketing_method "downtown"
-commission "5%/4%"
+agent "5%"
+subagent "4%"
+end
 

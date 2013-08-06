@@ -1,21 +1,29 @@
 carrier "KE"
 
+rule 1 do
 example "svogmp"
-agent "С 01.04.2011г. 5% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
-subagent "С 01.04.2011г. 3% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
+agent_comment "С 01.04.2011г. 5% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
+subagent_comment "С 01.04.2011г. 3% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута в России."
 routes "RU..."
 discount "3%"
 ticketing_method "aviacenter"
-commission "5%/3%"
+agent "5%"
+subagent "3%"
+end
 
+rule 2 do
 example "gmpsvo"
-agent "С 01.04.2011г. 0% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута вне России."
-subagent "С 01.04.2011г. 0% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута вне России."
+agent_comment "С 01.04.2011г. 0% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута вне России."
+subagent_comment "С 01.04.2011г. 0% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута вне России."
 consolidator "2%"
 ticketing_method "aviacenter"
 check %{ not includes(country_iatas.first, 'RU') }
-commission "0%/0%"
+agent "0%"
+subagent "0%"
+end
 
+rule 3 do
 example "svoicn icnsvo/ab"
 no_commission
+end
 

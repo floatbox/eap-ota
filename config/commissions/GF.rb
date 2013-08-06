@@ -1,14 +1,20 @@
 carrier "GF"
 
-agent "7% от тарифа на международные рейсы GF"
-subagent "5% от тарифа на международные рейсы GF"
+rule 1 do
+agent_comment "7% от тарифа на международные рейсы GF"
+subagent_comment "5% от тарифа на международные рейсы GF"
 ticketing_method "aviacenter"
 disabled "не bsp"
-commission "7%/5%"
+agent "7%"
+subagent "5%"
+end
 
-agent "5% от тарифа на рейсы GF между аэропортами Персидского залива"
-subagent "3,5% от тарифа на рейсы GF между аэропортами Персидского залива"
+rule 2 do
+agent_comment "5% от тарифа на рейсы GF между аэропортами Персидского залива"
+subagent_comment "3,5% от тарифа на рейсы GF между аэропортами Персидского залива"
 ticketing_method "aviacenter"
 disabled "не bsp"
-commission "5%/3.5%"
+agent "5%"
+subagent "3.5%"
+end
 

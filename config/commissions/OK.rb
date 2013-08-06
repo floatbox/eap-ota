@@ -1,12 +1,15 @@
 carrier "OK"
 
+rule 1 do
 example "svocdg"
 example "cdgsvo svocdg/ab"
-agent "1% от опубл. тарифов на собств.рейсы OK;"
-agent "1% от опубл. тарифов на рейсы Interline, если один из сегментов выполнен под кодом OK."
-subagent "0.5%"
+agent_comment "1% от опубл. тарифов на собств.рейсы OK;"
+agent_comment "1% от опубл. тарифов на рейсы Interline, если один из сегментов выполнен под кодом OK."
+subagent_comment "0.5%"
 interline :no, :yes
 discount "2%"
 ticketing_method "aviacenter"
-commission "1%/0.5%"
+agent "1%"
+subagent "0.5%"
+end
 

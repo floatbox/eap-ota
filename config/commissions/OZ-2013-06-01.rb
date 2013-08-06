@@ -1,17 +1,23 @@
 carrier "OZ", start_date: "2013-06-01"
 
+rule 1 do
 example "svocdg"
-agent "5% (3%)(3%) от опубл.тарифов на собств.рейсы OZ; "
-subagent "3%"
+agent_comment "5% (3%)(3%) от опубл.тарифов на собств.рейсы OZ; "
+subagent_comment "3%"
 discount "3%"
 ticketing_method "aviacenter"
-commission "5%/3%"
-
-example "svocdg cdgsvo/ab"
-agent "5% (3%)(3%) от опубл.тарифов на рейсы Interline с обязательным собств. сегментом OZ;"
+agent "5%"
 subagent "3%"
+end
+
+rule 2 do
+example "svocdg cdgsvo/ab"
+agent_comment "5% (3%)(3%) от опубл.тарифов на рейсы Interline с обязательным собств. сегментом OZ;"
+subagent_comment "3%"
 interline :yes
 discount "3%"
 ticketing_method "aviacenter"
-commission "5%/3%"
+agent "5%"
+subagent "3%"
+end
 

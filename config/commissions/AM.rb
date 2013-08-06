@@ -1,10 +1,13 @@
 carrier "AM"
 
+rule 1 do
 example "SVOCDG"
-agent "9% от всех опубликованных тарифов"
-subagent "7% от опубл. тарифов на рейсы AM"
+agent_comment "9% от всех опубликованных тарифов"
+subagent_comment "7% от опубл. тарифов на рейсы AM"
 interline :no, :yes
 discount "7%"
 ticketing_method "aviacenter"
-commission "9%/7%"
+agent "9%"
+subagent "7%"
+end
 

@@ -1,8 +1,11 @@
 carrier "W3"
 
-agent "1% от всех опубликованных тарифов"
-subagent "5 рублей с билета по опубликованным тарифам"
+rule 1 do
+agent_comment "1% от всех опубликованных тарифов"
+subagent_comment "5 рублей с билета по опубликованным тарифам"
 consolidator "2%"
 ticketing_method "aviacenter"
-commission "1%/5"
+agent "1%"
+subagent "5"
+end
 

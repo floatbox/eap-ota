@@ -1,19 +1,25 @@
 carrier "RB"
 
+rule 1 do
 example "svocdg"
-agent "7% от всех опубл. тарифов на рейсы RB (В договоре Interline не прописан.)"
-subagent "5% от опубл. тарифов на рейсы RB"
+agent_comment "7% от всех опубл. тарифов на рейсы RB (В договоре Interline не прописан.)"
+subagent_comment "5% от опубл. тарифов на рейсы RB"
 discount "2.5%"
 ticketing_method "aviacenter"
 disabled "Катя сказала выключить, потому что война"
-commission "7%/5%"
+agent "7%"
+subagent "5%"
+end
 
+rule 2 do
 example "cdgsvo svocdg/ab"
-agent "1р Interline не прописан"
-subagent "0р Interline не прописан"
+agent_comment "1р Interline не прописан"
+subagent_comment "0р Interline не прописан"
 interline :unconfirmed
 discount "2.5%"
 ticketing_method "aviacenter"
 disabled "Катя сказала выключить, потому что война"
-commission "7%/5%"
+agent "7%"
+subagent "5%"
+end
 

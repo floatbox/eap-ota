@@ -1,25 +1,34 @@
 carrier "ET"
 
+rule 1 do
 example "svocdg"
-agent "7% от опубл. тарифов на собств. рейсы ET"
-subagent "5% от опубл. тарифов на собств. рейсы ET"
+agent_comment "7% от опубл. тарифов на собств. рейсы ET"
+subagent_comment "5% от опубл. тарифов на собств. рейсы ET"
 discount "5%"
 ticketing_method "aviacenter"
-commission "7%/5%"
+agent "7%"
+subagent "5%"
+end
 
+rule 2 do
 example "svocdg cdgsvo/ab"
-agent "5 % от опубл. тарифов на рейсы Interline с участком ET"
-subagent "3,5 % от опубл. тарифов на рейсы Interline с участком ET"
+agent_comment "5 % от опубл. тарифов на рейсы Interline с участком ET"
+subagent_comment "3,5 % от опубл. тарифов на рейсы Interline с участком ET"
 interline :yes
 discount "3.5%"
 ticketing_method "aviacenter"
-commission "5%/3.5%"
+agent "5%"
+subagent "3.5%"
+end
 
+rule 3 do
 example "cdgsvo/ab"
-agent "0 % от опубл. тарифов на рейсы Interline без участка ET"
-subagent "0 % от опубл. тарифов на рейсы Interline без участка ET"
+agent_comment "0 % от опубл. тарифов на рейсы Interline без участка ET"
+subagent_comment "0 % от опубл. тарифов на рейсы Interline без участка ET"
 interline :absent
 consolidator "2%"
 ticketing_method "aviacenter"
-commission "0%/0%"
+agent "0%"
+subagent "0%"
+end
 

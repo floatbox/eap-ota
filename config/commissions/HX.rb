@@ -1,9 +1,12 @@
 carrier "HX"
 
+rule 1 do
 example "svocdg"
-agent "5% от всех опубл. тарифов на собств.рейсы HX (В договоре Interline не прописан.)"
-subagent "3% от опубл. тарифов на собств.рейсы HX"
+agent_comment "5% от всех опубл. тарифов на собств.рейсы HX (В договоре Interline не прописан.)"
+subagent_comment "3% от опубл. тарифов на собств.рейсы HX"
 discount "3%"
 ticketing_method "aviacenter"
-commission "5%/3%"
+agent "5%"
+subagent "3%"
+end
 

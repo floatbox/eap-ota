@@ -1,55 +1,70 @@
 carrier "SN"
 
+rule 1 do
 example "svojfk/f"
 example "svojfk/a jfksvo/z"
-agent "по классам F, A,D, Z, P у них осталась комиссия 10 %"
-subagent "8%"
+agent_comment "по классам F, A,D, Z, P у них осталась комиссия 10 %"
+subagent_comment "8%"
 subclasses "FADZP"
 routes "AT,CH,DE,FR,IT,NL,ES,GB,IE,BE,DK,FI,GR,LU,NO,PT,SE,TR,AE,BH,IL,KW,QA,BA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 discount "8%"
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP10"
-commission "10%/8%"
+agent "10%"
+subagent "8%"
+end
 
+rule 2 do
 example "svojfk/q"
 example "svojfk/q jfksvo/k"
-agent "по классам Q, V, W, S, T, L, K у них комиссия 8%"
-subagent "6%"
+agent_comment "по классам Q, V, W, S, T, L, K у них комиссия 8%"
+subagent_comment "6%"
 subclasses "QVWSTLK"
 routes "TR,AE,BH,IL,KW,QA,BG,CY,CZ,HR,HU,MD,ME,MK,MT,PL,RO,RS,SI,SK,AL,AM,AZ,BY,EE,GE,KG,KZ,LT,LV,RU,TM,UA,UZ,AF,IQ,JO,LB,OM,SA,SY,YE,AO,BF,BJ,CD,CG,CI,CM,CV,DJ,DZ,ER,GA,GH,GM,GN,GQ,GW,LR,LY,MA,MG,ML,MU,MW,MZ,NA,NG,SC,SL,SN,SD,ST,TG,TN,ZA,ZM,ZW,BD,LK,MV,PK,EG,IR,BI,ET,KE,RW,SD,TZ,UG-US/ALL"
 discount "6%"
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP8"
-commission "8%/6%"
+agent "8%"
+subagent "6%"
+end
 
+rule 3 do
 example "svojfk/y"
 example "svojfk/y jfksvo/m"
-agent "по классам Y, B, M, U, H у них комиссия 5%"
-subagent "3%"
+agent_comment "по классам Y, B, M, U, H у них комиссия 5%"
+subagent_comment "3%"
 subclasses "YBMUH"
 discount "3%"
 ticketing_method "downtown"
 tour_code "815ZU"
 designator "PP5"
 check %{ includes(country_iatas, %W[AT CH DE FR IT NL ES GB IE BE DK FI GR LU NO PT SE TR AE BH IL KW QA BA BG CY CZ HR HU MD ME MK MT PL RO RS SI SK AL AM AZ BY EE GE KG KZ LT LV RU TM UA UZ AF IQ JO LB OM SA SY YE AO BF BJ CD CG CI CM CV DJ DZ ER GA GH GM GN GQ GW LR LY MA MG ML MU MW MZ NA NG SC SL SN SD ST TG TN ZA ZM ZW BD LK MV PK EG IR BI ET KE RW SD TZ UG US]) and includes(country_iatas, 'US') }
-commission "5%/3%"
+agent "5%"
+subagent "3%"
+end
 
+rule 4 do
 example "svocdg"
 example "DMEBRU"
 example "BRULBA"
-agent "0,5% от опубл. тарифам на собств. рейсы SN;"
-subagent "5 руб. с билета по опубл. тарифам на собств. рейсы SN;"
+agent_comment "0,5% от опубл. тарифам на собств. рейсы SN;"
+subagent_comment "5 руб. с билета по опубл. тарифам на собств. рейсы SN;"
 our_markup "10"
 ticketing_method "aviacenter"
-commission "0.5%/5"
+agent "0.5%"
+subagent "5"
+end
 
+rule 5 do
 example "svocdg cdgsvo/ab"
-agent "0,5% от опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
-subagent "5 руб. с билета по опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
+agent_comment "0,5% от опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
+subagent_comment "5 руб. с билета по опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
 interline :yes
 our_markup "60"
 ticketing_method "aviacenter"
-commission "0.5%/5"
+agent "0.5%"
+subagent "5"
+end
 

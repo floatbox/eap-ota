@@ -1,17 +1,23 @@
 carrier "R3"
 
+rule 1 do
 example "svocdg cdgsvo"
-agent "6 % от всех опубл. тарифов на все собств.рейсы Авиакомпании;"
-subagent "4% от всех опубл. тарифов на все собств.рейсы Авиакомпании;"
+agent_comment "6 % от всех опубл. тарифов на все собств.рейсы Авиакомпании;"
+subagent_comment "4% от всех опубл. тарифов на все собств.рейсы Авиакомпании;"
 discount "4%"
 ticketing_method "aviacenter"
-commission "6%/4%"
+agent "6%"
+subagent "4%"
+end
 
+rule 2 do
 example "ykscdg/ab cdgyks"
-agent "4 % от всех опубл. тарифов на все рейсы, выполняемые Интерлайн-партнерами Авиакомпании."
-subagent "3% от всех опубл. тарифов на все рейсы, выполняемые Интерлайн-партнерами"
+agent_comment "4 % от всех опубл. тарифов на все рейсы, выполняемые Интерлайн-партнерами Авиакомпании."
+subagent_comment "3% от всех опубл. тарифов на все рейсы, выполняемые Интерлайн-партнерами"
 interline :yes
 discount "3%"
 ticketing_method "aviacenter"
-commission "4%/3%"
+agent "4%"
+subagent "3%"
+end
 
