@@ -177,32 +177,25 @@
     background: #fdfbea;
     line-height: 16px;
 }
-.bfp-hint {
-    position: absolute;
-    top: 0;
-    margin-left: -10px;
-    padding: 0 10px;
-    background: #fbf4cb;    
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 13px;
-    color: #777;
-}
-#bfph-passport {
-    left: 645px;
-}
-#bfph-expiration {
-    left: 805px;
-}
-.bfph-link {
-    text-decoration: underline;
-    cursor: pointer;
-}
 .bfp-control {
     padding-right: 10px;
 }
 .bfp-spacer {
     height: 14px;
+}
+.bfpl-hint {
+    cursor: pointer;
+}
+.bfpl-hint:after {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: -1px 0 0 3px;
+    background: url('/images/booking/hint.png') no-repeat;
+    content: ' ';
+}
+.bfpl-underline {
+    border-bottom: 1px dashed #777;
 }
 
 /* Add/remove person */

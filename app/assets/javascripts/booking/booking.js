@@ -12,11 +12,12 @@ init: function() {
     results.header.select.find('.rhs-link').click(function() {
         that.cancel();
     });
-    this.content.delegate('.bf-hint', 'click', function(event) {
-        var content = $('#' + $(this).attr('data-hint')).html();
-        hint.show(event, content);
+    this.content.on('click', '.bf-hint', function(event) {
+        var control = $(this);
+        var content = $('#' + control.attr('data-hint')).html();
+        hint.show(event, content, control.attr('data-width'));
     });
-    this.content.delegate('.od-alliance', 'click', function(event) {
+    this.content.on('click', '.od-alliance', function(event) {
         var el = $(this);
         hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-carriers') + '.');
     });

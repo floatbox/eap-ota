@@ -12,7 +12,7 @@ init: function() {
         if (event.type == 'click' || event.which == 27) that.hide();
     };
 },
-show: function(event, content) {
+show: function(event, content, width) {
     var that = this;
     var w = $(window), wst = w.scrollTop();
     if (this.el.is(':visible')) {
@@ -20,7 +20,7 @@ show: function(event, content) {
         this.el.hide();
     }
     this.content.html(content);
-    var ew = this.el.width(), eh = this.el.height();
+    this.el.width(width || '');
     this.el.css({
         left: (event.pageX - this.el.width() - 20).constrain(15, w.width() - this.el.outerWidth() - 15),
         top: (event.pageY - 15).constrain(wst + 15, wst + w.height() - this.el.outerHeight() - 15)
