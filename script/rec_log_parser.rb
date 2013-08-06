@@ -4,7 +4,8 @@
 # Скрипт проверяет к каким валидным перевозчикам не применяются правила.
 
 $opts = {
-  interactive: false
+  interactive: false,
+  dump: 'tmp/recs'
 }
 require_relative '../config/environment'
 
@@ -15,12 +16,15 @@ totals = {}
 unsellables = {}
 total_recs = 0
 unsellable_recs = 0
+missing_iatas = 0
 
 trap :INT do
   exit
 end
 
 at_exit do
+  # пропускаю строчку после ctrl+c и прогрессбара
+  warn ""
   totals.keys.sort.each do |carrier|
     total = totals[carrier]
     unsellable = unsellables[carrier] || 0
@@ -35,6 +39,7 @@ at_exit do
     puts
     puts "total recs: #{total_recs}"
     puts "unsellable recs: #{unsellable_recs}"
+    puts "missing iatas: #{missing_iatas}"
   end
 end
 
@@ -52,6 +57,13 @@ class Progressbar
     STDERR.print "  #{@counter}\r" if (@counter % 10).zero?
   end
 end
+
+if $opts[:dump]
+  require 'fileutils'
+  warn "dumping recommendations to #{$opts[:dump]}"
+  FileUtils.mkdir_p $opts[:dump]
+end
+
 progress = Progressbar.new('recommendations')
 log_file = File.open(filename).each_line do |log_line_file|
 
@@ -70,7 +82,17 @@ log_file = File.open(filename).each_line do |log_line_file|
       unsellables[carrier] ||= 0
       unsellables[carrier] += 1
     end
-  rescue IataStash::NotFound
+    if $opts[:dump]
+      filename = carrier + '_' + rec.commission.number.to_s
+      filename += '_nosell' unless rec.commission.sellable?
+      filename += '.log'
+      # FIXME кэшировать открытый хэндл
+      File.open($opts[:dump] + '/' + filename, 'a') do |f|
+        f << log_line_file
+      end
+    end
+  rescue CodeStash::NotFound
+    missing_iatas += 1
     next
   end
 
