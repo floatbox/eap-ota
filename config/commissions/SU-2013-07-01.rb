@@ -25,15 +25,18 @@ example "cdgsvo svocdg"
 end
 
 rule 3 do
-disabled "Включаем SU#4"
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
-discount "2.25%"
+discount "4.5%"
 agent_comment "Коля: SU на dtt 5%/4.5%/4.2%, кроме тель-авива и SU#1"
 subagent_comment "4.5%"
+interline :no, :yes
 check %{ not includes(city_iatas, 'TLV') }
 example "svobkk bkksvo"
+example "svocdg"
+example "svocdg cdgsvo"
+example "svocdg/su cdgsvo/ab"
 end
 
 rule 4 do
@@ -45,9 +48,7 @@ agent_comment "4%  от тарифа на собств. рейсы SU с нач�
 subagent_comment "3%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 interline :no, :yes
 routes "RU..."
-example "svocdg"
-example "svocdg cdgsvo"
-example "svocdg/su cdgsvo/ab"
+example "svotlv/su tlvsvo"
 end
 
 rule 5 do
