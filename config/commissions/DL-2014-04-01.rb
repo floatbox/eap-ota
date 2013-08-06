@@ -1,38 +1,40 @@
 carrier "DL", start_date: "2014-04-01"
 
 rule 1 do
-example "svojfk/d jfksvo/m"
-example "jfksvo/x"
+ticketing_method "downtown"
+agent "8%"
+subagent "6%"
+discount "3%"
 agent_comment "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
 agent_comment "Если, кратко, то C,D,Z,I Y,B,M,S,H,Q W,K,L,U,T,X,V"
 agent_comment "Только перелеты в Америку из России и наоборот (RT и OW), только СОБСТВЕННЫЕ рейсы ( никаких код-шерингов), авиакомпании могут комбинироваться в одном бронировании. Их комиссия 8%, наша 6%, никаких особенностей в выписке"
 subagent_comment "6%"
 subclasses "CDZIYBMSHQWKLUTXV"
 routes "RU-US/ALL"
-discount "3%"
-ticketing_method "downtown"
-agent "8%"
-subagent "6%"
+example "svojfk/d jfksvo/m"
+example "jfksvo/x"
 end
 
 rule 2 do
-example "svojfk/f"
-example "svojfk/c jfksvo/d"
+disabled "продаем по dtt"
+ticketing_method "aviacenter"
+agent "4%"
+subagent "2%"
+discount "1%"
 agent_comment "4% (2%) (2%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ;"
 subagent_comment "4% (2%) (2%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ;"
 subclasses "JCDZI"
 routes "MOW..."
-discount "1%"
-ticketing_method "aviacenter"
-disabled "продаем по dtt"
-agent "4%"
-subagent "2%"
+example "svojfk/f"
+example "svojfk/c jfksvo/d"
 end
 
 rule 3 do
-example "okocdg cdgoko/ab"
-example "cdgoko"
-example "okomia"
+disabled "включил dtt"
+ticketing_method "aviacenter"
+agent "1%"
+subagent "0.5%"
+discount "0.25%"
 agent_comment "1% от опубл. тарифа DL на трансатлантический перелет при перевозке, начинающейся в Европе, Азии или Африке;"
 agent_comment "1% от опубл. тарифа других авиакомпаний в комбинации с опубл. тарифом DL на трансатлант.перелет при перевозке, нач.в Европе, Азии или Африке;"
 agent_comment "1% от опубл. тарифа DL при внутренних перелетах по США"
@@ -40,49 +42,47 @@ subagent_comment "0,5% от опубл. тарифа DL на трансатла�
 subagent_comment "0,5% от опубл. тарифа других авиакомпаний в комбинации с опубл. тарифом DL на трансатлант.перелет при перевозке, нач.в Европе, Азии или Африке;"
 subagent_comment "0,5% от опубл. тарифа DL при внутренних перелетах по США"
 interline :no, :yes
-discount "0.25%"
-ticketing_method "aviacenter"
 check %{ includes(%W(europe asia africa), Country[country_iatas.first].continent ) }
-disabled "включил dtt"
-agent "1%"
-subagent "0.5%"
+example "okocdg cdgoko/ab"
+example "cdgoko"
+example "okomia"
 end
 
 rule 4 do
-example "miadtw dtwmia"
-example "miadtw dtwmia/ab"
+important!
+ticketing_method "aviacenter"
+agent "1%"
+subagent "0.5%"
+discount "0.25%"
 agent_comment "1% от опубл. тарифа DL при внутренних перелетах по США"
 subagent_comment "0,5% от опубл. тарифа DL при внутренних перелетах по США"
 interline :no, :yes
-important!
 domestic
-discount "0.25%"
-ticketing_method "aviacenter"
-agent "1%"
-subagent "0.5%"
+example "miadtw dtwmia"
+example "miadtw dtwmia/ab"
 end
 
 rule 5 do
-example "cdgsvo/ab"
-agent_comment "1% от опубл. тарифа на рейсы Interline без участка DL."
-subagent_comment "0,5% от опубл. тарифа на рейсы Interline без участка DL."
-interline :absent
-discount "0.25%"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
+discount "0.25%"
+agent_comment "1% от опубл. тарифа на рейсы Interline без участка DL."
+subagent_comment "0,5% от опубл. тарифа на рейсы Interline без участка DL."
+interline :absent
+example "cdgsvo/ab"
 end
 
 rule 6 do
-example "EWRDTW DTWYYZ"
+ticketing_method "aviacenter"
+agent "0%"
+subagent "0%"
+consolidator "2%"
 comment "ньюйорк - детройт - торонто"
 agent_comment "0% на перевозки, нач.в США (включая Пуэрто Рико, Острова Вирджинии и Канада)"
 subagent_comment "0% на перевозки, нач.в США (включая Пуэрто Рико, Острова Вирджинии и Канада)"
 interline :no, :yes
 routes "PR,US,VI,CA..."
-consolidator "2%"
-ticketing_method "aviacenter"
-agent "0%"
-subagent "0%"
+example "EWRDTW DTWYYZ"
 end
 

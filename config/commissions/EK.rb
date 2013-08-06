@@ -1,96 +1,96 @@
 carrier "EK"
 
 rule 1 do
-example "svocdg/first cdgsvo/business"
-example "svocdg/first cdgsvo/first"
+ticketing_method "aviacenter"
+agent "5%"
+subagent "3.5%"
+discount "3.5%"
 agent_comment "5% от тарифов Первого и Бизнес классов на рейсы EK;"
 subagent_comment "3,5% от тарифов Первого и Бизнес классов на рейсы EK;"
 classes :first, :business
 routes "RU..."
-discount "3.5%"
-ticketing_method "aviacenter"
-agent "5%"
-subagent "3.5%"
+example "svocdg/first cdgsvo/business"
+example "svocdg/first cdgsvo/first"
 end
 
 rule 2 do
-example "svocdg/business cdgsvo"
-example "svocdg/first cdgsvo"
-agent_comment "5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
-subagent_comment "3,5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
-routes "RU..."
-discount "3.5%"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
+discount "3.5%"
+agent_comment "5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
+subagent_comment "3,5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
+routes "RU..."
+example "svocdg/business cdgsvo"
+example "svocdg/first cdgsvo"
 end
 
 rule 3 do
-example "svocdg"
+important!
+ticketing_method "aviacenter"
+agent "1"
+subagent "0.05"
+discount "2%"
 agent_comment "1 руб. с билета по опубл.тарифам Эконом класса на рейсы EK."
 subagent_comment "5 коп. с билета по опубл.тарифам Эконом класса на собств. рейсы EK."
 classes :economy
 routes "RU..."
-important!
-discount "2%"
-ticketing_method "aviacenter"
-agent "1"
-subagent "0.05"
+example "svocdg"
 end
 
 rule 4 do
-example "jfkcdg"
-agent_comment "1 руб. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
-subagent_comment "С 01.01.13г. 5 коп. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
 ticketing_method "aviacenter"
-check %{ not includes_only(country_iatas.first, 'RU') }
 agent "1"
 subagent "0.05"
+agent_comment "1 руб. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
+subagent_comment "С 01.01.13г. 5 коп. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
+check %{ not includes_only(country_iatas.first, 'RU') }
+example "jfkcdg"
 end
 
 rule 5 do
-example "svocdg/business cdgsvo/ab/business svoled/business ledsvo/business"
+ticketing_method "aviacenter"
+agent "5%"
+subagent "3.5%"
+discount "3.5%"
 agent_comment "5% (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
 subagent_comment "3.5%"
 interline :less_than_half
 classes :first, :business
 routes "RU..."
-discount "3.5%"
-ticketing_method "aviacenter"
-agent "5%"
-subagent "3.5%"
+example "svocdg/business cdgsvo/ab/business svoled/business ledsvo/business"
 end
 
 rule 6 do
-example "svocdg/first cdgsvo/ab/business svoled ledsvo"
+disabled "Пока не разруливается с чистым экономом на уровне спеки: также как и с OW example в чистом правиле не сделать"
+ticketing_method "aviacenter"
+agent "5%"
+subagent "3.5%"
+discount "1.75%"
 comment "интерлайновые копии"
 agent_comment "5% (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
 subagent_comment "3.5%"
 interline :less_than_half
 routes "RU..."
-discount "1.75%"
-ticketing_method "aviacenter"
-disabled "Пока не разруливается с чистым экономом на уровне спеки: также как и с OW example в чистом правиле не сделать"
-agent "5%"
-subagent "3.5%"
+example "svocdg/first cdgsvo/ab/business svoled ledsvo"
 end
 
 rule 7 do
-example "svocdg cdgsvo/ab svoled ledsvo"
+ticketing_method "aviacenter"
+agent "1"
+subagent "0.05"
+our_markup "20"
 agent_comment "1 рубль (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
 subagent_comment "5 коп"
 interline :less_than_half
 classes :economy
 routes "RU..."
-our_markup "20"
-ticketing_method "aviacenter"
-agent "1"
-subagent "0.05"
+example "svocdg cdgsvo/ab svoled ledsvo"
 end
 
 rule 8 do
+no_commission
 example "svocdg cdgled/ab ledsvo/ab"
 example "svocdg/ab cdgsvo/ab"
-no_commission
 end
 

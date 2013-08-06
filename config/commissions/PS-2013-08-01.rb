@@ -1,101 +1,101 @@
 carrier "PS", start_date: "2013-08-01"
 
 rule 1 do
-example "svocdg"
-example "svocdg cdgsvo"
-agent_comment "Для перевозок, содержащих участок в/из пунктов РФ:"
-agent_comment "5% (3%) (3%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в Москвы;"
-discount "3%"
 ticketing_method "aviacenter"
-check %{ includes(country_iatas, 'RU') and includes(city_iatas, 'MOW LED') }
 agent "5%"
 subagent "3%"
+discount "3%"
+agent_comment "Для перевозок, содержащих участок в/из пунктов РФ:"
+agent_comment "5% (3%) (3%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в Москвы;"
+check %{ includes(country_iatas, 'RU') and includes(city_iatas, 'MOW LED') }
+example "svocdg"
+example "svocdg cdgsvo"
 end
 
 rule 2 do
-example "svxcdg"
-example "svxcdg cdgsvx"
-agent_comment "7% (5%) (5%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в пунктов в РФ, кроме Москвы;"
-discount "5%"
 ticketing_method "aviacenter"
-check %{ includes(country_iatas, 'RU') and not includes(city_iatas, 'MOW LED') }
 agent "7%"
 subagent "5%"
+discount "5%"
+agent_comment "7% (5%) (5%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в пунктов в РФ, кроме Москвы;"
+check %{ includes(country_iatas, 'RU') and not includes(city_iatas, 'MOW LED') }
+example "svxcdg"
+example "svxcdg cdgsvx"
 end
 
 rule 3 do
-example "svocdg/business"
-example "svocdg/business cdgsvo/business"
+important!
+ticketing_method "aviacenter"
+agent "7%"
+subagent "5%"
+discount "5%"
 agent_comment "7% от тарифа Бизнес класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) из/в пунктов в РФ;"
 subagent_comment "5%"
 classes :business
-important!
-discount "5%"
-ticketing_method "aviacenter"
 check %{ includes(country_iatas, 'RU') }
-agent "7%"
-subagent "5%"
+example "svocdg/business"
+example "svocdg/business cdgsvo/business"
 end
 
 rule 4 do
-example "cdgsvo svocdg/ab"
+ticketing_method "aviacenter"
+agent "5%"
+subagent "3%"
+discount "3%"
 agent_comment "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 subagent_comment "3% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 interline :yes
-discount "3%"
-ticketing_method "aviacenter"
 check %{ includes(country_iatas, 'RU') }
-agent "5%"
-subagent "3%"
+example "cdgsvo svocdg/ab"
 end
 
 rule 5 do
-example "cdgsvo/ab"
+ticketing_method "aviacenter"
+agent "0%"
+subagent "0%"
+consolidator "2%"
 agent_comment "0% от опубл. тарифов на рейсы Interline без участка PS"
 subagent_comment "0% от опубл. тарифов на рейсы Interline без участка PS"
 interline :absent
-consolidator "2%"
-ticketing_method "aviacenter"
 check %{ includes(country_iatas, 'RU') }
-agent "0%"
-subagent "0%"
+example "cdgsvo/ab"
 end
 
 rule 6 do
-example "ievcdg"
+ticketing_method "aviacenter"
+agent "1%"
+subagent "5"
+consolidator "2%"
 comment "для несодержащих РФ перевозок"
 agent_comment "1% (5 руб+2%сбор АЦ) (скидки нет) от тарифа на собственных и совместных рейсах Авиакомпании под кодом PS (566)"
 subagent_comment "5 р"
-consolidator "2%"
-ticketing_method "aviacenter"
 check %{ not includes(country_iatas, 'RU') }
-agent "1%"
-subagent "5"
+example "ievcdg"
 end
 
 rule 7 do
-example "cdgiev ievcdg/ab"
+ticketing_method "aviacenter"
+agent "1%"
+subagent "5"
+consolidator "2%"
 comment "для несодержащих РФ перевозок"
 agent_comment "1% (5 руб+2%сбор АЦ) (скидки нет) от тарифа на рейсы Interline с участком PS;"
 subagent_comment "5р + 2% сбор ац"
 interline :yes
-consolidator "2%"
-ticketing_method "aviacenter"
 check %{ not includes(country_iatas, 'RU') }
-agent "1%"
-subagent "5"
+example "cdgiev ievcdg/ab"
 end
 
 rule 8 do
-example "cdgiev/ab"
+ticketing_method "aviacenter"
+agent "0%"
+subagent "0%"
+consolidator "2%"
 comment "для несодержащих РФ перевозок"
 agent_comment "0% от опубл. тарифов на рейсы Interline без участка PS"
 subagent_comment "0% от опубл. тарифов на рейсы Interline без участка PS"
 interline :absent
-consolidator "2%"
-ticketing_method "aviacenter"
 check %{ not includes(country_iatas, 'RU') }
-agent "0%"
-subagent "0%"
+example "cdgiev/ab"
 end
 

@@ -1,19 +1,19 @@
 carrier "RJ"
 
 rule 1 do
-example "svocdg cdgsvo"
-agent_comment "5 (пять) % от всех опубл. тарифов на собств. рейсы RJ"
-subagent_comment "3% от опубл. тарифов на собств. рейсы RJ"
-discount "2.5%"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
+discount "2.5%"
+agent_comment "5 (пять) % от всех опубл. тарифов на собств. рейсы RJ"
+subagent_comment "3% от опубл. тарифов на собств. рейсы RJ"
+example "svocdg cdgsvo"
 end
 
 rule 2 do
-example "svocdg/ab cdgsvo"
+no_commission
 agent_comment "interline нет в договоре"
 interline :yes, :absent
-no_commission
+example "svocdg/ab cdgsvo"
 end
 

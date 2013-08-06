@@ -1,25 +1,25 @@
 carrier "GW"
 
 rule 1 do
-example "svocdg"
-agent_comment "5% от опубл. тарифов на собств. рейсы авиакомпании."
-subagent_comment "3% от всех опубл. тарифов на собств. рейсы GW"
-discount "0%"
-ticketing_method "aviacenter"
 disabled "bankrupt"
+ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
+discount "0%"
+agent_comment "5% от опубл. тарифов на собств. рейсы авиакомпании."
+subagent_comment "3% от всех опубл. тарифов на собств. рейсы GW"
+example "svocdg"
 end
 
 rule 2 do
-example "svocdg cdgsvo/ab"
+disabled "bankrupt"
+ticketing_method "aviacenter"
+agent "3%"
+subagent "1%"
+discount "0%"
 agent_comment "3% от опубл. тарифов на рейсы Interline c обязательным участием GW. Выписка на рейсы Interline без участка GW запрещена."
 subagent_comment "1% от всех опубл. тарифов на собств. рейсы GW"
 interline :yes
-discount "0%"
-ticketing_method "aviacenter"
-disabled "bankrupt"
-agent "3%"
-subagent "1%"
+example "svocdg cdgsvo/ab"
 end
 
