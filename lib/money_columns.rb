@@ -30,7 +30,7 @@ module MoneyColumns
          end
        end
        def customized_#{attr}
-         #{attr} ? #{attr}.with_currency : 'Unknown'
+         #{attr} && #{attr}.is_a?(Money) ? #{attr}.with_currency : 'Unknown'
        end
        END
        validates_format_of attr_as_string, :with => MONEY_VALIDATION_REGEXP, :allow_blank => true, :message =>  "некорректное значение: '#{attr_as_string}', валютные значения следует вводить в таком формате: '10 USD'"
