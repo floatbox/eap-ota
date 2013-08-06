@@ -75,9 +75,8 @@ example "svocdg/ab cdgsvo/ab"
 end
 
 rule 7 do
-no_commission
+not_implemented "не умеем определять конфиденциальные тарифы"
 ticketing_method "aviacenter"
-comment "загадочная хрень"
 agent_comment "1 (один) рубль за каждый выписанный авиабилет по конфиденциальным IT тарифам."
 subagent_comment "5 (пять) руб. за каждый выписанный авиабилет по конфиденциальным IT тарифам."
 end
