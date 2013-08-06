@@ -11,6 +11,9 @@ class Commission::Page
   # @return String IATA код перевозчика
   attr_accessor :carrier
 
+  # @return String метод выписки для правил
+  attr_accessor :ticketing_method
+
   # @return Date дата начала действия комиссии
   attr_accessor :start_date
 
