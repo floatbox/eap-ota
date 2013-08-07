@@ -112,10 +112,10 @@ important!
 ticketing_method "downtown"
 agent "7%"
 subagent "6%"
-discount "5%"
+discount "6%"
 agent_comment "все через dtt"
-subagent_comment ""
 interline :no, :yes
 example "svocdg"
 example "svocdg cdgsvo/ab"
 end
+
