@@ -2,7 +2,13 @@
 class Admin::CountersController < Admin::BaseController
   def index
     @tabs = (0..6).to_a.reverse.map {|t| t.days.ago.strftime(StatCounters::DATE_FORMAT) }
-    @data = StatCounters.debug_yml(StatCounters.on_date(params[:date] || @tabs.last))
+    @subtabs = (0..3).to_a.reverse.map {|t| t.hours.ago.strftime(StatCounters::DATE_HOUR_FORMAT) }
+    if params[:time]
+      @data = StatCounters.debug_yml(StatCounters.on_hour(params[:time]))
+    else
+      date = params[:date] || @tabs.last
+      @data = StatCounters.debug_yml(StatCounters.on_date(date))
+    end
   end
 
   def destinations

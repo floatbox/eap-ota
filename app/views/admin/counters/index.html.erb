@@ -1,6 +1,11 @@
 <% for date_str in @tabs %>
   <%= link_to_unless_current date_str, url_for(:date => date_str) %> ::
 <% end %>
+<br>
+<br>
+<% for time_str in @subtabs || [] %>
+  <%= link_to_unless_current time_str, url_for(:time => time_str) %> ::
+<% end %>
 <pre>
 <%=raw @data %>
 <pre>
