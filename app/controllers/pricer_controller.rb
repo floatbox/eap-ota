@@ -132,7 +132,7 @@ class PricerController < ApplicationController
       StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{partner4stat}.total] if @destination
       # поправка на неопределенный @destination что бы сходились счетчики
       StatCounters.inc %W[search.api.#{partner4stat}.bad_destination] if !@destination
-      @cheat_partner = Partner[partner] && Partner[partner].cheat
+      @partner = Partner[partner]
       render 'api/variants'
     else
       StatCounters.inc %W[search.api.invalid search.api.#{partner4stat}.invalid]

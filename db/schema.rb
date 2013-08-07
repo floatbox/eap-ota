@@ -419,6 +419,7 @@ ActiveRecord::Schema.define(:version => 20130731152906) do
     t.integer  "suggested_limit"
     t.boolean  "cheat",               :default => false
     t.text     "notes"
+    t.string   "cheat_mode",          :default => "no"
   end
 
   add_index "partners", ["token"], :name => "index_partners_on_token"

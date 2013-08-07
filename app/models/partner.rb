@@ -31,6 +31,11 @@ class Partner < ActiveRecord::Base
     self[id].password == pass if pass.present?
   end
 
+  def self.cheat_modes
+    ['no', 'yes', 'smart']
+
+  end
+
   def disable!
     update_attributes enabled: false
   end

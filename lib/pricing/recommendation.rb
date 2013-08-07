@@ -36,6 +36,20 @@ module Pricing
       end
     end
 
+    def price_for_partner(partner)
+      if partner.cheat_mode == 'yes'
+        price_total.ceil
+      elsif partner.cheat_mode == 'smart'
+        if (price_with_payment_commission.ceil / 1000) == (price_total.ceil / 1000)
+          price_total.ceil
+        else
+          price_with_payment_commission.ceil
+        end
+      else
+        price_with_payment_commission.ceil
+      end
+    end
+
     # комиссия платежного шлюза
     def price_payment
       Payment.commission.reverse_call(price_total)
