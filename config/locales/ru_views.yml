@@ -276,7 +276,7 @@ ru:
       many: "%{count} мест"
   prebooking:
     progress: 'Проверяем доступность мест на вашем перелете'
-    available: 'Все отлично, места есть'
+    available: 'Все отлично, места есть, создаем бронирование'
   booking:
     title: "Ваш перелет"
     countdown:

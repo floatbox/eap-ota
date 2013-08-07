@@ -63,7 +63,7 @@ prebook: function(offer) {
 process: function(result) {
     var that = this;
     if (result && result.success) {
-        this.offer.state.html(I18n.t('prebooking.available'));
+        this.offer.state.find('.ob-progress').html(I18n.t('prebooking.available'));
         this.key = result.number;
         this.ltimer = setTimeout(function() {
             that.load();
