@@ -26,7 +26,7 @@ class AutoTicketStuff
     order.ticket_status == 'booked' or return 'заказ не в статусе booked'
     !order.offline_booking or return 'offline заказ'
     recommendation.country_iatas.uniq.all?{|ci| Country[ci].continent != 'africa'} or return 'есть хотя бы один африканский город'
-    people.all?{|p| ['RU', 'UA'].include?(p.nationality.alpha2)} or return 'есть пассажиры, не являющиеся гражданами РФ и Украины'
+    people.all?{|p| ['RU', 'UA', 'BY', 'MD'].include?(p.nationality.alpha2)} or return 'есть пассажиры, не являющиеся гражданами РФ, Украины, Белоруссии или Молдавии'
     !order.email['hotmail']  or return 'название почтового ящика содержит hotmail'
     !order.email['yahoo']  or return 'название почтового ящика содержит yahoo'
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
