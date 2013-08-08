@@ -45,7 +45,7 @@ Eviterra::Application.routes.draw do
   match 'api/search(.:format)' => 'api_home#gone'
   match 'api/redirection(.:format)' => 'booking#api_redirect'
   # какой-то жаваскрипт фигачит посты сюда. убрать потом
-  post 'api/booking/edit' => redirect('/')
+  post 'api/booking/edit' => proc { [404, {}, []] }
   match 'api/booking/:query_key(.:format)' => 'booking#api_booking', :via => :get
   match 'api/rambler_booking(.:format)' => 'booking#api_rambler_booking', :via => :get, :format => :xml, :as => :api_rambler_booking
   match 'api/order_stats' => 'api_order_stats#index'
