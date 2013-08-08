@@ -23,7 +23,6 @@ important!
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
-consolidator "2%"
 agent_comment "1 евро (5 руб)(0%) для прямых перелетов из Санкт-Петербурга в Варшаву и из Варшавы в Санкт-Петербург Эконом и Бизнес класса; "
 subagent_comment "5р"
 classes :economy, :business
@@ -61,7 +60,6 @@ rule 5 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
-consolidator "2%"
 agent_comment "1 евро(5 руб)(0%) на вылеты из других стран, а также на промо, групповые (L,O,U,G), корпоративные, туроператорские, веб-тарифы и т.д."
 subagent_comment "5 руб"
 example "svoprg/l prgwaw/u"
