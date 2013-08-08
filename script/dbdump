@@ -10,11 +10,58 @@ OptionParser.new do |op|
   op.banner = "#{$0} [options] dumps database schema and data, skipping some contents."
   op.on "-t", "--trash", "Skip trash tables.", &setopt[:trash]
   op.on "-d", "--data", "Skip data tables.", &setopt[:data]
+  op.on "-o", "--others", "Dump schemas for other tables.", &setopt[:others]
   op.on_tail("-h", "--help", "Show this message.") do
     puts op
     exit
   end
 end.parse!
+
+# FIXME просмотреть
+ALL_TABLES = %W(
+  airline_alliances
+  airplanes
+  airports
+  amadeus_sessions
+  carriers
+  cities
+  consolidators
+  countries
+  currency_rates
+  customers
+  destinations
+  flight_groups
+  geo_taggings
+  geo_tags
+  global_distribution_systems
+  hot_offers
+  imports
+  imports_payments
+  imports_tickets
+  notifications
+  order_comments
+  orders
+  orders_stored_flights
+  partners
+  payments
+  promo_codes
+  regions
+  stored_flights
+  stored_flights_tickets
+  subscriptions
+  tickets
+  typus_users
+  versions
+)
+
+GEO_TABLES = %W(
+  countries
+  cities
+  airports
+  regions
+  carriers
+  airplanes
+)
 
 TRASH_TABLES = %W(
   amadeus_sessions
@@ -25,6 +72,8 @@ TRASH_TABLES = %W(
   hot_offers
   destinations
   imports
+  imports_payments
+  imports_tickets
 
   order_comments
 )
@@ -53,7 +102,12 @@ cmd_pass += " -h #{cfg['host']}" if cfg['host']
 cmd_pass += " -u #{cfg['username']}" if cfg['username']
 cmd_pass += " -p#{cfg['password']}" if cfg['password']
 
+# дампит схему и данные для неигнорируемых таблиц
 ignore_tables_cmd = skip_tables.map { |t| "--ignore-table=#{cfg['database']}.#{t}"}.join(' ')
-only_tables_cmd = skip_tables.join(' ') + ' --no-data'
 system "#{cmd_pass} #{cfg['database']} #{ignore_tables_cmd}"
-system "#{cmd_pass} #{cfg['database']} #{only_tables_cmd}"
+
+if opts[:others]
+  # дампит только схему для игнорируемых таблиц
+  only_tables_cmd = skip_tables.join(' ') + ' --no-data'
+  system "#{cmd_pass} #{cfg['database']} #{only_tables_cmd}"
+end
