@@ -57,10 +57,11 @@ Airport:
   fields:
     default: iata, name_ru, name_en, importance, city
     list: iata, name_ru, name_en, importance, city
-    form: iata, iata_ru, name_en, name_ru, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city, disabled
+    form: iata, iata_ru, name_en, name_ru, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city, disabled, auto_save
     csv: iata, name_ru, city
   order_by: name_ru
   relationships: city, country, geo_tags
+  scopes: autosaved
   filters:
   search: name_ru, name_en, ^iata, synonym_list
   actions:
