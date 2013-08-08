@@ -65,8 +65,9 @@ module CodeStash
   end
 
   def code_stash
+
     CodeStash.stash[name.to_s] ||= Hash.new do |hash, code|
-      unless code.nil?
+      if code
         object = fetch_by_code(code) || make_by_code(code)
         if object
           # вносим объект в стэш по запрошенному коду и по всем его остальным кодам,

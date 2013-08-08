@@ -57,7 +57,7 @@ class AviaSearch
     unless lack_of_parameters.empty?
       raise ArgumentError, "Lack of required parameter(s)  - \"#{lack_of_parameters.join(', ')}\""
     end
-    return unless Location[args[:from]] && Location[args[:to]]
+    #return unless Location[args[:from]] && Location[args[:to]]
 
     segments = [AviaSearchSegment.new(from: args[:from], to: args[:to], date: convert_api_date(args[:date1]))]
     if args[:date2].present?

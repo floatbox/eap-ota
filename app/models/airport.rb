@@ -6,15 +6,17 @@ class Airport < ActiveRecord::Base
 
   class << self
     def fetch_by_code(code)
-      find_by_iata(code)  # || find_by_iata_ru(code)
+      known.find_by_iata(code) # || find_by_iata_ru(code)
     end
 
     def make_by_code(code)
       # нет поддержки кириллицы для сирены
-      if code =~ /^[A-Z]{3}$/
-        Rails.logger.info "Airport with iata: #{code} autosaved to db"
-        create(iata: code, auto_save: true)
+      # если сделать validate_uniqueness_of :iata, то вторую проверку следует опустить
+      if code =~ /^[A-Z]{3}$/ && !find_by_iata(code)
+        create(iata: code, auto_save: true, city: nil)
+        Rails.logger.info "Airport with iata '#{code}' autosaved to db"
       end
+      nil
     end
   end
 
