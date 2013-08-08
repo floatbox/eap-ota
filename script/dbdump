@@ -1,19 +1,48 @@
 #!/usr/bin/env ruby
 # дамп базы без кэширующих и социально опасных таблиц
+require 'optparse'
+require 'yaml'
 
-SKIP_TABLES = %W(
+opts = {
+}
+setopt = proc {|key| proc {|value| opts[key] = value } }
+OptionParser.new do |op|
+  op.banner = "#{$0} [options] dumps database schema and data, skipping some contents."
+  op.on "-t", "--trash", "Skip trash tables.", &setopt[:trash]
+  op.on "-d", "--data", "Skip data tables.", &setopt[:data]
+  op.on_tail("-h", "--help", "Show this message.") do
+    puts op
+    exit
+  end
+end.parse!
+
+TRASH_TABLES = %W(
   amadeus_sessions
-  orders
-  payments
-  tickets
   versions
+
   subscriptions
   notifications
   hot_offers
   destinations
+  imports
+
+  order_comments
 )
 
-require 'yaml'
+DATA_TABLES = %W(
+  customers
+  orders
+  payments
+  tickets
+
+  stored_flights
+  stored_flights_tickets
+  orders_stored_flights
+)
+
+skip_tables = []
+skip_tables += TRASH_TABLES if opts[:trash]
+skip_tables += DATA_TABLES if opts[:data]
 
 database_yml = YAML.load_file(File.expand_path('../../config/database.yml', __FILE__))
 cfg = database_yml[ENV['RAILS_ENV'] || 'development' ]
@@ -24,7 +53,7 @@ cmd_pass += " -h #{cfg['host']}" if cfg['host']
 cmd_pass += " -u #{cfg['username']}" if cfg['username']
 cmd_pass += " -p#{cfg['password']}" if cfg['password']
 
-ignore_tables_cmd = SKIP_TABLES.map { |t| "--ignore-table=#{cfg['database']}.#{t}"}.join(' ')
-only_tables_cmd = SKIP_TABLES.join(' ') + ' --no-data'
+ignore_tables_cmd = skip_tables.map { |t| "--ignore-table=#{cfg['database']}.#{t}"}.join(' ')
+only_tables_cmd = skip_tables.join(' ') + ' --no-data'
 system "#{cmd_pass} #{cfg['database']} #{ignore_tables_cmd}"
 system "#{cmd_pass} #{cfg['database']} #{only_tables_cmd}"
