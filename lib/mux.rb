@@ -80,7 +80,7 @@ class Mux
         log_examples(recommendations)
       end
 
-      recommendations.delete_if(&:without_full_information)
+      recommendations.delete_if(&:without_full_information?)
       recommendations.delete_if(&:ground?)
       recommendations.select!(&:valid_interline?)
 
