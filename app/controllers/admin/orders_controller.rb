@@ -96,6 +96,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
       render :text => 'incomplete order'
     else
       @recommendation = Strategy::Amadeus.new(order: @order).recommendation_from_booking
+      @recommendation.find_commission!
       render
     end
   #rescue
