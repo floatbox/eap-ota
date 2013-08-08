@@ -114,7 +114,7 @@ describe AviaSearch do
               :to => 'LON',
               :date1 => "0910#{yy}",
               :cabin => 'C'}
-       expect{ AviaSearch.simple(args) }.to raise_error(CodeStash::NotFound,"Couldn't find Airport with code 'Зимбабве'")
+       expect{ AviaSearch.simple(args) }.to_not raise_error
     end
 
     it "should raise ArgumentError if from and/or to are new iatas" do

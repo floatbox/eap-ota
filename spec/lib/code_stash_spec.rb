@@ -47,13 +47,15 @@ describe CodeStash do
         it "when searching for unknown country iata" do
           expect { Country['ZZ'] }.to raise_error(CodeStash::NotFound)
         end
+
+        it "when searching for unknown airport by iata" do
+          # несмотря на автоматическую генерацию, ведет себя как другие справочники
+          # сгенеренный аэропорт нельзя использовать до заполнения остальных полей
+          expect { Airport['ZZZ'] }.to raise_error(CodeStash::NotFound)
+        end
       end
 
       context 'error not raised' do
-        it "when searching for unknown airport by iata" do
-          expect { Airport['ZZZ'] }.to_not raise_error(CodeStash::NotFound)
-        end
-
         it "when searching for unknown airplane by iata" do
           expect { Airplane['ZZZ'] }.to_not raise_error(CodeStash::NotFound)
         end
