@@ -30,8 +30,8 @@ class AutoTicketStuff
     !order.email['hotmail']  or return 'название почтового ящика содержит hotmail'
     !order.email['yahoo']  or return 'название почтового ящика содержит yahoo'
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
-    no_dupe_orders? or return 'dupe'
-    !group_booking? or return 'Скрытая группа'
+    no_dupe_orders? or return "dupe (#{@dupe_summary})"
+    !group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
     people.map{|p| [p.first_name, p.last_name]}.uniq.count == people.count or return 'есть 2 пассажира с совпадающими именем и фамилией'
     nil
   end
@@ -47,15 +47,27 @@ class AutoTicketStuff
   end
 
   def no_dupe_orders?
+    dupe_information = Hash.new([])
+    passengers = passenger_names(order)
     order.stored_flights.all? do |stored_flight|
-      passengers = stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).map{|o| passenger_names(o)}.flatten
-      passengers.count == passengers.uniq.count
+      stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).where('id != ?', order.id).each do |o|
+        (passenger_names(o) & passengers).each do |p|
+          dupe_information[p] += [o.pnr_number]
+        end
+      end
     end
+    dupe_information.values.every.uniq!
+    @dupe_summary = dupe_information.map{|k, v| "#{k}: #{v.join(', ')}"}.join('. ')
+    return dupe_information.blank?
   end
 
   def group_booking?
+    @other_order_pnrs = []
     order.stored_flights.any? do |stored_flight|
-      stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).sum(:blank_count) > 8
+      orders = stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).where('id != ?', order.id)#sum(:blank_count) > 8
+      @other_order_pnrs += orders.every.pnr_number if orders.sum(:blank_count) + order.blank_count > 8
     end
+    @other_order_pnrs.uniq!
+    return @other_order_pnrs.present?
   end
 end
