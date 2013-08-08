@@ -86,4 +86,11 @@ class Commission::Book
     page = find_page(carrier: recommendation.validating_carrier_iata) or return []
     page.all_with_reasons_for(recommendation)
   end
+
+  def obsolete_page?(page)
+    current_page = find_page(carrier: page.carrier, ticketing_method: page.ticketing_method)
+    return false if current_page == page || current_page.start_date.nil?
+    return true if page.start_date.nil?
+    return page.start_date < current_page.start_date
+  end
 end
