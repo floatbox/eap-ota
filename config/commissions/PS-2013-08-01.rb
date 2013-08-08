@@ -1,7 +1,6 @@
 carrier "PS", start_date: "2013-08-01"
 
 rule 1 do
-disabled "все через dtt"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -14,7 +13,6 @@ example "svocdg cdgsvo"
 end
 
 rule 2 do
-disabled "все через dtt"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -26,7 +24,6 @@ example "svxcdg cdgsvx"
 end
 
 rule 3 do
-disabled "все через dtt"
 important!
 ticketing_method "aviacenter"
 agent "7%"
@@ -41,7 +38,6 @@ example "svocdg/business cdgsvo/business"
 end
 
 rule 4 do
-disabled "все через dtt"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -54,7 +50,6 @@ example "cdgsvo svocdg/ab"
 end
 
 rule 5 do
-disabled "все через dtt"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
@@ -67,7 +62,6 @@ example "cdgsvo/ab"
 end
 
 rule 6 do
-disabled "все через dtt"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
@@ -80,7 +74,6 @@ example "ievcdg"
 end
 
 rule 7 do
-disabled "все через dtt"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
@@ -94,7 +87,6 @@ example "cdgiev ievcdg/ab"
 end
 
 rule 8 do
-disabled "все через dtt"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
@@ -109,10 +101,11 @@ end
 
 rule 9 do
 important!
+disabled "переключили на aviacenter"
 ticketing_method "downtown"
 agent "7%"
 subagent "6%"
-discount "6%"
+discount "3%"
 agent_comment "все через dtt"
 interline :no, :yes
 example "svocdg"

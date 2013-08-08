@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "downtown"
 agent "8%"
 subagent "6%"
-discount "7%"
+discount "3%"
 our_markup "0.1%"
 agent_comment "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
 agent_comment "Если, кратко, то C,D,Z,I W,S,Y,M,U,K,H A,L,Q,T,N,R,V"
@@ -20,7 +20,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
-discount "2%"
+discount "0%"
 agent_comment "1руб за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 1руб за билет, выписанный по опубл. тарифам,  в случае вылета вне стран СНГ;"
 subagent_comment "5 коп. за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ; 5 коп. за билет, выписанный по опубл. тарифам, в случае вылета вне стран СНГ;"
 interline :no, :yes

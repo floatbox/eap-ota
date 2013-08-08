@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "4%"
 subagent "3%"
-discount "3%"
+discount "1.5%"
 agent_comment " 4% от всех опубликованных тарифов на рейсы 5N"
 subagent_comment "3% от всех опубликованных тарифов на рейсы 5N"
 example "svocdg"

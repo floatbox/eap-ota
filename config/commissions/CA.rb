@@ -5,7 +5,7 @@ important!
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7.5%"
-discount "7.5%"
+discount "3.5%"
 agent_comment "9% Все международные перелеты рейсами СА из России"
 subagent_comment "7.5% Все международные перелеты рейсами СА из России"
 routes "RU..."

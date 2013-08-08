@@ -17,7 +17,7 @@ important!
 ticketing_method "aviacenter"
 agent "6%"
 subagent "4.2%"
-discount "3%"
+discount "2%"
 agent_comment "6% от опубл.тарифов (вкл.промотарифы в V и Q классах) на собств.рейсы SQ/Silk Air с началом от пунктов РФ в/через Хьюстон (США) и от Хьюстона (США) в пункты РФ;"
 subagent_comment "4,2% от опубл.тарифов (вкл.промотарифы в V и Q классах) на собств.рейсы SQ/Silk Air с началом от пунктов РФ в/через Хьюстон (США) и от Хьюстона (США) в пункты РФ;"
 check %{ (includes(country_iatas.first, 'RU') and includes(city_iatas, 'HOU')) or 

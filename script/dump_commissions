@@ -4,7 +4,7 @@ require 'optparse'
 
 # defaults
 $opts = {
-  in: "config/commissions.rb"
+  in: "config/commissions"
 }
 
 def setopt(attr)
@@ -81,19 +81,8 @@ if $opts[:yaml]
   outfh << book.to_yaml
 else
   if $opts[:dir]
-
     puts "writing commissions to dir #{$opts[:dir]}"
-    FileUtils.mkdir_p($opts[:dir])
-    book.pages.each do |page|
-      filename = page.carrier
-      filename += '-' + page.start_date.to_s if page.start_date
-      filename += '.rb'
-      filename = File.join($opts[:dir], filename)
-      File.open(filename, 'w') do |fh|
-        fh << Commission::Writer::Page.new(page).write
-      end
-    end
-
+    Commission::Writer::Book.new(book).write_dir($opts[:dir])
   else
     outfh << Commission::Writer::Book.new(book).write
   end

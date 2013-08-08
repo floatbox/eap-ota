@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "5%"
+discount "2.5%"
 agent_comment "7% от опубл. тарифов эконом класса на собств. рейсы D9"
 subagent_comment "5% от опубл. тарифов эконом класса на собств. рейсы D9"
 classes :economy
@@ -15,7 +15,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "6.3%"
-discount "6.3%"
+discount "3%"
 agent_comment "9% от опубл. тарифов бизнес класса на собств. рейсы D9"
 subagent_comment "6,3% от опубл. тарифов бизнес класса на собств. рейсы D9"
 classes :business
