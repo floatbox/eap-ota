@@ -8,14 +8,7 @@ describe Commission::Rule::Matching do
 
     RSpec::Matchers.define(:match_recommendation) do |recommendation|
       match do |subject_rule|
-        begin
-          # FIXME сделать другой выключатель проверки интерлайнов
-          old, Commission::Rule.skip_interline_validity_check = Commission::Rule.skip_interline_validity_check, false
-          @reason = subject_rule.turndown_reason(recommendation)
-        ensure
-          Commission::Rule.skip_interline_validity_check = old
-        end
-        ! @reason
+        !subject_rule.turndown_reason(recommendation)
       end
 
       failure_message_for_should do |subject_rule|
