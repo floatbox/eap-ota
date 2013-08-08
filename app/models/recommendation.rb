@@ -154,11 +154,23 @@ class Recommendation
   end
 
   def without_full_information?
-    #проверяем, что все аэропорты и авиакомпании есть в базе
-    flights.map {|f| f.arrival; f.departure; f.operating_carrier; f.marketing_carrier; f.equipment_type}
-    false
-  rescue CodeStash::NotFound => e
-    return true
+    begin
+      #проверяем, что все аэропорты и авиакомпании есть в базе
+      flights.map do |f|
+        raise 'Аэропорт прибытия не привязан к городу' unless f.arrival.known?
+        raise 'Аэропорт прибытия не привязан к городу' unless f.departure.known?
+        f.operating_carrier
+        f.marketing_carrier
+        f.equipment_type
+      end
+      false
+    # Не хочется на первое время делать rescue Exception
+    # логирования ради
+    rescue RuntimeError => e
+      true
+    rescue CodeStash::NotFound => e
+      true
+    end
   end
 
   def ground?

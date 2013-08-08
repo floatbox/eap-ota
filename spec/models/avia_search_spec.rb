@@ -116,6 +116,18 @@ describe AviaSearch do
               :cabin => 'C'}
        expect{ AviaSearch.simple(args) }.to raise_error(CodeStash::NotFound,"Couldn't find Airport with code 'Зимбабве'")
     end
+
+    it "should raise ArgumentError if from and/or to are new iatas" do
+      unknown_iata = 'BBQ'
+      args = {
+              :from => 'LON',
+              :to => unknown_iata,
+              :date1 => "0910#{yy}",
+              :cabin => 'C'}
+       expect{ AviaSearch.simple(args) }.to_not raise_error(CodeStash::NotFound,"Couldn't find Airport with code '#{unknown_iata}'")
+       Airport.lost.where(iata: unknown_iata).should_not == []
+    end
+
     it "should raise ArgumentError if from, to or data1 are not there" do
       args = {
               :date1 => "0910#{yy}",

@@ -2,7 +2,7 @@
 class Airplane < ActiveRecord::Base
   extend CodeStash
 
-  scope :autosaved, -> { where(auto_save: true) }
+  scope :autosaved, where(auto_save: true)
 
   class << self
     def fetch_by_code(code)
@@ -10,7 +10,11 @@ class Airplane < ActiveRecord::Base
     end
 
     def make_by_code(code)
-      Airplane.autosaved.create(iata: code)
+      autosaved.create(iata: code)
+    end
+
+    def engine_types
+      { 'Реактивный' => 'jet','Турбовинтовой' => 'prop', 'Поезд' => 'train', 'Автобус' => 'bus', 'Вертолет' => 'heli' }
     end
   end
 
@@ -19,10 +23,6 @@ class Airplane < ActiveRecord::Base
   end
 
   has_paper_trail
-
-  def self.engine_types
-    { 'Реактивный' => 'jet','Турбовинтовой' => 'prop', 'Поезд' => 'train', 'Автобус' => 'bus', 'Вертолет' => 'heli' }
-  end
 
   validates_inclusion_of :engine_type, :in => engine_types.values
 

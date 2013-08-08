@@ -34,20 +34,29 @@ describe CodeStash do
     end
 
     context 'with unknown code' do
-      it "should raise an exception trying to find unknown airport by iata" do
-        expect { Airport['ZZZ'] }.to raise_error(CodeStash::NotFound)
+
+      context 'error raised' do
+        it "when searching for unknown carrier by iata" do
+          expect { Carrier['ZZ'] }.to raise_error(CodeStash::NotFound)
+        end
+
+        it "when searching for unknown city by iata" do
+          expect { City['ZZZ'] }.to raise_error(CodeStash::NotFound)
+        end
+
+        it "when searching for unknown country iata" do
+          expect { Country['ZZ'] }.to raise_error(CodeStash::NotFound)
+        end
       end
 
-      it "should raise an exception trying to find unknown carrier by iata" do
-        expect { Carrier['ZZ'] }.to raise_error(CodeStash::NotFound)
-      end
+      context 'error not raised' do
+        it "when searching for unknown airport by iata" do
+          expect { Airport['ZZZ'] }.to_not raise_error(CodeStash::NotFound)
+        end
 
-      it "should raise an exception trying to find unknown city by iata" do
-        expect { City['ZZZ'] }.to raise_error(CodeStash::NotFound)
-      end
-
-      it "should raise an exception trying to find unknown country iata" do
-        expect { Country['ZZ'] }.to raise_error(CodeStash::NotFound)
+        it "when searching for unknown airplane by iata" do
+          expect { Airplane['ZZZ'] }.to_not raise_error(CodeStash::NotFound)
+        end
       end
     end
   end
@@ -61,7 +70,7 @@ describe CodeStash do
   end
 
   it "exception trying to find unknown iata" do
-    (Airport['FFFF'] rescue $!.message).should == "Couldn't find Airport with code 'FFFF'"
+    (City['FFFF'] rescue $!.message).should == "Couldn't find City with code 'FFFF'"
   end
 
   pending it "should not raise an exception then searching for unknown airplane" do

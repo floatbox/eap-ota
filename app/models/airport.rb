@@ -4,8 +4,18 @@ class Airport < ActiveRecord::Base
   include Cases
   extend CodeStash
 
-  def self.fetch_by_code(code)
-    find_by_iata(code)  # || find_by_iata_ru(code)
+  class << self
+    def fetch_by_code(code)
+      find_by_iata(code)  # || find_by_iata_ru(code)
+    end
+
+    def make_by_code(code)
+      # нет поддержки кириллицы для сирены
+      if code =~ /^[A-Z]{3}$/
+        Rails.logger.info "Airport with iata: #{code} autosaved to db"
+        create(iata: code, auto_save: true)
+      end
+    end
   end
 
   def codes
@@ -34,11 +44,18 @@ class Airport < ActiveRecord::Base
 
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
+
   scope :with_country, where("city_id is not null").includes(:city => :country)
+  scope :lost, where(city_id: nil)
+  scope :known, where('airports.city_id IS NOT NULL')
+  scope :autosaved, where(auto_save: true)
+
+  def known?
+    !!city
+  end
 
   def name
     name_ru.presence || name_en.presence || iata
-
   end
 
   def equal_to_city
