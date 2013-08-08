@@ -24,12 +24,13 @@ class Commission::Book
   end
 
   def pages
-    @index.values.flatten
+    @index.values.map(&:values).flatten
   end
 
   def pages_for(opts)
     carrier = opts[:carrier] or raise ArgumentError, "carrier not specified"
-    @index[carrier]
+    ticketing_method = opts[:ticketing_method] || "unknown"
+    @index[carrier] && @index[carrier][ticketing_method]
   end
 
   # временный метод, отображающий только активные страницы
@@ -67,14 +68,17 @@ class Commission::Book
   # TODO ugly and untested
   # @return Commission::Page
   def register_page(page)
-    pages = @index[page.carrier] || []
+    carrier = page.carrier
+    ticketing_method = page.ticketing_method || "unknown"
+    @index[carrier] ||= {}
+    pages = @index[carrier][ticketing_method] || []
     pages += [page]
     pages.sort_by! {|p| p.start_date || LONG_TIME_AGO }
     pages.reverse!
     if pages.map(&:start_date).uniq.size != pages.size
       raise ArgumentError, "#{page} with #{page.start_date} already registered in book"
     end
-    @index[page.carrier] = pages
+    @index[carrier][ticketing_method] = pages
     page
   end
 
