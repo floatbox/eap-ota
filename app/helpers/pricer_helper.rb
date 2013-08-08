@@ -305,7 +305,6 @@ module PricerHelper
     # concat recommendation.source
     concat %( <a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe if recommendation.source == 'amadeus'
     concat 'Наземный участок ' if recommendation.ground?
-    concat 'Нет интерлайна ' if recommendation.source == 'amadeus' && !recommendation.valid_interline?
     concat recommendation.validating_carrier_iata + ' '
     if recommendation.sellable?
       concat %( #{recommendation.commission.agent}/#{recommendation.commission.subagent})

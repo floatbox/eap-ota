@@ -38,6 +38,7 @@ class Mux
     end
     recommendations = recommendations.select(&:sellable?) unless admin_user
     recommendations.delete_if(&:without_full_information?)
+    recommendations.select!(&:valid_interline?)
     recommendations.every.clear_variants
     recommendations.delete_if{|r| r.variants.blank?}
 
@@ -79,14 +80,17 @@ class Mux
         log_examples(recommendations)
       end
 
-      recommendations.delete_if(&:without_full_information?)
       recommendations.delete_if(&:ground?)
+      recommendations.select!(&:valid_interline?)
 
       recommendations = recommendations.reject(&:ignored_carriers)
       benchmark 'commission matching' do
         recommendations.every.find_commission!
       end
+
+
       recommendations = recommendations.select(&:sellable?) unless admin_user
+
       unless lite
         # sort
         recommendations = recommendations.sort_by(&:price_total)
@@ -134,6 +138,7 @@ class Mux
 
   def sirena_cleanup(recs)
     recs.delete_if(&:without_full_information?)
+    recs.select!(&:valid_interline?)
     # временно из-за проблем с тарифами AB и LX удаляем из рекоммендации
     recs.delete_if {|r| ['AB', 'LX', 'ЮХ'].include? r.validating_carrier_iata }
     recs.every.clear_variants

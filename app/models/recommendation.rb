@@ -125,7 +125,6 @@ class Recommendation
     end
   end
 
-
   def segments
     variants.sum(&:segments)
   end

@@ -3,7 +3,7 @@ module Pricing
 
     attr_accessor :price_fare, :price_tax, :blank_count
 
-    delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing_method,
+    delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing_method, 
       :to => :commission, :prefix => :commission
 
     include IncomeSuppliers

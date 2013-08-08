@@ -6,10 +6,6 @@ module Commission::Rule::Matching
 
   extend ActiveSupport::Concern
 
-  included do
-    cattr_accessor :skip_interline_validity_check
-  end
-
   # можно ли показывать клиентам и продавать предложения
   # по данному комиссинному правилу?
   # TODO Переместить в другой модуль?
@@ -33,7 +29,6 @@ module Commission::Rule::Matching
     skipped? and return "правило не проверяется"
     # carrier == recommendation.validating_carrier_iata and
     applicable_interline?(recommendation) or return "интерлайн/не интерлайн"
-    valid_interline?(recommendation) or return "нет интерлайн договора между авиакомпаниями"
     applicable_classes?(recommendation) or return "не подходит класс бронирования"
     applicable_subclasses?(recommendation) or return "не подходит подкласс бронирования"
     applicable_custom_check?(recommendation) or return "не прошло дополнительную проверку"
@@ -69,11 +64,6 @@ module Commission::Rule::Matching
         raise ArgumentError, "неизвестный тип interline у #{carrier}: '#{interline}' (line #{source})"
       end
     end
-  end
-
-  # надо использовать self.class.skip..., наверное
-  def valid_interline? recommendation
-    Commission::Rule.skip_interline_validity_check || recommendation.valid_interline?
   end
 
   CLASS_CABIN_MAPPING = {:economy => %w(M W Y), :business => %w(C), :first => %w(F)}
