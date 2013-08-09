@@ -3,17 +3,15 @@
 <% if as_table %>
 <table>
   <tr style="<%= strype %>; text-align:right; <%= 'background-color: #fdd' if rule.disabled? %>">
-    <td width="4%">
+    <td width="10%">
       <%= link_to "#{rule.carrier} #{rule.ticketing_method} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %>
     </td>
-    <td width="10%"> <%= rule.system %> </td>
-    <td width="10%"> <%= rule.ticketing_method %> </td>
-    <td width="10%" style="<%= 'color: blue' if rule.ticketing_method == 'direct' %>"     title="<%= rule.agent_comments %>"> <%= rule.agent %> </td>
-    <td width="10%" style="<%= 'color: blue' if rule.ticketing_method == 'aviacenter' %>" title="<%= rule.subagent_comments %>"> <%= rule.subagent %> </td>
+    <td width="10%" style="<%= 'color: blue' if rule.ticketing_method == 'direct' %>" title="<%= rule.agent_comments %>"> <%= rule.agent %> </td>
+    <td width="10%" style="<%= 'color: blue' if rule.ticketing_method != 'direct' %>" title="<%= rule.subagent_comments %>"> <%= rule.subagent %> </td>
     <td width="10%" title="сбор агента 1%/2%"> <%= rule.consolidator %> </td>
     <td width="10%" style="<%= 'color:green' unless rule.discount.try(:zero?) %>" title="скидка"> <%= rule.discount %> </td>
     <td width="10%" style="<%= 'color:green' unless rule.our_markup.try(:zero?) %>" title="надбавка"> <%= rule.our_markup %> </td>
-    <td width="26%" style="color:red"> <%= "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </td>
+    <td width="30%" style="color:red"> <%= "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </td>
   </tr>
 </table>
 <% else %>
