@@ -54,16 +54,6 @@ describe Commission::Reader do
     it "should have registered three rules" do
       book.should have(3).rules
     end
-
-    describe "#exists_for_rec?" do
-      specify do
-        book.exists_for_rec?(Recommendation.new(:validating_carrier_iata => 'AB')).should be_true
-      end
-
-      specify do
-        book.exists_for_rec?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
-      end
-    end
   end
 
   context "two carriers, four pages" do
@@ -107,15 +97,6 @@ describe Commission::Reader do
       pending
     end
 
-    describe "#exists_for_rec?" do
-      specify do
-        book.exists_for_rec?(Recommendation.new(:validating_carrier_iata => 'FV')).should be_true
-      end
-
-      specify do
-        book.exists_for_rec?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
-      end
-    end
   end
 
   context "all the rules" do
@@ -328,10 +309,6 @@ describe Commission::Reader do
     end
 
     specify {
-      book.exists_for_rec?(recommendation).should be_true
-    }
-
-    specify {
       book.find_rule_for_rec(recommendation).should be_a(Commission::Rule)
     }
 
@@ -405,10 +382,6 @@ describe Commission::Reader do
     let :recommendation do
       Recommendation.example('SVOCDG/BUSINESS', :carrier => 'AB')
     end
-
-    specify {
-      book.exists_for_rec?(recommendation).should be_true
-    }
 
     it "should find no_commission rule" do
       book.find_rule_for_rec(recommendation).should_not be_sellable

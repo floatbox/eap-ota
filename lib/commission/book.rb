@@ -11,10 +11,6 @@ class Commission::Book
   # Inspection
   ############
 
-  def exists_for_rec?(recommendation)
-    pages_for(carrier: recommendation.validating_carrier_iata).present?
-  end
-
   def rules
     pages.map(&:rules).flatten.sort_by(&:source)
   end

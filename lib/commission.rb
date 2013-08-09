@@ -6,7 +6,6 @@ module Commission
   class << self
 
     delegate \
-      :exists_for_rec?,
       :find_rule_for_rec,
       :rules,
       :carriers,
