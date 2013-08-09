@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 # TODO написать rspec_matcher для комиссий, с более внятным выводом причин
-describe Commission do
+describe Commission, :commissions do
 
   RSpec::Matchers.define(:match_rule) do |page, rule|
 
