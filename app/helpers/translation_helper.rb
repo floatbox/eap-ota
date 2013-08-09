@@ -35,8 +35,8 @@ module TranslationHelper
         when Airplane
           # object.iata нужно для автогенеренных самолетов
           # консерн такой: лучше показать iata, чем падать с 500й
-          object.name_ru || object.iata
           logger.info "No name_ru found for airplane #{object.iata}"
+          object.name_ru || object.iata
         when Carrier
           case format
           when :name
@@ -58,8 +58,8 @@ module TranslationHelper
           end
         when Airplane
           # см. выше с :ru
-          object.name_en || object.iata
           logger.info "No name_en found for airplane #{object.iata}"
+          object.name_en || object.iata
         when Carrier
           case format
           when :name
