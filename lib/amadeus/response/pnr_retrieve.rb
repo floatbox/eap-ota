@@ -182,7 +182,7 @@ module Amadeus
 
       def exchanged_tickets
         @exchanged_tickets ||= xpath( "//r:dataElementsIndiv[r:elementManagementData/r:reference[r:qualifier='OT']]/r:otherDataFreetext[r:freetextDetail/r:type='45']/r:longFreetext"
-        ).inject({}) do |res, fa|
+        ).each_with_object({}) do |fa, res|
           ticket_hash = parsed_exchange_string(fa.to_s)
           infant_flag = ticket_hash.delete(:inf) == 'INF' ? 'i': 'a'
           passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i || tickets.keys.find{|(_, flag), _| flag == infant_flag}[0][0]
@@ -194,7 +194,7 @@ module Amadeus
             new_ticket = tickets.find{|k, v| k[0] == [passenger_ref, infant_flag] && v[:number] != ticket_hash[:number]}
             segments_refs = new_ticket[0][1] if new_ticket
           end
-          res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash}) if segments_refs.present?
+          res.merge!({[[passenger_ref, infant_flag], segments_refs] => ticket_hash}) if segments_refs.present?
         end
       end
 
