@@ -60,7 +60,7 @@ class Commission::Page
   # Recommendation finders
   ########################
 
-  def find_rule(recommendation)
+  def find_rule_for_rec(recommendation)
     @index.find do |r|
       r.applicable?(recommendation)
     end

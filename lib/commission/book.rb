@@ -11,7 +11,7 @@ class Commission::Book
   # Inspection
   ############
 
-  def exists_for?(recommendation)
+  def exists_for_rec?(recommendation)
     pages_for(carrier: recommendation.validating_carrier_iata).present?
   end
 
@@ -43,9 +43,9 @@ class Commission::Book
   # Recommendation finders
   ########################
 
-  def find_for(recommendation, opts={})
+  def find_rule_for_rec(recommendation, opts={})
     page = find_page(opts.merge(carrier: recommendation.validating_carrier_iata)) or return Commission::Rule::Null
-    page.find_rule(recommendation) or return Commission::Rule::Null
+    page.find_rule_for_rec(recommendation) or return Commission::Rule::Null
   end
 
   # выбирает страницу с указанным перевозчиком

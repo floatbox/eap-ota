@@ -8,7 +8,7 @@ describe Commission do
 
     match_for_should do |example|
       @recommendation = example.recommendation
-      @proposed = page.find_rule(@recommendation)
+      @proposed = page.find_rule_for_rec(@recommendation)
       if @proposed != rule
         @reason = rule.turndown_reason(@recommendation)
         false
@@ -19,7 +19,7 @@ describe Commission do
 
     match_for_should_not do |example|
       @recommendation = example.recommendation
-      @proposed = page.find_rule(@recommendation)
+      @proposed = page.find_rule_for_rec(@recommendation)
       @proposed.nil? || !@proposed.sellable?
     end
 

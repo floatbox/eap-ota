@@ -130,7 +130,7 @@ module Pricing
 
     # пока не придумал для метода места получше
     def find_commission!(opts={})
-      @commission = Commission.find_for(self, opts)
+      @commission = Commission.find_rule_for_rec(self, opts)
     end
 
     # пытаемся избежать сохранения формул в order_forms_cache

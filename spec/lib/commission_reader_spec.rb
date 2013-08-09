@@ -22,7 +22,7 @@ describe Commission::Reader do
 
     it "should find a commission for correct recommendation" do
       recommendation = Recommendation.example('SVOCDG', :carrier => 'FV')
-      book.find_for(recommendation).should be_a(Commission::Rule)
+      book.find_rule_for_rec(recommendation).should be_a(Commission::Rule)
     end
   end
 
@@ -55,13 +55,13 @@ describe Commission::Reader do
       book.should have(3).rules
     end
 
-    describe "#exists_for?" do
+    describe "#exists_for_rec?" do
       specify do
-        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'AB')).should be_true
+        book.exists_for_rec?(Recommendation.new(:validating_carrier_iata => 'AB')).should be_true
       end
 
       specify do
-        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
+        book.exists_for_rec?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
       end
     end
   end
@@ -107,13 +107,13 @@ describe Commission::Reader do
       pending
     end
 
-    describe "#exists_for?" do
+    describe "#exists_for_rec?" do
       specify do
-        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'FV')).should be_true
+        book.exists_for_rec?(Recommendation.new(:validating_carrier_iata => 'FV')).should be_true
       end
 
       specify do
-        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
+        book.exists_for_rec?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
       end
     end
   end
@@ -328,11 +328,11 @@ describe Commission::Reader do
     end
 
     specify {
-      book.exists_for?(recommendation).should be_true
+      book.exists_for_rec?(recommendation).should be_true
     }
 
     specify {
-      book.find_for(recommendation).should be_a(Commission::Rule)
+      book.find_rule_for_rec(recommendation).should be_a(Commission::Rule)
     }
 
     specify {
@@ -357,7 +357,7 @@ describe Commission::Reader do
       end
 
       it "should display as successful really applied rule" do
-        subject.find {|row| row[1] == :success}[0].should == book.find_for(recommendation)
+        subject.find {|row| row[1] == :success}[0].should == book.find_rule_for_rec(recommendation)
       end
     end
 
@@ -407,11 +407,11 @@ describe Commission::Reader do
     end
 
     specify {
-      book.exists_for?(recommendation).should be_true
+      book.exists_for_rec?(recommendation).should be_true
     }
 
     it "should find no_commission rule" do
-      book.find_for(recommendation).should_not be_sellable
+      book.find_rule_for_rec(recommendation).should_not be_sellable
     end
 
     specify {
