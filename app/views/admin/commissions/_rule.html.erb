@@ -4,7 +4,7 @@
 <table>
   <tr style="<%= strype %>; text-align:right; <%= 'background-color: #fdd' if rule.disabled? %>">
     <td width="4%">
-      <%= link_to "#{rule.carrier} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %>
+      <%= link_to "#{rule.carrier} #{rule.ticketing_method} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %>
     </td>
     <td width="10%"> <%= rule.system %> </td>
     <td width="10%"> <%= rule.ticketing_method %> </td>
@@ -20,7 +20,7 @@
 <table>
   <tr style="<%= strype %>">
     <td width="4%" style="<%= 'color: red' if rule.disabled? %>">
-      <%= link_to "#{rule.carrier} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %>
+      <%= link_to "#{rule.carrier} #{rule.ticketing_method} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %>
     </td>
     <th width="48%">агентский договор</th>
     <th width="48%">субагентский договор</th>
