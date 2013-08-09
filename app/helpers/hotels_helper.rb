@@ -62,6 +62,7 @@ module HotelsHelper
 
   def destination flights
     point = {}
+    return unless flights.first
     start_point_iata = flights.first.departure_iata
     flights.each do |fl|
       if point[:iata] && fl.departure_datetime_utc - point[:at] > 12.hours && fl.dept_date != point[:arrv_date]
