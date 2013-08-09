@@ -40,8 +40,17 @@ class Commission::Book
   ########################
 
   def find_rule_for_rec(recommendation, opts={})
-    page = find_page(opts.merge(carrier: recommendation.validating_carrier_iata)) or return Commission::Rule::Null
+    carrier = recommendation.validating_carrier_iata
+    page = find_page(opts.merge(carrier: carrier)) or return Commission::Rule::Null
     page.find_rule_for_rec(recommendation) or return Commission::Rule::Null
+  end
+
+  # принимает список ticketing_method-ов
+  def find_rules_for_rec(recommendation, opts={})
+    carrier = recommendation.validating_carrier_iata
+    ticketing_methods = Array(opts[:ticketing_method] || @index[carrier].keys)
+    pages = ticketing_methods.map {|m| find_page(opts.merge(carrier: carrier, ticketing_method: m)) }.compact
+    pages.map {|p| p.find_rule_for_rec(recommendation) }.compact
   end
 
   # выбирает страницу с указанным перевозчиком

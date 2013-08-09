@@ -128,9 +128,13 @@ module Pricing
       @commission || raise("no commission found yet. run #find_commission!")
     end
 
+    def commission=(rule)
+      @commission = rule
+    end
+
     # пока не придумал для метода места получше
     def find_commission!(opts={})
-      @commission = Commission.find_rule_for_rec(self, opts)
+      Commission::Finder.new.cheap!(self, opts)
     end
 
     # пытаемся избежать сохранения формул в order_forms_cache
