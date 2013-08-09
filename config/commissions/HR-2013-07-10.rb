@@ -4,6 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
+discount "1.5%"
 our_markup "20"
 consolidator "2%"
 comment "включено с дополнительной проверкой"
