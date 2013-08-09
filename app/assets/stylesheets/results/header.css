@@ -30,7 +30,6 @@
 
 /* Button */
 #results-button {
-    float: right;
     position: relative;
     top: -1px;
     font-weight: bold;
@@ -68,13 +67,24 @@
 }
 .rb-active {
     position: absolute;
-    left: 1px; top: 1px;
+    left: 1px; top: 1px; right: 5px;
     height: 37px;
     padding: 0 35px;
     border-radius: 5px;
     color: #FFF;
     text-shadow: rgba(0, 0, 0, 0.3) -1px -1px 0;
     cursor: pointer;
+    text-align: center;    
+}
+.rb-validating {
+    display: none;
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    width: 160px;
+    height: 20px;
+    margin-left: -80px;
+    background: url('/images/results/validating.gif') no-repeat #454752;
 }
 
 /* Message */
