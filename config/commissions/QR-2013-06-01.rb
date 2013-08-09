@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "3.5%"
+discount "1.5%"
 agent_comment "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent_comment "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :first, :business

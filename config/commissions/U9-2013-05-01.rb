@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "4%"
 subagent "3%"
-discount "3%"
+discount "1.5%"
 agent_comment "4% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 subagent_comment "3% от опубл. тарифов на собств. рейсы U9 Бизнес класса;"
 interline :no_codeshare
@@ -16,7 +16,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2%"
-discount "2%"
+discount "1%"
 comment "бизнес класс отфильтрован правилом #1, поэтому тут классы не указываем"
 agent_comment "3% от опубл. тарифов на собств. рейсы U9 Эконом класса;"
 subagent_comment "2% от опубл. тарифов на собств. рейсы U9 Эконом класса;"

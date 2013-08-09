@@ -100,8 +100,8 @@ example "cdgiev/ab"
 end
 
 rule 9 do
-disabled "переключили на aviacenter"
 important!
+disabled "переключили на aviacenter"
 ticketing_method "downtown"
 agent "7%"
 subagent "6%"
