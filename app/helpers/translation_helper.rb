@@ -33,7 +33,10 @@ module TranslationHelper
             nbsp_first( object.send("case_#{format}") )
           end
         when Airplane
-          object.name_ru
+          # object.iata нужно для автогенеренных самолетов
+          # консерн такой: лучше показать iata, чем падать с 500й
+          object.name_ru || object.iata
+          logger.info "No name_ru found for airplane #{object.iata}"
         when Carrier
           case format
           when :name
@@ -54,7 +57,9 @@ module TranslationHelper
             nbsp_first("#{format} #{object.name_en}")
           end
         when Airplane
-          object.name_en
+          # см. выше с :ru
+          object.name_en || object.iata
+          logger.info "No name_en found for airplane #{object.iata}"
         when Carrier
           case format
           when :name
