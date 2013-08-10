@@ -12,7 +12,7 @@ class Commission::Book
   ############
 
   def rules
-    pages.map(&:rules).flatten.sort_by(&:source)
+    pages.flat_map(&:rules).sort_by(&:source)
   end
 
   def carriers
@@ -20,49 +20,46 @@ class Commission::Book
   end
 
   def pages
-    @index.values.map(&:values).flatten
+    sections.flat_map(&:pages)
   end
 
+  def sections
+    @index.values.flat_map(&:values)
+  end
+
+  # FIXME отдает страницы только по одному методу выписки
+  # нужен ли еще?
   def pages_for(opts)
-    carrier = opts[:carrier] or raise ArgumentError, "carrier not specified"
-    ticketing_method = opts[:ticketing_method] || "unknown"
-    @index[carrier] && @index[carrier][ticketing_method]
+    section = find_section(opts) or return
+    section.pages
   end
 
-  # временный метод, отображающий только активные страницы
-  def current_pages
-    carriers.map do |carrier|
-      find_page(carrier: carrier)
-    end.compact
+  def current_pages(date=Date.today)
+    sections.map {|s| s.current_page(date) }.compact
   end
 
-  def current_rules
-    current_pages.flat_map(&:rules)
+  def current_rules(date=Date.today)
+    current_pages(date).flat_map(&:rules)
   end
 
   # Recommendation finders
   ########################
 
-  def find_rule_for_rec(recommendation, opts={})
-    carrier = recommendation.validating_carrier_iata
-    page = find_page(opts.merge(carrier: carrier)) or return Commission::Rule::Null
-    page.find_rule_for_rec(recommendation) or return Commission::Rule::Null
-  end
-
   # принимает список ticketing_method-ов
   def find_rules_for_rec(recommendation, opts={})
     carrier = recommendation.validating_carrier_iata
     ticketing_methods = Array(opts[:ticketing_method] || @index[carrier].try(&:keys))
-    pages = ticketing_methods.map {|m| find_page(opts.merge(carrier: carrier, ticketing_method: m)) }.compact
+    sections = ticketing_methods.map {|m| find_section(carrier: carrier, ticketing_method: m) }.compact
+    pages = sections.map {|s| s.current_page }.compact
     pages.map {|p| p.find_rule_for_rec(recommendation) }.compact
   end
 
   # выбирает страницу с указанным перевозчиком
   # по умолчанию - действующую в данный момент
   def find_page(opts)
-    pages = pages_for(opts) or return
+    section = find_section(opts) or return
     date = opts[:date] || Date.today
-    page = pages.find {|p| p.start_date.nil? || p.start_date <= date }
+    page = section.current_page(date)
   end
 
   # создает и вносит в индекс страницу
@@ -72,23 +69,25 @@ class Commission::Book
     register_page page
   end
 
-  LONG_TIME_AGO = Date.new(2000,1,1)
   # вносит в индекс страницу
-  # TODO ugly and untested
   # @return Commission::Page
   def register_page(page)
-    carrier = page.carrier
-    ticketing_method = page.ticketing_method || "unknown"
+    section = find_or_create_section(carrier: page.carrier, ticketing_method: page.ticketing_method)
+    section.register_page(page)
+  end
+
+  def find_section(opts)
+    carrier = opts[:carrier]
+    ticketing_method = opts[:ticketing_method] || "unknown"
+    @index[carrier] && @index[carrier][ticketing_method]
+  end
+
+  def find_or_create_section(opts)
+    carrier = opts[:carrier]
+    ticketing_method = opts[:ticketing_method] || "unknown"
     @index[carrier] ||= {}
-    pages = @index[carrier][ticketing_method] || []
-    pages += [page]
-    pages.sort_by! {|p| p.start_date || LONG_TIME_AGO }
-    pages.reverse!
-    if pages.map(&:start_date).uniq.size != pages.size
-      raise ArgumentError, "#{page} with #{page.start_date} already registered in book"
-    end
-    @index[carrier][ticketing_method] = pages
-    page
+    @index[carrier][ticketing_method] ||=
+      Commission::Section.new(carrier: carrier, ticketing_method: ticketing_method)
   end
 
   def all_with_reasons_for(recommendation)
@@ -96,10 +95,4 @@ class Commission::Book
     page.all_with_reasons_for(recommendation)
   end
 
-  def obsolete_page?(page)
-    current_page = find_page(carrier: page.carrier, ticketing_method: page.ticketing_method)
-    return false if current_page == page || current_page.start_date.nil?
-    return true if page.start_date.nil?
-    return page.start_date < current_page.start_date
-  end
 end

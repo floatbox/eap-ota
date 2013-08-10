@@ -5,10 +5,7 @@ module Commission
 
   class << self
 
-    delegate \
-      :find_rule_for_rec,
-      :rules,
-      :carriers,
+    delegate :carriers,
         to: :default_book
 
     # lazy считывание дефолтных комиссий

@@ -16,14 +16,9 @@ describe Commission::Reader do
       end
     end
 
-    it "should have one commission" do
-      book.rules.should have(1).item
-    end
-
-    it "should find a commission for correct recommendation" do
-      recommendation = Recommendation.example('SVOCDG', :carrier => 'FV')
-      book.find_rule_for_rec(recommendation).should be_a(Commission::Rule)
-    end
+    it { should have(1).rule }
+    it { should have(1).page }
+    it { should have(1).section }
   end
 
   context "two carriers, three simple rules" do
@@ -47,17 +42,12 @@ describe Commission::Reader do
       end
     end
 
-    it "should have two airlines" do
-      book.carriers.should == ['FV', 'AB']
-    end
-
-    it "should have registered three rules" do
-      book.should have(3).rules
-    end
+    its(:carriers) { should == ['FV', 'AB'] }
+    it { should have(3).rules }
   end
 
   context "two carriers, four pages" do
-    let :book do
+    subject :book do
       Commission::Reader.new.define do
         carrier 'FV'
         rule 1 do
@@ -81,21 +71,10 @@ describe Commission::Reader do
       end
     end
 
-    it "should have two airlines" do
-      book.carriers.should == ['FV', 'AB']
-    end
-
-    it "should have registered four rules" do
-      book.should have(4).rules
-    end
-
-    it "should define four pages" do
-      book.should have(4).pages
-    end
-
-    describe "active_pages" do
-      pending
-    end
+    its(:carriers) { should == ['FV', 'AB'] }
+    it { book.should have(4).rules }
+    it { should have(4).pages }
+    it { should have(2).sections }
 
   end
 
@@ -309,7 +288,7 @@ describe Commission::Reader do
     end
 
     specify {
-      book.find_rule_for_rec(recommendation).should be_a(Commission::Rule)
+      book.find_rules_for_rec(recommendation).first.should be_a(Commission::Rule)
     }
 
     specify {
@@ -334,7 +313,7 @@ describe Commission::Reader do
       end
 
       it "should display as successful really applied rule" do
-        subject.find {|row| row[1] == :success}[0].should == book.find_rule_for_rec(recommendation)
+        subject.find {|row| row[1] == :success}[0].should == book.find_rules_for_rec(recommendation).first
       end
     end
 
@@ -384,7 +363,7 @@ describe Commission::Reader do
     end
 
     it "should find no_commission rule" do
-      book.find_rule_for_rec(recommendation).should_not be_sellable
+      book.find_rules_for_rec(recommendation).first.should_not be_sellable
     end
 
     specify {
