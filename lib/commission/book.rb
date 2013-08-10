@@ -48,7 +48,7 @@ class Commission::Book
   # принимает список ticketing_method-ов
   def find_rules_for_rec(recommendation, opts={})
     carrier = recommendation.validating_carrier_iata
-    ticketing_methods = Array(opts[:ticketing_method] || @index[carrier].keys)
+    ticketing_methods = Array(opts[:ticketing_method] || @index[carrier].try(&:keys))
     pages = ticketing_methods.map {|m| find_page(opts.merge(carrier: carrier, ticketing_method: m)) }.compact
     pages.map {|p| p.find_rule_for_rec(recommendation) }.compact
   end
