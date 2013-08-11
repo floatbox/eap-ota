@@ -5,7 +5,6 @@ disabled "вышли из bsp"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
-our_markup "0.2%"
 agent_comment "1 руб. с билета по опубл.тарифам"
 subagent_comment "5 коп. с билета по опубл. тарифам на собств. рейсы BD и рейсы Interline с участком BD"
 interline :no, :yes

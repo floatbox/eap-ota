@@ -81,7 +81,6 @@ ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
 discount "1.5%"
-our_markup "20"
 agent_comment "1 рубль (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
 subagent_comment "5 коп"
 interline :less_than_half
