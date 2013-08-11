@@ -33,7 +33,11 @@ class Commission::Book
   def current_pages
     carriers.map do |carrier|
       find_page(carrier: carrier)
-    end
+    end.compact
+  end
+
+  def current_rules
+    current_pages.flat_map(&:rules)
   end
 
   # Recommendation finders
