@@ -149,7 +149,9 @@ validate: function() {
 },
 loadSummary: function(values, process) {
     var that = this;
-    if (values.query_key) {
+    if (this.valid) {
+        results.header.wait();
+    } else if (values.query_key) {
         this.valid = true;
     }
     this.request = $.ajax({
@@ -202,7 +204,7 @@ loadSummary: function(values, process) {
         error: function() {
             results.header.show(I18n.t('timeout'), false);
         },
-        timeout: 30000
+        timeout: 45000
     });
 },
 restoreValues: function(data) {
