@@ -407,7 +407,10 @@
     letter-spacing: -0.03em;
 }
 .bf-result .obb-side {
-    background-image: url(/images/booking/continue.png);
+    background-image: url(/images/results/book.png?2);
+}
+.bf-result .obb-title {
+    padding: 8px 17px 9px 18px;
 }
 
 /* 3DSecure */
