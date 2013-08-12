@@ -46,7 +46,7 @@ if opts[:discounts]
   discounts_file = File.open(opts[:discounts])
   discounts = discounts_file.readlines.map(&:chomp)
   discounts = discounts.map do |d|
-    carrier, number, fx = d.split
+    carrier, method, number, fx = d.split
     number = number.sub('#','').to_i
     fx = Commission::Formula.new(fx.sub(',', '.'))
     raise fx unless fx.valid?
