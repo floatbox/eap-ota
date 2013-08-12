@@ -303,40 +303,42 @@ module PricerHelper
 
   def variant_debug_info(recommendation, variant)
     # concat recommendation.source
-    concat %( <a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe if recommendation.source == 'amadeus'
+    # concat %( <a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe if recommendation.source == 'amadeus'
     concat 'Наземный участок ' if recommendation.ground?
-    concat recommendation.validating_carrier_iata + ' '
+    concat recommendation.validating_carrier_iata + ', '
     if recommendation.sellable?
-      concat %( #{recommendation.commission.agent}/#{recommendation.commission.subagent})
-      unless recommendation.commission.consolidator.zero?
-        concat %( +#{recommendation.commission.consolidator})
-        #concat %(, конс: #{recommendation.price_consolidator} р.)
-      end
+      concat %( тариф #{recommendation.price_fare.to_i})
+      concat ", #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
+      concat %( (FM #{recommendation.commission.agent}) #{recommendation.commission.subagent})
       unless recommendation.commission.our_markup.zero?
-        concat %( #{recommendation.commission.our_markup})
+        concat %( + #{recommendation.commission.our_markup})
       end
       unless recommendation.commission.discount.zero?
-        concat %( -#{recommendation.commission.discount})
+        concat %( - #{recommendation.commission.discount})
       end
       concat ' '
+      concat %( = #{recommendation.income.round(2) } р. прибыли) unless recommendation.income.zero?
+      concat ', '
+      unless recommendation.commission.consolidator.zero?
+        concat %( +#{recommendation.commission.consolidator} конс.)
+        #concat %(, конс: #{recommendation.price_consolidator} р.)
+      end
       concat recommendation.commission.ticketing_method
-      concat %( = #{recommendation.income.round(2) } р.) unless recommendation.income.zero?
       concat ' '
-      concat link_to('комиссия', check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
-    elsif
-      reason = recommendation.commission.no_commission
+      concat link_to('проверить комиссию', check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
+    elsif reason = recommendation.commission.no_commission
       reason = 'продажа отключена' if reason == true;
       concat 'Не можем продать '
       concat link_to(reason, check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
     end
-    concat " #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
     # concat ' (' + recommendation.booking_classes.join(',') + ')'
     concat " Мест: #{recommendation.availability}"
     concat "<br>".html_safe
-    variant.flights.zip(recommendation.booking_classes) do |flight, booking_class|
-      concat link_to("#{flight.flight_code}/#{booking_class}", show_seat_map_url(flight.flight_code, booking_class), target: '_blank')
-      concat ' '
-    end
+    # seatmaps, временно убираю
+    # variant.flights.zip(recommendation.booking_classes) do |flight, booking_class|
+    #   concat link_to("#{flight.flight_code}/#{booking_class}", show_seat_map_url(flight.flight_code, booking_class), target: '_blank')
+    #   concat ' '
+    # end
   end
 
 end
