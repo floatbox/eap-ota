@@ -86,6 +86,10 @@ slide: function() {
     this.content.el.show();
     this.filters.el.show();
     this.fixed.update();
+    this.content.tabs.removeClass('rt-compact');
+    if (this.content.tabs.height() > 50) {
+        this.content.tabs.addClass('rt-compact');
+    }
     page.title.set(I18n.t('page.results', {title: this.data.titles.window}));
 },
 update: function(data) {
