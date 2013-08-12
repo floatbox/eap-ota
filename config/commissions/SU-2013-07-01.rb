@@ -28,7 +28,7 @@ rule 3 do
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
-discount "5.5%"
+discount "6%"
 agent_comment "Коля: SU на dtt 5%/4.5%/4.2%, кроме тель-авива и SU#1"
 subagent_comment "4.5%"
 interline :no, :yes
