@@ -1,0 +1,22 @@
+#!script/rails runner
+puts "reading book"
+old_book = Commission::Reader.new.read_file('config/commissions')
+puts "splitting books"
+new_book = Commission::Book.new
+old_book.pages.each do |old_page|
+  # ticketing_methods = old_page.ticketing_methods
+  ticketing_methods = old_page.rules.map(&:ticketing_method).uniq.compact
+  if ticketing_methods.size > 0
+    puts "splitting #{old_page.carrier}-#{old_page.start_date}"
+  end
+  ticketing_methods.each do |ticketing_method|
+    new_page = new_book.create_page carrier: old_page.carrier, ticketing_method: ticketing_method, start_date: old_page.start_date
+    old_page.rules.each do |old_rule|
+      if old_rule.ticketing_method == ticketing_method || old_rule.ticketing_method.nil?
+        new_page.register old_rule.clone
+      end
+    end
+  end
+end
+puts "writing book"
+Commission::Writer::Book.new(new_book).write_dir('config/split_commissions')
