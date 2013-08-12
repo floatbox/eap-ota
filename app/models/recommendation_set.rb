@@ -1,13 +1,17 @@
 # encoding: utf-8
 
-class RecommendationSet
+class RecommendationSet < Struct.new(:recommendations)
 
-  def initialize(*recommendations)
-    @recommendations = recommendations
-  end
+  delegate  :empty?,
+            :size,
+            :count,
+            :flights,
+            :first,
+            :last,
+    to: :recommendations
 
   # вынести это отсюда нафиг
-  [:<<, :delete_if, :reject!, :select!, :+, :-, :select].each do |method|
+  [:<<, :delete_if, :reject!, :select!, :+, :-].each do |method|
     class_eval <<-EOS, __FILE__, __LINE__ - 1
       def #{method} *args
         @recommendations.#{method}(*args)

@@ -86,7 +86,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   def recommendations_sax
     flight_indexes_cache = flight_indexes_sax
 
-    parsed.recommendation.map do |recommendation|
+    recommendations = parsed.recommendation.map do |recommendation|
 
       blank_count = recommendation.paxFareProduct.flat_map(&:traveller).size
       price_total = recommendation.amount.first.to_f
@@ -124,6 +124,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
         last_tkt_date: last_tkt_date
       )
     end
+    RecommendationSet.new(recommendations)
   end
 
   def variants_sax(recommendation, flight_indexes_cache)
