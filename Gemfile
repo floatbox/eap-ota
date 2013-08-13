@@ -63,7 +63,7 @@ gem 'newrelic_rpm'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
-gem "devise", "~> 2.2.4"
+gem "devise", "~> 2.2.6"
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 #gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
