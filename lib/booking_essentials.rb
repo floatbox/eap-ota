@@ -47,8 +47,12 @@ module BookingEssentials
       @search.adults = params[:adults] if params[:adults]
       @search.children = params[:children] if params[:children]
       @search.infants = params[:infants] if params[:infants]
-      @recommendation.segments.each do |s|
-        @search.segments.new(from: s.departure.city.iata, to: s.arrival.city.iata, date: s.departure_date)
+      @search.segments = @recommendation.segments.map do |s|
+        AviaSearchSegment.new(
+          from: s.departure.city.iata,
+          to: s.arrival.city.iata,
+          date: s.departure_date
+        )
       end
     end
 
