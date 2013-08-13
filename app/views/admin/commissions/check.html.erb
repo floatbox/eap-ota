@@ -19,6 +19,6 @@
     <h2 style="color:gray">не проверяли<% if reason %> (но был бы "<%= reason %>")<% end %>:</h2>
   <% end %>
 
-  <%= render 'rule', :rule => rule %>
+  <%= render 'rule', :rule => rule, :error => reason %>
 <hr>
 <% end %>

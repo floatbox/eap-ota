@@ -1,11 +1,9 @@
-<p>валидирующий перевозчик:
-<%= Carrier[@recommendation.validating_carrier_iata].name rescue '' %> (<%= @recommendation.validating_carrier_iata %>)</p>
-
+<h3>рекомендация:</h3>
  <table>
  <% @recommendation.journey.segments.each_with_index do |segment, seg_idx| %>
    <% segment.flights.each do |flight| %>
      <tr>
-       <td width="2%"> <%= seg_idx + 1 %> </td>
+       <%# <td width="2%"> <%= seg_idx + 1 > </td> %>
        <td width="5%" align="right" > <%= flight.carrier_pair %> </td>
        <td width="5%"> <%= flight.flight_number if flight.flight_number != '9999' %> </td>
        <td width="20%">
@@ -23,3 +21,6 @@
    <% end %>
  <% end %>
  </table>
+<p>валидирующий перевозчик:
+<%= Carrier[@recommendation.validating_carrier_iata].name rescue '' %> (<%= @recommendation.validating_carrier_iata %>)</p>
+
