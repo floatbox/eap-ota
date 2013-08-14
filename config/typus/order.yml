@@ -199,6 +199,7 @@ Order:
   order_by: -orders.created_at
   search: ^pnr_number, ^parent_pnr_number, email, phone
   options:
+    per_page: 50
     default_action_on_item: show
     export: csv
     #action_after_save: show
