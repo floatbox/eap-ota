@@ -1,10 +1,11 @@
 carrier "SU", start_date: "2013-07-01"
 
 rule 1 do
+disabled "переключаем выписку на АЦ"
 ticketing_method "downtown"
 agent "9%"
 subagent "8%"
-discount "9%"
+discount "4%"
 agent_comment "правила для выписки авиакомпании SU в DTT"
 agent_comment "При вылете из США - все классы - агентская 9%, субагентская 8%, скидка 7%"
 subagent_comment "8%"
@@ -13,10 +14,11 @@ example "jfksvo svojfk"
 end
 
 rule 2 do
+disabled "переключаем выписку на АЦ"
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
-discount "5.5%"
+discount "2%"
 agent_comment "правила для выписки авиакомпании SU в DTT"
 agent_comment "При вылете НЕ из России - все классы - агентская 5%, субагентская   4.5%, скидка 4%"
 subagent_comment "4.5%"
@@ -25,10 +27,11 @@ example "cdgsvo svocdg"
 end
 
 rule 3 do
+disabled "переключаем выписку на АЦ"
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
-discount "6%"
+discount "2%"
 agent_comment "Коля: SU на dtt 5%/4.5%/4.2%, кроме тель-авива и SU#1"
 subagent_comment "4.5%"
 interline :no, :yes
@@ -52,7 +55,6 @@ example "svotlv/su tlvsvo"
 end
 
 rule 5 do
-disabled "Выписываем такое в dtt"
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
