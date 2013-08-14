@@ -100,6 +100,7 @@ Eviterra::Application.routes.draw do
   match "unsubscribe" => 'subscription#unsubscribe', :as => 'unsubscribe'
   match "unsubscribe/:destination_id" => 'subscription#unsubscribe_by_destination', :as => 'unsubscribe_by_destination'
 
+  match "admin/commissions/mass_check" => 'admin/commissions#mass_check', :as => 'mass_check_admin_commissions'
   match "admin/commissions/check" => 'admin/commissions#check', :as => 'check_admin_commissions'
   match "admin/commissions/table" => 'admin/commissions#table', :as => 'table_admin_commissions'
   match "admin/commissions/page" => 'admin/commissions#page', :as => 'admin_commissions_page'

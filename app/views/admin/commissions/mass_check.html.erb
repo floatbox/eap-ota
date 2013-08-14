@@ -1,0 +1,14 @@
+<p>
+<%= link_to 'Все комиссии', admin_commissions_path %>
+</p>
+<h2>Проверить рекомендации</h2>
+<form action="<%= mass_check_admin_commissions_url %>" method="POST">
+  коды <textarea name="examples" value="<%= @examples_text %>"></textarea>
+  <br>
+  <input type="submit" value="Проверить">
+</form>
+<hr>
+<% (@rules_with_examples || []).each do |rule, examples| %>
+  <%= render 'rule', :rule => rule, :examples => examples %>
+<hr>
+<% end %>

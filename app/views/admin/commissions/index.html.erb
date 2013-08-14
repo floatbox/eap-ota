@@ -3,6 +3,7 @@
 <%= link_to_unless_current 'подробно', admin_commissions_url %> /
 <%= link_to_unless_current 'кратко', table_admin_commissions_url %> /
 <%= link_to('проверить маршрут', check_admin_commissions_url) %>
+<%= link_to('массовая проверка', mass_check_admin_commissions_url) %>
 </p>
 <p>
 <% @book.carriers.sort.each do |carrier_code| %>

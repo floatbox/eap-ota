@@ -1,5 +1,6 @@
 <% as_table ||= false %>
 <% error ||= nil %>
+<% examples ||= [] %>
 <% highlight_error = proc {|kind| raw 'style="color:red"' if kind == error } %>
 <% strype = cycle('background-color: #fff', 'background-color: #ddd') %>
 <% if as_table %>
@@ -84,11 +85,12 @@
 
     </td>
     <td colspan=3>
-      <% if rule.examples.present? %>
+      <% provided_examples = examples.presence || (rule.examples || []).map(&:code) %>
+      <% if provided_examples.present? %>
         <h3>примеры</h3>
         <ul>
-          <% rule.examples.each do |example| %>
-            <li><%= link_to(example.code, check_admin_commissions_url(example: example.code, carrier: rule.carrier), target: '_blank') %></li>
+          <% provided_examples.each do |example| %>
+            <li><%= link_to(example, check_admin_commissions_url(example: example, carrier: rule.carrier), target: '_blank') %></li>
           <% end %>
         </ul>
       <% end %>
