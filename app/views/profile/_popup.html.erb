@@ -88,7 +88,8 @@
     </div>
     <div class="phu-popup" id="phup-password">
         <div class="phu-section">
-            <h6 class="phus-title">Придумайте пароль</h6>
+            <h6 class="phus-title" style="margin: 0 0 5px;">Придумайте пароль</h6>
+            <p class="phupp-profile" style="margin: 0 0 10px;">для личного кабинета</p>
             <%= form_for("customer", :url => customer_confirm_path, :html => {:method => :put, :novalidate => 'novalidate'}) do |f| %>
             <%= f.hidden_field :confirmation_token %>
             <div class="phu-field">
@@ -104,6 +105,11 @@
             </div>
             <div class="phu-error"></div>
             <% end %>
+        </div>
+    </div>
+    <div class="phu-popup" id="phup-token">
+        <div class="phu-section">
+            <p style="width: 230px; margin-top: 2px;">Ссылка, по&nbsp;которой вы&nbsp;перешли, устарела или неверна. Чтобы задать пароль для личного кабинета, перейдите, пожалуйста, по&nbsp;ссылке из&nbsp;письма.</p>
         </div>
     </div>
 </div>

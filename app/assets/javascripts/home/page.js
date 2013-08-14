@@ -18,11 +18,27 @@ init: function() {
         this.restoreBooking(this.location.search, this.location.booking);
     } else if (this.location.search.indexOf('confirmation_token') == 0) {
         var token = this.location.search.replace('confirmation_token=', '');
-        User.password.use(token);
-        User.show('password');
+        $.ajax({
+            method: 'GET',
+            url: '/profile/verification',
+            data: {confirmation_token: token},
+            success: function(result) {
+                if (result.success) {
+                    User.password.el.find('.phupp-profile').html('для личного кабинета ' + result.resource.email);
+                    User.password.use(token);
+                    User.show('password');
+                } else {
+                    User.show('token');
+                }
+            },
+            error: function() {
+                User.show('token');
+            },
+            timeout: 20000
+        });
+        this.loadLocation();
         search.map.resize();
-        /*this.reset();
-        this.loadLocation();*/
+        //this.reset();
     } else if (this.location.search) {
         this.restoreResults(this.location.search);
     } else {
