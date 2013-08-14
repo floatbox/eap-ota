@@ -1,6 +1,7 @@
 carrier "SU", start_date: "2013-07-01"
 
 rule 1 do
+disabled "переключаем выписку на АЦ"
 ticketing_method "downtown"
 agent "9%"
 subagent "8%"
@@ -13,6 +14,7 @@ example "jfksvo svojfk"
 end
 
 rule 2 do
+disabled "переключаем выписку на АЦ"
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
@@ -25,6 +27,7 @@ example "cdgsvo svocdg"
 end
 
 rule 3 do
+disabled "переключаем выписку на АЦ"
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
@@ -52,7 +55,6 @@ example "svotlv/su tlvsvo"
 end
 
 rule 5 do
-disabled "Выписываем такое в dtt"
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
