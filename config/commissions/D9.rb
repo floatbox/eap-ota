@@ -26,7 +26,6 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "2%"
 subagent "1.4%"
-discount "0%"
 agent_comment "2% от опубл. тарифов на рейсы Interline с участком D9"
 subagent_comment "1,4% от опубл. тарифов на рейсы Interline с участком D9"
 interline :yes

@@ -71,7 +71,6 @@ rule 6 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
-discount "0%"
 consolidator "2%"
 agent_comment "1 евро с билета на рейсы Interline без участка SU, а также по тарифам: туроператорским, конфиденциальным, 'нетто'."
 subagent_comment "5 (пять) руб.  с билета на рейсы Interline без участка SU, а также по тарифам: туроператорским, конфиденциальным, нетто'."
