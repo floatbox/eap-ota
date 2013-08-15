@@ -26,8 +26,8 @@ class Commission::Writer::Rule
     @rule.ticketing_method and
       line %[ticketing_method #{@rule.ticketing_method.inspect}]
 
-    line commission_if_needed(:agent)
-    line commission_if_needed(:subagent)
+    line commission_unless_blank(:agent)
+    line commission_unless_blank(:subagent)
     line commission_if_needed(:discount)
     line commission_if_needed(:our_markup)
     line commission_if_needed(:consolidator)
@@ -94,6 +94,12 @@ class Commission::Writer::Rule
     def commission_if_needed token
       fx = @rule.send token
       return if fx == Commission::Formula.new( WRITER_DEFAULTS[token] )
+      %[#{token} #{fx.to_s.inspect}]
+    end
+
+    def commission_unless_blank token
+      fx = @rule.send token
+      return if fx.blank?
       %[#{token} #{fx.to_s.inspect}]
     end
 
