@@ -194,6 +194,8 @@ GEM
       multi_xml
     i18n (0.6.4)
     ice_nine (0.8.0)
+    jist (1.5.1)
+      json
     journey (1.0.4)
     jquery-rails (2.0.2)
       railties (>= 3.2.0, < 5.0)
@@ -435,6 +437,7 @@ DEPENDENCIES
   handsoap!
   hpricot
   i18n-js!
+  jist
   jquery-rails
   kaminari
   libnotify
