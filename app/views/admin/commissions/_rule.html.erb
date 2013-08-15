@@ -21,34 +21,32 @@
 <table>
   <tr style="<%= strype %>">
     <th width="10%" style="<%= 'color: red' if rule.disabled? %>">
-      <%= link_to "#{rule.carrier} #{rule.ticketing_method} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %>
-      <th width="10%" style="<%= 'color: cyan' if rule.ticketing_method == 'direct' %>" title="<%= rule.agent_comments %>">
-        <%= rule.agent %> </td>
-      <th width="10%" style="<%= 'color: cyan' if rule.ticketing_method != 'direct' %>" title="<%= rule.subagent_comments %>">
-        <%= rule.subagent %> </td>
-      <th width="10%" title="сбор агента 1%/2%">
-        <%= rule.consolidator unless rule.consolidator.try(:zero?) %> </td>
-      <th width="10%" style="<%= 'color:green' unless rule.discount.try(:zero?) %>" title="скидка">
-        <%= rule.discount unless rule.discount.try(:zero?) %> </td>
-      <th width="10%" style="<%= 'color:green' unless rule.our_markup.try(:zero?) %>" title="надбавка">
-        <%= rule.our_markup unless rule.our_markup.try(:zero?) %> </td>
-      <th width="10%">
-        <% if rule.tour_code %>
-          tour code: <%= rule.tour_code %>
-        <% end %>
-        <% if rule.designator %>
-          designator: <%= rule.designator %>
-        <% end %>
-      </td>
-      <th width="20%" style="color:red"> <%# "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </td>
+      <%= link_to "#{rule.carrier} #{rule.ticketing_method} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %> </th>
+    <th width="10%" style="<%= 'color: cyan' if rule.ticketing_method == 'direct' %>" title="<%= rule.agent_comments %>">
+      <%= rule.agent %> </th>
+    <th width="10%" style="<%= 'color: cyan' if rule.ticketing_method != 'direct' %>" title="<%= rule.subagent_comments %>">
+      <%= rule.subagent %> </th>
+    <th width="10%" title="сбор агента 1%/2%">
+      <%= rule.consolidator unless rule.consolidator.try(:zero?) %> </th>
+    <th width="10%" style="<%= 'color:green' unless rule.discount.try(:zero?) %>" title="скидка">
+      <%= rule.discount unless rule.discount.try(:zero?) %> </th>
+    <th width="10%" style="<%= 'color:green' unless rule.our_markup.try(:zero?) %>" title="надбавка">
+      <%= rule.our_markup unless rule.our_markup.try(:zero?) %> </th>
+    <th width="10%">
+      <% if rule.tour_code %>
+        tour code: <%= rule.tour_code %>
+      <% end %>
+      <% if rule.designator %>
+        designator: <%= rule.designator %>
+      <% end %>
+    </th>
+    <th width="10%" style="color:red"> <%# "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </th>
   </tr>
   <tr style="<%= strype %>">
-    <td></td>
     <td colspan=4><h3>агентский договор</h3> <%= raw (rule.agent_comments || '--').gsub("\n", "<br>") %> </td>
-    <td colspan=3><h3>субагентский договор</h3> <%= raw (rule.subagent_comments || '--').gsub("\n", "<br>") %> </td>
+    <td colspan=4><h3>субагентский договор</h3> <%= raw (rule.subagent_comments || '--').gsub("\n", "<br>") %> </td>
   </tr>
   <tr style="<%= strype %>">
-    <td></td>
     <td colspan=4>
         <h3>правила</h3>
         <ul>
@@ -84,7 +82,7 @@
           </ul>
 
     </td>
-    <td colspan=3>
+    <td colspan=4>
       <% provided_examples = examples.presence || (rule.examples || []).map(&:code) %>
       <% if provided_examples.present? %>
         <h3>примеры</h3>
