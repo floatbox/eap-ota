@@ -15,6 +15,7 @@ OptionParser.new do |op|
   op.on "-d", "--dir DIRNAME", "write commissions to directory", &setopt[:dir]
   op.on "-y", "--yaml", "write in YAML format", &setopt[:yaml]
   op.on "-s", "--discounts FILENAME", "apply discounts from file", &setopt[:discounts]
+  op.on "-e", "--eval RUBYCODE", "apply code to book before dumping", &setopt[:eval]
   op.on_tail("-h", "--help", "Show this message") do
     puts op
     exit
@@ -60,6 +61,11 @@ if opts[:discounts]
     #puts "changing #{rule.discount} to #{discount}"
     rule.discount = discount
   end
+end
+
+if opts[:eval]
+  puts "evaluating code..."
+  book.instance_eval opts[:eval]
 end
 
 if opts[:yaml]
