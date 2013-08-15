@@ -163,7 +163,7 @@ class Commission::Formula
 
   # строка => хеш, нужно для арифметических операций на формулах
   def decompose
-    pairs = formula.split(/\s?\+\s?/).map do |part|
+    pairs = formula.split('+').map do |part|
       part.strip =~ /([\d\.]+)([%\w]+)?/
       currency = $2 || 'rub'
       value = $1.to_f
