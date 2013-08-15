@@ -142,4 +142,15 @@ describe Commission::Formula do
 
   end
 
+  describe "#==" do
+    it "should return true for 0% == 0 comparison" do
+      (Fx('0') == Fx('0%')).should be_true
+    end
+
+    it "should return true for 0usd == 0 comparison" do
+      (Fx('0usd') == Fx('0')).should be_true
+    end
+  end
+
 end
+

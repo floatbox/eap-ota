@@ -117,6 +117,7 @@ class Commission::Formula
   end
 
   def == other_formula
+    return true if zero? && other_formula.zero?
     formula == other_formula.formula
   end
 
