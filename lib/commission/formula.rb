@@ -6,6 +6,8 @@ class Commission::Formula
 
   extend SimpleFlyweight
 
+  delegate :[], to: :decompose
+
   attr_accessor :formula, :compiled
 
   def initialize formula
