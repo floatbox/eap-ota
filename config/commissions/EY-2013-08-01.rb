@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "10%"
 subagent "8%"
-discount "8%"
+discount "4%"
 agent_comment "C 01.08.13г. по 30.09.13г. 10% от опубл. тарифов Первого и Бизнес класса на собств.рейсы EY, включая код-шеринг сегменты, выписанные на бланках EY с сегментом EY. А также на сквозные рейсы Interline с обязательным участием EY."
 subagent_comment "8%"
 interline :no, :yes
@@ -17,7 +17,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "5%"
+discount "1.5%"
 agent_comment "5% от опубл. тарифов Эконом класса на собств.рейсы EY, а также на сквозные рейсы Interline с обязательным участием EY."
 subagent_comment "3.5%"
 interline :no, :yes

@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
-discount "3%"
+discount "1.5%"
 agent_comment "Для перевозок, содержащих участок в/из пунктов РФ:"
 agent_comment "5% (3%) (3%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в Москвы;"
 check %{ includes(country_iatas, 'RU') and includes(city_iatas, 'MOW LED') }
@@ -16,7 +16,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "5%"
+discount "2.5%"
 agent_comment "7% (5%) (5%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в пунктов в РФ, кроме Москвы;"
 check %{ includes(country_iatas, 'RU') and not includes(city_iatas, 'MOW LED') }
 example "svxcdg"
@@ -28,7 +28,7 @@ important!
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "5%"
+discount "2.5%"
 agent_comment "7% от тарифа Бизнес класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) из/в пунктов в РФ;"
 subagent_comment "5%"
 classes :business
@@ -41,7 +41,7 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
-discount "3%"
+discount "1.5%"
 agent_comment "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 subagent_comment "3% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 interline :yes
