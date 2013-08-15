@@ -29,7 +29,8 @@ abort: function() {
         delete this.request;
     }
     if (this.offer) {
-        this.offer.book.removeClass('ob-disabled').show();
+        results.content.el.find('.rc-overlay').hide();
+        this.offer.book.removeClass('ob-disabled ob-fade').show();
         this.offer.updateBook();
     }
     delete this.variant;
@@ -52,7 +53,8 @@ prebook: function(offer) {
         },
         timeout: 120000
     });
-    offer.book.addClass('ob-disabled');
+    results.content.el.find('.rc-overlay').show();
+    offer.book.addClass('ob-disabled ob-fade');
     offer.state.html('<span class="ob-progress">' + I18n.t('prebooking.progress') + '</span>');
     this.variant = offer.selected;
     this.offer = offer;
@@ -75,11 +77,12 @@ process: function(result) {
 },
 failed: function() {
     var tip = 'Так бывает вследствие несвоевременного или&nbsp;некорректного обновления авиакомпанией информации о&nbsp;наличии мест в&nbsp;системах бронирования. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
-    this.offer.book.addClass('ob-failed');
+    this.offer.book.addClass('ob-failed').removeClass('ob-fade');
     this.offer.state.html('Авиакомпания не подтвердила наличие мест по этому тарифу. Выберите <span class="obs-cancel">другой вариант</span>. <span class="link obs-hint">Почему так бывает?</span>');
     this.offer.state.find('.obs-hint').click(function(event) {
         hint.show(event, tip);
     });
+    results.content.el.find('.rc-overlay').hide();
     _kmq.push(['record', 'PRE-BOOKING: fail']);
     _gaq.push(['_trackEvent', 'Бронирование', 'Невозможно выбрать вариант']);
 },
@@ -125,7 +128,8 @@ preview: function(content) {
         return 'segment' + (i + 1);
     });
     results.content.el.hide();
-    this.offer.book.removeClass('ob-disabled');
+    results.content.el.find('.rc-overlay').hide();
+    this.offer.book.removeClass('ob-disabled ob-fade');
     this.offer.updateBook();
     this.comparePrices();
     this.el.show();

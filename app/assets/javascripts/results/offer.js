@@ -75,7 +75,7 @@ select: function(index, smooth) {
         this.summaries[variant.segments[i]].addClass('os-selected');
     }
     var disabled = smooth && this.book.hasClass('ob-disabled'); // Если переключили во время проверки доступности, анимация не нужна
-    this.book.removeClass('ob-disabled ob-failed');
+    this.book.removeClass('ob-disabled ob-failed ob-fade');
     this.selected = variant;
     if (smooth && !disabled) {
         var that = this;
