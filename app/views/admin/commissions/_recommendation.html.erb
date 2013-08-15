@@ -1,3 +1,4 @@
+<% if @recommendation %>
 <h3>рекомендация:</h3>
  <table>
  <% @recommendation.journey.segments.each_with_index do |segment, seg_idx| %>
@@ -23,4 +24,4 @@
  </table>
 <p>валидирующий перевозчик:
 <%= Carrier[@recommendation.validating_carrier_iata].name rescue '' %> (<%= @recommendation.validating_carrier_iata %>)</p>
-
+<% end %>

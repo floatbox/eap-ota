@@ -1,7 +1,8 @@
 <h2>Комиссии</h2>
 <p>
 <%= link_to_unless_current 'подробно', admin_commissions_url %> /
-<%= link_to_unless_current 'кратко', table_admin_commissions_url %>
+<%= link_to_unless_current 'кратко', table_admin_commissions_url %> /
+<%= link_to('проверить маршрут', check_admin_commissions_url) %>
 </p>
 <p>
 <% @book.carriers.sort.each do |carrier_code| %>
@@ -9,8 +10,6 @@
 <% end %>
 </p>
 <hr>
-
-<%= render 'form' %>
 
 <% @book.current_pages.group_by(&:carrier).each do |carrier_code, pages| %>
   <h2 id="<%= carrier_code %>"><%= "(#{carrier_code})" %> <%= Carrier[carrier_code].name  rescue '' %></h2>
