@@ -137,19 +137,12 @@ class Commission::Formula
     0
   end
 
-
   def + other_formula
-    itself, other = decompose, other_formula.decompose
-    ikeys, okeys = itself.keys, other.keys
-    same = ikeys & okeys
+    arithmetic :+, other_formula
+  end
 
-    result = itself.merge(other)
-    same.each { |key| result[key] = itself[key] + other[key] }
-
-    # делаем числа без вещественной части интами
-    result.each { |k, v| result[k] = v.to_i if v.modulo(1) == 0 }
-
-    Commission::Formula.compose(result)
+  def - other_formula
+    arithmetic :-, other_formula
   end
 
   def * value
@@ -182,7 +175,7 @@ class Commission::Formula
   def decompose
     @decomposed ||= begin
       pairs = formula.split('+').map do |part|
-        part.strip =~ /([\d\.]+)([%\w]+)?/
+        part.strip =~ /([-\d\.]+)([%\w]+)?/
         currency = $2 || 'rub'
         value = $1.to_f
         [currency, value]
@@ -197,6 +190,22 @@ class Commission::Formula
       # пустая строка не должна возвращаться со всеми пустыми значениями
       string.empty? ? '0' : string
     end
+  end
+
+  private
+
+  def arithmetic method, other_formula
+    itself, other = decompose, other_formula.decompose
+    ikeys, okeys = itself.keys, other.keys
+    same = ikeys & okeys
+
+    result = itself.merge(other)
+    same.each { |key| result[key] = itself[key].__send__(method, other[key]) }
+
+    # делаем числа без вещественной части интами
+    result.each { |k, v| result[k] = v.to_i if v.modulo(1) == 0 }
+
+    Commission::Formula.compose(result)
   end
 
 end

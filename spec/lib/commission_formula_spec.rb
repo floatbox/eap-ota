@@ -158,6 +158,16 @@ describe Commission::Formula do
     specify { (Fx('2%') + Fx('0')).should == '2%' }
   end
 
+  describe "#-" do
+    specify { (Fx('3%') - Fx('4%')).should == '-1%' }
+    specify { (Fx('3% + 4eur') - Fx('4eur')).should == '3%' }
+    specify { (Fx('3% + 4') - Fx('5')).should == '3% + -1' }
+    specify { (Fx('3% + 4') - Fx('5 + 2%')).should == '1% + -1' }
+    specify { (Fx('3% + 4rub') - Fx('5 + 2%')).should == '1% + -1' }
+    specify { (Fx('3.0% + 4rub') - Fx('5.0 + 2.0%')).should == '1% + -1' }
+    specify { (Fx('2%') - Fx('0')).should == '2%' }
+  end
+
   describe ".compose" do
     #implicit
     specify { Commission::Formula.compose('' => 3).should == '3' }
