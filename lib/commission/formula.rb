@@ -121,6 +121,25 @@ class Commission::Formula
     formula == other_formula.formula
   end
 
+  def + other_formula
+    itself, other = decompose, other_formula.decompose
+    ikeys, okeys = itself.keys, other.keys
+    same = ikeys & okeys
+
+    result = itself.merge(other)
+    same.each { |key| result[key] = itself[key] + other[key] }
+
+    # делаем числа без вещественной части интами
+    result.each { |k, v| result[k] = v.to_i if v.modulo(1) == 0 }
+
+    Commission::Formula.compose(result)
+  end
+
+  def * value
+    hash = decompose
+    hash.each { |k, v| hash[k] *= value }
+  end
+
   # Сериализация
 
   # для YAML/Psych
@@ -140,6 +159,23 @@ class Commission::Formula
   def init_with(coder)
     @formula = coder["formula"]
     compile!
+  end
+
+  # строка => хеш, нужно для арифметических операций на формулах
+  def decompose
+    pairs = formula.split(/\s?\+\s?/).map do |part|
+      part.strip =~ /([\d\.]+)([%\w]+)?/
+      currency = $2 || 'rub'
+      value = $1.to_f
+      [currency, value]
+    end
+    Hash[pairs]
+  end
+
+  class << self
+    def compose hash
+      hash.map{ |currency, value| "#{value}#{currency}" }.join(' + ').downcase.gsub(/rub/, '')
+    end
   end
 
 end

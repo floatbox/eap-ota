@@ -152,5 +152,30 @@ describe Commission::Formula do
     end
   end
 
+  describe "#+" do
+    specify { (Fx('3%') + Fx('4%')).should == '7%' }
+    specify { (Fx('3% + 4eur') + Fx('4eur')).should == '3% + 8eur' }
+    specify { (Fx('3% + 4') + Fx('5')).should == '3% + 9' }
+    specify { (Fx('3% + 4') + Fx('5 + 2%')).should == '5% + 9' }
+    specify { (Fx('3% + 4rub') + Fx('5 + 2%')).should == '5% + 9' }
+    specify { (Fx('3.0% + 4rub') + Fx('5.0 + 2.1%')).should == '5.1% + 9' }
+  end
+
+  describe ".compose" do
+    #implicit
+    specify { Commission::Formula.compose('' => 3).should == '3' }
+    specify { Commission::Formula.compose('' => 3, '%' => 2).should == '3 + 2%' }
+    #explicit
+    specify { Commission::Formula.compose('rub' => 3).should == '3' }
+    specify { Commission::Formula.compose('rub' => 3, '%' => 2).should == '3 + 2%' }
+  end
+
+  describe "#decompose" do
+    specify { Fx('3').decompose.should == {'rub' => 3} }
+    specify { Fx('3rub').decompose.should == {'rub' => 3} }
+    specify { Fx('3 + 4%').decompose.should == {'rub' => 3, '%' => 4} }
+    specify { Fx('2usd + 4%').decompose.should == {'usd' => 2, '%' => 4} }
+  end
+
 end
 
