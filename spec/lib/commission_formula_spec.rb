@@ -168,6 +168,11 @@ describe Commission::Formula do
     #explicit
     specify { Commission::Formula.compose('rub' => 3).should == '3' }
     specify { Commission::Formula.compose('rub' => 3, '%' => 2).should == '3 + 2%' }
+    # с нулевыми значениями
+    specify { Commission::Formula.compose('rub' => 3, '%' => 0).should == '3' }
+    specify { Commission::Formula.compose('rub' => 0, '%' => 0).should == '0' }
+    # FIXME? возможно стоит рейзить в этом случае
+    specify { Commission::Formula.compose({}).should == '0' }
   end
 
   describe "#decompose" do
