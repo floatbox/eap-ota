@@ -4,6 +4,7 @@
 # понимает проценты, абсолютные значения, и даже другие валюты (иногда)
 class Commission::Formula
 
+  include Comparable
   extend SimpleFlyweight
 
   delegate :[], to: :decompose
@@ -25,7 +26,7 @@ class Commission::Formula
   end
 
   def zero?
-    rate.zero?
+    !decompose.values.any?(&:nonzero?)
   end
 
   delegate :blank?, :to => :formula
@@ -118,10 +119,24 @@ class Commission::Formula
               ( \s* \+ \s*  \d+ (?: \.\d+ )? (?: % | eur )? )*  $/x )
   end
 
-  def == other_formula
-    return true if zero? && other_formula.zero?
-    formula == other_formula.formula
+  def <=> other_formula
+    # для нулевых формул
+    return 0 if (zero? && other_formula.zero?) || formula == other_formula.formula
+
+    itself, other = decompose, other_formula.decompose
+
+    %w{% eur usd rub}.each do |currency|
+      ours = itself[currency]
+      another = other[currency]
+      return 1 if ( ours && !another )
+      return -1 if ( another && !ours )
+      cmp = ours <=> another if ( ours && another )
+      return cmp if cmp && cmp.nonzero?
+    end
+
+    0
   end
+
 
   def + other_formula
     itself, other = decompose, other_formula.decompose
@@ -165,13 +180,15 @@ class Commission::Formula
 
   # строка => хеш, нужно для арифметических операций на формулах
   def decompose
-    pairs = formula.split('+').map do |part|
-      part.strip =~ /([\d\.]+)([%\w]+)?/
-      currency = $2 || 'rub'
-      value = $1.to_f
-      [currency, value]
+    @decomposed ||= begin
+      pairs = formula.split('+').map do |part|
+        part.strip =~ /([\d\.]+)([%\w]+)?/
+        currency = $2 || 'rub'
+        value = $1.to_f
+        [currency, value]
+      end
+      Hash[pairs]
     end
-    Hash[pairs]
   end
 
   class << self
@@ -183,3 +200,4 @@ class Commission::Formula
   end
 
 end
+

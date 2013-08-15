@@ -39,10 +39,6 @@ describe Commission::Formula do
     specify { Fx("3.235%").call(500).should == 16.18 }
   end
 
-  it "should be equal to the same formula" do
-    Fx('3.34%').should == Fx('3.34%')
-  end
-
   describe "#serialize" do
     specify { Fx('3.34%').inspect.should == '#<Fx 3.34% >' }
   end
@@ -159,6 +155,7 @@ describe Commission::Formula do
     specify { (Fx('3% + 4') + Fx('5 + 2%')).should == '5% + 9' }
     specify { (Fx('3% + 4rub') + Fx('5 + 2%')).should == '5% + 9' }
     specify { (Fx('3.0% + 4rub') + Fx('5.0 + 2.1%')).should == '5.1% + 9' }
+    specify { (Fx('2%') + Fx('0')).should == '2%' }
   end
 
   describe ".compose" do
@@ -180,6 +177,28 @@ describe Commission::Formula do
     specify { Fx('3rub').decompose.should == {'rub' => 3} }
     specify { Fx('3 + 4%').decompose.should == {'rub' => 3, '%' => 4} }
     specify { Fx('2usd + 4%').decompose.should == {'usd' => 2, '%' => 4} }
+  end
+
+  describe "#<=>" do
+    # простые
+    specify { Fx('3.34%').should == Fx('3.34%') }
+    specify { Fx('3').should > Fx('2') }
+    specify { Fx('3').should >= Fx('3') }
+    specify { Fx('3').should < Fx('4') }
+    specify { Fx('3').should <= Fx('3') }
+
+    # с приоритетом
+    specify { Fx('3%').should > Fx('3') }
+    specify { Fx('3%').should > Fx('3eur') }
+    specify { Fx('3%').should > Fx('3usd') }
+    specify { Fx('3%').should > Fx('3rub') }
+
+    # композитные
+    specify { Fx('3% + 10.5usd').should > Fx('11usd') }
+    specify { Fx('3% + 10.5usd').should > Fx('2% + 10.5usd') }
+    specify { Fx('3% + 10.5usd').should < Fx('3.01% + 10.5usd') }
+    specify { Fx('3% + 10.5usd').should < Fx('10.5eur + 3%') }
+    specify { Fx('3.5% + 5.4').should == Fx('5.4rub + 3.5%') }
   end
 
 end
