@@ -273,7 +273,7 @@ start: function() {
     this.counter = this.el.find('.bft-counter');
     this.timer = setInterval(function() {
         var now = new Date().getTime();
-        var time = Math.max(0, 1200 - Math.round((now - from) / 1000));
+        var time = Math.max(0, 1800 - Math.round((now - from) / 1000));
         if (time === 0) {
             that.expire();
             that.stop();
@@ -282,7 +282,7 @@ start: function() {
         }
     }, 5000);
     this.minutes = undefined;
-    this.show(1200);
+    this.show(1800);
 },
 show: function(time) {
     var minutes = Math.ceil(time / 60);
