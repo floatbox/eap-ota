@@ -119,6 +119,13 @@ class Commission::Formula
               ( \s* \+ \s*  \d+ (?: \.\d+ )? (?: % | eur )? )*  $/x )
   end
 
+  # работает по таким законам:
+  # если указана процентная ставка - всегда больше, чем без неё
+  # иначе они просто сравниваются
+  # то же касается и валюты
+  # приоритеты:
+  # % > eur > usd > rub
+  # никаких конверсий для валют не выполняется
   def <=> other_formula
     # для нулевых формул
     return 0 if (zero? && other_formula.zero?) || formula == other_formula.formula
@@ -194,6 +201,7 @@ class Commission::Formula
 
   private
 
+  # "3% + 5rub" + "2%" = "5% + 5rub"
   def arithmetic method, other_formula
     itself, other = decompose, other_formula.decompose
     ikeys, okeys = itself.keys, other.keys
