@@ -13,6 +13,7 @@ class Commission::Formula
 
   def initialize formula
     @formula = formula.to_s.strip
+    @decomposed = decompose
     compile!
   end
 
@@ -180,15 +181,14 @@ class Commission::Formula
 
   # строка => хеш, нужно для арифметических операций на формулах
   def decompose
-    @decomposed ||= begin
-      pairs = formula.split('+').map do |part|
-        part.strip =~ /([-\d\.]+)([%\w]+)?/
-        currency = $2 || 'rub'
-        value = $1.to_f
-        [currency, value]
-      end
-      Hash[pairs]
+    return @decomposed if @decomposed
+    pairs = formula.split('+').map do |part|
+      part.strip =~ /([-\d\.]+)([%\w]+)?/
+      currency = $2 || 'rub'
+      value = $1.to_f
+      [currency, value]
     end
+    Hash[pairs]
   end
 
   class << self
