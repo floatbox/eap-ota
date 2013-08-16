@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "downtown"
 agent "12%"
 subagent "10%"
-discount "5%"
+our_markup "500"
 agent_comment "через DTT из России в США и наоборот - 12%"
 subagent_comment "через DTT из России в США и наоборот - 10%"
 interline :no, :yes
@@ -18,7 +18,7 @@ rule 2 do
 ticketing_method "downtown"
 agent "8%"
 subagent "6%"
-discount "3%"
+our_markup "500"
 comment "subclasses JZBQVWKLT"
 agent_comment "через DTT из России в США и наоборот - 8%"
 subagent_comment "через DTT из России в США и наоборот - 6%"
