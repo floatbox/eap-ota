@@ -40,7 +40,8 @@
         designator: <%= rule.designator %>
       <% end %>
     </th>
-    <th width="10%" style="color:red"> <%# "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </th>
+    <th width="10%" style="color:red"> <%= rule.subagent - rule.discount + rule.our_markup %>
+    <%# "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </th>
   </tr>
   <tr style="<%= strype %>">
     <td colspan=4><h3>агентский договор</h3> <%= raw (rule.agent_comments || '--').gsub("\n", "<br>") %> </td>

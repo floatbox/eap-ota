@@ -149,37 +149,37 @@ describe Commission::Formula do
   end
 
   describe "#+" do
-    specify { (Fx('3%') + Fx('4%')).should == '7%' }
-    specify { (Fx('3% + 4eur') + Fx('4eur')).should == '3% + 8eur' }
-    specify { (Fx('3% + 4') + Fx('5')).should == '3% + 9' }
-    specify { (Fx('3% + 4') + Fx('5 + 2%')).should == '5% + 9' }
-    specify { (Fx('3% + 4rub') + Fx('5 + 2%')).should == '5% + 9' }
-    specify { (Fx('3.0% + 4rub') + Fx('5.0 + 2.1%')).should == '5.1% + 9' }
-    specify { (Fx('2%') + Fx('0')).should == '2%' }
+    specify { (Fx('3%') + Fx('4%')).should == Fx('7%') }
+    specify { (Fx('3% + 4eur') + Fx('4eur')).should == Fx('3% + 8eur') }
+    specify { (Fx('3% + 4') + Fx('5')).should == Fx('3% + 9') }
+    specify { (Fx('3% + 4') + Fx('5 + 2%')).should == Fx('5% + 9') }
+    specify { (Fx('3% + 4rub') + Fx('5 + 2%')).should == Fx('5% + 9') }
+    specify { (Fx('3.0% + 4rub') + Fx('5.0 + 2.1%')).should == Fx('5.1% + 9') }
+    specify { (Fx('2%') + Fx('0')).should == Fx('2%') }
   end
 
   describe "#-" do
-    specify { (Fx('3%') - Fx('4%')).should == '-1%' }
-    specify { (Fx('3% + 4eur') - Fx('4eur')).should == '3%' }
-    specify { (Fx('3% + 4') - Fx('5')).should == '3% + -1' }
-    specify { (Fx('3% + 4') - Fx('5 + 2%')).should == '1% + -1' }
-    specify { (Fx('3% + 4rub') - Fx('5 + 2%')).should == '1% + -1' }
-    specify { (Fx('3.0% + 4rub') - Fx('5.0 + 2.0%')).should == '1% + -1' }
-    specify { (Fx('2%') - Fx('0')).should == '2%' }
+    specify { (Fx('3%') - Fx('4%')).should == Fx('-1%') }
+    specify { (Fx('3% + 4eur') - Fx('4eur')).should == Fx('3%') }
+    specify { (Fx('3% + 4') - Fx('5')).should == Fx('3% + -1') }
+    specify { (Fx('3% + 4') - Fx('5 + 2%')).should == Fx('1% + -1') }
+    specify { (Fx('3% + 4rub') - Fx('5 + 2%')).should == Fx('1% + -1') }
+    specify { (Fx('3.0% + 4rub') - Fx('5.0 + 2.0%')).should == Fx('1% + -1') }
+    specify { (Fx('2%') - Fx('0')).should == Fx('2%') }
   end
 
   describe ".compose" do
     #implicit
-    specify { Commission::Formula.compose('' => 3).should == '3' }
-    specify { Commission::Formula.compose('' => 3, '%' => 2).should == '3 + 2%' }
+    specify { Commission::Formula.compose('' => 3).should == Fx('3') }
+    specify { Commission::Formula.compose('' => 3, '%' => 2).should == Fx('3 + 2%') }
     #explicit
-    specify { Commission::Formula.compose('rub' => 3).should == '3' }
-    specify { Commission::Formula.compose('rub' => 3, '%' => 2).should == '3 + 2%' }
+    specify { Commission::Formula.compose('rub' => 3).should == Fx('3') }
+    specify { Commission::Formula.compose('rub' => 3, '%' => 2).should == Fx('3 + 2%') }
     # с нулевыми значениями
-    specify { Commission::Formula.compose('rub' => 3, '%' => 0).should == '3' }
-    specify { Commission::Formula.compose('rub' => 0, '%' => 0).should == '0' }
+    specify { Commission::Formula.compose('rub' => 3, '%' => 0).should == Fx('3') }
+    specify { Commission::Formula.compose('rub' => 0, '%' => 0).should == Fx('0') }
     # FIXME? возможно стоит рейзить в этом случае
-    specify { Commission::Formula.compose({}).should == '0' }
+    specify { Commission::Formula.compose({}).should == Fx('0') }
   end
 
   describe "#decompose" do

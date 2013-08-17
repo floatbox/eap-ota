@@ -195,7 +195,7 @@ class Commission::Formula
     def compose hash
       string = hash.map{ |currency, value| "#{value}#{currency}" if value.nonzero? }.compact.join(' + ').downcase.gsub(/rub/, '')
       # пустая строка не должна возвращаться со всеми пустыми значениями
-      string.empty? ? '0' : string
+      new(string.empty? ? '0' : string)
     end
   end
 
