@@ -109,7 +109,7 @@ important!
 ticketing_method "downtown"
 agent "7%"
 subagent "6%"
-our_markup "500"
+discount "6%"
 agent_comment "все через dtt"
 interline :no, :yes
 example "svocdg"
