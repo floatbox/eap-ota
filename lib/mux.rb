@@ -33,7 +33,7 @@ class Mux
     amadeus.release
 
     benchmark 'commission matching' do
-      recommendations.each(&:find_commission!
+      recommendations.find_commission!
     end
 
     recommendations.delete_if(&:ignored_carriers)
@@ -89,7 +89,7 @@ class Mux
 
 
       benchmark 'commission matching' do
-        recommendations.each(&:find_commission!)
+        recommendations.find_commission!
       end
 
       recommendations.select!(&:sellable?) unless admin_user

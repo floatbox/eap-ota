@@ -55,6 +55,10 @@ class RecommendationSet
     Recommendation.filters_data @recommendations
   end
 
+  def find_commission!
+    @recommendations.each(&:find_commission!)
+  end
+
   [:<<, :delete_if, :map!, :reject!, :select!, :uniq!].each do |method|
     class_eval <<-EOS, __FILE__, __LINE__ - 2
       def #{method} *args
