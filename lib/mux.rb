@@ -81,22 +81,19 @@ class Mux
         recommendations.find_commission!
       end
 
-      recommendations.select_valid! do |recs|
-        recs.delete_if(&:ground?)
-        recommendations.select!(&:sellable?) unless admin_user
-        unless lite
-          # sort
-          recommendations = recommendations.sort_by(&:price_total)
-          # regroup
-          # TODO: перенести в RecommendationSet, он для таких вещей и создан
-          recommendations = Recommendation.corrected(recommendations)
-        end
-
+      recommendations.select_valid! do |r|
+        r.delete_if(&:ground?)
+        r.select!(&:sellable?) unless admin_user
         # TODO пометить как непродаваемые, для админов?
-        recommendations.each(&:clear_variants) unless admin_user
-        recommendations
+        r.each(&:clear_variants) unless admin_user
       end
 
+      unless lite
+        # sort
+        recommendations = recommendations.sort_by(&:price_total)
+        # regroup
+        recommendations = recommendations.group_and_correct
+      end
     end
   end
 

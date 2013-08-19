@@ -73,6 +73,25 @@ class RecommendationSet
     @recommendations.each(&:find_commission!)
   end
 
+  # бывший Recommendation#corrected - там ему больше не место
+  def group_and_correct
+    result = RecommendationSet.new
+    #объединяем эквивалентные варианты
+    @recommendations.each do |r|
+      #некрасиво, но просто и работает
+      if r.groupable_with? result[-1]
+        result[-1].variants += r.variants
+      elsif r.groupable_with? result[-2]
+        result[-2].variants += r.variants
+      elsif r.groupable_with? result[-3]
+        result[-3].variants += r.variants
+      else
+        result << r
+      end
+    end
+    result
+  end
+
   private
 
   def reject_by! *criterias

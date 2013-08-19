@@ -221,24 +221,6 @@ class Recommendation
   end
   alias == eql?
 
-  def self.corrected recs
-    #объединяем эквивалентные варианты
-    result = RecommendationSet.new
-    recs.each do |r|
-      #некрасиво, но просто и работает
-      if r.groupable_with? result[-1]
-        result[-1].variants += r.variants
-      elsif r.groupable_with? result[-2]
-        result[-2].variants += r.variants
-      elsif r.groupable_with? result[-3]
-        result[-3].variants += r.variants
-      else
-        result << r
-      end
-    end
-    result
-  end
-
   def groupable_with? rec
     return unless rec
     [price_fare, price_tax, validating_carrier_iata, booking_classes, marketing_carrier_iatas] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.marketing_carrier_iatas]
