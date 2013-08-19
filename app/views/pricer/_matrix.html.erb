@@ -2,7 +2,7 @@
 <% if @recommendations.present? %>
 
 <div class="rm-source" data-dates="<%= @search.segments.map{|fs| fs.date_for_render }.join(' ') %>">
-<% duration_scale = 88.0 / @recommendations.collect(&:segments).flatten.collect(&:total_duration).push(600).max %>
+<% duration_scale = 88.0 / @recommendations.flat_map(&:segments).collect(&:total_duration).push(600).max %>
 <% @recommendations.each do |recommendation| %>
 <div class="rm-variants" data-prices='<%= raw recommendation_prices(recommendation) %>'>
     <% cabins = different_cabins(recommendation, @search.cabin) %>

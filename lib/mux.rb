@@ -32,14 +32,15 @@ class Mux
     recommendations = amadeus.fare_master_pricer_calendar(form).recommendations
     amadeus.release
 
-    recommendations = recommendations.reject(&:ignored_carriers)
-    benchmark 'commission matching calendar' do
-      recommendations.every.find_commission!
+    benchmark 'commission matching' do
+      recommendations.each(&:find_commission!)
     end
-    recommendations = recommendations.select(&:sellable?) unless admin_user
-    recommendations.delete_if(&:without_full_information?)
+
+    recommendations.delete_if(&:ignored_carriers)
+    recommendations.select!(&:sellable?) unless admin_user
+    recommendations.select!(&:full_information?)
     recommendations.select!(&:valid_interline?)
-    recommendations.every.clear_variants
+    recommendations.map(&:clear_variants)
     recommendations.delete_if{|r| r.variants.blank?}
 
     recommendations
@@ -80,26 +81,29 @@ class Mux
         log_examples(recommendations)
       end
 
-      recommendations.delete_if(&:without_full_information?)
+      recommendations.select!(&:full_information?)
       recommendations.delete_if(&:ground?)
       recommendations.select!(&:valid_interline?)
 
-      recommendations = recommendations.reject(&:ignored_carriers)
+      recommendations.reject!(&:ignored_carriers)
+
+
       benchmark 'commission matching' do
-        recommendations.every.find_commission!
+        recommendations.each(&:find_commission!)
       end
 
-
-      recommendations = recommendations.select(&:sellable?) unless admin_user
+      recommendations.select!(&:sellable?) unless admin_user
 
       unless lite
         # sort
         recommendations = recommendations.sort_by(&:price_total)
         # regroup
+        #
+        # TODO: перенести в RecommendationSet, он для таких вещей и создан
         recommendations = Recommendation.corrected(recommendations)
       end
       # TODO пометить как непродаваемые, для админов?
-      recommendations.every.clear_variants unless admin_user
+      recommendations.each(&:clear_variants) unless admin_user
       recommendations.delete_if{|r| r.variants.blank?}
       recommendations
     end
@@ -125,7 +129,7 @@ class Mux
     return [] unless Conf.sirena.enabled
     return [] if lite && !Conf.sirena.enabled_in_lite
     return [] unless sirena_searchable?(form)
-    recommendations = []
+    recommendations = RecommendationSet.new
     benchmark 'Pricer sirena' do
       recommendations = Sirena::Service.new.pricing(form, :lite => lite).recommendations || []
       sirena_cleanup(recommendations)
@@ -138,11 +142,11 @@ class Mux
   end
 
   def sirena_cleanup(recs)
-    recs.delete_if(&:without_full_information?)
+    recs.select!(&:full_information?)
     recs.select!(&:valid_interline?)
     # временно из-за проблем с тарифами AB и LX удаляем из рекоммендации
     recs.delete_if {|r| ['AB', 'LX', 'ЮХ'].include? r.validating_carrier_iata }
-    recs.every.clear_variants
+    recs.each(&:clear_variants)
     recs.delete_if{|r| r.variants.blank?}
   end
 
@@ -155,17 +159,17 @@ class Mux
     sirena.async_pricing(form, :lite => lite, &block)
   end
 
-  def async_pricer(form)
+  def async_pricer(search)
     benchmark 'Pricer, async total' do
-      amadeus_recommendations = []
-      sirena_recommendations = []
-      amadeus_async_pricer(form) do |res|
+      amadeus_recommendations = RecommendationSet.new
+      sirena_recommendations = RecommendationSet.new
+      amadeus_async_pricer(search) do |res|
         benchmark "Amadeus::Recommendations: parsing" do
           logger.info "Mux: amadeus recs: #{res.recommendations.size}"
           amadeus_recommendations += res.recommendations
         end
       end
-      sirena_async_pricer(form) do |res|
+      sirena_async_pricer(search) do |res|
         logger.info "Mux: sirena recs: #{res.recommendations.size}"
         sirena_recommendations += res.recommendations
       end
@@ -174,7 +178,7 @@ class Mux
 
       recommendations = amadeus_merge_and_cleanup(amadeus_recommendations) + sirena_cleanup(sirena_recommendations)
       benchmark 'creating and saving rambler cache' do
-        save_to_mongo(form, recommendations) if Conf.api.store_rambler_cache && !admin_user && !form.complex_route?
+        save_to_mongo(search, recommendations) if Conf.api.store_rambler_cache && !admin_user && !form.complex_route?
       end
       if lite
         recommendations

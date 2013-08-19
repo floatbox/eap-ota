@@ -1,18 +1,62 @@
 # encoding: utf-8
 
-class RecommendationSet < Struct.new(:recommendations)
+class RecommendationSet
 
   delegate  :empty?,
+            :present?,
+            :blank?,
+            :each,
             :size,
             :count,
             :flights,
             :first,
             :last,
+            :map,
+            :collect,
+            :select,
+            :reject,
+            :flat_map,
+            :flatten,
+            :segments,
+            :[],
     to: :recommendations
 
-  # вынести это отсюда нафиг
-  [:<<, :delete_if, :reject!, :select!, :+, :-].each do |method|
-    class_eval <<-EOS, __FILE__, __LINE__ - 1
+
+  def initialize(recommendations=Array.new)
+    @recommendations = recommendations
+  end
+
+  def recommendations
+    @recommendations
+  end
+
+  def to_a
+    @recommendations
+  end
+
+  def + other
+    @recommendations += other.recommendations
+    self
+  end
+
+  def to_s
+    "#{super}: #{@recommendations.to_s}"
+  end
+
+  def select_valid!
+    select! :full_information?, :valid_interline?
+  end
+
+  def sort_by &block
+    RecommendationSet.new(@recommendations.sort_by &block)
+  end
+
+  def filters_data
+    Recommendation.filters_data @recommendations
+  end
+
+  [:<<, :delete_if, :map!, :reject!, :select!, :uniq!].each do |method|
+    class_eval <<-EOS, __FILE__, __LINE__ - 2
       def #{method} *args
         @recommendations.#{method}(*args)
         self
@@ -20,22 +64,14 @@ class RecommendationSet < Struct.new(:recommendations)
     EOS
   end
 
-  def to_s
-    "#{super}: #{@recommendations.to_s}"
-  end
+  #private
 
-  def reject_invalid!
-    reject_by! :without_full_information?, :invalid_interline?
-  end
-
-  private
-
-  def reject_by! *criterias
-    criterias.each { |criteria| reject!(&criteria) }
-  end
+  #def reject_by! *criterias
+    #criterias.each { |criteria| reject!(&criteria) }
+  #end
 
   def select_by! *criterias
-    criterias.each { |criteria| reject!(&criteria) }
+    criterias.each { |criteria| select!(&criteria) }
   end
 
 end

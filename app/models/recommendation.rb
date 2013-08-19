@@ -153,12 +153,12 @@ class Recommendation
     ((marketing_carrier_iatas + operating_carrier_iatas) & Conf.amadeus.ignored_carriers).present?
   end
 
-  def without_full_information?
+  def full_information?
     #проверяем, что все аэропорты и авиакомпании есть в базе
     flights.map {|f| f.arrival; f.departure; f.operating_carrier; f.marketing_carrier; f.equipment_type}
-    false
-  rescue CodeStash::NotFound => e
     true
+  rescue CodeStash::NotFound => e
+    false
   end
 
   def ground?
@@ -219,7 +219,8 @@ class Recommendation
 
   def self.corrected recs
     #объединяем эквивалентные варианты
-    recs.each_with_object([]) do |r, result|
+    result = RecommendationSet.new
+    recs.each do |r|
       #некрасиво, но просто и работает
       if r.groupable_with? result[-1]
         result[-1].variants += r.variants
@@ -231,6 +232,7 @@ class Recommendation
         result << r
       end
     end
+    result
   end
 
   def groupable_with? rec
@@ -379,9 +381,9 @@ class Recommendation
     data[:alliances] = recs.every.validating_carrier.map{|vc| vc.alliance || nil}.compact.uniq.sort_by(&:name)
     data[:carriers] = all_segments.flatten.every.main_marketing_carrier.uniq
     data[:planes] = flights.every.equipment_type.uniq
-    
+
     data
-  end  
+  end
 
   # фабрика для тестовых целей
   # Recommendation.example 'mowaer aermow/s7/c'

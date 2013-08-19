@@ -14,7 +14,7 @@
 <% end %>
 
 <% if @recommendations.present? %>
-<% data = Recommendation.filters_data(@recommendations) %>
+<% data = @recommendations.filters_data %>
 <% human = [human_people(@search.adults, @search.children, @search.infants), t(@search.cabin, :scope => 'results.header.cabin', :default => '')] %>
 <% human.delete(''); %>
 <div class="r-average latent"><%= @average_price.round.to_i if @average_price %></div>
