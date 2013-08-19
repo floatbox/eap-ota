@@ -3,7 +3,11 @@ require 'spec_helper'
 
 describe Search::Urls::Decoder do
   before do
-    Time.stub(:now).and_return(Date.parse('14JUL2013'))
+    Timecop.freeze(Date.parse('14JUL2013'))
+  end
+
+  after do
+    Timecop.return
   end
 
   def parsed?(url)
@@ -40,8 +44,8 @@ describe Search::Urls::Decoder do
 
     context 'two-way ticket search' do
 
-      before(:all) do
-        @url = 'MOW-PAR-Aug8;Aug16'
+      before do
+        @url = 'MOW-PAR-Aug8-Aug16'
         @decoder = Search::Urls::Decoder.new(@url)
       end
 
