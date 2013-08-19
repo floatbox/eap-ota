@@ -36,14 +36,10 @@ class Mux
       recommendations.find_commission!
     end
 
-    recommendations.select!(&:sellable?) unless admin_user
-
-    recommendations.select_valid!
-
-    recommendations.map(&:clear_variants)
-    recommendations.delete_if{|r| r.variants.blank?}
-
-    recommendations
+    recommendations.select_valid! do |r|
+      r.select!(&:sellable?) unless admin_user
+      r.map(&:clear_variants)
+    end
   end
 
   # TODO exception handling
@@ -81,27 +77,26 @@ class Mux
         log_examples(recommendations)
       end
 
-      recommendations.select_valid!
-      recommendations.delete_if(&:ground?)
-
       benchmark 'commission matching' do
         recommendations.find_commission!
       end
 
-      recommendations.select!(&:sellable?) unless admin_user
+      recommendations.select_valid! do |recs|
+        recs.delete_if(&:ground?)
+        recommendations.select!(&:sellable?) unless admin_user
+        unless lite
+          # sort
+          recommendations = recommendations.sort_by(&:price_total)
+          # regroup
+          # TODO: перенести в RecommendationSet, он для таких вещей и создан
+          recommendations = Recommendation.corrected(recommendations)
+        end
 
-      unless lite
-        # sort
-        recommendations = recommendations.sort_by(&:price_total)
-        # regroup
-        #
-        # TODO: перенести в RecommendationSet, он для таких вещей и создан
-        recommendations = Recommendation.corrected(recommendations)
+        # TODO пометить как непродаваемые, для админов?
+        recommendations.each(&:clear_variants) unless admin_user
+        recommendations
       end
-      # TODO пометить как непродаваемые, для админов?
-      recommendations.each(&:clear_variants) unless admin_user
-      recommendations.delete_if{|r| r.variants.blank?}
-      recommendations
+
     end
   end
 
@@ -138,11 +133,11 @@ class Mux
   end
 
   def sirena_cleanup(recs)
-    recs.select_valid!
-    # временно из-за проблем с тарифами AB и LX удаляем из рекоммендации
-    recs.delete_if {|r| ['AB', 'LX', 'ЮХ'].include? r.validating_carrier_iata }
-    recs.each(&:clear_variants)
-    recs.delete_if{|r| r.variants.blank?}
+    recs.select_valid! do |recs|
+      recs.each(&:clear_variants)
+      # временно из-за проблем с тарифами AB и LX удаляем из рекоммендации
+      recs.delete_if {|r| ['AB', 'LX', 'ЮХ'].include? r.validating_carrier_iata }
+    end
   end
 
   def sirena_async_pricer(form, &block)

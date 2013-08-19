@@ -153,6 +153,10 @@ class Recommendation
     ((marketing_carrier_iatas + operating_carrier_iatas) & Conf.amadeus.ignored_carriers).present?
   end
 
+  def variants?
+    variants.present?
+  end
+
   def full_information?
     #проверяем, что все аэропорты и авиакомпании есть в базе
     flights.map {|f| f.arrival; f.departure; f.operating_carrier; f.marketing_carrier; f.equipment_type}

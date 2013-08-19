@@ -43,9 +43,22 @@ class RecommendationSet
     "#{super}: #{@recommendations.to_s}"
   end
 
+  [:<<, :delete_if, :map!, :reject!, :select!, :uniq!].each do |method|
+    class_eval <<-EOS, __FILE__, __LINE__ - 2
+      def #{method} *args
+        @recommendations.#{method}(*args)
+        self
+      end
+    EOS
+  end
+
   def select_valid!
     select_by! :full_information?, :valid_interline?
     reject_by! :ignored_carriers
+    yield(@recommendations) if block_given?
+    # чистка - пока что могут оставаться рекомендации без вариантов
+    @recommendations.select! &:variants?
+    self
   end
 
   def sort_by &block
@@ -58,15 +71,6 @@ class RecommendationSet
 
   def find_commission!
     @recommendations.each(&:find_commission!)
-  end
-
-  [:<<, :delete_if, :map!, :reject!, :select!, :uniq!].each do |method|
-    class_eval <<-EOS, __FILE__, __LINE__ - 2
-      def #{method} *args
-        @recommendations.#{method}(*args)
-        self
-      end
-    EOS
   end
 
   private
