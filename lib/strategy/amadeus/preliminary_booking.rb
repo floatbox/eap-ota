@@ -3,7 +3,6 @@ module Strategy::Amadeus::PreliminaryBooking
   CABINS_MAPPING = {'M' => 'E', 'W' => 'E', 'Y' => 'E', 'C' => 'B', 'F' => 'F'}
 
   def check_price_and_availability(forbid_class_changing = Conf.amadeus.forbid_class_changing)
-    @forbid_class_changing = forbid_class_changing
     if !lax && !TimeChecker.ok_to_book(@rec.dept_date + 1.day)
       logger.error 'Strategy::Amadeus::Check: time criteria missed'
       return
@@ -17,7 +16,8 @@ module Strategy::Amadeus::PreliminaryBooking
     @rec.blank_count = @search.people_total
 
     ::Amadeus.booking do |amadeus|
-      return if !get_places_and_last_tkt_date(amadeus) || !get_price_and_rules(amadeus)
+      return unless get_places_and_last_tkt_date(amadeus, forbid_class_changing)
+      return unless get_price_and_rules(amadeus)
       # не нужно, booking {...} убьет бронирование
       # amadeus.pnr_ignore
 
@@ -40,7 +40,6 @@ module Strategy::Amadeus::PreliminaryBooking
   end
 
   def find_new_classes(amadeus)
-    return if @forbid_class_changing
     amadeus.pnr_ignore
     begin
       resp = amadeus.fare_informative_best_pricing_without_pnr(
@@ -68,28 +67,27 @@ module Strategy::Amadeus::PreliminaryBooking
   end
 
 
-  def get_places_and_last_tkt_date(amadeus)
-    1.times do
+  def get_places_and_last_tkt_date(amadeus, forbid_class_changing=true)
+    3.times do
       # FIXME точно здесь нельзя нечаянно заморозить места?
       air_sfr = amadeus.air_sell_from_recommendation(
         :recommendation => @rec,
         :segments => @rec.segments,
         :seat_total => @search.seat_total
       )
-      unless air_sfr.segments_confirmed?
-        logger.error "Strategy::Amadeus::Check: segments aren't confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} #{Time.now.strftime('%H:%M %d.%m.%Y')}"
-        if find_new_classes(amadeus)
-          redo
-        else
-          return
-        end
+      if air_sfr.segments_confirmed?
+        # FIXME не будет ли надежнее использовать дополнительный pnr_retrieve вместо fill_itinerary?
+        air_sfr.fill_itinerary!(@rec.segments)
+        #FIXME не плохо бы здесь получать и цены (вместо первого informative_pricing_without_pnr)
+        @rec.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).last_tkt_date
+        return @rec
       end
-      # FIXME не будет ли надежнее использовать дополнительный pnr_retrieve вместо fill_itinerary?
-      air_sfr.fill_itinerary!(@rec.segments)
+      logger.error "Strategy::Amadeus::Check: segments aren't confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} #{Time.now.strftime('%H:%M %d.%m.%Y')}"
+      return if forbid_class_changing
+      return unless find_new_classes(amadeus)
     end
-    #FIXME не плохо бы здесь получать и цены (вместо первого informative_pricing_without_pnr)
-    @rec.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).last_tkt_date
-    @rec
+    logger.error "Strategy::Amadeus::Check: tried to reprice 3 times, no success"
+    return
   end
 
 
