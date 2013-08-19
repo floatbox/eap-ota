@@ -40,7 +40,6 @@ example "svocdg/su cdgsvo/ab"
 end
 
 rule 4 do
-disabled "переключаем выписку на dtt"
 ticketing_method "aviacenter"
 agent "4%"
 subagent "3%"
