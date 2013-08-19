@@ -2,6 +2,11 @@
 require 'spec_helper'
 
 describe Commission::Formula do
+
+  before do
+    Commission::Formula.clear_cache
+  end
+
   include Commission::Fx
   specify { Fx("3").call.should == 3 }
   specify { Fx("3.5").call.should == 3.5 }
@@ -209,6 +214,16 @@ describe Commission::Formula do
     specify { Fx('3% + 10.5usd').should < Fx('3.01% + 10.5usd') }
     specify { Fx('3% + 10.5usd').should < Fx('10.5eur + 3%') }
     specify { Fx('3.5% + 5.4').should == Fx('5.4rub + 3.5%') }
+  end
+
+  describe "freezed formula arithmetic" do
+    it "should compute even in frozen state" do
+      first_formula = Fx('3% + 5rub')
+      second_formula = Fx('5% + 3rub')
+      first_formula.freeze
+      second_formula.freeze
+      expect {first_formula + second_formula}.to_not raise_error
+    end
   end
 
 end
