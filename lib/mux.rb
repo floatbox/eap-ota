@@ -33,13 +33,14 @@ class Mux
     amadeus.release
 
     benchmark 'commission matching' do
-      recommendations.each(&:find_commission!)
+      recommendations.each(&:find_commission!
     end
 
     recommendations.delete_if(&:ignored_carriers)
     recommendations.select!(&:sellable?) unless admin_user
-    recommendations.select!(&:full_information?)
-    recommendations.select!(&:valid_interline?)
+
+    recommendations.select_valid!
+
     recommendations.map(&:clear_variants)
     recommendations.delete_if{|r| r.variants.blank?}
 
@@ -81,9 +82,8 @@ class Mux
         log_examples(recommendations)
       end
 
-      recommendations.select!(&:full_information?)
+      recommendations.select_valid!
       recommendations.delete_if(&:ground?)
-      recommendations.select!(&:valid_interline?)
 
       recommendations.reject!(&:ignored_carriers)
 
@@ -142,8 +142,7 @@ class Mux
   end
 
   def sirena_cleanup(recs)
-    recs.select!(&:full_information?)
-    recs.select!(&:valid_interline?)
+    recs.select_valid!
     # временно из-за проблем с тарифами AB и LX удаляем из рекоммендации
     recs.delete_if {|r| ['AB', 'LX', 'ЮХ'].include? r.validating_carrier_iata }
     recs.each(&:clear_variants)

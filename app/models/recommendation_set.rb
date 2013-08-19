@@ -44,7 +44,7 @@ class RecommendationSet
   end
 
   def select_valid!
-    select! :full_information?, :valid_interline?
+    select_by! :full_information?, :valid_interline?
   end
 
   def sort_by &block
@@ -64,11 +64,11 @@ class RecommendationSet
     EOS
   end
 
-  #private
+  private
 
-  #def reject_by! *criterias
-    #criterias.each { |criteria| reject!(&criteria) }
-  #end
+  def reject_by! *criterias
+    criterias.each { |criteria| reject!(&criteria) }
+  end
 
   def select_by! *criterias
     criterias.each { |criteria| select!(&criteria) }
