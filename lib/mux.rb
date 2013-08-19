@@ -36,7 +36,6 @@ class Mux
       recommendations.find_commission!
     end
 
-    recommendations.delete_if(&:ignored_carriers)
     recommendations.select!(&:sellable?) unless admin_user
 
     recommendations.select_valid!
@@ -84,9 +83,6 @@ class Mux
 
       recommendations.select_valid!
       recommendations.delete_if(&:ground?)
-
-      recommendations.reject!(&:ignored_carriers)
-
 
       benchmark 'commission matching' do
         recommendations.find_commission!

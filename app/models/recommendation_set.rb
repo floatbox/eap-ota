@@ -45,6 +45,7 @@ class RecommendationSet
 
   def select_valid!
     select_by! :full_information?, :valid_interline?
+    reject_by! :ignored_carriers
   end
 
   def sort_by &block
