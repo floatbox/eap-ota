@@ -129,6 +129,9 @@ validate: function(forced) {
         this.footer.show();
         delete this.back;
     }
+    if (this.loadingPrice) {
+        disabled = true;
+    }
     if (!this.sending) {
         if (!disabled && this.button.hasClass('bfb-disabled')) {
             _kmq.push(['record', 'BOOKING: button enabled']);
@@ -310,14 +313,20 @@ getPrice: function() {
             } else {
                 that.footer.find('.bff-passengers').remove();
             }
+            that.loadingPrice = false;
+            that.validate();
         },
         error: function() {
             that.footer.find('.bff-passengers').remove();
+            that.loadingPrice = false;
+            that.validate();
         }
     });
     var content = '<p class="bffp-progress">' + I18n.t('booking.update.progress') + '</p>';
     this.footer.find('.bff-passengers .bffp-content').html(content);
     this.wrongPrice = false;
+    this.loadingPrice = true;
+    this.validate();
 },
 updatePrice: function(content) {
     this.footer.find('.bff-passengers').remove();
