@@ -35,7 +35,7 @@ module TranslationHelper
         when Airplane
           # object.iata нужно для автогенеренных самолетов
           # консерн такой: лучше показать iata, чем падать с 500й
-          logger.info "No name_ru found for airplane #{object.iata}"
+          logger.info "No name_ru found for airplane #{object.iata}" unless object.name_ru
           object.name_ru || object.iata
         when Carrier
           case format
