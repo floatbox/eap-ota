@@ -18,7 +18,7 @@ module MoneyColumns
      attrs.each do |attr|
        attr_as_string = "#{attr}_as_string"
 
-       class_eval <<-"END"
+       class_eval <<-"END", __FILE__, __LINE__ + 1
        def #{attr_as_string}
          @#{attr_as_string} || #{attr}.try(&:with_currency)
        end
