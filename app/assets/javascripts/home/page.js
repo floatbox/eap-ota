@@ -20,7 +20,7 @@ init: function() {
         var token = this.location.search.replace('confirmation_token=', '');
         $.ajax({
             method: 'GET',
-            url: '/profile/verification',
+            url: '/profile/confirmation',
             data: {confirmation_token: token},
             success: function(result) {
                 if (result.success) {

@@ -1,10 +1,8 @@
 # encoding: utf-8
 Eviterra::Application.routes.draw do
 
-#  devise_for :customers, :controllers => { :sessions => "customers/sessions" }
   devise_scope :customer do
     put "profile/confirm", :to => "profile/confirmations#confirm", :as => 'customer_confirm'
-    get "profile/success", :to => "profile/registrations#success", :as => 'customer_success'
   end
 
   devise_for :customers, 
@@ -14,16 +12,7 @@ Eviterra::Application.routes.draw do
       :registrations => 'profile/registrations',
       :passwords => 'profile/passwords'
     },  
-    :path => "profile", 
-    :path_names => { 
-      :sign_in => 'login', 
-      :sign_out => 'logout', 
-      :password => 'secret', 
-      :confirmation => 'verification', 
-      :unlock => 'unblock', 
-      :registration => 'sign_up', 
-      :sign_up => 'new'
-    }
+    :path => "profile"
 
 
   match 'pricer' => 'pricer#pricer', :as => :pricer
