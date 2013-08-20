@@ -45,6 +45,11 @@ class Admin::CommissionsController < Admin::BaseController
     @page = book.find_page(carrier: carrier, date: date)
   end
 
+  def reload
+    Commission.reload!
+    render text: "commissions reloaded in #{Process.pid}"
+  end
+
   private
 
   # TODO задел на работу с несколькими коллекциями
