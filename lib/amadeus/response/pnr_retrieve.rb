@@ -136,7 +136,7 @@ module Amadeus
             :departure_time =>         fi.xpath("r:travelProduct/r:product/r:depTime").to_s,
             :equipment_type_iata =>    fi.xpath("r:flightDetail/r:productDetails/r:equipment").to_s,
             :departure_term =>         fi.xpath("r:flightDetail/r:departureInformation/r:departTerminal").to_s,
-            :cabin =>                  fi.xpath("r:travelProduct/r:productDetails/r:classOfService").to_s,
+            :cabin =>                  fi.xpath("r:cabinDetails/r:cabinDetails/r:classDesignator").to_s,
             :warning =>                fi.xpath("r:errorInfo/r:errorfreeFormText/r:text").to_s,
             :amadeus_ref => ref
           }

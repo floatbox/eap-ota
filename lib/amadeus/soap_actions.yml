@@ -12,8 +12,12 @@ Fare_InformativePricingWithoutPNR:
   soap_action: http://webservices.amadeus.com/1ASIWOABEVI/TIPNRQ_08_1_1A
   r: http://xml.amadeus.com/TIPNRR_08_1_1A
 PNR_Retrieve: 
-  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/PNRRET_08_2_1A
-  r: http://xml.amadeus.com/PNRACC_08_2_1A
+  # старая версия
+  #soap_action: http://webservices.amadeus.com/1ASIWOABEVI/PNRRET_08_2_1A
+  #r: http://xml.amadeus.com/PNRACC_08_2_1A
+  # новая
+  soap_action: http://webservices.amadeus.com/1ASIWOABEVI/PNRRET_11_3_1A
+  r: http://xml.amadeus.com/PNRRET_11_3_1A
 Fare_QuoteItinerary: 
   soap_action: http://webservices.amadeus.com/1ASIWOABEVI/FITQPQ_08_2_1A
   r: http://xml.amadeus.com/FITQPR_08_2_1A

@@ -240,7 +240,8 @@ describe Amadeus::Response::PNRRetrieve, :amadeus do
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:first_name].should == 'GENNADY MR'}
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:last_name].should == 'NEDELKO'}
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:flights].every.marketing_carrier_iata.should == ['AZ','AZ','KL','KL']}
-      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:flights].every.cabin.should == ['S', 'S', 'R', 'R']}
+      # не работает после смены версии на 11.3
+      #specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:flights].every.cabin.should == ['S', 'S', 'R', 'R']}
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:passport].should == '714512085'}
 
     end
@@ -276,6 +277,13 @@ describe Amadeus::Response::PNRRetrieve, :amadeus do
   describe "#responsibility_office" do
     subject {amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')}
     its(:responsibility_office) {should == "MOWR2233B"}
+  end
+
+  describe "11.3 cabins" do
+    it 'should parse right cabins' do
+      r = amadeus_response('spec/amadeus/xml/PNR_Retrieve_11_3.xml')
+      r.flights.collect(&:cabin).should == %w{M M M M}
+    end
   end
 
 end
