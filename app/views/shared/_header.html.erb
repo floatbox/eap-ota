@@ -75,29 +75,34 @@ I18n.locale = '<%= I18n.locale %>';
 
 <div id="page-header">
 <div class="ph-content">
-    <div class="ph-logo">
-        <a href="/" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
+    <div class="ph-bar">
+        <div class="ph-logo">
+            <a href="/" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
+        </div>
+        <% if admin_user %>
+        <div class="ph-lang">
+            <% if I18n.locale == :en %>
+                <span class="link">RU</span>
+            <% else %>
+                <span class="link" data-locale="en">EN</span>
+            <% end %>    
+        </div>
+        <% end %>
     </div>
-    <div id="ph-teaser">
-        Авиабилеты дешевле, чем у авиакомпаний. <div class="pht-wrapper"><span class="link pht-why">Почему?</span>
+    <div class="ph-tab">
+        <h6 class="pht-title">Авиабилеты</h6>
+        <p class="pht-tip">дешевле, чем у авиакомпаний <span class="link pht-why">Почему?</span></p>
         <div class="pht-popup">
             <div class="phtp-close">&times;</div>
-            <h6 class="phtp-title">Почему?</h6>
             <p class="phtp-text">Условия нашего сотрудничества со&nbsp;многими авиакомпаниями позволяют нам предоставлять скидки от&nbsp;их&nbsp;официальных тарифов.</p>
             <p class="phtp-text">Вот почему зачастую у&nbsp;нас дешевле.</p>
-        </div>
-        </div>
+        </div>    
+    </div>
+    <div class="ph-tab">
+        <h6 class="pht-title">Отели</h6>
+        <p class="pht-tip">300<span class="digit">000</span> по всему миру, лучшие условия</p>
     </div>
 
-    <% if admin_user %>
-    <div class="ph-lang">
-        <% if I18n.locale == :en %>
-            <span class="link">RU</span>
-        <% else %>
-            <span class="link" data-locale="en">EN</span>
-        <% end %>    
-    </div>
-    <% end %>
 
     <% if admin_user %>
     <%= render "profile/popup" %>
