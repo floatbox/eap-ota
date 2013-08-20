@@ -176,6 +176,29 @@
     background-position: -350px -41px;
 }
 
+/* Fade */
+.ob-fade {
+    position: relative;
+    z-index: 21;
+}
+.ob-fixed .ob-fade {
+    z-index: 21;
+}
+.ob-fade .ob-line {
+    border-color: #B2B2B2;
+}
+.ob-fade .ob-overlay:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 16px;
+    height: 26px;
+    background: #666;
+    opacity: 0.5;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50);
+}
+
 /* Failed booking */
 .ob-failed .ob-button {
     display: none;
