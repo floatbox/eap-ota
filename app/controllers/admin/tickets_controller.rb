@@ -45,6 +45,7 @@ class Admin::TicketsController < Admin::EviterraResourceController
   def delete_refund
     get_object
     @item.destroy if !@item.processed && @item.kind == 'refund'
+    @item.order.recalculate_prices if @item.order
     redirect_to :action => 'show',
                 :controller => 'orders',
                 :id => @item.order.id
@@ -59,6 +60,7 @@ class Admin::TicketsController < Admin::EviterraResourceController
       @item.status = 'pending'
       @item.ticketed_date = nil
     end
+    @item.order.recalculate_prices if @item.order
     render :action => :edit
   end
 
