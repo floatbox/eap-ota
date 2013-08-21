@@ -2,17 +2,20 @@
 Eviterra::Application.routes.draw do
 
   devise_scope :customer do
-    put "profile/confirm", :to => "profile/confirmations#confirm", :as => 'customer_confirm'
+    get    '#login' => 'profile/sessions#new', :as => :new_customer_session
+    post   'profile/sign_in' => 'profile/sessions#create', :as => :customer_session
+    delete 'profile/sign_out' => 'profile/sessions#destroy', :as => :destroy_customer_session
+    put    'profile/confirm' => 'profile/confirmations#confirm', :as => :customer_confirm
   end
 
-  devise_for :customers, 
+  devise_for :customers,
+    :path => 'profile',
     :controllers => { 
-      :sessions => 'profile/sessions', 
       :confirmations => 'profile/confirmations',
       :registrations => 'profile/registrations',
       :passwords => 'profile/passwords'
-    },  
-    :path => "profile"
+    },
+    :skip => [:sessions]
 
 
   match 'pricer' => 'pricer#pricer', :as => :pricer

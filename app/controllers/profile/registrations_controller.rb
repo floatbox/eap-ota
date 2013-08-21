@@ -47,12 +47,4 @@ class Profile::RegistrationsController < Devise::RegistrationsController
     return render :json => {:success => false, :errors => ["exist"]}
   end
 
-  def after_sign_up_path_for(resource)
-    customer_success_path
-  end
-
-  def after_inactive_sign_up_path_for(resource)
-    customer_success_path
-  end
-
 end
