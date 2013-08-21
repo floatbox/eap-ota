@@ -11,12 +11,14 @@ group :assets do
 end
 
 # консолька вместо IRB
-# если убрать в группу :development, не грузит больше в rails c
-# возможно, отжирает память и ресурсы
 gem 'pry-rails'
-gem 'pry-plus'
+gem 'pry-doc', require: false
+gem 'jist', require: false
+# расцветка строки ввода. убрал, ибо глушат полезные хоткеи
+# gem 'pry-coolline' #, :git => 'https://github.com/pry/pry-coolline.git'
+gem 'pry-editline', require: false
 # для rake "db:migrate" и т.п. в rails console
-gem 'commands'
+gem 'commands', group: [:development, :test]
 
 # Deploy with Capistrano
 group :deployment do
@@ -111,6 +113,10 @@ group :test do
   gem 'webmock'
   # тестирование завтрашних комиссий
   gem 'timecop'
+end
+
+group :debug do
+  gem 'ruby-debug19', :require => 'ruby-debug', :platforms => :ruby_19
 end
 
 group :profiling do
