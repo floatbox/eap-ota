@@ -35,12 +35,11 @@ class RecommendationSet
   end
 
   def + other
-    other_recommendations = case other
+    @recommendations += case other
       when Array then other
       when RecommendationSet then other.recommendations
       else raise TypeError, "cannot concatenate #{other.class} with RecommendationSet"
     end
-    @recommendations += other.recommendations
     self
   end
 
