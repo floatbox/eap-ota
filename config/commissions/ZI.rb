@@ -26,7 +26,7 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2%"
-discount "2%"
+discount "5%"
 agent_comment "3% от тарифа на собств. рейсы ZI по классам бронирования T/Q/U/V/L"
 subagent_comment "2% от тарифа на собств. рейсы ZI по классам бронирования T/Q/U/V/L"
 subclasses "TQUVL"

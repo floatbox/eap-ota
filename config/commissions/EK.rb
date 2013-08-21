@@ -30,7 +30,7 @@ important!
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
-discount "2%"
+discount "3%"
 agent_comment "1 руб. с билета по опубл.тарифам Эконом класса на рейсы EK."
 subagent_comment "5 коп. с билета по опубл.тарифам Эконом класса на собств. рейсы EK."
 classes :economy
@@ -42,7 +42,7 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
-discount "2%"
+discount "3%"
 agent_comment "1 руб. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
 subagent_comment "С 01.01.13г. 5 коп. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
 check %{ not includes_only(country_iatas.first, 'RU') }
