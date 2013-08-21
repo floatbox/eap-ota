@@ -16,7 +16,7 @@ init: function() {
 
     if (this.location.booking) {
         this.restoreBooking(this.location.search, this.location.booking);
-    } else if (this.location === 'login') {
+    } else if (this.location.search === 'login') {
         search.map.resize();
         User.show('authorization');        
         this.loadLocation();
@@ -65,7 +65,7 @@ showConfirmationForm: function() {
         success: function(result) {
             if (result.success) {
                 User.password.el.find('.phus-title').css('margin-bottom', '');
-                User.password.el.find('.phupp-profile').html('для личного кабинета ' + result.resource.email).show();
+                User.password.el.find('.phupp-profile').html('для личного кабинета <strong>' + result.resource.email + '</strong>').show();
                 User.password.use(token, 'confirmation_token', '/profile/confirm');
                 User.show('password');
             } else {
