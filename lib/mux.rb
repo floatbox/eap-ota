@@ -20,7 +20,7 @@ class Mux
     # FIXME делает сортировку дважды
     benchmark 'Pricer, total' do
       (
-        sirena_pricer(form) + amadeus_pricer(form)
+        amadeus_pricer(form) + sirena_pricer(form)
       ).sort_by(&:price_total)
     end
   end
@@ -64,7 +64,7 @@ class Mux
     end
   rescue
     with_warning
-    []
+    RecommendationSet.new
   end
 
   def amadeus_merge_and_cleanup(recommendations)
@@ -95,6 +95,7 @@ class Mux
         recommendations = recommendations.group_and_correct
       end
     end
+    recommendations
   end
 
   def amadeus_async_pricer(form, &block)
@@ -126,7 +127,7 @@ class Mux
     recommendations
   rescue
     with_warning
-    []
+    RecommendationSet.new
   end
 
   def sirena_cleanup(recs)
