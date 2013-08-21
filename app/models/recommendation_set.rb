@@ -5,7 +5,6 @@ class RecommendationSet
   delegate  :empty?,
             :present?,
             :blank?,
-            :each,
             :size,
             :count,
             :flights,
@@ -32,6 +31,10 @@ class RecommendationSet
 
   def to_a
     @recommendations
+  end
+
+  def each
+    @recommendations.each
   end
 
   def + other
