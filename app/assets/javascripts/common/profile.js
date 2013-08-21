@@ -282,8 +282,9 @@ init: function() {
     };
 
 },
-use: function(token) {
-    $('#customer_confirmation_token').val(token);
+use: function(token, name, url) {
+    $('#password_token').val(token).attr('name', 'customer[' + name + ']');
+    this.el.find('form').attr('action', url);
 }
 };
 
