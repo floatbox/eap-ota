@@ -33,8 +33,8 @@ class RecommendationSet
     @recommendations
   end
 
-  def each
-    @recommendations.each
+  def each &block
+    @recommendations.each &block
   end
 
   def + other
