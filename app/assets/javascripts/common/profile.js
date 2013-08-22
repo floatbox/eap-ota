@@ -135,7 +135,8 @@ initForms: function() {
         if (full) {
             if (!value) return 'Введите адрес электронной почты.';
             if (!/^\S+@\S+\.\w+$/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
-        } else if (value) {
+        } 
+        if (value) {
             if (/[а-яА-Я]/.test(value)) return 'Адрес электронной почты может содержать только латинские символы.';
         }
     };
@@ -338,10 +339,10 @@ send: function() {
             type: 'POST',
             data: this.elem.serialize()
         }).done(function(result) {
+            that.loading.hide();
             if (result.success) {
                 that.process(result);
             } else if (result.errors && result.errors.length) {
-                that.loading.hide();
                 that.button.prop('disabled', false);
                 that.showError(result.errors[0]);
             }
