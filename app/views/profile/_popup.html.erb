@@ -24,7 +24,7 @@
                 </div>
                 <div class="phu-submit">
                     <span class="link phu-forgot-link">Забыли пароль?</span>
-                    <%= f.submit "Войти", :class => 'phu-button' %>
+                    <%= f.submit "Войти", :class => 'phu-button' %><span class="phu-loading"></span>
                 </div>
                 <div class="phu-error"></div>
             <% end %>
@@ -60,7 +60,7 @@
                     <%= f.email_field :email, :class => 'phuf-input', :id => 'signup-email', :placeholder => 'электронная почта' %>
                 </div>            
                 <div class="phu-submit">
-                    <%= f.submit "Зарегистрироваться", :class => 'phu-button' %>
+                    <%= f.submit "Зарегистрироваться", :class => 'phu-button' %><span class="phu-loading"></span>
                 </div>
                 <div class="phu-error"></div>
             </div>
@@ -80,7 +80,7 @@
                     <%= f.email_field :email, :class => 'phuf-input', :id => 'confirm-email', :placeholder => 'электронная почта' %>
                 </div>
                 <div class="phu-submit">
-                    <%= f.submit "Выслать", :class => 'phu-button' %>
+                    <%= f.submit "Выслать", :class => 'phu-button' %><span class="phu-loading"></span>
                 </div>
                 <div class="phu-error"></div>                
             <% end %>
@@ -101,7 +101,7 @@
                 <%= f.password_field :password_confirmation, :class => 'phuf-input', :id => 'new-password-2', :placeholder => 'ещё разок пароль' %>
             </div>
             <div class="phu-submit">
-                <%= f.submit "Продолжить", :class => 'phu-button' %>
+                <%= f.submit "Продолжить", :class => 'phu-button' %><span class="phu-loading"></span>
             </div>
             <div class="phu-error"></div>
             <% end %>

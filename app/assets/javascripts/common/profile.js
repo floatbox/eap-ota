@@ -309,6 +309,7 @@ var profileForm = function(elem) {
     this.process = $.noop;
     this.error = this.elem.find('.phu-error');
     this.button = this.elem.find('.phu-submit .phu-button').prop('disabled', false);
+    this.loading = this.elem.find('.phu-loading');
     this.fields = [];
     this.messages = {};
 };
@@ -340,14 +341,17 @@ send: function() {
             if (result.success) {
                 that.process(result);
             } else if (result.errors && result.errors.length) {
+                that.loading.hide();
                 that.button.prop('disabled', false);
                 that.showError(result.errors[0]);
             }
         }).fail(function(jqXHR, status, message) {
+            that.loading.hide();
             that.button.prop('disabled', false);
             that.showError(jqXHR.statusText);
         });
         this.button.prop('disabled', true);
+        this.loading.show();
     }
 },
 add: function(selector, check) {

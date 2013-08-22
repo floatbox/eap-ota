@@ -3,7 +3,7 @@
     position: absolute;
     top: 0; left: 0;
     z-index: 15;
-    min-width: 1002px;    
+    min-width: 1002px;
     width: 100%;
     height: 33px;
     border-bottom: 3px solid #929292;
@@ -234,7 +234,7 @@
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
     font-size: 13px;
     line-height: 15px;
-    cursor: pointer; 
+    cursor: pointer;
 }
 .phu-button:active {
     box-shadow: 0 1px 0 rgba(0,0,0,0.15);
@@ -242,6 +242,14 @@
 .phu-button:disabled {
     box-shadow: 0 1px 0 rgba(0,0,0,0.15);
     color: #777;
+}
+.phu-loading {
+    display: none;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: 7px 0 0 10px;
+    background: url(/images/booking/progress-b.gif) no-repeat;
 }
 .phu-error {
     display: none;
