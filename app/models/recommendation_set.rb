@@ -11,9 +11,14 @@ class RecommendationSet
             :first,
             :last,
             :map,
+            :map!,
             :collect,
             :select,
             :reject,
+            :select!,
+            :reject!,
+            :delete_if,
+            :uniq!,
             :flat_map,
             :flatten,
             :segments,
@@ -51,13 +56,9 @@ class RecommendationSet
     "#{super}: #{@recommendations.to_s}"
   end
 
-  [:<<, :delete_if, :map!, :reject!, :select!, :uniq!].each do |method|
-    class_eval <<-EOS, __FILE__, __LINE__ - 2
-      def #{method} *args
-        @recommendations.#{method}(*args)
-        self
-      end
-    EOS
+  def << other
+    @recommendations << other
+    self
   end
 
   def select_valid!
