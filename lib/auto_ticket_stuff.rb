@@ -30,7 +30,7 @@ class AutoTicketStuff
     !order.email['hotmail']  or return 'название почтового ящика содержит hotmail'
     !order.email['yahoo']  or return 'название почтового ящика содержит yahoo'
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
-    #no_dupe_orders? or return "dupe (#{@dupe_summary})"
+    no_dupe_orders? or return "dupe (#{@dupe_summary})"
     #!group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
     people.map{|p| [p.first_name, p.last_name]}.uniq.count == people.count or return 'есть 2 пассажира с совпадающими именем и фамилией'
     nil
@@ -49,7 +49,7 @@ class AutoTicketStuff
   def no_dupe_orders?
     dupe_information = Hash.new([])
     passengers = passenger_names(order)
-    order.stored_flights.all? do |stored_flight|
+    order.stored_flights.each do |stored_flight|
       stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).where('id != ?', order.id).each do |o|
         (passenger_names(o) & passengers).each do |p|
           dupe_information[p] += [o.pnr_number]
