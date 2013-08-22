@@ -81,12 +81,12 @@ class Mux
         recommendations.find_commission!
       end
 
-      recommendations.select_valid! do |r|
-        r.delete_if(&:ground?)
-        r.select!(&:sellable?) unless admin_user
-        # TODO пометить как непродаваемые, для админов?
-        r.each(&:clear_variants) unless admin_user
-      end
+      recommendations.select!(&:full_information)
+      recommendations.delete_if(&:ground?)
+      recommendations.reject!(&:ignored_carriers)
+
+      # TODO пометить как непродаваемые, для админов?
+      recommendations.select!(&:sellable?) unless admin_user
 
       unless lite
         # sort
@@ -94,6 +94,9 @@ class Mux
         # regroup
         recommendations = recommendations.group_and_correct
       end
+
+      recommendations.each(&:clear_variants)
+      recommendations.delete_if{|r| r.variants.blank?}
     end
     recommendations
   end

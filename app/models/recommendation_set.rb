@@ -17,6 +17,7 @@ class RecommendationSet
             :flat_map,
             :flatten,
             :segments,
+            :variants,
             :[],
     to: :recommendations
 
