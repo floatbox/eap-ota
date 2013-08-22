@@ -8,7 +8,7 @@ stdout_path project_home + "/log/unicorn.stdout.log"
 listen  (ENV['UNICORN_PORT'] || 8001).to_i, backlog: (ENV['UNICORN_BACKLOG'] || 100).to_i
 
 # What the timeout for killing busy workers is, in seconds
-timeout (ENV['UNICORN_TIMEOUT'] || 60).to_i
+timeout (ENV['UNICORN_TIMEOUT'] || 600).to_i
 
 # Whether the app should be pre-loaded
 preload_app true
