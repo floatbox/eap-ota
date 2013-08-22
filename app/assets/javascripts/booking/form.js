@@ -164,7 +164,7 @@ submit: function() {
             }
         },
         error: function() {
-            that.process('<div class="bf-result bfr-fail"><h5 class="bfr-title">Что-то пошло не так.</h5><p class="bfr-content">Возникла техническая проблема. Попробуйте нажать на кнопку «Купить» ещё раз или позвоните нам <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p><p class="bfr-content"><span class="link bfr-back">Попробовать ещё раз</span></p></div>');
+            that.process('<div class="bf-result bfr-fail"><h5 class="bfr-title">Что-то пошло не так</h5><p class="bfr-content">Возникла техническая проблема. Попробуйте нажать на кнопку «Купить» ещё раз или позвоните нам <nobr>(+7 495 660-35-20) &mdash;</nobr> мы&nbsp;разберемся.</p><p class="bfr-content"><span class="link bfr-back">Попробовать ещё раз</span></p></div>');
         }
     });
     _kmq.push(['record', 'BOOKING: button pressed']);
@@ -198,6 +198,9 @@ process: function(s) {
     this.button.removeClass('bfb-disabled');
     this.sending = false;
     var that = this;
+    if (this.result) {
+        this.result.remove();
+    }
     this.result = $(s).insertAfter(this.el);
     this.result.find('.bfr-cancel').click(function() {
         booking.cancel();
@@ -308,18 +311,17 @@ getPrice: function() {
         url: '/booking/recalculate_price',
         data: this.el.serialize(),
         success: function(s) {
-            if (typeof s === 'string' && s.length) {
-                that.updatePrice($(s).find('.bfnp-data'));
-            } else {
-                that.footer.find('.bff-passengers').remove();
-            }
             that.loadingPrice = false;
-            that.validate();
+            if (typeof s === 'string' && s.length && s.indexOf('bfnp-data') !== -1) {
+                that.updatePrice($(s).find('.bfnp-data'));
+                that.validate();
+            } else {
+                that.getPriceFailed();
+            }
         },
         error: function() {
-            that.footer.find('.bff-passengers').remove();
             that.loadingPrice = false;
-            that.validate();
+            that.getPriceFailed();
         }
     });
     var content = '<p class="bffp-progress">' + I18n.t('booking.update.progress') + '</p>';
@@ -327,6 +329,10 @@ getPrice: function() {
     this.wrongPrice = false;
     this.loadingPrice = true;
     this.validate();
+},
+getPriceFailed: function() {
+    this.footer.find('.bff-passengers').remove();
+    this.process('<div class="bf-result bfr-fail"><h5 class="bfr-title">Возникла проблема</h5><p class="bfr-content">Авиакомпания не подтвердила наличие достаточного количества мест по&nbsp;этому предложению. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Выберите&nbsp;<span class="link bfr-cancel">другой&nbsp;вариант</span>.</p></div>');        
 },
 updatePrice: function(content) {
     this.footer.find('.bff-passengers').remove();
