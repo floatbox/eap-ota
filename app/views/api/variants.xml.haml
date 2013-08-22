@@ -8,13 +8,13 @@
         %price= recommendation.price_for_partner(@partner)
         %url= yandex_newurl(@search, recommendation, variant)
         %recommendation= recommendation.serialize(variant)
-        %validatingCarrier= recommendation.validating_carrier.iata
+        %validatingCarrier= recommendation.validating_carrier_iata
         - variant.segments.each do |segment|
           %segment
             - segment.flights.each do |flight|
               %flight
-                %marketingCarrier= flight.marketing_carrier.iata
-                %operatingCarrier= flight.operating_carrier.iata
+                %marketingCarrier= flight.marketing_carrier_iata
+                %operatingCarrier= flight.operating_carrier_iata
                 %number= flight.flight_number
                 %departure= flight.departure.iata
                 - if flight.departure.iata_ru.present?
