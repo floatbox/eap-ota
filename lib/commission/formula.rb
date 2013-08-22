@@ -153,9 +153,16 @@ class Commission::Formula
     arithmetic :-, other_formula
   end
 
-  def * value
-    hash = decompose
-    hash.each { |k, v| hash[k] *= value }
+  def * (value)
+    Commission::Formula.compose(
+      Hash[ decompose.map {|k, v|  [k, v*value] } ]
+    )
+  end
+
+  def / (value)
+    Commission::Formula.compose(
+      Hash[ decompose.map {|k, v|  [k, v/value] } ]
+    )
   end
 
   # Сериализация
@@ -193,7 +200,11 @@ class Commission::Formula
 
   class << self
     def compose hash
-      string = hash.map{ |currency, value| "#{value}#{currency}" if value.nonzero? }.compact.join(' + ').downcase.gsub(/rub/, '')
+      string = hash.map{ |currency, value|
+        value = value.to_i if value == value.to_i
+        # делаем числа без вещественной части интами
+        "#{value}#{currency}" if value.nonzero?
+      }.compact.join(' + ').downcase.gsub(/rub/, '')
       # пустая строка не должна возвращаться со всеми пустыми значениями
       new(string.empty? ? '0' : string)
     end
@@ -209,9 +220,6 @@ class Commission::Formula
 
     result = itself.merge(other)
     same.each { |key| result[key] = itself[key].__send__(method, other[key]) }
-
-    # делаем числа без вещественной части интами
-    result.each { |k, v| result[k] = v.to_i if v.modulo(1) == 0 }
 
     Commission::Formula.compose(result)
   end
