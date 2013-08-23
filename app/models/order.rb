@@ -138,8 +138,8 @@ class Order < ActiveRecord::Base
 
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
-  before_save :set_prices
-  before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
+  before_save :set_prices, :set_customer
+  before_create :generate_code, :set_payment_status, :set_email_status
   after_save :create_order_notice
 
   def set_prices
@@ -598,11 +598,11 @@ class Order < ActiveRecord::Base
   end
 
   def set_customer
-    if !email.blank?
+    if !email.blank? && email_changed?
       self.customer = Customer.find_or_initialize_by_email(email)
-      # TODO этот вызов надо будет убрать при запуске ЛК
       customer.skip_confirmation_notification!
-      customer.send_first_purchase_instructions
+      ## TODO закоментить продакшн до выкатки
+      customer.send_first_purchase_instructions unless customer.confirmed?
       customer.save unless customer.persisted?
     end
   end
