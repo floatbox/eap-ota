@@ -1,6 +1,8 @@
 # encoding: utf-8
 Eviterra::Application.routes.draw do
 
+  devise_for :deck_users, ActiveAdmin::Devise.config
+
 #  devise_for :customers, :controllers => { :sessions => "customers/sessions" }
   devise_scope :customer do
     put "profile/confirm", :to => "profile/confirmations#confirm", :as => 'customer_confirm'
@@ -115,6 +117,8 @@ Eviterra::Application.routes.draw do
   match 'profile/itinerary/:id/ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :profile_itinerary_for_ticket
 
   root :to => 'home#index'
+
+  ActiveAdmin.routes(self)
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
