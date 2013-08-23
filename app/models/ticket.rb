@@ -112,6 +112,7 @@ class Ticket < ActiveRecord::Base
       end
       self.route = @flights.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
       self.cabins = @flights.every.cabin.compact.join(' + ')
+      self.booking_classes = @flights.every.booking_class.compact.join(' + ')
       self.dept_date = @flights.first.dept_date
 
       # и закидываем в базу
