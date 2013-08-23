@@ -123,10 +123,6 @@ class Ticket < ActiveRecord::Base
     stored_flights.map(&:to_flight).sort_by(&:departure_datetime_utc)
   end
 
-  def booking_classes
-    cabins.split(' + ')
-  end
-
   def price_fare_base
     @price_fare_base ||= if parent && parent.created_at && created_at  && parent.created_at < created_at
       original_price_fare + parent.price_fare_base
