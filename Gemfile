@@ -14,8 +14,17 @@ end
 # если убрать в группу :development, не грузит больше в rails c
 # возможно, отжирает память и ресурсы
 gem 'pry-rails'
-gem 'pry-plus'
-# для rake "db:migrate" и т.п. в rails console
+# включает pry-rescue. Разматываю зависимости сам.
+# gem 'pry-plus'
+# включается даже в продакшне, перехватывает SIGQUIT
+# gem 'pry-rescue', require: false
+gem 'pry-doc'
+gem 'pry-docmore'
+gem 'pry-debugger'
+gem 'pry-stack_explorer'
+gem 'bond'
+gem 'jist'
+
 gem 'commands'
 
 # Deploy with Capistrano

@@ -203,7 +203,6 @@ GEM
       multi_xml
     i18n (0.6.4)
     ice_nine (0.8.0)
-    interception (0.3)
     jist (1.5.1)
       json
     journey (1.0.4)
@@ -282,19 +281,8 @@ GEM
     pry-docmore (0.1.1)
       pry
       pry-doc
-    pry-plus (1.0.0)
-      bond
-      jist
-      pry-debugger
-      pry-doc
-      pry-docmore
-      pry-rescue
-      pry-stack_explorer
     pry-rails (0.3.2)
       pry (>= 0.9.10)
-    pry-rescue (1.1.1)
-      interception (>= 0.3)
-      pry
     pry-stack_explorer (0.4.9.1)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
@@ -427,6 +415,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
+  bond
   bson_ext
   capistrano
   capistrano_colors
@@ -454,6 +443,7 @@ DEPENDENCIES
   handsoap!
   hpricot
   i18n-js!
+  jist
   jquery-rails
   kaminari
   libnotify
@@ -471,8 +461,11 @@ DEPENDENCIES
   nokogiri
   paper_trail
   passenger
-  pry-plus
+  pry-debugger
+  pry-doc
+  pry-docmore
   pry-rails
+  pry-stack_explorer
   rails (= 3.2.12)
   rb-fchange
   rb-fsevent
