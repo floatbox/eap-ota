@@ -107,10 +107,16 @@ module Amadeus
       cmd("ES " + office_ids.map{|id| "#{id}-B"}.join(','))
     end
 
-    def conversion_rate(currency_code)
+    def conversion_rate(currency_code, date = Date.today)
       # BSR USED 1 USD = 30.50 RUB
-      cmd("FQC 1 #{currency_code}") =~ /^BSR USED 1 ...? = ([\d+.\d]+) RUB/
-      $1.to_f if $1
+      cmd("FQC 1 #{currency_code}/RUB/#{date.strftime('%d%b%y')}") =~ /^BSR USED 1 ...? = ([\d+.\d]+) RUB/
+      if $1
+        $1.to_f
+      elsif !date.future?
+        # нужно, тк тестовые амедеус живет в прошлом
+        cmd("FQC 1 #{currency_code}/RUB") =~ /^BSR USED 1 ...? = ([\d+.\d]+) RUB/
+        $1.to_f if $1
+      end
     end
 
     def interline_iatas(company_iata)
