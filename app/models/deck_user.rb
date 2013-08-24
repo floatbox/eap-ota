@@ -21,8 +21,9 @@ class DeckUser < ActiveRecord::Base
   # self.mailer_sender = "deck-profile@eviterra.com"
 
   # Configure the class responsible to send e-mails.
-  # FIXME не оверрайдится в модели
-  # self.mailer = "Devise::Mailer"
+  def devise_mailer
+    Devise::Mailer
+  end
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
