@@ -8,7 +8,11 @@ class DeckUser < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
   # attr_accessible :title, :body
+  #
+  include Typus::Orm::ActiveRecord::User::InstanceMethods
 
+  def role; "admin"; end
+  def locale; ::I18n.default_locale; end
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,

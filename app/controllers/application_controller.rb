@@ -33,7 +33,8 @@ class ApplicationController < ActionController::Base
     when Customer
       profile_path
     when DeckUser
-      deck_dashboard_path
+      # deck_dashboard_path
+      admin_dashboard_index_path
     end
   end
 
