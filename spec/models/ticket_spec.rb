@@ -175,7 +175,7 @@ describe Ticket do
 
         its(:vat_status) {should == '0'}
         its(:route) {should == 'CDG - SVO (SU); SVO - PEE (SU); PEE - CDG (S7)'}
-        its(:cabins) {should == 'Y + C + F'}
+        its(:cabins) {should == %W[Y C F]}
         its(:dept_date) {should == Date.new(2012, 10, 21)}
       end
 

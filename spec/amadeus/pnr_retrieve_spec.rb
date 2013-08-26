@@ -240,8 +240,10 @@ describe Amadeus::Response::PNRRetrieve, :amadeus do
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:first_name].should == 'GENNADY MR'}
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:last_name].should == 'NEDELKO'}
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:flights].every.marketing_carrier_iata.should == ['AZ','AZ','KL','KL']}
+      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:flights].every.booking_class.should == ['S', 'S', 'R', 'R']}
       # не работает после смены версии на 11.3
-      #specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:flights].every.cabin.should == ['S', 'S', 'R', 'R']}
+      # фиксчура ответа старой версии PNR_Retrieve
+      specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:flights].every.cabin.should == [nil, nil, nil, nil]}
       specify{subject.tickets[[[2, 'a'], [5, 6, 7, 8]]][:passport].should == '714512085'}
 
     end

@@ -1,8 +1,8 @@
 # encoding: utf-8
 class JoinedArray
   # TODO параметры?
-  def initialize
-    @separator = ' '
+  def initialize(separator=' ')
+    @separator = separator
   end
 
   def load(string)

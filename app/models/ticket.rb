@@ -37,6 +37,9 @@ class Ticket < ActiveRecord::Base
   has_and_belongs_to_many :stored_flights
   has_and_belongs_to_many :imports
   serialize :baggage_info, JoinedArray.new
+  # FIXME пофиксить разделитель большой миграцией однажды
+  serialize :booking_classes, JoinedArray.new(' + ')
+  serialize :cabins, JoinedArray.new(' + ')
 
   # для отображения в админке билетов. Не очень понятно,
   # как запретить добавление новых, впрочем.
@@ -111,7 +114,8 @@ class Ticket < ActiveRecord::Base
         end
       end
       self.route = @flights.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
-      self.cabins = @flights.every.cabin.compact.join(' + ')
+      self.cabins = @flights.every.cabin
+      self.booking_classes = @flights.every.booking_class
       self.dept_date = @flights.first.dept_date
 
       # и закидываем в базу
@@ -121,10 +125,6 @@ class Ticket < ActiveRecord::Base
 
   def flights
     stored_flights.map(&:to_flight).sort_by(&:departure_datetime_utc)
-  end
-
-  def booking_classes
-    cabins.split(' + ')
   end
 
   def price_fare_base

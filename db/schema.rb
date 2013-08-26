@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130808144541) do
+ActiveRecord::Schema.define(:version => 20130823152752) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -583,6 +583,7 @@ ActiveRecord::Schema.define(:version => 20130808144541) do
     t.string   "original_price_tax_currency",     :limit => 3
     t.integer  "original_price_penalty_cents"
     t.string   "original_price_penalty_currency", :limit => 3
+    t.string   "booking_classes"
   end
 
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"
