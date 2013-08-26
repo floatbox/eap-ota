@@ -19,7 +19,8 @@ gem 'pry-rails'
 # включается даже в продакшне, перехватывает SIGQUIT
 # gem 'pry-rescue', require: false
 gem 'pry-doc'
-gem 'pry-docmore'
+# возможно, вызывает проблему `expand_path': non-absolute home (ArgumentError)
+# gem 'pry-docmore'
 gem 'pry-debugger'
 gem 'pry-stack_explorer'
 gem 'bond'
