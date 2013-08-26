@@ -16,6 +16,13 @@ class DeckUser < ActiveRecord::Base
 
   has_paper_trail
 
+  scope :active, where(locked_at: nil)
+
+  # для active_admin
+  def display_name
+    [first_name, last_name].compact.join(' ').presence || email
+  end
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
