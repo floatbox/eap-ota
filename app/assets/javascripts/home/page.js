@@ -43,7 +43,7 @@ init: function() {
     
 },
 innerHeight: function() {
-    return $w.height() - 36;
+    return $w.height() - 62;
 },
 loadLocation: function() {
     $.get('/whereami', function(data) {

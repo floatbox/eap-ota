@@ -75,7 +75,7 @@ init: function() {
     }
 },
 position: function() {
-    return this.el.offset().top - 36 - results.header.height;
+    return this.el.offset().top - 62 - results.header.height;
 },
 focus: function(control) {
     if (browser.ios) {
@@ -83,7 +83,7 @@ focus: function(control) {
     } else {
         var st = control.offset().top;
         if (!this.iphoneLayout) {
-            st -= results.header.height + 71
+            st -= results.header.height + 97;
         }
         $w.smoothScrollTo(Math.min(st, $w.scrollTop()), function() {
             if (control.is('input, textarea')) {

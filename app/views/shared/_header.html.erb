@@ -81,40 +81,64 @@ I18n.locale = '<%= I18n.locale %>';
         </div>
         <% if admin_user %>
         <div class="ph-lang">
-            <% if I18n.locale == :en %>
-                <span class="link">RU</span>
-            <% else %>
-                <span class="link" data-locale="en">EN</span>
-            <% end %>    
+            <span class="phl-item<% if I18n.locale != :ru %> phl-link<% end %>">RU</span>
+            <span class="phl-item<% if I18n.locale != :en %> phl-link<% end %>" data-locale="en">EN</span>
         </div>
         <% end %>
     </div>
-    <div class="ph-tab">
-        <h6 class="pht-title">Авиабилеты</h6>
-        <p class="pht-tip">дешевле, чем у авиакомпаний <span class="link pht-why">Почему?</span></p>
-        <div class="pht-popup">
-            <div class="phtp-close">&times;</div>
-            <p class="phtp-text">Условия нашего сотрудничества со&nbsp;многими авиакомпаниями позволяют нам предоставлять скидки от&nbsp;их&nbsp;официальных тарифов.</p>
-            <p class="phtp-text">Вот почему зачастую у&nbsp;нас дешевле.</p>
-        </div>    
+    <div class="ph-tabs">
+        <% if controller.controller_name == 'home' || controller.controller_name == 'booking' %>
+        <div class="ph-tab pht-selected" id="pht-tickets">
+            <div class="pht-content">
+                <span class="pht-title">Авиабилеты</span>
+                <span class="pht-tip">дешевле, чем у авиакомпаний <span class="phtt-link">Почему?</span></span>
+            </div>
+        <% else %>
+        <div class="ph-tab" id="pht-tickets">
+            <a class="pht-content" href="/">
+                <span class="pht-title">Авиабилеты</span>
+                <span class="pht-tip">дешевле, чем у авиакомпаний <span class="phtt-link">Почему?</span></span>
+            </a>
+        <% end %>
+            <div class="pht-popup">
+                <div class="phtp-close">&times;</div>
+                <p class="phtp-text">Условия нашего сотрудничества со&nbsp;многими авиакомпаниями позволяют нам предоставлять скидки от&nbsp;их&nbsp;официальных тарифов.</p>
+                <p class="phtp-text">Вот почему зачастую у&nbsp;нас дешевле.</p>
+            </div>    
+        </div>
+        <div class="ph-tab">
+            <a class="pht-content" href="http://www.booking.com/index.html?aid=366864">
+                <span class="pht-title">Отели</span>
+                <span class="pht-tip">300<span class="thousand">000</span> по всему миру, лучшие условия</span>
+            </a>
+        </div>
+        <% if controller.controller_name == 'insurance' %>
+        <div class="ph-tab pht-selected">
+            <div class="pht-content">
+                <span class="pht-title">Страховки</span>
+                <span class="pht-tip">Электронные полисы, подходят для получения визы</span>            
+            </div>
+        </div>
+        <% else %>
+        <div class="ph-tab">
+            <a class="pht-content" href="/insurance">
+                <span class="pht-title">Страховки</span>
+                <span class="pht-tip">Электронные полисы, подходят для получения визы</span>
+            </a>
+        </div>
+        <% end %>
     </div>
-    <div class="ph-tab">
-        <h6 class="pht-title">Отели</h6>
-        <p class="pht-tip">300<span class="digit">000</span> по всему миру, лучшие условия</p>
-    </div>
 
+    <%= render "profile/popup" if admin_user %>
 
-    <% if admin_user %>
-    <%= render "profile/popup" %>
-    <% end %>
-
+    <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
     <div class="ph-social">
         <a target="_blank" class="phs-icon phs-facebook" title="Фейсбук" href="https://www.facebook.com/eviterra/">&nbsp;</a>
         <a target="_blank" class="phs-icon phs-vkontakte" title="ВКонтакте" href="http://vk.com/eviterra">&nbsp;</a>
         <a target="_blank" class="phs-icon phs-twitter" title="Твиттер" href="https://twitter.com/eviterra">&nbsp;</a>
         <a target="_blank" class="phs-icon phs-google" title="Блог" href="https://plus.google.com/103322039453589743139">&nbsp;</a>    
     </div>
-    <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
+
 </div>
 </div>
 <div class="ph-placeholder">
@@ -123,8 +147,7 @@ I18n.locale = '<%= I18n.locale %>';
 
 <script type="text/javascript">
 (function(){
-    var teaser = $('#ph-teaser');
-    var popup = teaser.find('.pht-popup').click(function(event) {
+    var popup = $('#pht-tickets .pht-popup').click(function(event) {
         event.stopPropagation();
     });
     var hide = function(event) {
@@ -133,14 +156,20 @@ I18n.locale = '<%= I18n.locale %>';
             popup.hide();
         }
     };
-    teaser.find('.pht-why').click(function() {
-        popup.show();
-        setTimeout(function() {
-            $('body').on('click keydown', hide);
-        }, 10);
-    });
-    teaser.find('.phtp-close').click(function(event) {
+    popup.find('.phtp-close').click(function(event) {
         hide(event);
+    });
+    $('#pht-tickets .phtt-link').click(function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        if (popup.is(':visible')) {
+            hide(event);
+        } else {
+            popup.show();
+            setTimeout(function() {
+                $('body').on('click keydown', hide);
+            }, 10);
+        }
     });
 })();
 </script>

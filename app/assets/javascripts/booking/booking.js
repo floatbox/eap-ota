@@ -182,7 +182,7 @@ hide: function() {
     results.header.edit.show();
     results.content.el.show();
     $w.scrollTop(this.offer.details.offset().top - offset);
-    $w.delay(300).smoothScrollTo(Math.max(this.offer.el.offset().top - 36 - results.header.height - 90, 0));
+    $w.delay(300).smoothScrollTo(Math.max(this.offer.el.offset().top - 62 - results.header.height - 90, 0));
     page.title.set(I18n.t('page.results', {title: results.data.titles.window}));
     page.location.set('booking');
     _gaq.push(['_trackPageview', page.location.track()]);
