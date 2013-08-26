@@ -87,7 +87,7 @@ class Commission::Formula
       end
   end
 
-  def call(base=nil, params={:eur => Conf.amadeus.euro_rate})
+  def call(base=nil, params={:eur => Amadeus::Rate.euro_rate})
     raise ArgumentError, "formula '#{@formula}' is not valid" unless compiled
     multiplier = (params[:multiplier] || 1).to_i
     compiled.call(base, multiplier, params).round(2)

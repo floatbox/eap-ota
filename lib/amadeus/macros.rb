@@ -107,16 +107,17 @@ module Amadeus
       cmd("ES " + office_ids.map{|id| "#{id}-B"}.join(','))
     end
 
-    def conversion_rate(currency_code, date = Date.today)
+    def conversion_rate(from, to = 'RUB', date = Date.today)
       # BSR USED 1 USD = 30.50 RUB
-      cmd("FQC 1 #{currency_code}/RUB/#{date.strftime('%d%b%y')}") =~ /^BSR USED 1 ...? = ([\d+.\d]+) RUB/
+      cmd("FQC 1 #{from}/#{to}/#{date.strftime('%d%b%y')}") =~ /^BSR USED 1 ...? = ([\d+.\d]+) #{to}/
       if $1
-        $1.to_f
-      elsif !date.future?
+        return $1.to_f
+      elsif !Conf.amadeus.check_rate_date
         # нужно, тк тестовые амедеус живет в прошлом
-        cmd("FQC 1 #{currency_code}/RUB") =~ /^BSR USED 1 ...? = ([\d+.\d]+) RUB/
-        $1.to_f if $1
+        cmd("FQC 1 #{from}/#{to}") =~ /^BSR USED 1 ...? = ([\d+.\d]+) #{to}/
+        return $1.to_f if $1
       end
+      raise "Error getting amadeus rate for date: #{date.strftime('%d%b%y')}"
     end
 
     def interline_iatas(company_iata)

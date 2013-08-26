@@ -29,10 +29,6 @@ every 1.hour do
   #runner 'Amadeus::Session.dirty_housekeep'
 end
 
-every :wednesday, :at => '12:30 am' do
-  runner 'script/amadeus_rate'
-end
-
 every :day, :at => '2:00 am' do
   runner 'script/sync_canceled_pnrs'
 end

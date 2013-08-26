@@ -96,6 +96,7 @@ describe Order do
     context 'with one non-zero ticket' do
       before(:all) do
         Conf.payture_alfa.stub(:commission).and_return('2.8%')
+        Amadeus::Rate.stub :euro_rate => 43.0
         @order = create(:order, :price_fare => 21590, :price_tax => 9878, :price_with_payment_commission => BigDecimal('31946.68'), :source => 'amadeus', :fix_price => true)
         @old_ticket = create(:ticket, :original_price_fare => 21590.to_money("RUB"), :original_price_tax => 9878.to_money("RUB"), :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789', :order => @order)
         @new_ticket_hashes = [
@@ -155,6 +156,7 @@ describe Order do
 
     context 'of two tickets with zero price' do
       before(:all) do
+        Amadeus::Rate.stub :euro_rate => 43.0
         Conf.payture_alfa.stub(:commission).and_return('2.8%')
         @order = create(:order, :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => -1000.5, :fix_price => true)
         @old_tickets = [1,2].map {|n| create(:ticket, :ticketed_date => Date.today - 5.days, :original_price_fare => 10005.to_money("RUB"), :original_price_tax => 5430.to_money("RUB"), :price_discount => -500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}

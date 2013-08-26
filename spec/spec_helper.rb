@@ -42,6 +42,9 @@ Spork.prefork do
     config.use_transactional_examples = true
 
     config.include SpecExtensions::LetOnce
+    config.before(:each) do
+      Amadeus::Rate.stub :euro_rate => 43.0
+    end
   end
 
 end
