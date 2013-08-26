@@ -37,9 +37,8 @@ class Ticket < ActiveRecord::Base
   has_and_belongs_to_many :stored_flights
   has_and_belongs_to_many :imports
   serialize :baggage_info, JoinedArray.new
-  # FIXME пофиксить разделитель большой миграцией однажды
-  serialize :booking_classes, JoinedArray.new(' + ')
-  serialize :cabins, JoinedArray.new(' + ')
+  serialize :booking_classes, JoinedArray.new(' ')
+  serialize :cabins, JoinedArray.new(' ')
 
   # для отображения в админке билетов. Не очень понятно,
   # как запретить добавление новых, впрочем.

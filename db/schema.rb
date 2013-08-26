@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130823152752) do
+ActiveRecord::Schema.define(:version => 20130826141933) do
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
