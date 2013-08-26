@@ -14,6 +14,8 @@ class DeckUser < ActiveRecord::Base
   def role; "admin"; end
   def locale; ::I18n.default_locale; end
 
+  has_paper_trail
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class with default "from" parameter.
