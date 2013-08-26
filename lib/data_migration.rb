@@ -8,6 +8,15 @@ require 'csv'
 
 module DataMigration
 
+  # удаляет всех пользователей из deck_users и накатывает заново копиями из старого typus_users
+  def self.migrate_admin_users
+    DeckUser.delete_all
+    DeckUser.connection.execute %(
+      insert into deck_users (id, email, first_name, last_name, created_at, locked_at)
+        select id, email, first_name, last_name, created_at, if(status, null, updated_at) from typus_users
+    )
+  end
+
   def self.get_cancelled_flights
     order_ids = StoredFlight.where('dept_date > ?', Date.today).every.tickets.flatten.every.order_id.uniq
     result = []

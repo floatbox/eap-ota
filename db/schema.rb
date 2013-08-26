@@ -224,6 +224,9 @@ ActiveRecord::Schema.define(:version => 20130826141933) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.string   "first_name",             :default => "", :null => false
+    t.string   "last_name",              :default => "", :null => false
+    t.datetime "locked_at"
   end
 
   add_index "deck_users", ["email"], :name => "index_deck_users_on_email", :unique => true

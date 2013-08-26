@@ -1,9 +1,9 @@
 class DeckUser < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
-  # :lockable, :timeoutable and :omniauthable
+  # :timeoutable and :omniauthable
   devise :database_authenticatable, 
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :lockable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
@@ -156,6 +156,7 @@ class DeckUser < ActiveRecord::Base
   # :failed_attempts = Locks an account after a number of failed attempts to sign in.
   # :none            = No lock strategy. You should handle locking by yourself.
   # self.lock_strategy = :failed_attempts
+  self.lock_strategy = :none
 
   # Defines which key will be used when locking and unlocking an account
   # self.unlock_keys = [ :email ]
@@ -166,6 +167,7 @@ class DeckUser < ActiveRecord::Base
   # :both  = Enables both strategies
   # :none  = No unlock strategy. You should handle unlocking by yourself.
   # self.unlock_strategy = :both
+  self.unlock_strategy = :none
 
   # Number of authentication tries before locking an account if lock_strategy
   # is failed attempts.
