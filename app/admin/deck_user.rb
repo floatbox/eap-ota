@@ -16,6 +16,12 @@ ActiveAdmin.register DeckUser, :as => "User" do
     column :email
     column :first_name
     column :last_name
+    column :roles do |resource|
+      resource.roles.map {|role| status_tag role }
+    end
+    column :status do |resource|
+      status_tag resource.access_locked? ? "locked" : "active"
+    end
     column :locked_at, class: "align-right"
     column :created_at, class: "align-right"
     # default_actions
