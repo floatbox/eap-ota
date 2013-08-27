@@ -40,6 +40,21 @@ class AutoTicketStuff
     Delayed::Job.enqueue AutoTicketJob.new(order_id: order.id), run_at: 30.minutes.from_now
   end
 
+  def job_run_at
+    return 30.minutes.from_now if order.commission_ticketing_method != 'aviacenter' ||
+                                  Date.today.wday != 2 ||
+                                  Time.now < Time.parse('20:30')
+    tomorrow_rate = CBR.exchange_on(Date.tomorrow).exchange_with('2 USD'.to_money, "RUB").to_f.ceil / 2.0 #Курс амадеуса не завтра
+    today_rate = Amadeus::Rate.exchange_on(Date.today).exchange_with('1 USD'.to_money, "RUB").to_f
+    if tomorrow_rate > today_rate
+      3.minutes.from_now
+    elsif tomorrow_rate < today_rate
+      Date.tomorrow + 1.minute
+    else
+      return 30.minutes.from_now
+    end
+  end
+
   def passenger_names(o)
     o.full_info.split("\n").map do |t|
       t.split('/')[0..1].join(' ')

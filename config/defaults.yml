@@ -45,11 +45,14 @@ amadeus:
   euro_rate: 40
   session_pool_size: 10
   no_ltd_restrictions: no
+  check_rate_date: no
   cancel_stale: no
   ignored_carriers: []
   forbid_class_changing: no
   default_office: MOWR228FA
   search_sax: yes
+  production:
+    check_rate_date: yes
   offices:
     MOWR228FA:
       alias: booking
