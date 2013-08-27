@@ -29,7 +29,13 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    profile_path
+    case resource
+    when Customer
+      profile_path
+    when DeckUser
+      # deck_dashboard_path
+      admin_dashboard_index_path
+    end
   end
 
   def after_sign_out_path_for(resource_or_scope)

@@ -83,6 +83,8 @@ gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rail
 gem 'haml'
 gem 'hpricot', require: false
 
+gem 'activeadmin'
+gem 'cancan'
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
