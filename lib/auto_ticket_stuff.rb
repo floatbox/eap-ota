@@ -63,11 +63,12 @@ class AutoTicketStuff
 
   def group_booking?
     @other_order_pnrs = []
-    order.stored_flights.any? do |stored_flight|
-      orders = stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).where('id != ?', order.id)#sum(:blank_count) > 8
-      @other_order_pnrs += orders.every.pnr_number if orders.sum(:blank_count) + order.blank_count > 8
+    other_orders = order.stored_flights.first.orders.where(ticket_status: ['booked', 'ticketed']).where('id != ?', order.id).select do |o|
+      order.stored_flights == o.stored_flights
     end
-    @other_order_pnrs.uniq!
+    if other_orders.every.blank_count.sum + order.blank_count > 8
+      @other_order_pnrs = other_orders.every.pnr_number
+    end
     return @other_order_pnrs.present?
   end
 end
