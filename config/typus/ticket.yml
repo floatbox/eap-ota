@@ -150,7 +150,8 @@ Ticket:
       - number_with_code
       - carrier
       - route
-      - cabins
+      - cabins_joined
+      - booking_classes_joined
       - price_fare
       - price_tax
       - customized_original_price_fare

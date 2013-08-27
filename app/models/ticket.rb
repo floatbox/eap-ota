@@ -82,6 +82,14 @@ class Ticket < ActiveRecord::Base
   before_validation :set_info_from_flights
   before_save :set_prices
 
+  def cabins_joined
+    cabins.join(' ')
+  end
+
+  def booking_classes_joined
+    booking_classes.join(' ')
+  end
+
   def set_prices
     self.price_acquiring_compensation = price_payment_commission if corrected_price && kind == 'ticket'
     if order && order.fix_price
