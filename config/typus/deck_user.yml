@@ -1,0 +1,6 @@
+# без этого файла не работает ассоциация "typus_user" в тайпусе.
+DeckUser:
+  fields:
+    default: first_name, last_name, email
+  application: Admin
+  description: Users Administration
