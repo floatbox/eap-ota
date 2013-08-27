@@ -90,6 +90,14 @@ class Ticket < ActiveRecord::Base
     booking_classes.join(' ')
   end
 
+  def cabins_joined= cabs
+    write_attribute(:cabins, cabs.strip.split(' '))
+  end
+
+  def booking_classes_joined= bcs
+    write_attribute(:booking_classes, bcs.strip.split(' '))
+  end
+
   def set_prices
     self.price_acquiring_compensation = price_payment_commission if corrected_price && kind == 'ticket'
     if order && order.fix_price

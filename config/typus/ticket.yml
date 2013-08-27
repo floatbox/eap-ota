@@ -110,6 +110,8 @@ Ticket:
       - commission_ticketing_method
       - income_suppliers
       - status
+      - cabins_joined
+      - booking_classes_joined
       - ticketed_date
       - dept_date
       - itinerary_receipt
@@ -143,6 +145,8 @@ Ticket:
       - mso_number
       - comment
       - corrected_price
+      - cabins_joined
+      - booking_classes_joined
     new_refund: original_price_fare_as_string, original_price_tax_as_string, original_price_penalty_as_string, price_consolidator, price_discount, price_our_markup, price_extra_penalty, price_operational_fee, price_acquiring_compensation, route, comment
     confirm_refund: ticketed_date, status
     csv:
