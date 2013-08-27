@@ -140,7 +140,7 @@ GEM
     coffee-script (2.2.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.2.0)
+    coffee-script-source (1.4.0)
     columnize (0.3.6)
     commands (0.2.1)
       rails (>= 3.2.0)
@@ -451,6 +451,7 @@ DEPENDENCIES
   capybara
   central_bank_of_russia
   coffee-rails
+  coffee-script-source (~> 1.4.0)
   commands
   crack
   cucumber

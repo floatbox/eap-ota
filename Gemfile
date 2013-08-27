@@ -7,6 +7,7 @@ group :assets do
   #gem 'therubyracer'
   gem "uglifier"
   gem 'sass-rails'
+  gem 'coffee-script-source', '~> 1.4.0'
   gem 'coffee-rails'
 end
 
