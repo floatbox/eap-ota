@@ -454,6 +454,11 @@ class Order < ActiveRecord::Base
     [price_fare, price_tax]
   end
 
+  def first_email
+    email.strip.split(/[,; ]+/).first.downcase
+  end
+
+
   # считывание offline брони из GDS
   ######################################
   extend CastingAccessors
@@ -599,7 +604,7 @@ class Order < ActiveRecord::Base
 
   def set_customer
     if !email.blank? && email_changed?
-      self.customer = Customer.find_or_initialize_by_email(email)
+      self.customer = Customer.find_or_initialize_by_email(first_email)
       customer.skip_confirmation_notification!
       ## TODO закоментить продакшн до выкатки
       customer.send_first_purchase_instructions unless customer.confirmed?
