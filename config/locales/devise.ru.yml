@@ -61,7 +61,7 @@ ru:
       first_purchase_instructions:
         subject: 'Приглашение в личный кабинет'
       invite_instructions:
-          subject: 'Приглашение в личный кабинет'
+          subject: 'Добро пожаловать в личный кабинет'
       reset_password_instructions:
         subject: 'Смена пароля в личном кабинете'
       unlock_instructions:
