@@ -82,6 +82,7 @@ class Ticket < ActiveRecord::Base
   before_validation :set_info_from_flights
   before_save :set_prices
 
+  # для csv и typus
   def cabins_joined
     cabins.join(' ')
   end
@@ -90,6 +91,7 @@ class Ticket < ActiveRecord::Base
     booking_classes.join(' ')
   end
 
+  # для typus
   def cabins_joined= cabs
     write_attribute(:cabins, cabs.strip.split(' '))
   end
