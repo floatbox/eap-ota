@@ -16,8 +16,8 @@ ActiveAdmin.register DeckUser, :as => "User" do
     column :email
     column :first_name
     column :last_name
-    column :locked_at
-    column :created_at
+    column :locked_at, class: "align-right"
+    column :created_at, class: "align-right"
     default_actions
   end
 
