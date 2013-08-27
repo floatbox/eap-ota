@@ -1,4 +1,7 @@
 class DeckUser < ActiveRecord::Base
+
+  ROLES = %w[admin hoteditor]
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :timeoutable and :omniauthable
@@ -11,12 +14,14 @@ class DeckUser < ActiveRecord::Base
   #
   include Typus::Orm::ActiveRecord::User::InstanceMethods
 
-  def role; "admin"; end
+  def role; roles.first; end
   def locale; ::I18n.default_locale; end
 
   has_paper_trail
 
   scope :active, where(locked_at: nil)
+
+  serialize :roles, JoinedArray.new
 
   # для active_admin
   def display_name

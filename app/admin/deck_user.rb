@@ -35,10 +35,12 @@ ActiveAdmin.register DeckUser, :as => "User" do
   end
 
   action_item :only => :show do
-    if resource.access_locked?
-      link_to "Unlock", {:action => :unlock}, :method => :post
-    else
-      link_to "Lock", {:action => :lock}, :method => :post
+    if authorized? :lock, resource
+      if resource.access_locked?
+        link_to "Unlock", {:action => :unlock}, :method => :post
+      else
+        link_to "Lock", {:action => :lock}, :method => :post
+      end
     end
   end
 

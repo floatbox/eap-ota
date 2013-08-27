@@ -109,6 +109,7 @@ GEM
     bson_ext (1.5.2)
       bson (= 1.5.2)
     builder (3.0.4)
+    cancan (1.6.10)
     capistrano (2.9.0)
       highline
       net-scp (>= 1.0.0)
@@ -444,6 +445,7 @@ DEPENDENCIES
   airbrake
   bond
   bson_ext
+  cancan
   capistrano
   capistrano_colors
   capybara

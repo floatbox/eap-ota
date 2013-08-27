@@ -12,8 +12,8 @@ module DataMigration
   def self.migrate_admin_users
     DeckUser.delete_all
     DeckUser.connection.execute %(
-      insert into deck_users (id, email, first_name, last_name, created_at, locked_at)
-        select id, email, first_name, last_name, created_at, if(status, null, updated_at) from typus_users
+      insert into deck_users (id, email, first_name, last_name, created_at, locked_at, roles)
+        select id, email, first_name, last_name, created_at, if(status, null, updated_at), role from typus_users
     )
   end
 
