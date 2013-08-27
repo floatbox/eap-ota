@@ -18,7 +18,16 @@ ActiveAdmin.register DeckUser, :as => "User" do
     column :last_name
     column :locked_at, class: "align-right"
     column :created_at, class: "align-right"
-    default_actions
+    # default_actions
+    actions do |resource|
+      if authorized? :lock, resource
+        if resource.access_locked?
+          link_to "Unlock", {:action => :unlock, :id => resource.id}, :method => :post
+        else
+          link_to "Lock", {:action => :lock, :id => resource.id}, :method => :post
+        end
+      end
+    end
   end
 
   form do |f|
