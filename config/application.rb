@@ -71,7 +71,8 @@ module Eviterra
     config.assets.precompile += %w( home.js home.css common.js common.css typus/application.css typus/application.js )
 
     # попытка решить проблему с mtime на nil
-    config.assets.initialize_on_precompile = true
+    # не помогло
+    # config.assets.initialize_on_precompile = true
 
     # Не знаю, как это вопхать в инициализатор
     console do
