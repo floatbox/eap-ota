@@ -90,8 +90,7 @@ GEM
     adamantium (0.0.11)
       ice_nine (~> 0.8.0)
     addressable (2.2.7)
-    airbrake (3.1.12)
-      activesupport
+    airbrake (3.1.14)
       builder
       json
     arbre (1.0.1)
