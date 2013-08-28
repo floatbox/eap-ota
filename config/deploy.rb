@@ -173,7 +173,15 @@ namespace :deploy do
     stop_delayed_job
   end
 
+  desc "exports to app/assets/javascripts i18n-js translations. Kill after upgrading 18n-js"
+  task :i18njs do
+    rake = fetch(:rake, "rake")
+    rails_env = fetch(:rails_env, "production")
+    directory = current_release
+    run "cd #{directory}; #{rake} RAILS_ENV=#{rails_env} i18n:js:export"
+  end
 
+  before "deploy:assets:precompile", "deploy:i18njs"
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
   after "deploy:finalize_update", "deploy:symlink_db_local"
