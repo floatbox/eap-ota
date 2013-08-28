@@ -70,6 +70,10 @@ class RecommendationSet
     self
   end
 
+  def sort_and_group!
+    @recommendations = group_and_correct(@recommendations.sort_by(&:price_total))
+  end
+
   def sort_by &block
     RecommendationSet.new(@recommendations.sort_by &block)
   end
@@ -83,8 +87,9 @@ class RecommendationSet
   end
 
   # бывший Recommendation#corrected - там ему больше не место
-  def group_and_correct
-    result = RecommendationSet.new
+  def group_and_correct recs
+    recs ||= @recommendations
+    result = []
     #объединяем эквивалентные варианты
     @recommendations.each do |r|
       #некрасиво, но просто и работает

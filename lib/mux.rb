@@ -90,13 +90,9 @@ class Mux
         # TODO пометить как непродаваемые, для админов?
         r.select!(&:sellable?) unless admin_user
 
-        unless lite
-          # sort
-          recommendations = recommendations.sort_by(&:price_total)
-          # regroup
-          recommendations = recommendations.group_and_correct
-        end
-
+        # сортируем и группируем, если ищем для морды
+        recommendations.sort_and_group! unless lite
+        # удаляем рекоммендации на сегодня-завтра
         recommendations.each(&:clear_variants)
       end
     end
