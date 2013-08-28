@@ -49,6 +49,10 @@ ActiveAdmin.register DeckUser, :as => "User" do
     f.actions
   end
 
+  # show do
+  #   render action: "show"
+  # end
+
   action_item :only => :show do
     if authorized? :lock, resource
       if resource.access_locked?
@@ -68,6 +72,14 @@ ActiveAdmin.register DeckUser, :as => "User" do
     resource.unlock_access!
     redirect_to({:action => :show}, {:notice => "Unlocked!"})
   end
+
+  action_item :only => :show do
+    link_to "History", :action => :history
+  end
+
+  # рендерит app/views/deck/users/history.html.*
+  # или app/views/active_admin/resource/history.html.*
+  member_action :history
 
   sidebar :actions, :only => :show do
     div do
