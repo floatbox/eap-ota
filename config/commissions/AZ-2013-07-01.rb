@@ -36,6 +36,7 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
+discount "2%"
 agent_comment "1 euro. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
 subagent_comment "5 руб. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
 example "mrucdg"

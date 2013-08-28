@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "8%"
 subagent "6%"
-discount "3%"
+discount "8%"
 agent_comment "8% от всех опубл. тарифов на рейсы YM (В договоре Interline не прописан.)"
 subagent_comment "6% от всех опубл. тарифов на рейсы YM"
 interline :no, :unconfirmed
