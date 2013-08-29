@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2%"
-discount "3%"
+discount "1%"
 agent_comment "3% от опубл.тарифов (вкл.промотарифы в V и Q классах) на собств.рейсы SQ/Silk Air с началом от пунктов РФ;"
 subagent_comment "2% от опубл.тарифов (вкл.промотарифы в V и Q классах) на собств.рейсы SQ/Silk Air с началом от пунктов РФ;"
 routes "RU..."

@@ -49,7 +49,6 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
-discount "0.25%"
 agent_comment "1%(0,5%)(0%) с вылетом из России на рейсы Interline, условии наличия в билете хотя бы одного сегмента собств.рейса LO; "
 subagent_comment "0.5%"
 interline :yes
