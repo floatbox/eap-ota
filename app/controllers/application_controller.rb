@@ -2,7 +2,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  include Typus::Authentication::Session, PartnerTracking
+  include PartnerTracking
   has_mobile_fu false
 
   before_filter :log_remote_ip
@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  alias_method :admin_user, :current_deck_user
   helper_method :admin_user
   # показывает данные текущего пользователя тайпус в админке
   alias_method :current_member, :admin_user
