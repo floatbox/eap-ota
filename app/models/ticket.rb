@@ -64,7 +64,7 @@ class Ticket < ActiveRecord::Base
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
 # set_refund_data нужно запускать до check_currency
-  before_validation :set_refund_data, :if => lambda {kind == "refund"}
+  before_validation :set_refund_data, :if => :refund?
   before_validation :update_prices_and_add_parent, :if => :original_price_total
   before_validation :check_currency
   before_save :recalculate_commissions, :set_validating_carrier
@@ -73,14 +73,22 @@ class Ticket < ActiveRecord::Base
   scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
   scope :reported, where(:status => ['ticketed'])
 
-  validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => lambda {kind = 'refund'}
+  validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => :refund?
   after_save :update_parent_status, :if => :parent
   after_destroy :update_parent_status, :if => :parent
-  validates_presence_of :comment, :if => lambda {kind == "refund"}
+  validates_presence_of :comment, :if => :refund?
   attr_accessor :parent_number, :parent_code, :original_price_total
   attr_writer :price_fare_base, :flights
   before_validation :set_info_from_flights
   before_save :set_prices
+
+  def refund?
+    kind == 'refund'
+  end
+
+  def ticket?
+    kind == 'ticket'
+  end
 
   # для csv и typus
   def cabins_joined
