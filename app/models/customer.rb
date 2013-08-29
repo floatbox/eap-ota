@@ -16,6 +16,15 @@ class Customer < ActiveRecord::Base
 
   has_many :orders
 
+  def self.create_from_order(email)
+    customer = find_or_initialize_by_email(email)
+    customer.skip_confirmation_notification!
+    ## TODO закоментить в продакшн до выкатки
+    customer.send_first_purchase_instructions if !customer.confirmed?
+    customer.save unless customer.persisted?
+    customer
+  end
+
   def cancel_confirmation!
       self.confirmation_token = nil
       self.confirmation_sent_at = nil

@@ -138,9 +138,9 @@ class Order < ActiveRecord::Base
 
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
-  before_save :set_prices, :set_customer
+  before_save :set_prices
   before_create :generate_code, :set_payment_status, :set_email_status
-  after_save :create_order_notice
+  after_save :create_order_notice, :set_customer
 
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
@@ -603,13 +603,12 @@ class Order < ActiveRecord::Base
   end
 
   def set_customer
-    if !email.blank? && email_changed?
-      self.customer = Customer.find_or_initialize_by_email(first_email)
-      customer.skip_confirmation_notification!
-      ## TODO закоментить продакшн до выкатки
-      customer.send_first_purchase_instructions unless customer.confirmed?
-      customer.save unless customer.persisted?
+    if customer
+      new_customer = Customer.create_from_order(first_email) if first_email != customer.email
+    else
+      new_customer = Customer.create_from_order(email) if !email.blank?
     end
+    update_column(:customer_id, new_customer.id) if new_customer
   end
 
   def set_payment_status
