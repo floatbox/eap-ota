@@ -76,8 +76,8 @@ class Strategy::Amadeus < Strategy::Base
       end
       rec_params = {
         :booking_classes => pnr_resp.booking_classes,
-        # FIXME не умеем определять класс обслуживания, хардкодим эконом
-        :cabins => pnr_resp.booking_classes.map {|x| 'Y' },
+        # FIXME если не смогли определить класс обслуживания (доступен не во всех офисах), хардкодим эконом
+        :cabins => pnr_resp.cabins.presence || pnr_resp.booking_classes.map {|x| 'Y' },
         :source => 'amadeus',
         :flights => flights
         }

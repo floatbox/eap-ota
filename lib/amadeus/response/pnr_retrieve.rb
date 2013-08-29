@@ -37,6 +37,13 @@ module Amadeus
              ).map(&:to_s)
       end
 
+      def cabins
+        xpath( "//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']" +
+              "[r:travelProduct/r:companyDetail/r:identification]" +
+              "/r:cabinDetails/r:cabinDetails/r:classDesignator"
+             ).map(&:to_s)
+      end
+
       def passengers
         xpath('//r:travellerInformation').map do |ti|
           surname = ti.xpath('r:traveller/r:surname').to_s

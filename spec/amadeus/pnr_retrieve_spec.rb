@@ -285,6 +285,7 @@ describe Amadeus::Response::PNRRetrieve, :amadeus do
     it 'should parse right cabins' do
       r = amadeus_response('spec/amadeus/xml/PNR_Retrieve_11_3.xml')
       r.flights.collect(&:cabin).should == %w{M M M M}
+      r.cabins.should == %w{M M M M}
     end
   end
 
