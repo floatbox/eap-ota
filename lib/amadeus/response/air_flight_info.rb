@@ -12,7 +12,7 @@ module Amadeus
           :departure_term =>         xpath("//r:departureStationInfo/r:terminal").to_s,
           :arrival_iata =>           xpath("//r:offPointDetails/r:trueLocationId").to_s,
           :arrival_term =>           xpath("//r:arrivalStationInfo/r:terminal").to_s,
-          :flight_number =>          xpath("//r:flightNumber").to_s.strip,
+          :flight_number =>          xpath("//r:flightNumber").to_s.try(:strip),
           :arrival_date =>           xpath("//r:flightDate/r:arrivalDate").last.to_s,
           :arrival_time =>           xpath("//r:flightDate/r:arrivalTime").last.to_s,
           :departure_date =>         xpath("//r:flightDate/r:departureDate").to_s,
@@ -34,6 +34,10 @@ module Amadeus
             :location_iata => pd.xpath('r:generalFlightInfo/r:boardPointDetails/r:trueLocationId').to_s
           )
         end
+      end
+
+      def error_message
+        xpath("//r:responseError/r:interactiveFreeText/r:freeText").to_s
       end
 
     end
