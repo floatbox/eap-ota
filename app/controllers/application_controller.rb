@@ -11,7 +11,10 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  alias_method :admin_user, :current_deck_user
+  def admin_user
+    current_deck_user
+  end
+
   helper_method :admin_user
   # показывает данные текущего пользователя тайпус в админке
   alias_method :current_member, :admin_user
