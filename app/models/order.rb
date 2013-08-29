@@ -603,12 +603,10 @@ class Order < ActiveRecord::Base
   end
 
   def set_customer
-    if customer
-      new_customer = Customer.create_from_order(first_email) if first_email != customer.email
-    else
-      new_customer = Customer.create_from_order(email) if !email.blank?
+    if (customer && first_email != customer.email) || (!customer && !first_email.blank?)
+      self.customer = Customer.create_from_order(first_email)
+      save
     end
-    update_column(:customer_id, new_customer.id) if new_customer
   end
 
   def set_payment_status
