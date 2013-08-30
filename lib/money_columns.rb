@@ -21,7 +21,7 @@ module MoneyColumns
 
        class_eval <<-"END", __FILE__, __LINE__ + 1
        def #{attr_as_string}
-         @#{attr_as_string} || #{attr}.try(&:with_currency)
+         @#{attr_as_string} || (#{attr} && #{attr}.is_a?(Money) ? #{attr}.with_currency : nil)
        end
        def #{attr_as_string}= (value)
          value.upcase!

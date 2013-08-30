@@ -417,4 +417,16 @@ describe Order do
 
   end
 
+  describe "original_price_tax_as_string with bad price in tickets" do
+    subject do
+      build(:order).tap do |o|
+        o.stub_chain(:sold_tickets, :present?).and_return(true)
+        o.stub_chain(:sold_tickets, :every, :original_price_tax, :sum).and_return(0)
+      end
+    end
+
+    its(:original_price_tax_as_string){should be_nil}
+
+  end
+
 end
