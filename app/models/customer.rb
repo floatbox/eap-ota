@@ -16,6 +16,10 @@ class Customer < ActiveRecord::Base
 
   has_many :orders
 
+  scope :without_orders, lambda {
+      where("id IN (#{select('customers.id').joins('LEFT JOIN orders ON orders.customer_id = customers.id').where('orders.id IS NULL').to_sql})")
+    }
+
   def self.create_from_order(email)
     customer = find_or_initialize_by_email(email)
     customer.skip_confirmation_notification!
