@@ -78,15 +78,6 @@ example "cdgsvo/ab"
 end
 
 rule 7 do
-no_commission "Катя просила выключить срочно от 14.06.12"
-important!
-ticketing_method "aviacenter"
-interline :no, :yes, :absent
-routes "...SIP,ODS..."
-example "odssvo svoods/VV"
-end
-
-rule 8 do
 disabled "переключаем выписку на dtt"
 no_commission "закрыли субсидированные тарифы"
 important!

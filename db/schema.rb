@@ -424,9 +424,9 @@ ActiveRecord::Schema.define(:version => 20130827010710) do
     t.string   "commission_designator"
     t.boolean  "auto_ticket",                                                 :default => false
     t.string   "no_auto_ticket_reason",                                       :default => ""
+    t.boolean  "old_downtown_booking",                                        :default => false
     t.boolean  "needs_visa_notification",                                     :default => false
     t.string   "additional_pnr_number"
-    t.boolean  "old_downtown_booking",                                        :default => false
   end
 
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
@@ -613,13 +613,13 @@ ActiveRecord::Schema.define(:version => 20130827010710) do
     t.decimal  "price_operational_fee",                        :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.decimal  "price_acquiring_compensation",                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.decimal  "price_difference",                             :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.string   "additional_pnr_number"
     t.integer  "original_price_fare_cents"
     t.string   "original_price_fare_currency",    :limit => 3
     t.integer  "original_price_tax_cents"
     t.string   "original_price_tax_currency",     :limit => 3
     t.integer  "original_price_penalty_cents"
     t.string   "original_price_penalty_currency", :limit => 3
+    t.string   "additional_pnr_number"
     t.string   "booking_classes"
   end
 
