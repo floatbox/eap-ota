@@ -235,15 +235,27 @@ module DataMigration
   end
 
   def self.fill_customers_for_orders
-    Order.where("customer_id IS NULL").limit(200).each do |order|
-      customer_email = order.email.strip.split(/[,; ]/).first
-      #customer = Customer.find_or_create_by_email(customer_email)
-      customer = Customer.find_or_initialize_by_email(customer_email)
+    Order.where("customer_id IS NULL").limit(2).each do |order|
+      customer = Customer.find_or_initialize_by_email(order.first_email)
       customer.skip_confirmation_notification!
       customer.save unless customer.persisted?
       order.update_column(:customer_id, customer.id)
       #order.save
     end
+  end
+
+  def self.fix_customers_for_orders
+    Order.joins(:customer).where('SUBSTRING_INDEX(orders.email, ",", 1) != customers.email').limit(200).each do |order|
+      customer = Customer.find_or_initialize_by_email(order.first_email)
+      customer.skip_confirmation_notification!
+      customer.save unless customer.persisted?
+      order.update_column(:customer_id, customer.id)
+      #order.save
+    end
+  end
+
+  def self.lowercase_customers_email
+    Customer.update_all('email = TRIM(LCASE(email))', 'BINARY LCASE(email) != email', :limit => 5)
   end
 
   def self.migrate_partners
