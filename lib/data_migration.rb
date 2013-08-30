@@ -234,6 +234,14 @@ module DataMigration
     end
   end
 
+  def self.trim_orders_email
+    Order.update_all('email = TRIM(email)', 'email != TRIM(email)', :limit => 10)
+  end
+
+  def self.fix_orders_email_delim
+    Order.update_all('email = REPLACE(email, ";", ",")', 'INSTR(orders.email, ";")', :limit => 10)
+  end
+
   def self.fill_customers_for_orders
     Order.where("customer_id IS NULL").limit(2).each do |order|
       customer = Customer.find_or_initialize_by_email(order.first_email)
@@ -245,7 +253,7 @@ module DataMigration
   end
 
   def self.fix_customers_for_orders
-    Order.joins(:customer).where('SUBSTRING_INDEX(orders.email, ",", 1) != customers.email').limit(200).each do |order|
+    Order.joins(:customer).where('TRIM(orders.email) != "" AND SUBSTRING_INDEX(TRIM(orders.email), ",", 1) != customers.email').limit(200).each do |order|
       customer = Customer.find_or_initialize_by_email(order.first_email)
       customer.skip_confirmation_notification!
       customer.save unless customer.persisted?
@@ -255,7 +263,13 @@ module DataMigration
   end
 
   def self.lowercase_customers_email
-    Customer.update_all('email = TRIM(LCASE(email))', 'BINARY LCASE(email) != email', :limit => 5)
+    Customer.update_all('email = TRIM(LCASE(email))', 'BINARY LCASE(email) != email', :limit => 200)
+  end
+
+  def self.delete_customers_without_orders
+    Customer.without_orders.limit(100).each do |customer|
+      customer.delete
+    end
   end
 
   def self.migrate_partners
