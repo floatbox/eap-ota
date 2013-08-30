@@ -312,6 +312,31 @@ describe Ticket do
         its(:original_price_tax){should == 1500.to_money("RUB")}
       end
     end
+
+    context 'exchange with split' do
+
+      subject do
+        Ticket.new(
+          :number => '123',
+          :code => '456',
+          :original_price_fare => original_price_fare,
+          :original_price_total => original_price_total,
+          :parent_number => '2341111111',
+          :parent_code => '456',
+          :price_fare_base => original_price_fare
+        ).tap do |t|
+          t.stub_chain(:order, :tickets).and_return([])
+          t.update_prices_and_add_parent
+        end
+      end
+
+      let(:original_price_total){original_price_fare + 60.to_money("USD")}
+
+      let(:original_price_fare) {430.to_money("USD")}
+
+      its(:original_price_fare) {should == 430.to_money("USD")}
+      its(:original_price_tax){should == 60.to_money("USD")}
+    end
   end
 
   describe 'price_with_payment_commission' do
