@@ -84,6 +84,18 @@ end
 rule 8 do
 important!
 ticketing_method "aviacenter"
+agent "5%"
+subagent "3%"
+consolidator "2%"
+agent_comment "Самара-Душанбе-Самара повысили вознаграждение до 5% (3%) (т.е. исключили из Группы  А)."
+subagent_comment "Самара-Душанбе-Самара повысили вознаграждение до 5% (3%) (т.е. исключили из Группы  А)."
+routes "KUF-DYU/OW,RT"
+example "kufdyu"
+end
+
+rule 9 do
+important!
+ticketing_method "aviacenter"
 agent "0.1%"
 subagent "0.5"
 consolidator "2%"
@@ -93,14 +105,14 @@ agent_comment "в размере 0,1%:"
 agent_comment "*от суммы тарифов (опубликованных в АСБ) по маршрутам:"
 agent_comment "*за каждый взятый с пассажира штраф при оформлении возврата или обмена авиабилетов с взиманием штрафных санкций;"
 subagent_comment "c 01.04.2013 г. 50 коп с билета по маршрутам:"
-routes "MOW-KGD,KZN,UFA,LED,KUF,GOJ,KRR,AER,AAQ,GBB,BAK,GDZ,KVD,LLK,SIP,MRV/OW,RT", "SVX-AER,KZN,SIP,KUF,YKS,HTA,AAQ,UFA,GDZ,EVN,KHV,VVO,KRR,KJZ,PKC,BAK,TBS/OW,RT", "LED-LWN,LLK,VVO,IKT,KHV,YKS/OW,RT", "KUF-DYU/OW,RT", "KUF-AAQ/OW,RT", "KUF-AER/OW,RT", "KUF-LBD/OW,RT", "CEK-GOJ,TAS/OW,RT", "PEE-DYU,LBD/OW,RT", "UFA-LBD,DYU/OW,RT", "KJA-IKT,MRV/OW,RT", "MRV-AER/OW,RT", "SIP-GOJ/OW,RT", "EVN-GOJ,KUF/OW,RT", "KRR-VVO,OVB/OW,RT", "GOJ-TAS,SIP,NMA/OW,RT", "IKT-PKC/OW,RT"
+routes "MOW-KGD,KZN,UFA,LED,KUF,GOJ,KRR,AER,AAQ,GBB,BAK,GDZ,KVD,LLK,SIP,MRV/OW,RT", "SVX-AER,KZN,SIP,KUF,YKS,HTA,AAQ,UFA,GDZ,EVN,KHV,VVO,KRR,KJZ,PKC,BAK,TBS/OW,RT", "LED-LWN,LLK,VVO,IKT,KHV,YKS/OW,RT", "KUF-AAQ/OW,RT", "KUF-AER/OW,RT", "KUF-LBD/OW,RT", "CEK-GOJ,TAS/OW,RT", "PEE-DYU,LBD/OW,RT", "UFA-LBD,DYU/OW,RT", "KJA-IKT,MRV/OW,RT", "MRV-AER/OW,RT", "SIP-GOJ/OW,RT", "EVN-GOJ,KUF/OW,RT", "KRR-VVO,OVB/OW,RT", "GOJ-TAS,SIP,NMA/OW,RT", "IKT-PKC/OW,RT"
 example "ledllk"
 example "svokzn"
 example "kuflbd"
 example "krrovb"
 end
 
-rule 9 do
+rule 10 do
 important!
 ticketing_method "aviacenter"
 agent "0.1%"
@@ -114,7 +126,7 @@ example "tivsvo"
 example "svotiv tivsvo"
 end
 
-rule 10 do
+rule 11 do
 important!
 ticketing_method "aviacenter"
 agent "3%"
