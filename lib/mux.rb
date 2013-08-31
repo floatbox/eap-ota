@@ -77,11 +77,11 @@ class Mux
         log_examples(recommendations)
       end
 
+      recommendations.select!(&:full_information?)
+
       benchmark 'commission matching' do
         recommendations.find_commission!
       end
-
-      recommendations.select!(&:full_information?)
 
       recommendations.recommendations.delete_if(&:ground?)
       recommendations.recommendations.reject!(&:ignored_carriers)
