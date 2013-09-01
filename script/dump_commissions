@@ -65,6 +65,7 @@ end
 
 if opts[:eval]
   puts "evaluating code..."
+  book.extend Commission::Fx
   book.instance_eval opts[:eval]
 end
 
