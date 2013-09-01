@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130827010710) do
+ActiveRecord::Schema.define(:version => 20130901140434) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -101,8 +101,6 @@ ActiveRecord::Schema.define(:version => 20130827010710) do
     t.string   "ru_longname"
     t.integer  "airline_alliance_id"
     t.string   "bonus_program_name"
-    t.integer  "gds_id"
-    t.integer  "consolidator_id"
     t.text     "interlines",          :null => false
     t.string   "color"
     t.string   "font_color"
@@ -142,12 +140,6 @@ ActiveRecord::Schema.define(:version => 20130827010710) do
   add_index "cities", ["iata"], :name => "index_cities_on_iata"
   add_index "cities", ["name_en"], :name => "index_cities_on_name_en"
   add_index "cities", ["name_ru"], :name => "index_cities_on_name_ru"
-
-  create_table "consolidators", :force => true do |t|
-    t.string "name"
-    t.string "booking_office"
-    t.string "ticketing_office"
-  end
 
   create_table "countries", :force => true do |t|
     t.string   "name_en"
@@ -271,10 +263,6 @@ ActiveRecord::Schema.define(:version => 20130827010710) do
     t.string   "proper_in"
     t.float    "lat"
     t.float    "lng"
-  end
-
-  create_table "global_distribution_systems", :force => true do |t|
-    t.string "name"
   end
 
   create_table "hot_offers", :force => true do |t|
