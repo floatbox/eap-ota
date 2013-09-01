@@ -1,6 +1,6 @@
 # encoding: utf-8
 ActiveAdmin.register Airplane do
-  menu parent: 'Dicionary'
+  menu parent: 'Dictionary'
 
   actions :all, except: [:destroy]
 
