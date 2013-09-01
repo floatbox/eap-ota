@@ -65,12 +65,12 @@ ActiveAdmin.register DeckUser, :as => "User" do
 
   member_action :lock, :method => :post do
     resource.lock_access!
-    redirect_to({:action => :show}, {:notice => "Locked!"})
+    redirect_to :back, :notice => "Locked!"
   end
 
   member_action :unlock, :method => :post do
     resource.unlock_access!
-    redirect_to({:action => :show}, {:notice => "Unlocked!"})
+    redirect_to :back, :notice => "Unlocked!"
   end
 
   action_item :only => :show do

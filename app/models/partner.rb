@@ -3,6 +3,9 @@ class Partner < ActiveRecord::Base
 
   has_paper_trail
 
+  scope :enabled, where(enabled: true)
+  scope :disabled, where(enabled: false)
+
   def initialize(*)
     super
     self.hide_income ||= false
@@ -65,5 +68,13 @@ class Partner < ActiveRecord::Base
     else
       "задайте пароль"
     end
+  end
+
+  def to_param
+    token.presence || 'anonymous'
+  end
+
+  def display_name
+    token.presence || 'anonymous'
   end
 end
