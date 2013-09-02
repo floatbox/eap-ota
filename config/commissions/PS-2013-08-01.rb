@@ -1,6 +1,7 @@
 carrier "PS", start_date: "2013-08-01"
 
 rule 1 do
+disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -13,6 +14,7 @@ example "svocdg cdgsvo"
 end
 
 rule 2 do
+disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -24,6 +26,7 @@ example "svxcdg cdgsvx"
 end
 
 rule 3 do
+disabled "переключили на downtown"
 important!
 ticketing_method "aviacenter"
 agent "7%"
@@ -38,6 +41,7 @@ example "svocdg/business cdgsvo/business"
 end
 
 rule 4 do
+disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -50,6 +54,7 @@ example "cdgsvo svocdg/ab"
 end
 
 rule 5 do
+disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
@@ -63,6 +68,7 @@ example "cdgsvo/ab"
 end
 
 rule 6 do
+disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
@@ -76,6 +82,7 @@ example "ievcdg"
 end
 
 rule 7 do
+disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
@@ -90,6 +97,7 @@ example "cdgiev ievcdg/ab"
 end
 
 rule 8 do
+disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
@@ -104,7 +112,6 @@ example "cdgiev/ab"
 end
 
 rule 9 do
-disabled "переключили на aviacenter"
 important!
 ticketing_method "downtown"
 agent "7%"
