@@ -7,39 +7,46 @@ class Commission::Formula
   include Comparable
   extend SimpleFlyweight
 
-  delegate :[], to: :decompose
+  KEYS = %w{% eur usd rub}
+  KEY_REGEXP = /(#{ Regexp.union(KEYS) })/
 
-  attr_accessor :formula, :compiled
+  delegate :[], to: :parts
 
-  def initialize formula
-    @formula = formula.to_s.strip
-    @decomposed = decompose
-    compile!
+  attr_accessor :formula, :compiled, :parts
+
+  def initialize data
+    case data
+    when Hash, Array
+      compose! data
+    else
+      parse! data
+    end
   end
 
   def complex?
-    !!formula['+']
-  end
-
-  def percentage?
-    raise ArgumentError, "#{formula} contains several parts" if complex?
-    !!formula['%']
+    @parts.keys.size > 1
   end
 
   def zero?
-    !decompose.values.any?(&:nonzero?)
+    !@parts.values.any?(&:nonzero?)
   end
 
   delegate :blank?, :to => :formula
 
-  def euro?
+  def percentage?
     raise ArgumentError, "#{formula} contains several parts" if complex?
-    !!formula['eur']
+    !!@parts['%']
   end
 
+  def euro?
+    raise ArgumentError, "#{formula} contains several parts" if complex?
+    !!@parts['eur']
+  end
+
+  # FIXME проверить где используется, можно ли туда возвращать FixNum?
   def rate
     raise ArgumentError, "#{formula} contains several parts" if complex?
-    formula.to_f
+    @parts.values.first.to_f
   end
 
   def to_s
@@ -50,47 +57,25 @@ class Commission::Formula
     "#<Fx #{formula} >"
   end
 
-  def compile!
-    return unless valid?
-    cached_rate = rate unless complex?
-
-    @compiled =
-      case
-
-      when complex?
-
-        formulas = formula.split('+').map do |f|
-          Commission::Formula.new(f)
-        end
-
-        lambda do |base, multiplier, params|
-          formulas.map { |f| f.call(base, params) }.inject(:+)
-        end
-
-      when percentage?
-
-        lambda do |base, multiplier, params|
-          cached_rate * base / 100
-        end
-
-      when euro?
-
-        lambda do |base, multiplier, params|
-          cached_rate * params[:eur].to_f * multiplier
-        end
-
-      else
-        lambda do |base, multiplier, params|
-          cached_rate * multiplier
-        end
-
-      end
+  def valid?
+    !@invalid
   end
 
   def call(base=nil, params={:eur => Amadeus::Rate.euro_rate})
-    raise ArgumentError, "formula '#{@formula}' is not valid" unless compiled
+    raise ArgumentError, "formula '#{@formula}' is not valid" unless valid?
     multiplier = (params[:multiplier] || 1).to_i
-    compiled.call(base, multiplier, params).round(2)
+    @parts.map do |part, rate|
+      case part
+      when '%'
+        rate * base / 100
+      when 'eur'
+        rate * params[:eur].to_f * multiplier
+      when 'rub'
+        rate * multiplier
+      else
+        raise ArgumentError, "unknown part: #{part} in formula #{@formula}"
+      end
+    end.sum(0).round(2)
   end
 
   alias [] call
@@ -114,10 +99,8 @@ class Commission::Formula
     end.round(2)
   end
 
-  def valid?
-    formula.blank? ||
-    !!( formula.strip =~ /^ \d+ (?: \.\d+ )? (?: % | eur )?
-              ( \s* \+ \s*  \d+ (?: \.\d+ )? (?: % | eur )? )*  $/x )
+  def == other_formula
+    @parts == other_formula.parts
   end
 
   # работает по таким законам:
@@ -129,11 +112,11 @@ class Commission::Formula
   # никаких конверсий для валют не выполняется
   def <=> other_formula
     # для нулевых формул
-    return 0 if (zero? && other_formula.zero?) || formula == other_formula.formula
+    return 0 if self == other_formula
 
-    itself, other = decompose, other_formula.decompose
+    itself, other = @parts, other_formula.parts
 
-    %w{% eur usd rub}.each do |currency|
+    KEYS.each do |currency|
       ours = itself[currency]
       another = other[currency]
       return 1 if ( ours && !another )
@@ -145,23 +128,41 @@ class Commission::Formula
     0
   end
 
+  # Вычитание формулы с формулой, почленно.
   def + other_formula
-    arithmetic :+, other_formula
+    itself, other = @parts, other_formula.parts
+
+    result = itself.merge(other)
+
+    same_keys = itself.keys & other.keys
+    same_keys.each { |key| result[key] = itself[key] + other[key] }
+
+    Commission::Formula.new(result)
   end
 
+  # Вычитание формулы из формулы, почленно.
   def - other_formula
-    arithmetic :-, other_formula
+    self + -other_formula
   end
 
-  def * (value)
-    Commission::Formula.compose(
-      Hash[ decompose.map {|k, v|  [k, v*value] } ]
+  # Унарный минус. Разворачивает все ставки.
+  def -@
+    Commission::Formula.new(
+      @parts.map {|k, v| [k, -v]}
     )
   end
 
+  # Умножает все ставки в формуле на коэффициент.
+  def * (value)
+    Commission::Formula.new(
+      @parts.map {|k, v|  [k, v*value] }
+    )
+  end
+
+  # Делит все ставки в формуле на коэффициент.
   def / (value)
-    Commission::Formula.compose(
-      Hash[ decompose.map {|k, v|  [k, v/value] } ]
+    Commission::Formula.new(
+      @parts.map {|k, v|  [k, v/value] }
     )
   end
 
@@ -182,46 +183,43 @@ class Commission::Formula
   # для обратной совместимости со старой сериализацией.
   # (ruby/object:Commission::Formula...)
   def init_with(coder)
-    @formula = coder["formula"]
-    compile!
+    formula = coder["formula"]
+    parse! formula
   end
 
   # строка => хеш, нужно для арифметических операций на формулах
-  def decompose
-    return @decomposed if @decomposed
-    pairs = formula.split('+').map do |part|
-      part.strip =~ /([-\d\.]+)([%\w]+)?/
-      currency = $2 || 'rub'
-      value = $1.to_f
+  def parse! formula
+    @formula = formula.to_s
+    pairs = @formula.split(/(?=[+-])/).map do |part|
+      part.tr! ' ', ''
+      value, currency = part.split(KEY_REGEXP)
+      currency ||= 'rub'
+      value = Float(value)
+      next if value.zero?
       [currency, value]
-    end
-    Hash[pairs]
+    end.compact
+    @parts = Hash[pairs]
+  rescue TypeError, ArgumentError
+    @invalid = true
   end
 
-  class << self
-    def compose hash
-      string = hash.map{ |currency, value|
-        value = value.to_i if value == value.to_i
-        # делаем числа без вещественной части интами
-        "#{value}#{currency}" if value.nonzero?
-      }.compact.join(' + ').downcase.gsub(/rub/, '')
-      # пустая строка не должна возвращаться со всеми пустыми значениями
-      new(string.empty? ? '0' : string)
-    end
-  end
-
-  private
-
-  # "3% + 5rub" + "2%" = "5% + 5rub"
-  def arithmetic method, other_formula
-    itself, other = decompose, other_formula.decompose
-    ikeys, okeys = itself.keys, other.keys
-    same = ikeys & okeys
-
-    result = itself.merge(other)
-    same.each { |key| result[key] = itself[key].__send__(method, other[key]) }
-
-    Commission::Formula.compose(result)
+  def compose! parts
+    @parts = Hash[parts]
+    @parts.assert_valid_keys(KEYS)
+    @parts.reject! {|k, v| v.nil? || v.zero?}
+    string = KEYS.map { |part|
+      rate = @parts[part]
+      next unless rate
+      part = '' if part == 'rub'
+      # делаем числа без вещественной части интами
+      rate = rate.to_i if rate == rate.to_i
+      sign = (rate < 0) ? '-' : '+'
+      "#{sign} #{rate.abs}#{part}"
+    }.compact.join(' ').sub(/^\+ /,'').sub(/^- /,'-')
+    @formula = string.presence || '0'
+  rescue ArgumentError
+    @formula = parts.to_s
+    @invalid = true
   end
 
 end

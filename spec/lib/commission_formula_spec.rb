@@ -73,6 +73,19 @@ describe Commission::Formula do
     end
   end
 
+  describe "constructor" do
+    #explicit
+    specify { Fx('rub' => 3).should == Fx('3') }
+    specify { Fx('rub' => 3, '%' => 2).should == Fx('3 + 2%') }
+    # с нулевыми значениями
+    specify { Fx('rub' => 3, '%' => 0).should == Fx('3') }
+    specify { Fx('rub' => 0, '%' => 0).should == Fx('0') }
+    # FIXME? возможно стоит рейзить в этом случае
+    specify { Fx({}).should == Fx('0') }
+    specify { Fx('rub' => 3, '%' => -2).should == Fx('3 - 2%') }
+  end
+
+
   describe "#zero?" do
     specify { Fx('0').should be_zero }
     specify { Fx('0.00').should be_zero }
@@ -144,13 +157,12 @@ describe Commission::Formula do
   end
 
   describe "#==" do
-    it "should return true for 0% == 0 comparison" do
-      (Fx('0') == Fx('0%')).should be_true
-    end
-
-    it "should return true for 0usd == 0 comparison" do
-      (Fx('0usd') == Fx('0')).should be_true
-    end
+    specify { Fx('1').should == Fx('1') }
+    specify { Fx('1.0').should == Fx('1') }
+    specify { Fx('2% + 1').should == Fx('1 + 2%') }
+    specify { Fx('-2.3% + 1').should == Fx('1 - 2.3%') }
+    specify { Fx('0').should == Fx('0%') }
+    specify { Fx('0usd').should == Fx('0') }
   end
 
   describe "#+" do
@@ -166,32 +178,21 @@ describe Commission::Formula do
   describe "#-" do
     specify { (Fx('3%') - Fx('4%')).should == Fx('-1%') }
     specify { (Fx('3% + 4eur') - Fx('4eur')).should == Fx('3%') }
-    specify { (Fx('3% + 4') - Fx('5')).should == Fx('3% + -1') }
-    specify { (Fx('3% + 4') - Fx('5 + 2%')).should == Fx('1% + -1') }
-    specify { (Fx('3% + 4rub') - Fx('5 + 2%')).should == Fx('1% + -1') }
-    specify { (Fx('3.0% + 4rub') - Fx('5.0 + 2.0%')).should == Fx('1% + -1') }
+    specify { (Fx('3% + 4') - Fx('5')).should == Fx('3% - 1') }
+    specify { (Fx('3% + 4') - Fx('5 + 2%')).should == Fx('1% - 1') }
+    specify { (Fx('3% + 4rub') - Fx('5 + 2%')).should == Fx('1% - 1') }
+    specify { (Fx('3.0% + 4rub') - Fx('5.0 + 2.0%')).should == Fx('1% - 1') }
     specify { (Fx('2%') - Fx('0')).should == Fx('2%') }
+    specify { (Fx('5') - Fx('1%')).should == Fx('-1% + 5') }
   end
 
-  describe ".compose" do
-    #implicit
-    specify { Commission::Formula.compose('' => 3).should == Fx('3') }
-    specify { Commission::Formula.compose('' => 3, '%' => 2).should == Fx('3 + 2%') }
-    #explicit
-    specify { Commission::Formula.compose('rub' => 3).should == Fx('3') }
-    specify { Commission::Formula.compose('rub' => 3, '%' => 2).should == Fx('3 + 2%') }
-    # с нулевыми значениями
-    specify { Commission::Formula.compose('rub' => 3, '%' => 0).should == Fx('3') }
-    specify { Commission::Formula.compose('rub' => 0, '%' => 0).should == Fx('0') }
-    # FIXME? возможно стоит рейзить в этом случае
-    specify { Commission::Formula.compose({}).should == Fx('0') }
-  end
-
-  describe "#decompose" do
-    specify { Fx('3').decompose.should == {'rub' => 3} }
-    specify { Fx('3rub').decompose.should == {'rub' => 3} }
-    specify { Fx('3 + 4%').decompose.should == {'rub' => 3, '%' => 4} }
-    specify { Fx('2usd + 4%').decompose.should == {'usd' => 2, '%' => 4} }
+  describe "#parts" do
+    specify { Fx('3').parts.should == {'rub' => 3} }
+    specify { Fx('3rub').parts.should == {'rub' => 3} }
+    specify { Fx('3 + 4%').parts.should == {'rub' => 3, '%' => 4} }
+    specify { Fx('2usd + 4%').parts.should == {'usd' => 2, '%' => 4} }
+    specify { Fx('2usd - 4%').parts.should == {'usd' => 2, '%' => -4} }
+    specify { Fx('0usd').parts.should == {} }
   end
 
   describe "#<=>" do
