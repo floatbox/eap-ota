@@ -46,6 +46,9 @@ ActiveAdmin.register DeckUser, :as => "User" do
       f.input :first_name
       f.input :last_name
     end
+    f.inputs "Permissions" do
+      f.input :roles, as: :check_boxes, collection: %W[admin hoteditor], multiple: true
+    end
     f.actions
   end
 
