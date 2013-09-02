@@ -6,7 +6,7 @@ new_book = Commission::Book.new
 old_book.pages.each do |old_page|
   # ticketing_methods = old_page.ticketing_methods
   ticketing_methods = old_page.rules.map(&:ticketing_method).uniq.compact
-  if ticketing_methods.size > 0
+  if ticketing_methods.size > 1
     puts "splitting #{old_page.carrier}-#{old_page.start_date}"
   end
   ticketing_methods.each do |ticketing_method|
