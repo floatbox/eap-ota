@@ -8,6 +8,7 @@ init: function() {
     }
     this.initCalendar();
     this.initTimeline();
+    this.initArrows();
     this.initScrolling();
     this.initDays();
 },
@@ -176,6 +177,23 @@ initScrolling: function() {
     this.fscrollbar = this.el.find('.sdt-ftab');
     this.scrollTo(0);
 },
+initArrows: function() {
+    var that = this;
+    this.prevArrow = this.el.find('.sdca-prev');
+    this.nextArrow = this.el.find('.sdca-next');
+    this.prevArrow.click(function() {
+        that.scrollTo(Math.min(that.curfixed || that.position, that.position) - 1);
+    });
+    this.nextArrow.click(function() {
+        that.scrollTo(that.position + 1);
+    });    
+},
+updateArrows: function() {
+    var nm = this.monthes[this.position + 2];
+    var pm = this.monthes[Math.min(this.curfixed !== undefined ? this.curfixed : this.position, this.position) - 1];
+    this.prevArrow.html(pm ? '&larr;&nbsp;' + pm.ntitle.capitalize() : '').toggle(pm !== undefined);
+    this.nextArrow.html(nm ? nm.ntitle.capitalize() + '&nbsp;&rarr;' : '').toggle(nm !== undefined);    
+},
 getTarget: function(el) {
     var dp = el.data('dindex');
     if (this.fixed !== undefined) {
@@ -249,6 +267,7 @@ scrollTo: function(np, instant) {
     this.slider.stop().animate({left: this.mwidth * -np}, options);
     this.curfixed = this.fixed;
     this.position = np;
+    this.updateArrows();
     clearTimeout(this.sftimer);    
 },
 initDays: function() {
