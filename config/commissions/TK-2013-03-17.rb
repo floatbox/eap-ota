@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "5%"
+discount "6%"
 agent_comment "7% от полного опубл. тарифа IATA на рейсы TK;"
 agent_comment "+ 7% от тарифа Эконом класса на рейсы TK;"
 subagent_comment "5% от тарифа экономического класса на рейсы TK;"
@@ -55,7 +55,7 @@ rule 5 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "5%"
+discount "6%"
 agent_comment "Как обычная 7% (Билеты «Интерлайн» под кодом TK могут быть выписаны только в случае существования опубл. тарифов и только при условии, если TK выполняет первый рейс)"
 subagent_comment "Как обычная 5%"
 interline :first

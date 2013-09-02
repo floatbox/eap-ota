@@ -29,7 +29,7 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
-discount "1.5%"
+discount "2%"
 agent_comment "1 euro с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 subagent_comment "5 руб. с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 interline :first
