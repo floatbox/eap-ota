@@ -133,18 +133,6 @@ namespace :deploy do
 
   # daemons
 
-  task :restart_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon restart"
-  end
-
-  task :start_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon start"
-  end
-
-  task :stop_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon stop"
-  end
-
   task :restart_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
     run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job restart"
   end
@@ -158,18 +146,14 @@ namespace :deploy do
   end
 
   task :restart_services do
-    # уже полгода не используем
-    # restart_rambler_daemon
     restart_delayed_job
   end
 
   task :start_services do
-    start_rambler_daemon
     start_delayed_job
   end
 
   task :stop_services do
-    stop_rambler_daemon
     stop_delayed_job
   end
 
