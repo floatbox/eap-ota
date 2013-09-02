@@ -2,7 +2,7 @@
 module MoneyColumns
   extend ActiveSupport::Concern
   # FIXME вернуть валидацию на два знака после запятой
-  MONEY_VALIDATION_REGEXP = /^ \s* \d+ (?:\.\d+)? \s* (?:USD|EUR|RUB) \s* $/x
+  MONEY_VALIDATION_REGEXP = /^ \s* (?:-\s*)? \d+ (?:\.\d+)? \s* (?:USD|EUR|RUB) \s* $/x
 
   def has_money_columns *columns
     money_columns = columns.every.to_sym
