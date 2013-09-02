@@ -108,7 +108,7 @@ describe Search::Urls::Decoder do
 
           its(:from) { should == City.find_by_iata('AMS') }
           its(:to) { should == City.find_by_iata('PAR') }
-          its(:date) { should == Date.parse('1st Sep 2013') }
+          its(:date) { should == Date.parse('1st Sep 2014') }
         end
       end
 
@@ -137,7 +137,7 @@ describe Search::Urls::Decoder do
 
           its(:from) { should == City.find_by_iata('AMS') }
           its(:to) { should == City.find_by_iata('PAR') }
-          its(:date) { should == Date.parse('1st Sep 2013') }
+          its(:date) { should == Date.parse('1st Sep 2014') }
         end
       end
 
