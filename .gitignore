@@ -7,8 +7,7 @@ config/mongoid.yml
 log/*
 log/**/*.xml
 !log/**/.gitkeep
-tmp/*
-!tmp/i18n-js.cache
+tmp
 db/*.sqlite3
 public/assets
 public/system
