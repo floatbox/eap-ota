@@ -55,6 +55,21 @@ describe AutoTicketStuff do
 
     context '9 passengers' do
       before do
+        @old_order = create(:order, :blank_count => 3, :ticket_status => 'booked', :stored_flights => [flight1, flight2])
+      end
+
+      subject do
+        AutoTicketStuff.new(order: create(:order, :blank_count => 6, :ticket_status => 'booked', :stored_flights => [flight1, flight2])).tap(&:group_booking?)
+      end
+
+      its(:group_booking?) {should be_true}
+      specify{subject.instance_variable_get(:@other_order_pnrs).should == [@old_order.pnr_number]}
+
+    end
+
+    context 'some flights are same, some differ' do
+
+      before do
         create(:order, :blank_count => 3, :ticket_status => 'booked', :stored_flights => [flight1, flight2])
       end
 
@@ -62,7 +77,7 @@ describe AutoTicketStuff do
         AutoTicketStuff.new(order: create(:order, :blank_count => 6, :ticket_status => 'booked', :stored_flights => [flight2, flight3]))
       end
 
-      its(:group_booking?) {should be_true}
+      its(:group_booking?) {should be_false}
     end
   end
 
