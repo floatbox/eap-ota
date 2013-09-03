@@ -5,12 +5,18 @@ class Admin::TicketsController < Admin::EviterraResourceController
 
   def create
     super
-    @item.order.recalculate_prices if @item.order
+    if @item.order
+      @item.order.recalculate_prices
+      @item.order.update_has_refunds
+    end
   end
 
   def update
     super
-    @item.order.recalculate_prices if @item.order
+    if @item.order
+      @item.order.recalculate_prices
+      @item.order.update_has_refunds
+    end
   end
 
   def show_versions
@@ -45,11 +51,9 @@ class Admin::TicketsController < Admin::EviterraResourceController
   def delete_refund
     get_object
     @item.destroy if !@item.processed && @item.kind == 'refund'
-    @item.order.recalculate_prices if @item.order
     redirect_to :action => 'show',
                 :controller => 'orders',
                 :id => @item.order.id
-
   end
 
   def confirm_refund
@@ -60,7 +64,6 @@ class Admin::TicketsController < Admin::EviterraResourceController
       @item.status = 'pending'
       @item.ticketed_date = nil
     end
-    @item.order.recalculate_prices if @item.order
     render :action => :edit
   end
 
