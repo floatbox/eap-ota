@@ -165,6 +165,11 @@ namespace :deploy do
   after "deploy:rollback", "deploy:restart_services"
 
   after "deploy:update", "newrelic:notice_deployment"
+
+  task :fix_i18njs, :roles => :web do
+    run "cd #{latest_release} && touch tmp/i18n-js.cache"
+  end
+  before "deploy:assets:precompile", "deploy:fix_i18njs"
 end
 
 desc "Edit local config on all servers and restart instances if updated"
