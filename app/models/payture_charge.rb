@@ -131,7 +131,7 @@ class PaytureCharge < Payment
   end
 
   def income_payment_gateways
-    commission.call(price)
+    commission.apply(price)
   end
 
 end

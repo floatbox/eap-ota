@@ -82,7 +82,7 @@ module Amadeus
           agent_commission.complex? || agent_commission.percentage?
         # рублевая комиссия округляется до ближайшего целого
         # евро подставляются в дефолтных параметрах формулы из конфига (зря?)
-        agent_commission.call.round
+        agent_commission.apply.round
       end
 
       # подавление ошибки

@@ -52,7 +52,7 @@ module Pricing
 
     # комиссия платежного шлюза
     def price_payment
-      Payment.commission.reverse_call(price_total)
+      Payment.commission.reverse_apply(price_total)
     end
 
     # "налоги и сборы" для отображения клиенту
@@ -91,28 +91,28 @@ module Pricing
     end
 
     def price_agent
-      commission_agent.call(price_fare, :multiplier =>  blank_count)
+      commission_agent.apply(price_fare, :multiplier =>  blank_count)
     end
 
     def price_subagent
       return 0 unless commission
-      commission_subagent.call(price_fare, :multiplier =>  blank_count)
+      commission_subagent.apply(price_fare, :multiplier =>  blank_count)
     end
 
     def price_consolidator
-      commission_consolidator.call(price_fare, :multiplier => blank_count)
+      commission_consolidator.apply(price_fare, :multiplier => blank_count)
     end
 
     def price_blanks
-      commission_blanks.call(price_fare, :multiplier => blank_count)
+      commission_blanks.apply(price_fare, :multiplier => blank_count)
     end
 
     def price_discount
-      -commission_discount.call(price_fare, :multiplier => blank_count)
+      -commission_discount.apply(price_fare, :multiplier => blank_count)
     end
 
     def price_our_markup
-      commission_our_markup.call(price_fare, :multiplier => blank_count)
+      commission_our_markup.apply(price_fare, :multiplier => blank_count)
     end
 
     def price_declared_discount

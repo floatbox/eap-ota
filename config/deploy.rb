@@ -134,15 +134,15 @@ namespace :deploy do
   # daemons
 
   task :restart_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job restart"
+    run "sudo /usr/bin/sv restart /etc/service/delayed_job"
   end
 
   task :start_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job start"
+    run "sudo /usr/bin/sv start /etc/service/delayed_job"
   end
 
   task :stop_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job stop"
+    run "sudo /usr/bin/sv stop /etc/service/delayed_job"
   end
 
   task :restart_services do

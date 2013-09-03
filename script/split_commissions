@@ -6,8 +6,8 @@ new_book = Commission::Book.new
 old_book.pages.each do |old_page|
   # ticketing_methods = old_page.ticketing_methods
   ticketing_methods = old_page.rules.map(&:ticketing_method).uniq.compact
-  if ticketing_methods.size > 0
-    puts "splitting #{old_page.carrier}-#{old_page.start_date}"
+  if ticketing_methods.size > 1
+    puts "splitting " + ticketing_methods.map {|t| [old_page.carrier, t, old_page.start_date].compact.join('-') }.join(' ')
   end
   ticketing_methods.each do |ticketing_method|
     new_page = new_book.create_page carrier: old_page.carrier, ticketing_method: ticketing_method, start_date: old_page.start_date
