@@ -10,7 +10,16 @@ class Commission::Formula
   KEYS = %w{% eur usd rub}
   KEY_REGEXP = /(#{ Regexp.union(KEYS) })/
 
-  delegate :[], to: :parts
+  def self.wrap(formula_or_other)
+    if formula_or_other.is_a? self
+      formula_or_other
+    else
+      new(formula_or_other)
+    end
+  end
+
+  # временно уберу, а то раньше [] работало как вызов формулы. возможны последствия.
+  # delegate :[], to: :parts
 
   attr_accessor :formula, :compiled, :parts
 
@@ -61,12 +70,18 @@ class Commission::Formula
     !@invalid
   end
 
-  def call(base=nil, params={:eur => Amadeus::Rate.euro_rate})
-    raise ArgumentError, "formula '#{@formula}' is not valid" unless valid?
+  def assert_valid!
+    valid? or
+      raise ArgumentError, "#{self} is not valid", caller
+  end
+
+  def apply(base=nil, params={:eur => Amadeus::Rate.euro_rate})
+    assert_valid!
     multiplier = (params[:multiplier] || 1).to_i
     @parts.map do |part, rate|
       case part
       when '%'
+        # FIXME подумать о знаках. Чему на самом деле должен равняться Fx('-3%').apply(-10) ?
         rate * base / 100
       when 'eur'
         rate * params[:eur].to_f * multiplier
@@ -78,15 +93,13 @@ class Commission::Formula
     end.sum(0).round(2)
   end
 
-  alias [] call
-
-  # fx#reverse_call считает надбавку к числу, такую, что
+  # fx#reverse_apply считает надбавку к числу, такую, что
   # fx#call на сумму числа и надбавки вернет как раз эту надбавку.
   # сейчас служит для рассчета компенсации за эквайринг
   #
   # TODO euro? usd? multiplier? complex?
-  def reverse_call(base=nil)
-    raise ArgumentError, "formula '#{@formula}' is not valid" unless valid?
+  def reverse_apply(base=nil)
+    assert_valid!
     if complex?
       # TODO write something? for cases like "2.34% + 0.1usd". it should be possible
       raise TypeError, "complex formulas aren't reversible for now"
@@ -111,25 +124,18 @@ class Commission::Formula
   # % > eur > usd > rub
   # никаких конверсий для валют не выполняется
   def <=> other_formula
-    # для нулевых формул
-    return 0 if self == other_formula
-
-    itself, other = @parts, other_formula.parts
-
-    KEYS.each do |currency|
-      ours = itself[currency]
-      another = other[currency]
-      return 1 if ( ours && !another )
-      return -1 if ( another && !ours )
-      cmp = ours <=> another if ( ours && another )
-      return cmp if cmp && cmp.nonzero?
+    KEYS.each do |part|
+      ours = @parts[part] || 0
+      others = other_formula.parts[part] || 0
+      cmp = (ours <=> others).nonzero?
+      return cmp if cmp
     end
-
     0
   end
 
   # Вычитание формулы с формулой, почленно.
   def + other_formula
+    other_formula = Commission::Formula.wrap(other_formula)
     itself, other = @parts, other_formula.parts
 
     result = itself.merge(other)
@@ -142,7 +148,7 @@ class Commission::Formula
 
   # Вычитание формулы из формулы, почленно.
   def - other_formula
-    self + -other_formula
+    self + -Commission::Formula.wrap(other_formula)
   end
 
   # Унарный минус. Разворачивает все ставки.
@@ -166,6 +172,11 @@ class Commission::Formula
     )
   end
 
+  # вычленяет часть формулы
+  def extract(part)
+    Commission::Formula.new(part => @parts[part])
+  end
+
   # Сериализация
 
   # для YAML/Psych
@@ -186,6 +197,8 @@ class Commission::Formula
     formula = coder["formula"]
     parse! formula
   end
+
+  private
 
   # строка => хеш, нужно для арифметических операций на формулах
   def parse! formula
