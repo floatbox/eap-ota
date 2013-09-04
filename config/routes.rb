@@ -92,6 +92,8 @@ Eviterra::Application.routes.draw do
   match 'contacts' => 'about#contacts', :as => :about
   match 'about/:action' => 'about', :as => :about
   match 'partners' => 'about#partners', :as => :about
+  
+  match 'insurance' => 'insurance#index', :as => :insurance  
 
   match "whereami" => 'home#whereami', :as => :whereami
   match 'status' => 'home#status'

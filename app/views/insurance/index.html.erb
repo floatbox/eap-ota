@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang="ru-RU">
+<head>
+	<meta charset="utf-8">
+    <title>Страховки</title>
+    <meta name="description" content="Eviterra.com — простой, удобный и красивый способ найти и купить авиабилет. Поиск, выбор рейса и бронирование онлайн. Цены на авиабилеты. +7 495 660-35-20">
+    <meta name="keywords" content="авиабилет, авиакасса, авиабилеты купить, бронирование, выбрать рейс, авиарейс, перелет, дешевые авиабилеты, цены на билеты, онлайн бронирование, эвитерра, eviterra, спецпредложения, авиакомпании, расписание рейсов, маршрут, агентство, турагентство, путешествия">
+    <%= render 'shared/head' %>
+    <%= stylesheet_link_tag 'static/all' %>
+    <%= javascript_include_tag 'static' %>
+</head>
+<body>
+<div class="page-wrapper">
+
+<%= render 'shared/header' %>
+
+<script id="cheFullScrpt" type="text/javascript">
+var che = che || {};che.options = {"partner":153, "width":"100%", "colors":{}};(function() { var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = "//partners.cherehapa.ru/js/forms/full.js"; var ss = document.getElementsByTagName("script")[0]; ss.parentNode.insertBefore(s, ss); })();
+</script>
+
+<div class="page-buffer" style="margin-top: 20px;"></div>
+</div>
+<%= render 'shared/footer' %>
+</body>
+</html>
