@@ -81,6 +81,6 @@ apply: function() {
     }
 },
 position: function() {
-    return this.el.position().top - 36;
+    return this.el.position().top - 62;
 }
 };
