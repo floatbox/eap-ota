@@ -86,6 +86,7 @@ gem 'hpricot', require: false
 
 gem 'activeadmin'
 gem 'cancan'
+gem 'draper'
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
