@@ -11,11 +11,20 @@ OptionParser.new do |op|
   op.on "-t", "--trash", "Skip trash tables.", &setopt[:trash]
   op.on "-d", "--data", "Skip data tables.", &setopt[:data]
   op.on "-o", "--others", "Dump schemas for other tables.", &setopt[:others]
+  op.on "-p", "--pretend", "Don't run commands, just print them.", &setopt[:pretend]
   op.on_tail("-h", "--help", "Show this message.") do
     puts op
     exit
   end
 end.parse!
+
+runner = proc do |cmd|
+  if opts[:pretend]
+    puts cmd
+  else
+    system cmd
+  end
+end
 
 # FIXME просмотреть
 ALL_TABLES = %W(
@@ -104,10 +113,10 @@ cmd_pass += " -p#{cfg['password']}" if cfg['password']
 
 # дампит схему и данные для неигнорируемых таблиц
 ignore_tables_cmd = skip_tables.map { |t| "--ignore-table=#{cfg['database']}.#{t}"}.join(' ')
-system "#{cmd_pass} #{cfg['database']} #{ignore_tables_cmd}"
+runner.call "#{cmd_pass} #{cfg['database']} #{ignore_tables_cmd}"
 
 if opts[:others]
   # дампит только схему для игнорируемых таблиц
   only_tables_cmd = skip_tables.join(' ') + ' --no-data'
-  system "#{cmd_pass} #{cfg['database']} #{only_tables_cmd}"
+  runner.call "#{cmd_pass} #{cfg['database']} #{only_tables_cmd}"
 end
