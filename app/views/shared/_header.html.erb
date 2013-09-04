@@ -75,41 +75,70 @@ I18n.locale = '<%= I18n.locale %>';
 
 <div id="page-header">
 <div class="ph-content">
-    <div class="ph-logo">
-        <a href="/" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
-    </div>
-    <div id="ph-teaser">
-        Авиабилеты дешевле, чем у авиакомпаний. <div class="pht-wrapper"><span class="link pht-why">Почему?</span>
-        <div class="pht-popup">
-            <div class="phtp-close">&times;</div>
-            <h6 class="phtp-title">Почему?</h6>
-            <p class="phtp-text">Условия нашего сотрудничества со&nbsp;многими авиакомпаниями позволяют нам предоставлять скидки от&nbsp;их&nbsp;официальных тарифов.</p>
-            <p class="phtp-text">Вот почему зачастую у&nbsp;нас дешевле.</p>
+    <div class="ph-bar">
+        <div class="ph-logo">
+            <a href="/" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
         </div>
+        <% if admin_user %>
+        <div class="ph-lang">
+            <span class="phl-item<% if I18n.locale != :ru %> phl-link<% end %>">RU</span>
+            <span class="phl-item<% if I18n.locale != :en %> phl-link<% end %>" data-locale="en">EN</span>
         </div>
+        <% end %>
     </div>
-
-    <% if admin_user %>
-    <div class="ph-lang">
-        <% if I18n.locale == :en %>
-            <span class="link">RU</span>
+    <div class="ph-tabs">
+        <% if controller.controller_name == 'home' || controller.controller_name == 'booking' %>
+        <div class="ph-tab pht-selected" id="pht-tickets">
+            <div class="pht-content">
+                <span class="pht-title">Авиабилеты</span>
+                <span class="pht-tip">Дешевле, чем у&nbsp;авиакомпаний <span class="phtt-link">Почему?</span></span>
+            </div>
         <% else %>
-            <span class="link" data-locale="en">EN</span>
-        <% end %>    
+        <div class="ph-tab" id="pht-tickets">
+            <a class="pht-content" href="/">
+                <span class="pht-title">Авиабилеты</span>
+                <span class="pht-tip">Дешевле, чем у&nbsp;авиакомпаний <span class="phtt-link">Почему?</span></span>
+            </a>
+        <% end %>
+            <div class="pht-popup">
+                <div class="phtp-close">&times;</div>
+                <p class="phtp-text">Условия нашего сотрудничества со&nbsp;многими авиакомпаниями позволяют нам предоставлять скидки от&nbsp;их&nbsp;официальных тарифов.</p>
+                <p class="phtp-text">Вот почему зачастую у&nbsp;нас дешевле.</p>
+            </div>    
+        </div>
+        <div class="ph-tab">
+            <a class="pht-content" href="https://ostrovok.ru/?partner_slug=eviterracom" target="_blank">
+                <span class="pht-title">Отели</span>
+                <span class="pht-tip">300<span class="thousand">000</span> по всему миру, лучшие условия</span>
+            </a>
+        </div>
+        <% if controller.controller_name == 'insurance' %>
+        <div class="ph-tab pht-selected">
+            <div class="pht-content">
+                <span class="pht-title">Страховки</span>
+                <span class="pht-tip">Электронные полисы, подходят для получения визы</span>            
+            </div>
+        </div>
+        <% else %>
+        <div class="ph-tab">
+            <a class="pht-content" href="/insurance">
+                <span class="pht-title">Страховки</span>
+                <span class="pht-tip">Электронные полисы, подходят для получения визы</span>
+            </a>
+        </div>
+        <% end %>
     </div>
-    <% end %>
 
-    <% if admin_user %>
-    <%= render "profile/popup" %>
-    <% end %>
+    <%= render "profile/popup" if admin_user %>
 
+    <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
     <div class="ph-social">
         <a target="_blank" class="phs-icon phs-facebook" title="Фейсбук" href="https://www.facebook.com/eviterra/">&nbsp;</a>
         <a target="_blank" class="phs-icon phs-vkontakte" title="ВКонтакте" href="http://vk.com/eviterra">&nbsp;</a>
         <a target="_blank" class="phs-icon phs-twitter" title="Твиттер" href="https://twitter.com/eviterra">&nbsp;</a>
         <a target="_blank" class="phs-icon phs-google" title="Блог" href="https://plus.google.com/103322039453589743139">&nbsp;</a>    
     </div>
-    <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
+
 </div>
 </div>
 <div class="ph-placeholder">
@@ -118,8 +147,7 @@ I18n.locale = '<%= I18n.locale %>';
 
 <script type="text/javascript">
 (function(){
-    var teaser = $('#ph-teaser');
-    var popup = teaser.find('.pht-popup').click(function(event) {
+    var popup = $('#pht-tickets .pht-popup').click(function(event) {
         event.stopPropagation();
     });
     var hide = function(event) {
@@ -128,14 +156,20 @@ I18n.locale = '<%= I18n.locale %>';
             popup.hide();
         }
     };
-    teaser.find('.pht-why').click(function() {
-        popup.show();
-        setTimeout(function() {
-            $('body').on('click keydown', hide);
-        }, 10);
-    });
-    teaser.find('.phtp-close').click(function(event) {
+    popup.find('.phtp-close').click(function(event) {
         hide(event);
+    });
+    $('#pht-tickets .phtt-link').click(function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        if (popup.is(':visible')) {
+            hide(event);
+        } else {
+            popup.show();
+            setTimeout(function() {
+                $('body').on('click keydown', hide);
+            }, 10);
+        }
     });
 })();
 </script>

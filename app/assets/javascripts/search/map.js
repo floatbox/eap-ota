@@ -20,7 +20,7 @@ bindResize: function() {
     });
 },
 resize: function(instant) {
-    var dh = 36; // Page header
+    var dh = 62; // Page header
     dh += search.locations.el.height();
     dh += search.dates.el.height() + 2;
     dh += search.options.el.height();
