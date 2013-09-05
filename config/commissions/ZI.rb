@@ -34,7 +34,7 @@ example "svocdg/q"
 end
 
 rule 4 do
-disabled "Система не дает интерлайн"
+no_commission "проверить: Система не дает интерлайн"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"

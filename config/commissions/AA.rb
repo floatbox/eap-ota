@@ -36,7 +36,7 @@ example "miaiad iadmia/ab"
 end
 
 rule 4 do
-disabled "ни разу не попадались"
+not_implemented "не умеем отлавливать fare basis"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"

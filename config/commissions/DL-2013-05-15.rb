@@ -41,20 +41,6 @@ example "svotam/j tamsvo/z"
 end
 
 rule 4 do
-disabled "DL/AFKL/AZ Comission programm"
-ticketing_method "downtown"
-agent "5%"
-subagent "3%"
-discount "4%"
-tour_code "RUNYPREM"
-agent_comment "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ (до NYC Tour Code RUNYPREM);"
-subagent_comment "3%"
-subclasses "JCDZI"
-routes "MOW-NYC/OW,RT"
-example "svojfk/d jfksvo/i"
-end
-
-rule 5 do
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"
@@ -67,7 +53,7 @@ routes "MOW-US,CA/OW,RT"
 example "svoyyz/c yyzsvo/i"
 end
 
-rule 6 do
+rule 5 do
 important!
 ticketing_method "downtown"
 agent "8%"
@@ -83,7 +69,7 @@ example "svojfk/d jfksvo/m"
 example "jfksvo/x"
 end
 
-rule 7 do
+rule 6 do
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"
@@ -97,7 +83,7 @@ example "zigjfk/i jfkzig/s"
 example "accjfk/k jfkacc/k"
 end
 
-rule 8 do
+rule 7 do
 important!
 ticketing_method "aviacenter"
 agent "1%"
@@ -112,7 +98,7 @@ example "accjfk/su:dl jfkacc/su:dl"
 example "jfksvo/x/su:dl"
 end
 
-rule 9 do
+rule 8 do
 important!
 ticketing_method "downtown"
 agent "5%"
@@ -127,7 +113,7 @@ example "zigjfk/i/az:dl jfkzig/s/az:dl"
 example "accjfk/l/az:dl jfkacc/n/az:dl"
 end
 
-rule 10 do
+rule 9 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
@@ -145,7 +131,7 @@ example "cdgoko"
 example "okomia"
 end
 
-rule 11 do
+rule 10 do
 important!
 ticketing_method "aviacenter"
 agent "1%"
@@ -159,7 +145,7 @@ example "miadtw dtwmia"
 example "miadtw dtwmia/ab"
 end
 
-rule 12 do
+rule 11 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
@@ -170,7 +156,7 @@ interline :absent
 example "cdgsvo/ab"
 end
 
-rule 13 do
+rule 12 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"

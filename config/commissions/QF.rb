@@ -1,7 +1,6 @@
-carrier "QF"
+carrier "QF", no_commission: "not bsp"
 
 rule 1 do
-disabled "not bsp"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "4.9%"

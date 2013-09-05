@@ -1,7 +1,6 @@
-carrier "HY"
+carrier "HY", no_commission: "не bsp"
 
 rule 1 do
-disabled "не bsp"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -12,7 +11,6 @@ example "svocdg"
 end
 
 rule 2 do
-disabled "не bsp"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"

@@ -64,7 +64,7 @@ example "okojog"
 end
 
 rule 6 do
-disabled "no subagent... FLEX PEX?"
+not_implemented "FLEX PEX?"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"

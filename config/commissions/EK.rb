@@ -63,7 +63,7 @@ example "svocdg/business cdgsvo/ab/business svoled/business ledsvo/business"
 end
 
 rule 6 do
-disabled "Пока не разруливается с чистым экономом на уровне спеки: также как и с OW example в чистом правиле не сделать"
+not_implemented "Пока не разруливается с чистым экономом на уровне спеки: также как и с OW example в чистом правиле не сделать"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"

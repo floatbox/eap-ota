@@ -1,7 +1,6 @@
-carrier "J2"
+carrier "J2", no_commission: "no etkt"
 
 rule 1 do
-disabled "no etkt"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"

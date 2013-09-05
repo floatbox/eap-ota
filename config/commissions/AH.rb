@@ -1,7 +1,6 @@
-carrier "AH"
+carrier "AH", no_commission: "проверить: PROHIBITED TICKETING CARRIER c Apr 20 2013"
 
 rule 1 do
-disabled "PROHIBITED TICKETING CARRIER"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"

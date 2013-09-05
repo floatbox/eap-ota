@@ -1,7 +1,6 @@
-carrier "GF"
+carrier "GF", no_commission: "не bsp"
 
 rule 1 do
-disabled "не bsp"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -11,7 +10,6 @@ subagent_comment "5% от тарифа на международные рейс�
 end
 
 rule 2 do
-disabled "не bsp"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
