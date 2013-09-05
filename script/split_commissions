@@ -1,7 +1,7 @@
 #!script/rails runner
 puts "reading book"
 old_book = Commission::Reader.new.read_file('config/commissions')
-puts "splitting books"
+puts "splitting pages"
 new_book = Commission::Book.new
 old_book.pages.each do |old_page|
   # ticketing_methods = old_page.ticketing_methods
@@ -11,10 +11,24 @@ old_book.pages.each do |old_page|
   end
   ticketing_methods.each do |ticketing_method|
     new_page = new_book.create_page carrier: old_page.carrier, ticketing_method: ticketing_method, start_date: old_page.start_date
+    other_examples = []
     old_page.rules.each do |old_rule|
       if old_rule.ticketing_method == ticketing_method || old_rule.ticketing_method.nil?
         new_page.register old_rule.clone
+      else
+        other_examples << old_rule.examples.every.code if old_rule.examples
       end
+    end
+    if other_examples.any?
+      # puts "collecting other_examples: #{other_examples.join(' ')}"
+      new_page.create_rule no_commission: "распределить: продавались по правилам для других офисов выписки.",
+        examples: other_examples,
+        # чтобы не падал dumper
+        interline: [:no],
+        discount: 0,
+        our_markup: 0,
+        consolidator: 0,
+        blanks: 0
     end
   end
 end
