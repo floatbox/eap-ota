@@ -62,7 +62,7 @@ describe Commission::Reader do
           agent "4%"
         end
 
-        carrier 'FV', start_date: '2013-08-01'
+        carrier 'FV', start_date: '2013-08-01', no_commission: "stopped sales"
 
         carrier 'AB'
         rule 1 do
@@ -75,6 +75,11 @@ describe Commission::Reader do
     it { book.should have(4).rules }
     it { should have(4).pages }
     it { should have(2).sections }
+
+    it "should define no_commission page as no commission" do
+      page = book.find_section(carrier: 'FV').pages.find { |p| p.start_date == Date.new(2013,8,1)}
+      page.no_commission.should == "stopped sales"
+    end
 
   end
 

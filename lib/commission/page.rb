@@ -17,6 +17,9 @@ class Commission::Page
   # @return Date дата начала действия комиссии
   attr_accessor :start_date
 
+  # @return String причина отключения продаж по данной странице
+  attr_accessor :no_commission
+
   def initialize(*)
     @index = []
     super
@@ -32,6 +35,7 @@ class Commission::Page
   def register rule
     rule.number = @index.size + 1
     rule.carrier = carrier
+    rule.no_commission = no_commission if no_commission
     if rule.important
       @index.unshift rule
     else

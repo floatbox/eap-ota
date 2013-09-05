@@ -12,6 +12,8 @@ class Commission::Writer::Page
       str << %[, ticketing_method: #{@page.ticketing_method.to_s.inspect}]
     @page.start_date and
       str << %[, start_date: #{@page.start_date.to_s.inspect}]
+    @page.no_commission and
+      str << %[, no_commission: #{@page.no_commission.to_s.inspect}]
     str << "\n\n"
 
     @page.rules.each do |rule|

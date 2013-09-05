@@ -47,6 +47,8 @@ describe Commission::Writer::Book do
       example "SVOLED/AB"
       end
 
+      carrier "FV", start_date: "2013-10-01", no_commission: "сдулись"
+
       carrier "FV", start_date: "2013-06-30"
 
       rule 1 do
