@@ -7,7 +7,6 @@ class PricerController < ApplicationController
   include Monitoring::Benchmarkable
 
   def pricer
-    @search.partner = params[:partner]
     @destination = Destination.get_by_search @search
     @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
     if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
