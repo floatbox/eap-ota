@@ -10,7 +10,12 @@ old_book.pages.each do |old_page|
     puts "splitting " + ticketing_methods.map {|t| [old_page.carrier, t, old_page.start_date].compact.join('-') }.join(' ')
   end
   ticketing_methods.each do |ticketing_method|
-    new_page = new_book.create_page carrier: old_page.carrier, ticketing_method: ticketing_method, start_date: old_page.start_date
+    new_page = new_book.create_page(
+      carrier: old_page.carrier,
+      ticketing_method: ticketing_method,
+      start_date: old_page.start_date,
+      no_commission: old_page.no_commission
+    )
     other_examples = []
     old_page.rules.each do |old_rule|
       if old_rule.ticketing_method == ticketing_method || old_rule.ticketing_method.nil?
