@@ -95,7 +95,12 @@
 
 <script type="text/javascript">
 $(function() {
-    _kmq.push(['record', 'VISIT: metasearch']);
+    var kmqdata = ['record', 'VISIT: metasearch'];
+    var partner = window.location.hash.match(/partner=([^&?]+)/);
+    if (partner) {
+        kmqdata.push({'partner': partner[1]});
+    }
+    _kmq.push(kmqdata);
     _gaq.push(['_trackPageview']);
     search.dates = {csnow: new Date('<%= Time.now.to_formatted_s(:rfc822) %>')};
     results.data = $.parseJSON('<%= raw @search.details.to_json %>');
