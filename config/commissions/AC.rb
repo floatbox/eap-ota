@@ -1,6 +1,7 @@
 carrier "AC", no_commission: "на свои не продается"
 
 rule 1 do
+no_commission "на свои не продается"
 ticketing_method "downtown"
 agent "10%"
 subagent "8%"
@@ -14,6 +15,7 @@ example "svojfk/a jfksvo/z"
 end
 
 rule 2 do
+no_commission "на свои не продается"
 ticketing_method "downtown"
 agent "8%"
 subagent "6%"
@@ -27,6 +29,7 @@ example "svojfk/q jfksvo/k"
 end
 
 rule 3 do
+no_commission "на свои не продается"
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"

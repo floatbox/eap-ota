@@ -1,6 +1,7 @@
 carrier "RB", no_commission: "Катя сказала выключить, потому что война"
 
 rule 1 do
+no_commission "Катя сказала выключить, потому что война"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -11,6 +12,7 @@ example "svocdg"
 end
 
 rule 2 do
+no_commission "Катя сказала выключить, потому что война"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
