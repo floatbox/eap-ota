@@ -31,7 +31,7 @@ class AutoTicketStuff
     !order.email['yahoo']  or return 'название почтового ящика содержит yahoo'
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
     no_dupe_orders? or return "dupe (#{@dupe_summary})"
-    #!group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
+    !group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
     people.map{|p| [p.first_name, p.last_name]}.uniq.count == people.count or return 'есть 2 пассажира с совпадающими именем и фамилией'
     !people.any?(&:too_long_names?) or return 'слишком длинные имена пассажиров'
     nil
