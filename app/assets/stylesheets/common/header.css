@@ -3,7 +3,7 @@
     position: absolute;
     top: 0; left: 0;
     z-index: 15;
-    min-width: 1002px;    
+    min-width: 1002px;
     width: 100%;
     height: 62px;
     background: #f2f2f2;
@@ -200,7 +200,7 @@ a.pht-content:hover .pht-title {
     top: -20px;
     left: -15px;
     width: 100%;
-    padding: 0 15px;    
+    padding: 0 15px;
     height: 50px;
     background: #EDEDE3;
     clip: rect(10px 160px 46px -10px);
@@ -313,7 +313,7 @@ a.pht-content:hover .pht-title {
     box-shadow: 0 1px 2px rgba(0,0,0,0.25);
     font-size: 13px;
     line-height: 15px;
-    cursor: pointer; 
+    cursor: pointer;
 }
 .phu-button:active {
     box-shadow: 0 1px 0 rgba(0,0,0,0.15);
@@ -374,14 +374,39 @@ a.pht-content:hover .pht-title {
     font-size: 13px;
     line-height: 15px;
 }
-.phu-logout {
-    display: none;
+.phul-wrapper {
+    float: left;
+    max-width: 150px;
+    height: 16px;
+    overflow: hidden;
+}
+.phul-text {
+    float: left;
+    height: 16px;
+    text-decoration: underline;
+}
+.phul-overflow {
+    float: right;
+    position: relative;
+    top: -16px;
+    margin-left: -19px;
+    width: 20px;
+    height: 16px;
+    background: -webkit-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
+    background: -moz-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
+    background: -ms-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
+    background: -o-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
+    background: linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
 }
 .phul-logout {
+    float: left;
     margin-left: 2px;
     padding: 0 3px;
     cursor: pointer;
 }
 .phul-icon {
     vertical-align: -2px;
+}
+.phu-logout {
+    display: none;
 }
