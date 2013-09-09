@@ -7,7 +7,7 @@
         <div class="ob-button">
             <div class="obb-title">Продолжить покупку</div>
             <div class="obb-side obb-left"><div class="obb-side obb-right"></div></div>
-        </div> или <span class="link bfr-cancel">выбрать другой вариант</span>
+        </div><span class="bfrc-addition"> или <span class="link bfr-cancel">выбрать другой вариант</span></span>
     </div>
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>

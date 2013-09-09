@@ -114,6 +114,11 @@ load: function(number, price_changed) {
 failed: function() {
     this.loading.find('.bl-title').html('Авиакомпания не подтвердила наличие мест по этому тарифу');
     this.loading.find('.bl-tip').html('Выберите другой вариант');
+},
+processPrice: function(context, dp) {
+    var sum = I18n.t('currencies.RUR', {count: Math.abs(dp)});
+    var content = context.find('.bfnp-content');
+    content.html(content.html().absorb(dp > 0 ? 'дороже' : 'дешевле', sum));
 }
 };
 
@@ -137,4 +142,10 @@ show: function() {
 hide: function() {
     this.el.hide();
 }
+};
+
+/* Countdown */
+booking.countdown = {
+    start: $.noop,
+    stop: $.noop
 };
