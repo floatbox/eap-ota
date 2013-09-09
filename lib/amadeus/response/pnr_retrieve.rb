@@ -108,7 +108,7 @@ module Amadeus
         m = s.to_s.match(
           %r{
             (?<inf>PAX|INF)\ (?<code> \d+ )-(?<number> [\d-]+ )
-            / [DE] (?<status> [TRV] ) (?<validating_carrier> \w{2} )
+            / [DEV] (?<status> [TRV] ) (?<validating_carrier> \w{2} )
             /? [^/]*
             / (?<ticketed_date> \w+ )
             / (?<office_id> \w+ )
