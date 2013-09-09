@@ -25,11 +25,9 @@ describe Person do
   its(:birthday) {should == Date.new(1984, 6, 16)}
   its(:document_expiration_date) {should == Date.new(2014, 9, 8)}
 
-  describe '#correct_long_name' do
+  describe '#too_long_names?' do
     subject do
-      p = build(:person, :associated_infant => associated_infant, :first_name => ('A'*10), :last_name => last_name, :sex => sex, :child => child)
-      p.correct_long_name
-      p
+      build(:person, :associated_infant => associated_infant, :first_name => ('A'*10), :last_name => last_name, :sex => sex, :child => child)
     end
     let(:child) {nil}
 
@@ -43,46 +41,30 @@ describe Person do
         let(:infant_last_name){'A'*10}
 
         context 'male' do
-          # ограничение амадеуса - имя + имя младенца + фамилия <= 36 символов
+          # ограничение амадеуса - имя + имя младенца + фамилия <= 52 символов
           let(:sex) {'m'}
           context "with too long names" do
-            let(:infant_first_name) {'I' * 17}
-            its(:first_name) {should == 'A'}
-            its('associated_infant.first_name') {should == 'I' * 17}
-          end
-
-          context "with extremely long names" do
-            let(:infant_first_name) {'I' * 30}
-            its(:first_name) {should == 'A'}
-            its('associated_infant.first_name') {should == 'I'}
+            let(:infant_first_name) {'I' * 33}
+            its(:too_long_names?){should be_true}
           end
 
           context "with short names" do
-            let(:infant_first_name) {'I' * 16}
-            its(:first_name) {should == 'A' * 10}
-            its('associated_infant.first_name') {should == 'I' * 16}
+            let(:infant_first_name) {'I' * 32}
+            its(:too_long_names?){should be_false}
           end
         end
 
         context 'female' do
-          # ограничение амадеуса - имя + имя младенца + фамилия <= 35 символов
+          # ограничение амадеуса - имя + имя младенца + фамилия <= 51 символов
           let(:sex) {'f'}
           context "with too long names" do
-            let(:infant_first_name) {'I' * 16}
-            its(:first_name) {should == 'A'}
-            its('associated_infant.first_name') {should == 'I' * 16}
-          end
-
-          context "with extremely long names" do
-            let(:infant_first_name) {'I' * 30}
-            its(:first_name) {should == 'A'}
-            its('associated_infant.first_name') {should == 'I'}
+            let(:infant_first_name) {'I' * 32}
+            its(:too_long_names?){should be_true}
           end
 
           context "with short names" do
-            let(:infant_first_name) {'I' * 15}
-            its(:first_name) {should == 'A' * 10}
-            its('associated_infant.first_name') {should == 'I' * 15}
+            let(:infant_first_name) {'I' * 31}
+            its(:too_long_names?){should be_false}
           end
         end
       end
@@ -90,46 +72,32 @@ describe Person do
       context 'with different last name' do
         let(:infant_last_name){'I'*10}
         context 'male' do
-          # ограничение амадеуса - имя + имя младенца + фамилия + фамилия младенца <= 36 символов
+          # ограничение амадеуса - имя + имя младенца + фамилия + фамилия младенца <= 52 символов
           let(:sex) {'m'}
           context "with too long names" do
-            let(:infant_first_name) {'I' * 7}
-            its(:first_name) {should == 'A'}
-            its('associated_infant.first_name') {should == 'I' * 7}
+            let(:infant_first_name) {'I' * 23}
+            its(:too_long_names?){should be_true}
           end
 
-          context "with extremely long names" do
-            let(:infant_first_name) {'I' * 20}
-            its(:first_name) {should == 'A'}
-            its('associated_infant.first_name') {should == 'I'}
-          end
 
           context "with short names" do
-            let(:infant_first_name) {'I' * 6}
-            its(:first_name) {should == 'A' * 10}
-            its('associated_infant.first_name') {should == 'I' * 6}
+            let(:infant_first_name) {'I' * 22}
+            its(:too_long_names?){should be_false}
           end
         end
 
         context 'female' do
-          # ограничение амадеуса - имя + имя младенца + фамилия + фамилия младенца <= 35 символов
+          # ограничение амадеуса - имя + имя младенца + фамилия + фамилия младенца <= 51 символов
           let(:sex) {'f'}
           context "with too long names" do
-            let(:infant_first_name) {'I' * 6}
-            its(:first_name) {should == 'A'}
-            its('associated_infant.first_name') {should == 'I' * 6}
+            let(:infant_first_name) {'I' * 22}
+            its(:too_long_names?){should be_true}
           end
 
-          context "with extremely long names" do
-            let(:infant_first_name) {'I' * 20}
-            its(:first_name) {should == 'A'}
-            its('associated_infant.first_name') {should == 'I'}
-          end
 
           context "with short names" do
-            let(:infant_first_name) {'I' * 5}
-            its(:first_name) {should == 'A' * 10}
-            its('associated_infant.first_name') {should == 'I' * 5}
+            let(:infant_first_name) {'I' * 21}
+            its(:too_long_names?){should be_false}
           end
         end
       end
@@ -139,30 +107,30 @@ describe Person do
       let(:associated_infant) {nil}
 
       context 'male' do
-        #ограничение - 55 символов
+        #ограничение - 66 символов
         let(:sex) {'m'}
         context 'with long name' do
-          let(:last_name) {'A' * 46}
-          its(:first_name) {should == 'A'}
+          let(:last_name) {'A' * 57}
+          its(:too_long_names?){should be_true}
         end
 
         context 'with short name' do
-          let(:last_name) {'A' * 45}
-          its(:first_name) {should == 'A' * 10}
+          let(:last_name) {'A' * 56}
+          its(:too_long_names?){should be_false}
         end
       end
 
       context 'female' do
-        #ограничение - 54 символа
+        #ограничение - 65 символа
         let(:sex) {'f'}
         context 'with long name' do
-          let(:last_name) {'A' * 45}
-          its(:first_name) {should == 'A'}
+          let(:last_name) {'A' * 56}
+          its(:too_long_names?){should be_true}
         end
 
         context 'with short name' do
-          let(:last_name) {'A' * 44}
-          its(:first_name) {should == 'A' * 10}
+          let(:last_name) {'A' * 55}
+          its(:too_long_names?){should be_false}
         end
       end
 
@@ -171,13 +139,13 @@ describe Person do
         let(:child) {true}
 
         context 'with long name' do
-          let(:last_name) {'A' * 49}
-          its(:first_name) {should == 'A'}
+          let(:last_name) {'A' * 47}
+          its(:too_long_names?){should be_true}
         end
 
         context 'with short name' do
-          let(:last_name) {'A' * 48}
-          its(:first_name) {should == 'A' * 10}
+          let(:last_name) {'A' * 46}
+          its(:too_long_names?){should be_false}
         end
       end
 
@@ -186,13 +154,13 @@ describe Person do
         let(:child) {true}
 
         context 'with long name' do
-          let(:last_name) {'A' * 49}
-          its(:first_name) {should == 'A'}
+          let(:last_name) {'A' * 47}
+          its(:too_long_names?){should be_true}
         end
 
         context 'with short name' do
-          let(:last_name) {'A' * 48}
-          its(:first_name) {should == 'A' * 10}
+          let(:last_name) {'A' * 46}
+          its(:too_long_names?){should be_false}
         end
       end
 

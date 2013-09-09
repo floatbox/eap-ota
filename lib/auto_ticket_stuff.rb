@@ -33,6 +33,7 @@ class AutoTicketStuff
     no_dupe_orders? or return "dupe (#{@dupe_summary})"
     #!group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
     people.map{|p| [p.first_name, p.last_name]}.uniq.count == people.count or return 'есть 2 пассажира с совпадающими именем и фамилией'
+    !people.any?(:too_long_names?) or return 'слишком длинные имена пассажиров'
     nil
   end
 
