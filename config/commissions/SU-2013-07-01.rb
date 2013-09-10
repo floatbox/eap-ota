@@ -14,7 +14,7 @@ example "jfksvo svojfk"
 end
 
 rule 2 do
-disabled "с первого сентября - через авиацентр"
+#disabled "с первого сентября - через авиацентр"
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
@@ -54,6 +54,7 @@ example "svotlv/su tlvsvo"
 end
 
 rule 5 do
+disabled "вовь через dtt"
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
