@@ -44,13 +44,10 @@
 <col width="20">
 <col width="156">
 <%= render :partial => 'pnr/flights' %>
-<tbody valign="top" style="font-size: 13px; line-height: 16px;">
-<tr>
-    <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
-</tr>
-</tbody>
 </table>
+
 <br>
+<%= render :partial => 'pnr/upsales' unless @lang %>
 <br>
 
 <table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
@@ -62,11 +59,13 @@
         <div style="font-size: 10px; line-height: 10px;"><br></div>
         <table cellspacing="0" cellpadding="0" style="font-size: 13px; line-height: 18px;">
         <tbody valign="top">
-        <col width="340">
+        <col width="320">
+        <col width="20">
         <col width="190">
         <%= render :partial => 'pnr/main_prices' %>
         <tr>
             <td><% unless @lang %>Форма оплаты <span style="color: #C0C0C0;">/</span> <% end %>Paid by</td>
+            <td><br></td>
             <td><%= @prices.paid_by %></td>
         </tr>
         </tbody>
@@ -75,12 +74,12 @@
     <td width="366">
         <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Данные покупателя<br><% end %>Customer Details</div>
         <div style="font-size: 10px; line-height: 10px;"><br></div>
+        <% if @pnr.email || @pnr.phone %>
         <div style="font-size: 13px; line-height: 18px;">
-        <% if @pnr.email %>
-          <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #333333; text-decoration: none;"><%= @pnr.email %></a><br>
-        <% end %>
-        <%= @pnr.phone %>
+            <%= [@pnr.email, @pnr.phone].compact.join(', ') %>
         </div>
+        <div style="font-size: 10px; line-height: 10px;"><br></div>
+        <% end %>        
     </td>
 </tr>
 <tr valign="bottom">
