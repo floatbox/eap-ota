@@ -330,6 +330,8 @@ module PricerHelper
       reason = 'продажа отключена' if reason == true;
       concat 'Не можем продать '
       concat link_to(reason, check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
+    else
+      concat 'не можем продать, дополнительные критерии в #sellable?'
     end
     # concat ' (' + recommendation.booking_classes.join(',') + ')'
     concat " Мест: #{recommendation.availability}"

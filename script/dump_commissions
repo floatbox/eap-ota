@@ -4,7 +4,8 @@ require 'optparse'
 
 # defaults
 opts = {
-  in: "config/commissions"
+  in: "config/commissions",
+  dir: "config/commissions"
 }
 
 setopt = proc {|key| proc {|value| opts[key] = value } }
@@ -16,6 +17,8 @@ OptionParser.new do |op|
   op.on "-y", "--yaml", "write in YAML format", &setopt[:yaml]
   op.on "-s", "--discounts FILENAME", "apply discounts from file", &setopt[:discounts]
   op.on "-e", "--eval RUBYCODE", "apply code to book before dumping", &setopt[:eval]
+  op.on "-E", "--ruleeval RUBYCODE", "apply code to each current active rule before dumping", &setopt[:ruleeval]
+  op.on "-m", "--method TICKETING_METHODS", "comma separated list of ticketing methods to apply --ruleeval", &setopt[:method]
   op.on_tail("-h", "--help", "Show this message") do
     puts op
     exit
@@ -36,10 +39,10 @@ book = Commission::Reader.new.read_file(opts[:in])
 # чтобы убрать адреса и мусор, для сравнения после апдейта:
 #   perl -lpe 's/[&*]\d+//' | grep -v 'source' > commissions.yml
 
-if opts[:out]
-  outfh = File.open('w', outfile)
-else
+if opts[:out] == '-'
   outfh = STDOUT
+elsif opts[:out]
+  outfh = File.open('w', outfile)
 end
 
 if opts[:discounts]
@@ -69,6 +72,17 @@ if opts[:eval]
   book.instance_eval opts[:eval]
 end
 
+if opts[:ruleeval]
+  puts "evaluating code..."
+  ticketing_methods = opts[:method].split(',') if opts[:method]
+  book.current_rules.each do |r|
+    next if r.no_commission
+    next if ticketing_methods && !ticketing_methods.include?(r.ticketing_method)
+    r.extend Commission::Fx
+    r.instance_eval opts[:ruleeval]
+  end
+end
+
 if opts[:yaml]
   # патчим to_yaml, чтобы атрибуты объектов сортировались
   class Psych::Visitors::YAMLTree
@@ -84,10 +98,10 @@ if opts[:yaml]
 
   outfh << book.to_yaml
 else
-  if opts[:dir]
+  if opts[:out]
+    outfh << Commission::Writer::Book.new(book).write
+  else
     puts "writing commissions to dir #{opts[:dir]}"
     Commission::Writer::Book.new(book).write_dir(opts[:dir])
-  else
-    outfh << Commission::Writer::Book.new(book).write
   end
 end
