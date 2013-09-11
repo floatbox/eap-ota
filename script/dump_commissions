@@ -19,6 +19,7 @@ OptionParser.new do |op|
   op.on "-e", "--eval RUBYCODE", "apply code to book before dumping", &setopt[:eval]
   op.on "-E", "--ruleeval RUBYCODE", "apply code to each current active rule before dumping", &setopt[:ruleeval]
   op.on "-m", "--method TICKETING_METHODS", "comma separated list of ticketing methods to apply --ruleeval", &setopt[:method]
+  op.on "-c", "--carrier CARRIERS", "comma separated list of carriers methods to apply --ruleeval", &setopt[:carrier]
   op.on_tail("-h", "--help", "Show this message") do
     puts op
     exit
@@ -75,9 +76,11 @@ end
 if opts[:ruleeval]
   puts "evaluating code..."
   ticketing_methods = opts[:method].split(',') if opts[:method]
+  carriers = opts[:carrier].split(',') if opts[:carrier]
   book.current_rules.each do |r|
     next if r.no_commission
     next if ticketing_methods && !ticketing_methods.include?(r.ticketing_method)
+    next if carriers && !carriers.include?(r.carrier)
     r.extend Commission::Fx
     r.instance_eval opts[:ruleeval]
   end
