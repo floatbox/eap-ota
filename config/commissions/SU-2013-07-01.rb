@@ -17,7 +17,7 @@ rule 2 do
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
-discount "4.5%"
+discount "5.5%"
 agent_comment "правила для выписки авиакомпании SU в DTT"
 agent_comment "При вылете НЕ из России - все классы - агентская 5%, субагентская   4.5%, скидка 4%"
 subagent_comment "4.5%"
@@ -45,7 +45,7 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "4%"
 subagent "3%"
-discount "3%"
+discount "4%"
 agent_comment "4%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 subagent_comment "3%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 interline :no, :yes
