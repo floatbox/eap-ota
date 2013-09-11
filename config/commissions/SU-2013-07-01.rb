@@ -14,7 +14,6 @@ example "jfksvo svojfk"
 end
 
 rule 2 do
-#disabled "с первого сентября - через авиацентр"
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
@@ -46,6 +45,7 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "4%"
 subagent "3%"
+discount "3%"
 agent_comment "4%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 subagent_comment "3%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 interline :no, :yes
@@ -58,6 +58,7 @@ disabled "вовь через dtt"
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
+discount "2%"
 consolidator "2%"
 agent_comment "1 евро с билета на собств. рейсы SU с началом перевозки за пределами РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 subagent_comment "5 (пять) руб. с билета на собств. рейсы SU с началом перевозки за пределами РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
@@ -71,6 +72,7 @@ rule 6 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
+discount "2%"
 consolidator "2%"
 agent_comment "1 евро с билета на рейсы Interline без участка SU, а также по тарифам: туроператорским, конфиденциальным, 'нетто'."
 subagent_comment "5 (пять) руб.  с билета на рейсы Interline без участка SU, а также по тарифам: туроператорским, конфиденциальным, нетто'."

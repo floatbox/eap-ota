@@ -88,6 +88,7 @@ important!
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
+discount "2%"
 agent_comment "1%"
 subagent_comment "0.5%"
 check %{ codeshare? }
@@ -116,6 +117,7 @@ rule 9 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
+discount "2%"
 agent_comment "1% от опубл. тарифа DL на трансатлантический перелет при перевозке, начинающейся в Европе, Азии или Африке;"
 agent_comment "1% от опубл. тарифа других авиакомпаний в комбинации с опубл. тарифом DL на трансатлант.перелет при перевозке, нач.в Европе, Азии или Африке;"
 agent_comment "1% от опубл. тарифа DL при внутренних перелетах по США"
@@ -134,6 +136,7 @@ important!
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
+discount "2%"
 agent_comment "1% от опубл. тарифа DL при внутренних перелетах по США"
 subagent_comment "0,5% от опубл. тарифа DL при внутренних перелетах по США"
 interline :no, :yes
@@ -146,6 +149,7 @@ rule 11 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
+discount "2%"
 agent_comment "1% от опубл. тарифа на рейсы Interline без участка DL."
 subagent_comment "0,5% от опубл. тарифа на рейсы Interline без участка DL."
 interline :absent
@@ -156,6 +160,7 @@ rule 12 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
+discount "2%"
 consolidator "2%"
 comment "ньюйорк - детройт - торонто"
 agent_comment "0% на перевозки, нач.в США (включая Пуэрто Рико, Острова Вирджинии и Канада)"
