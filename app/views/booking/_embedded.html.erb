@@ -152,12 +152,12 @@
     <p style="margin: 0 0 12px;"><%= raw t 'booking.farerules.restrictions' %></p>
     <p style="margin: 0 0 12px;"><%= raw t 'booking.farerules.service' %></p>
     <p><%= raw t 'booking.farerules.cancellation' %></p>
-    <% @order_form.recommendation.rules.each do |(airline, fare) ,rule| %>
+    <% @order_form.recommendation.rules.each do |(airline, fare, from, to, passenger_type) ,rule| %>
     <div class="bff-group">
         <% if @order_form.recommendation.source != 'sirena' %>
             <div class="bffg-translate"></div>
         <% end %>
-        <h5 class="bffg-title"><%= t 'booking.farerules.fare' %> <%= fare %></h5>
+        <h5 class="bffg-title"><%= t 'booking.farerules.fare' %> <%= "#{fare}, #{from}, #{to}, #{passenger_type}" %></h5>
         <pre class="bffg-content"><%= raw(rule) %></pre>
     </div>
     <% end %>
