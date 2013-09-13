@@ -157,7 +157,7 @@
         <% if @order_form.recommendation.source != 'sirena' %>
             <div class="bffg-translate"></div>
         <% end %>
-        <h5 class="bffg-title"><%= t 'booking.farerules.fare' %> <%= "#{fare}, #{from}, #{to}, #{passenger_type}" %></h5>
+        <h5 class="bffg-title"><%= t 'booking.farerules.fare' %> <%= "#{fare}, #{from.name_ru}, #{to.name_ru}, #{passenger_type}" %></h5>
         <pre class="bffg-content"><%= raw(rule) %></pre>
     </div>
     <% end %>
