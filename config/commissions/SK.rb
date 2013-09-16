@@ -32,7 +32,7 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.5"
-discount "3.25%"
+discount "3%"
 agent_comment "1 руб. с билета на рейсы SAS. (Билеты «Интерлайн» под кодом Авиакомпании могут быть выписаны только в случае существования опубл. тарифов и только при условии, если Авиакомпания выполняет хотя бы один рейс.)"
 subagent_comment "50 коп. с билета на рейсы SAS"
 interline :no, :yes
