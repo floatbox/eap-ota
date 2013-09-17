@@ -56,4 +56,17 @@ class StatReports
      (lastdate.to_date - firstdate.to_date).round.abs + 1
   end
 
+  def self.by_office date_range
+    res = {}
+    Ticket.office_ids.each do |office|
+      tickets = Ticket.where(office_id: office, kind: 'ticket', status: 'ticketed').where(date_range)
+      cnt = tickets.count
+      res[office] = {
+        :price => tickets.sum(:corrected_price),
+        :count => cnt
+      } if cnt > 0
+    end
+    res
+  end
+
 end

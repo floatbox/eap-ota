@@ -1,6 +1,8 @@
 # encoding: utf-8
 Eviterra::Application.routes.draw do
 
+  devise_for :deck_users, ActiveAdmin::Devise.config
+
   devise_scope :customer do
     get    '#login' => 'profile/sessions#new', :as => :new_customer_session
     post   'profile/sign_in' => 'profile/sessions#create', :as => :customer_session
@@ -36,6 +38,8 @@ Eviterra::Application.routes.draw do
 
   match 'api/search(.:format)' => 'api_home#gone'
   match 'api/redirection(.:format)' => 'booking#api_redirect'
+  # какой-то жаваскрипт фигачит посты сюда. убрать потом
+  post 'api/booking/edit' => proc { [404, {}, []] }
   match 'api/booking/:query_key(.:format)' => 'booking#api_booking', :via => :get
   match 'api/rambler_booking(.:format)' => 'booking#api_rambler_booking', :via => :get, :format => :xml, :as => :api_rambler_booking
   match 'api/order_stats' => 'api_order_stats#index'
@@ -80,15 +84,22 @@ Eviterra::Application.routes.draw do
   match 'contacts' => 'about#contacts', :as => :about
   match 'about/:action' => 'about', :as => :about
   match 'partners' => 'about#partners', :as => :about
+  
+  match 'insurance' => 'insurance#index', :as => :insurance  
 
   match "whereami" => 'home#whereami', :as => :whereami
   match 'status' => 'home#status'
+  match 'revision' => 'home#revision'
+  match 'revision/pending' => 'home#pending'
+  match 'revision/current' => 'home#current'
   match "subscribe" => 'subscription#subscribe', :as => 'subscribe'
   match "unsubscribe" => 'subscription#unsubscribe', :as => 'unsubscribe'
   match "unsubscribe/:destination_id" => 'subscription#unsubscribe_by_destination', :as => 'unsubscribe_by_destination'
 
+  match "admin/commissions/mass_check" => 'admin/commissions#mass_check', :as => 'mass_check_admin_commissions'
   match "admin/commissions/check" => 'admin/commissions#check', :as => 'check_admin_commissions'
   match "admin/commissions/table" => 'admin/commissions#table', :as => 'table_admin_commissions'
+  match "admin/commissions/page" => 'admin/commissions#page', :as => 'admin_commissions_page'
   match "admin/commissions" => 'admin/commissions#index', :as => 'admin_commissions'
   match "admin/new_hot_offers" => 'admin/hot_offers#best_of_the_week', :as => 'show_best_offers'
   match 'admin/notifications/show_sent_notice/:id' => 'admin/notifications#show_sent_notice', :as => :show_sent_notice
@@ -100,6 +111,8 @@ Eviterra::Application.routes.draw do
   match 'profile/itinerary/:id/ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :profile_itinerary_for_ticket
 
   root :to => 'home#index'
+
+  ActiveAdmin.routes(self)
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

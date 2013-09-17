@@ -10,99 +10,84 @@ describe Commission::Reader do
     subject :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
+        rule 1 do
+          agent "2%"
+        end
       end
     end
 
-    it "should have one commission" do
-      book.rules.should have(1).item
-    end
-
-    it "should find a commission for correct recommendation" do
-      recommendation = Recommendation.example('SVOCDG', :carrier => 'FV')
-      book.find_for(recommendation).should be_a(Commission::Rule)
-    end
+    it { should have(1).rule }
+    it { should have(1).page }
+    it { should have(1).section }
   end
 
   context "two carriers, three simple rules" do
     subject :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
-        commission '1%/0'
+
+        rule 1 do
+        agent "2%"
+        end
+
+        rule 2 do
+        agent "1%"
+        end
 
         carrier 'AB'
-        commission '0/0'
+
+        rule 1 do
+        agent "0"
+        end
       end
     end
 
-    it "should have two airlines" do
-      book.carriers.should == ['FV', 'AB']
-    end
-
-    it "should have registered three rules" do
-      book.should have(3).rules
-    end
-
-    describe "#exists_for?" do
-      specify do
-        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'AB')).should be_true
-      end
-
-      specify do
-        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
-      end
-    end
+    its(:carriers) { should == ['FV', 'AB'] }
+    it { should have(3).rules }
   end
 
   context "two carriers, four pages" do
-    let :book do
+    subject :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
-        commission '1%/0'
+        rule 1 do
+          agent "2%"
+        end
+        rule 2 do
+          agent "1%"
+        end
 
         carrier 'FV', start_date: '2013-05-01'
-        commission '4%/3'
+        rule 1 do
+          agent "4%"
+        end
 
-        carrier 'FV', start_date: '2013-08-01'
+        carrier 'FV', start_date: '2013-08-01', no_commission: "stopped sales"
 
         carrier 'AB'
-        commission '0/0'
+        rule 1 do
+          agent "0"
+        end
       end
     end
 
-    it "should have two airlines" do
-      book.carriers.should == ['FV', 'AB']
+    its(:carriers) { should == ['FV', 'AB'] }
+    it { book.should have(4).rules }
+    it { should have(4).pages }
+    it { should have(2).sections }
+
+    it "should define no_commission page as no commission" do
+      page = book.find_section(carrier: 'FV').pages.find { |p| p.start_date == Date.new(2013,8,1)}
+      page.no_commission.should == "stopped sales"
     end
 
-    it "should have registered four rules" do
-      book.should have(4).rules
-    end
-
-    it "should define four pages" do
-      book.should have(4).pages
-    end
-
-    describe "active_pages" do
-      pending
-    end
-
-    describe "#exists_for?" do
-      specify do
-        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'FV')).should be_true
-      end
-
-      specify do
-        book.exists_for?(Recommendation.new(:validating_carrier_iata => 'S7')).should be_false
-      end
-    end
   end
 
   context "all the rules" do
     let :book do
       Commission::Reader.new.define do
         carrier 'FV'
+        rule 1 do
         consolidator '1%'
         blanks 50
         discount '2%'
@@ -111,7 +96,9 @@ describe Commission::Reader do
         check %{ true }
         tour_code "FOOBAR"
         designator "PP10"
-        commission '2%/3'
+        agent "2%"
+        subagent "3"
+        end
       end
     end
 
@@ -138,8 +125,10 @@ describe Commission::Reader do
       let :book do
         Commission::Reader.new.define do
           carrier 'SU'
+          rule 1 do
           check "true"
-          commission '0/0'
+          agent "0"
+          end
         end
       end
 
@@ -162,12 +151,14 @@ describe Commission::Reader do
       subject :book do
         Commission::Reader.new.define do
           carrier 'SU'
+          rule 1 do
           check %[
             false
             1here_should_be_error
             true
           ]
-          commission '0/0'
+          agent "0"
+          end
         end
       end
 
@@ -194,13 +185,22 @@ describe Commission::Reader do
     let :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
+        rule 1 do
+        agent "2%"
+        subagent "3"
+        end
 
         carrier 'UN', start_date: "1.2.2013"
-        commission '1%/1%'
+        rule 1 do
+        agent "1%"
+        subagent "1%"
+        end
 
-        carrier 'UN', "Transaero"
-        commission '2%/2%'
+        carrier 'UN'
+        rule 1 do
+        agent "2%"
+        subagent "2%"
+        end
       end
     end
 
@@ -248,27 +248,43 @@ describe Commission::Reader do
     let :book do
       Commission::Reader.new.define do
         carrier 'FV'
-        commission '2%/3'
+
+        rule 1 do
+        agent "2%"
+        subagent "3"
+        end
 
         carrier 'AB'
 
-        agent "first"
+        rule 1 do
+        agent_comment "first"
         interline :first
-        commission '1%/1%'
+        agent "1%"
+        subagent "1%"
+        end
 
-        agent "second"
+        rule 2 do
+        agent_comment "second"
         interline :yes
-        commission '2%/2%'
+        agent "2%"
+        subagent "2%"
+        end
 
-        agent "third"
+        rule 3 do
+        agent_comment "third"
         interline :no
         important!
-        commission '3%/3%'
+        agent "3%"
+        subagent "3%"
+        end
 
-        agent "fourth"
+        rule 4 do
+        agent_comment "fourth"
         interline :possible
         disabled "just because"
-        commission "4%/4%"
+        agent "4%"
+        subagent "4%"
+        end
       end
     end
 
@@ -277,11 +293,7 @@ describe Commission::Reader do
     end
 
     specify {
-      book.exists_for?(recommendation).should be_true
-    }
-
-    specify {
-      book.find_for(recommendation).should be_a(Commission::Rule)
+      book.find_rules_for_rec(recommendation).first.should be_a(Commission::Rule)
     }
 
     specify {
@@ -306,7 +318,7 @@ describe Commission::Reader do
       end
 
       it "should display as successful really applied rule" do
-        subject.find {|row| row[1] == :success}[0].should == book.find_for(recommendation)
+        subject.find {|row| row[1] == :success}[0].should == book.find_rules_for_rec(recommendation).first
       end
     end
 
@@ -329,17 +341,25 @@ describe Commission::Reader do
       Commission::Reader.new.define do
         carrier 'AB'
 
-        agent "first"
+        rule 1 do
+        agent_comment "first"
         classes :economy
-        commission '1%/1%'
+        agent "1%"
+        subagent "1%"
+        end
 
-        agent "second"
+        rule 2 do
+        agent_comment "second"
         classes :business
         no_commission '2%/2% forbidden to sale'
+        end
 
-        agent "third"
+        rule 3 do
+        agent_comment "third"
         classes :business
-        commission '3%/3%'
+        agent "3%"
+        subagent "3%"
+        end
       end
     end
 
@@ -347,12 +367,8 @@ describe Commission::Reader do
       Recommendation.example('SVOCDG/BUSINESS', :carrier => 'AB')
     end
 
-    specify {
-      book.exists_for?(recommendation).should be_true
-    }
-
     it "should find no_commission rule" do
-      book.find_for(recommendation).should_not be_sellable
+      book.find_rules_for_rec(recommendation).first.should_not be_sellable
     end
 
     specify {
@@ -384,7 +400,9 @@ describe Commission::Reader do
       let :book do
         Commission::Reader.new.define do
           carrier 'FV'
-          commission '/2%'
+          rule 1 do
+          subagent '2%'
+          end
         end
       end
 
@@ -398,7 +416,9 @@ describe Commission::Reader do
       let :book do
         Commission::Reader.new.define do
           carrier 'FV'
-          commission '2%/'
+          rule 1 do
+          agent "2%"
+          end
         end
       end
 

@@ -3,7 +3,7 @@ module Pricing
 
     attr_accessor :price_fare, :price_tax, :blank_count
 
-    delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing_method,
+    delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing_method, 
       :to => :commission, :prefix => :commission
 
     include IncomeSuppliers
@@ -36,9 +36,23 @@ module Pricing
       end
     end
 
+    def price_for_partner(partner)
+      if partner.cheat_mode == 'yes'
+        price_total.ceil
+      elsif partner.cheat_mode == 'smart'
+        if (price_with_payment_commission.ceil / 1000) == (price_total.ceil / 1000)
+          price_total.ceil
+        else
+          price_with_payment_commission.ceil
+        end
+      else
+        price_with_payment_commission.ceil
+      end
+    end
+
     # комиссия платежного шлюза
     def price_payment
-      Payment.commission.reverse_call(price_total)
+      Payment.commission.reverse_apply(price_total)
     end
 
     # "налоги и сборы" для отображения клиенту
@@ -77,28 +91,28 @@ module Pricing
     end
 
     def price_agent
-      commission_agent.call(price_fare, :multiplier =>  blank_count)
+      commission_agent.apply(price_fare, :multiplier =>  blank_count)
     end
 
     def price_subagent
       return 0 unless commission
-      commission_subagent.call(price_fare, :multiplier =>  blank_count)
+      commission_subagent.apply(price_fare, :multiplier =>  blank_count)
     end
 
     def price_consolidator
-      commission_consolidator.call(price_fare, :multiplier => blank_count)
+      commission_consolidator.apply(price_fare, :multiplier => blank_count)
     end
 
     def price_blanks
-      commission_blanks.call(price_fare, :multiplier => blank_count)
+      commission_blanks.apply(price_fare, :multiplier => blank_count)
     end
 
     def price_discount
-      -commission_discount.call(price_fare, :multiplier => blank_count)
+      -commission_discount.apply(price_fare, :multiplier => blank_count)
     end
 
     def price_our_markup
-      commission_our_markup.call(price_fare, :multiplier => blank_count)
+      commission_our_markup.apply(price_fare, :multiplier => blank_count)
     end
 
     def price_declared_discount
@@ -114,9 +128,13 @@ module Pricing
       @commission || raise("no commission found yet. run #find_commission!")
     end
 
+    def commission=(rule)
+      @commission = rule
+    end
+
     # пока не придумал для метода места получше
-    def find_commission!(args={})
-      @commission = Commission.find_for(self)
+    def find_commission!(opts={})
+      Commission::Finder.new.cheap!(self, opts)
     end
 
     # пытаемся избежать сохранения формул в order_forms_cache

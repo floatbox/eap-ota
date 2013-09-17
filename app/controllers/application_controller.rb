@@ -2,7 +2,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  include Typus::Authentication::Session, PartnerTracking
+  include PartnerTracking
   has_mobile_fu false
 
   before_filter :log_remote_ip
@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
   after_filter :log_partner
 
   protected
+
+  def admin_user
+    current_deck_user
+  end
 
   helper_method :admin_user
   # показывает данные текущего пользователя тайпус в админке
@@ -29,7 +33,13 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    profile_path
+    case resource
+    when Customer
+      profile_path
+    when DeckUser
+      # deck_dashboard_path
+      admin_dashboard_index_path
+    end
   end
 
   def after_sign_out_path_for(resource_or_scope)

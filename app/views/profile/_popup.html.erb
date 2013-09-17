@@ -1,7 +1,11 @@
 <div class="ph-user" id="user">
 <% if customer_signed_in? %>
     <div class="phu-link">
-        <a href="<%= profile_path %>"><%= current_customer.email.downcase %></a> <span class="phul-logout" title="Выйти из личного кабинета"><img class="phul-icon" src="/images/common/exit.png" alt="Выйти"></span>
+        <a class="phul-wrapper" href="<%= profile_path %>">
+            <span class="phul-text"><%= current_customer.email.downcase %></span>
+            <span class="phul-overflow">&nbsp;</span>
+        </a>
+        <span class="phul-logout" title="Выйти из личного кабинета"><img class="phul-icon" src="/images/common/exit.png" alt="Выйти"></span>
     </div>
     <div class="phu-logout">
         <%= button_to('Выйти', destroy_customer_session_path, :method => :delete) %>    

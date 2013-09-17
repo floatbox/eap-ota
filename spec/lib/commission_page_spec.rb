@@ -20,6 +20,15 @@ describe Commission::Page do
       before do
         subject.create_rule disabled: true
         subject.create_rule not_implemented: "yes"
+        subject.create_rule no_commission: "yes"
+      end
+      it {should be_empty}
+    end
+
+    context "when no marked as no_commission" do
+      before do
+        subject.no_commission = "can't sell"
+        subject.create_rule agent: '...'
       end
       it {should be_empty}
     end

@@ -1,14 +1,16 @@
 # encoding: utf-8
 class Carrier < ActiveRecord::Base
-  extend IataStash
+  extend CodeStash
+
+  def self.fetch_by_code(code)
+    find_by_iata(code)  # || find_by_iata_ru(code)
+  end
 
   has_paper_trail
 
   belongs_to :alliance, :foreign_key => 'airline_alliance_id', :class_name => 'AirlineAlliance'
 
   belongs_to :country
-  belongs_to :consolidator
-  belongs_to :gds, :foreign_key => 'gds_id', :class_name =>'GlobalDistributionSystem'
   serialize :interlines, JoinedArray.new
   serialize :not_interlines, JoinedArray.new
 

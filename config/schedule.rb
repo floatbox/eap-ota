@@ -11,6 +11,10 @@ every 5.minutes do
   runner 'Order.cancel_stale!'
 end
 
+every 5.minutes do
+  runner 'Order.set_error_ticket_status!'
+end
+
 every 10.minutes do
 #  runner 'Notification.process_queued_emails!'
 end
@@ -25,16 +29,16 @@ every 1.hour do
   #runner 'Amadeus::Session.dirty_housekeep'
 end
 
-every :wednesday, :at => '12:30 am' do
-  runner 'script/amadeus_rate'
-end
-
 every :day, :at => '2:00 am' do
   runner 'script/sync_canceled_pnrs'
 end
 
 every :day, :at => '5:00 am' do
   runner 'Tripster.load_cities'
+end
+
+every :day, :at => '6:00 pm' do
+  runner 'CBR.preload_rate'
 end
 
 ### FILL CUSTOMERS Table From ORDERS

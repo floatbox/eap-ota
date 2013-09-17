@@ -2,10 +2,19 @@
 class Country < ActiveRecord::Base
   include HasSynonyms
   include Cases
-  extend IataStash
+  extend CodeStash
+
+  def self.fetch_by_code code
+    find_by_alpha2(code)
+  end
+
+  def codes
+    [alpha2]
+  end
 
   has_paper_trail
 
+  # FIXME убрать order, лишнее замедление
   has_many :cities, :order => 'cities.name_ru'
 
   has_many :airports, :through => :cities
@@ -23,12 +32,6 @@ class Country < ActiveRecord::Base
 
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
-
-  # для работы iata_stash
-  def self.find_by_iata iata
-    iata && find_by_alpha2(iata)
-  end
-  def self.find_by_iata_ru iata_ru; return; end
 
   def iata
     alpha2

@@ -26,18 +26,34 @@ class AutoTicketStuff
     order.ticket_status == 'booked' or return 'заказ не в статусе booked'
     !order.offline_booking or return 'offline заказ'
     recommendation.country_iatas.uniq.all?{|ci| Country[ci].continent != 'africa'} or return 'есть хотя бы один африканский город'
-    people.all?{|p| ['RU', 'UA'].include?(p.nationality.alpha2)} or return 'есть пассажиры, не являющиеся гражданами РФ и Украины'
+    people.all?{|p| ['RU', 'UA', 'BY', 'MD'].include?(p.nationality.alpha2)} or return 'есть пассажиры, не являющиеся гражданами РФ, Украины, Белоруссии или Молдавии'
     !order.email['hotmail']  or return 'название почтового ящика содержит hotmail'
     !order.email['yahoo']  or return 'название почтового ящика содержит yahoo'
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
-    no_dupe_orders? or return 'dupe'
-    !group_booking? or return 'Скрытая группа'
+    no_dupe_orders? or return "dupe (#{@dupe_summary})"
+    !group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
     people.map{|p| [p.first_name, p.last_name]}.uniq.count == people.count or return 'есть 2 пассажира с совпадающими именем и фамилией'
+    !people.any?(&:too_long_names?) or return 'слишком длинные имена пассажиров'
     nil
   end
 
   def create_auto_ticket_job
     Delayed::Job.enqueue AutoTicketJob.new(order_id: order.id), run_at: 30.minutes.from_now
+  end
+
+  def job_run_at
+    return 30.minutes.from_now if order.commission_ticketing_method != 'aviacenter' ||
+                                  Date.today.wday != 2 ||
+                                  Time.now < Time.parse('20:30')
+    tomorrow_rate = CBR.exchange_on(Date.tomorrow).exchange_with('2 USD'.to_money, "RUB").to_f.ceil / 2.0 #Курс амадеуса не завтра
+    today_rate = Amadeus::Rate.exchange_on(Date.today).exchange_with('1 USD'.to_money, "RUB").to_f
+    if tomorrow_rate > today_rate
+      3.minutes.from_now
+    elsif tomorrow_rate < today_rate
+      Date.tomorrow + 1.minute
+    else
+      return 30.minutes.from_now
+    end
   end
 
   def passenger_names(o)
@@ -47,15 +63,28 @@ class AutoTicketStuff
   end
 
   def no_dupe_orders?
-    order.stored_flights.all? do |stored_flight|
-      passengers = stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).map{|o| passenger_names(o)}.flatten
-      passengers.count == passengers.uniq.count
+    dupe_information = Hash.new([])
+    passengers = passenger_names(order)
+    order.stored_flights.each do |stored_flight|
+      stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).where('id != ?', order.id).each do |o|
+        (passenger_names(o) & passengers).each do |p|
+          dupe_information[p] += [o.pnr_number]
+        end
+      end
     end
+    dupe_information.values.every.uniq!
+    @dupe_summary = dupe_information.map{|k, v| "#{k}: #{v.join(', ')}"}.join('. ')
+    return dupe_information.blank?
   end
 
   def group_booking?
-    order.stored_flights.any? do |stored_flight|
-      stored_flight.orders.where(ticket_status: ['booked', 'ticketed']).sum(:blank_count) > 8
+    @other_order_pnrs = []
+    other_orders = order.stored_flights.first.orders.where(ticket_status: ['booked', 'ticketed']).where('id != ?', order.id).select do |o|
+      order.stored_flights == o.stored_flights
     end
+    if other_orders.every.blank_count.sum + order.blank_count > 8
+      @other_order_pnrs = other_orders.every.pnr_number
+    end
+    return @other_order_pnrs.present?
   end
 end

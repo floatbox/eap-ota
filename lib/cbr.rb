@@ -1,17 +1,34 @@
 module CBR
   class << self
-    def usd(amount=1.0)
-      course = Conf.cbr.usd[Date.today] || Conf.cbr.usd.max[1]
-      (amount * course).round(2)
+    include LayeredExchange
+    def exchanges
+      @exchanges ||= {}
     end
 
-    # https://github.com/RubyMoney/money
-    # bank.exchange_with(money, "USD")
-    def bank date
-      bank =  Money::Bank::VariableExchange.new
-      bank.add_rate("RUB", "USD", Conf.cbr.usd[date])
-      bank.add_rate("USD", "RUB", (1/Conf.cbr.usd[date]))
-      bank
+    class LoggingCBR < CentralBankOfRussia
+
+      def update_rates(date)
+        Rails.logger.info "Getting CBR rates for #{date}"
+        super
+      end
+
+    end
+
+    def exchange_on(date)
+      # Параметр-блок задает метод округления
+      exchanges[date] ||=
+        ExchangeWithFallback.new(
+          InverseRatesFor.new({from: 'RUB'},
+            RatesUpdatedWithFallback.new(
+              ActiveRecordRates.new(CurrencyRate.where(date: date, bank: 'cbr')),
+              LazyRates.new { LoggingCBR.new.update_rates(date) } ))){|p| p.round}
+    end
+
+    def preload_rate
+      date = Time.now.hour > 16 ? Date.today + 1.day : Date.today
+      CBR.exchange_on(date).exchange_with("1 USD".to_money, "RUB")
+    rescue Exception
+      with_warning
     end
   end
 end

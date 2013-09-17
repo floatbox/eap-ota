@@ -13,4 +13,18 @@ class Commission::Writer::Book
     book_string
   end
 
+  def write_dir(dir)
+    FileUtils.mkdir_p(dir)
+    @book.pages.each do |page|
+      filename = page.carrier
+      filename += '-' + page.ticketing_method.to_s if page.ticketing_method
+      filename += '-' + page.start_date.to_s if page.start_date
+      filename += '.rb'
+      filename = File.join(dir, filename)
+      File.open(filename, 'w') do |fh|
+        fh << Commission::Writer::Page.new(page).write
+      end
+    end
+  end
+
 end

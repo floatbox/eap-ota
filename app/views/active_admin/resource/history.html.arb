@@ -1,0 +1,35 @@
+panel "История изменений" do
+
+table_for resource.versions.reverse do
+  column :created_at
+  column :event
+  column :author do |version|
+    (version.terminator || '--')
+  end
+  column :done
+  column :changes do |version|
+    if version.event == 'create'
+      attrs = version.next ? YAML::load(version.next.object) : @item.attributes
+      attrs.each do |attribute, value|
+        next if value.blank? || value == 0
+        strong do
+          resource_class.human_attribute_name(attribute)
+        end
+        span do
+          value.inspect
+        end
+      end
+    else
+      version.changeset.each do |attribute, (before, after)|
+        strong do
+          resource_class.human_attribute_name(attribute)
+        end
+        span do
+          before.inspect + "→" + after.inspect
+        end
+      end
+    end
+  end
+end
+
+end

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::FareMasterPricerCalendar do
+describe Amadeus::Response::FareMasterPricerCalendar, :amadeus do
   context 'with avaliability contexts from slice and dice' do
 
     let_once! :response do

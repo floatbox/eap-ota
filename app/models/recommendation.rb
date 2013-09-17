@@ -119,12 +119,11 @@ class Recommendation
   def valid_interline?
     # FIXME убрать проверку HR отсюда
     validating_carrier_iata == 'HR' or
-    not interline? or
+    # вернет true при отсутствии интерлайна тоже
     other_marketing_carrier_iatas.uniq.all? do |iata|
       validating_carrier.confirmed_interline_with?(iata)
     end
   end
-
 
   def segments
     variants.sum(&:segments)
@@ -145,7 +144,11 @@ class Recommendation
   def sellable?
     #FIXME Временный костыль, приходят рейсы выполняемые аэросвитом
     return if flights.any? do |f|
-      f.marketing_carrier_iata == 'PS' && booking_class_for_flight(f) == 'T'
+      f.marketing_carrier_iata == 'PS' && (
+        booking_class_for_flight(f) == 'T' ||
+        # PS возможно закроется, избавляемся от новогодних возвратов
+        f.dept_date && f.dept_date > Date.new(2013, 12, 15)
+      )
     end
     commission.sellable?
   end
@@ -154,12 +157,16 @@ class Recommendation
     ((marketing_carrier_iatas + operating_carrier_iatas) & Conf.amadeus.ignored_carriers).present?
   end
 
-  def without_full_information?
+  def variants?
+    variants.present?
+  end
+
+  def full_information?
     #проверяем, что все аэропорты и авиакомпании есть в базе
     flights.map {|f| f.arrival; f.departure; f.operating_carrier; f.marketing_carrier; f.equipment_type}
+    true
+  rescue CodeStash::NotFound => e
     false
-  rescue IataStash::NotFound => e
-    return true
   end
 
   def ground?
@@ -217,22 +224,6 @@ class Recommendation
     signature.eql?(b.signature)
   end
   alias == eql?
-
-  def self.corrected recs
-    #объединяем эквивалентные варианты
-    recs.each_with_object([]) do |r, result|
-      #некрасиво, но просто и работает
-      if r.groupable_with? result[-1]
-        result[-1].variants += r.variants
-      elsif r.groupable_with? result[-2]
-        result[-2].variants += r.variants
-      elsif r.groupable_with? result[-3]
-        result[-3].variants += r.variants
-      else
-        result << r
-      end
-    end
-  end
 
   def groupable_with? rec
     return unless rec
@@ -380,9 +371,9 @@ class Recommendation
     data[:alliances] = recs.every.validating_carrier.map{|vc| vc.alliance || nil}.compact.uniq.sort_by(&:name)
     data[:carriers] = all_segments.flatten.every.main_marketing_carrier.uniq
     data[:planes] = flights.every.equipment_type.uniq
-    
+
     data
-  end  
+  end
 
   # фабрика для тестовых целей
   # Recommendation.example 'mowaer aermow/s7/c'

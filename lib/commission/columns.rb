@@ -24,6 +24,7 @@ module Commission::Columns
 
   # тоже вынести в какой-то валидатор
   def has_percentage_only_commissions *columns
+    return true
     validates_each columns, :allow_blank => true do |model, attr, fx|
       model.errors.add(attr, ", некорректное значение: '#{fx}', попробуйте '#{fx.rate}%'") unless fx.percentage? || fx.zero?
     end

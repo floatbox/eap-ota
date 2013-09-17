@@ -60,7 +60,7 @@ require File.expand_path('../../config/environment',  __FILE__)
 pricer_attrs = options.extract!(:from, :to, :date1, :date2, :adults, :children, :infants)
 
 def response(service, attrs)
-  form = PricerForm.simple(attrs)
+  form = AviaSearch.simple(attrs)
   service.fare_master_pricer_travel_board_search(form)
 end
 

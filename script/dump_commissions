@@ -3,22 +3,25 @@
 require 'optparse'
 
 # defaults
-$opts = {
-  in: "config/commissions.rb"
+opts = {
+  in: "config/commissions",
+  dir: "config/commissions"
 }
 
-def setopt(attr)
-  proc {|value| $opts[attr] = value}
-end
-
-OptionParser.new do |opts|
-  opts.banner = "#{$0} [options] reads and dumps again commissions"
-  opts.on "-i", "--in FILENAME", "commission file to read (config/commissions.rb by default)", &setopt(:in)
-  opts.on "-o", "--out FILENAME", "commission file to write (STDOUT by default)", &setopt(:out)
-  opts.on "-d", "--dir DIRNAME", "write commissions to directory", &setopt(:dir)
-  opts.on "-y", "--yaml", "write in YAML format", &setopt(:yaml)
-  opts.on_tail("-h", "--help", "Show this message") do
-    puts opts
+setopt = proc {|key| proc {|value| opts[key] = value } }
+OptionParser.new do |op|
+  op.banner = "#{$0} [options] reads and dumps again commissions"
+  op.on "-i", "--in FILENAME", "commission file to read (config/commissions.rb by default)", &setopt[:in]
+  op.on "-o", "--out FILENAME", "commission file to write (STDOUT by default)", &setopt[:out]
+  op.on "-d", "--dir DIRNAME", "write commissions to directory", &setopt[:dir]
+  op.on "-y", "--yaml", "write in YAML format", &setopt[:yaml]
+  op.on "-s", "--discounts FILENAME", "apply discounts from file", &setopt[:discounts]
+  op.on "-e", "--eval RUBYCODE", "apply code to book before dumping", &setopt[:eval]
+  op.on "-E", "--ruleeval RUBYCODE", "apply code to each current active rule before dumping", &setopt[:ruleeval]
+  op.on "-m", "--method TICKETING_METHODS", Array, "comma separated list of ticketing methods to apply --ruleeval", &setopt[:methods]
+  op.on "-c", "--carrier CARRIERS", Array, "comma separated list of carriers methods to apply --ruleeval", &setopt[:carriers]
+  op.on_tail("-h", "--help", "Show this message") do
+    puts op
     exit
   end
 end.parse!
@@ -26,25 +29,62 @@ end.parse!
 # loading
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 
-unless $opts[:out]
+unless opts[:out]
   puts "working..."
 end
 
-book = Commission::Reader.new.read_file($opts[:in])
+book = Commission::Reader.new.read_file(opts[:in])
 
 # выгружает текущие комиссии в yaml. для массового сравнения.
 
 # чтобы убрать адреса и мусор, для сравнения после апдейта:
 #   perl -lpe 's/[&*]\d+//' | grep -v 'source' > commissions.yml
 
-if $opts[:out]
-  outfh = File.open('w', outfile)
-else
+if opts[:out] == '-'
   outfh = STDOUT
+elsif opts[:out]
+  outfh = File.open('w', outfile)
 end
 
+if opts[:discounts]
+  puts "applying discounts..."
+  discounts_file = File.open(opts[:discounts])
+  discounts = discounts_file.readlines.map(&:chomp)
+  discounts = discounts.map do |d|
+    carrier, method, number, fx = d.split
+    number = number.sub('#','').to_i
+    fx = Commission::Formula.new(fx.sub(',', '.'))
+    raise fx unless fx.valid?
+    [carrier, number, fx]
+  end
 
-if $opts[:yaml]
+  discounts.each do |carrier, number, discount|
+    page = book.find_page(carrier: carrier)
+    rule = page.rules.find {|r| r.number == number } if page
+    raise "no rule found for '#{carrier} ##{number}'" unless rule
+    #puts "changing #{rule.discount} to #{discount}"
+    rule.discount = discount
+  end
+end
+
+if opts[:eval]
+  puts "evaluating code..."
+  book.extend Commission::Fx
+  book.instance_eval opts[:eval]
+end
+
+if opts[:ruleeval]
+  puts "evaluating code..."
+  book.current_rules.each do |r|
+    next if r.no_commission
+    next if opts[:methods] && !opts[:methods].include?(r.ticketing_method)
+    next if opts[:carriers] && !opts[:carriers].include?(r.carrier)
+    r.extend Commission::Fx
+    r.instance_eval opts[:ruleeval]
+  end
+end
+
+if opts[:yaml]
   # патчим to_yaml, чтобы атрибуты объектов сортировались
   class Psych::Visitors::YAMLTree
     def dump_ivars target
@@ -59,20 +99,10 @@ if $opts[:yaml]
 
   outfh << book.to_yaml
 else
-  if $opts[:dir]
-
-    FileUtils.mkdir_p($opts[:dir])
-    book.pages.each do |page|
-      filename = page.carrier
-      filename += '-' + page.start_date.to_s if page.start_date
-      filename += '.rb'
-      filename = File.join($opts[:dir], filename)
-      File.open(filename, 'w') do |fh|
-        fh << Commission::Writer::Page.new(page).write
-      end
-    end
-
-  else
+  if opts[:out]
     outfh << Commission::Writer::Book.new(book).write
+  else
+    puts "writing commissions to dir #{opts[:dir]}"
+    Commission::Writer::Book.new(book).write_dir(opts[:dir])
   end
 end

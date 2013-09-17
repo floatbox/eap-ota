@@ -11,38 +11,22 @@ AirlineAlliance:
   relationships: carriers
   application: Base, 5
 
-GlobalDistributionSystem:
-  fields:
-    default: name
-    list: name
-    form: name
-  relationships: carriers
-  application: Base, 5
-
-Consolidator:
-  fields:
-    default: name, booking_office, ticketing_office
-    list: name, booking_office, ticketing_office
-    form: name, booking_office, ticketing_office
-  relationships: carriers
-  application: Base, 5
-
 Carrier:
   fields:
     default: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
     list: iata, ru_shortname, ru_longname, en_shortname, en_longname, country
-    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, iata_ru, country, bonus_program_name, alliance, gds, consolidator, color, font_color, comment
+    form: ru_shortname, ru_longname, en_shortname, en_longname, iata, iata_ru, country, bonus_program_name, alliance, color, font_color, comment
   order_by: en_shortname, ru_shortname
-  relationships: country, alliance, gds, consolidator
-  filters: country, gds, consolidator
+  relationships: country, alliance
+  filters: country
   search: ru_shortname, ru_longname, en_shortname, en_longname, ^iata
   application: Base, 5
 
 Airplane:
   fields:
-    default: iata, name_ru, name_en, engine_type
-    list: iata, name_ru, name_en, engine_type
-    form: iata, iata_ru, icao, name_ru, name_en, engine_type
+    default: iata, name_ru, name_en, engine_type, auto_save
+    list: iata, name_ru, name_en, engine_type, auto_save
+    form: iata, iata_ru, icao, name_ru, name_en, engine_type, auto_save
     options:
       selectors: engine_type
 
@@ -51,15 +35,17 @@ Airplane:
   filters: engine_type
   search: ^iata, name_ru, name_en
   application: Base, 5
+  scopes: autosaved
 
 Airport:
   fields:
     default: iata, name_ru, name_en, importance, city
     list: iata, name_ru, name_en, importance, city
-    form: iata, iata_ru, name_en, name_ru, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city, disabled
+    form: iata, iata_ru, name_en, name_ru, synonym_list, morpher_to, morpher_from, morpher_in, proper_to, proper_from, proper_in, domestic, icao, federal, international, runway_length, lat, lng, importance, city, disabled, auto_save
     csv: iata, name_ru, city
   order_by: name_ru
   relationships: city, country, geo_tags
+  scopes: autosaved
   filters:
   search: name_ru, name_en, ^iata, synonym_list
   actions:
@@ -212,10 +198,11 @@ Notification:
 Partner:
   fields:
     default: token, password, enabled, hide_income, cookies_expiry_time, income_at_least
-    list: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat
-    form: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat, notes
-    show: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat, sample_api_url, notes
+    list: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat_mode
+    form: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat_mode, notes
+    show: token, password, enabled, hide_income, cookies_expiry_time, income_at_least, cheat_mode, sample_api_url, notes
     options:
+      selectors: cheat_mode
       booleans:
         enabled: ["да", "нет"]
         hide_income: ["да", "нет"]
@@ -224,7 +211,7 @@ Partner:
         password: string
   options:
     action_after_save: show
-    default_action_on_item: show
+    default_action_on_item: edit
   search: token, notes
   application: Misc, 2
 

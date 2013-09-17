@@ -32,6 +32,9 @@
         <tr valign="top"><td class="dataName">Успех/Переход</td><td><%= number_to_percentage(report[:successes_per_enter]) %></td></tr>
         <tr valign="top"><td class="dataName">Заказ/Переход</td><td><%= number_to_percentage(report[:conv]) %></td></tr>
         <tr valign="top"><td class="dataName">Заказ/Успех</td><td><%= number_to_percentage(report[:conv_success]) %></td></tr>
+        <% report[:by_office].each do |office, office_summary| %>
+        <tr valign="top"><td class="dataName"><%= office %></td><td><%= display_price(office_summary[:price])%>, <%= display_numbers(office_summary[:count]) %> билетов</td></tr>
+        <% end %>
       </table>
     </td>
     <td style="width: 60%; text-align: center;">

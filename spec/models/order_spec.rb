@@ -96,12 +96,11 @@ describe Order do
     context 'with one non-zero ticket' do
       before(:all) do
         Conf.payture_alfa.stub(:commission).and_return('2.8%')
-        @old_ticket = Ticket.new(:price_fare => 21590, :price_tax => 9878, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789')
+        Amadeus::Rate.stub :euro_rate => 43.0
         @order = create(:order, :price_fare => 21590, :price_tax => 9878, :price_with_payment_commission => BigDecimal('31946.68'), :source => 'amadeus', :fix_price => true)
-        @old_ticket.order = @order
-        @old_ticket.save
+        @old_ticket = create(:ticket, :original_price_fare => 21590.to_money("RUB"), :original_price_tax => 9878.to_money("RUB"), :kind => 'ticket', :status => 'ticketed', :code => '123', :number => '123456789', :order => @order)
         @new_ticket_hashes = [
-          {:number => '123456787', :code => '123', :source => 'amadeus', :status => 'ticketed', :price_fare => 0, :price_fare_base => 0, :price_tax => '6075', :parent_number => '123456789', :parent_code => '123'}
+          {:ticketed_date => Date.today - 2.days, :number => '123456787', :code => '123', :source => 'amadeus', :status => 'ticketed', :original_price_fare => 21590.to_money("RUB"), :original_price_total => 6075.to_money("RUB"), :parent_number => '123456789', :parent_code => '123', :price_fare_base => 21590.to_money("RUB")}
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
         @order.reload_tickets
@@ -124,7 +123,9 @@ describe Order do
       describe 'old_ticket' do
         subject { @old_ticket }
 
+        its(:original_price_fare) {should == 21590.to_money("RUB")}
         its(:price_fare) {should == 21590}
+        its(:original_price_tax) {should == 9878.to_money("RUB")}
         its(:price_tax) {should == 9878}
         its(:status) {should == 'exchanged'}
 
@@ -139,7 +140,9 @@ describe Order do
         subject { @new_ticket }
 
         its(:price_fare) {should == 0}
+        its(:original_price_fare) {should == 0.to_money("RUB")}
         its(:price_tax) {should == 6075}
+        its(:original_price_tax) {should == 6075.to_money("RUB")}
         its(:status) {should == 'ticketed'}
         its(:parent) {should == @old_ticket}
 
@@ -153,13 +156,13 @@ describe Order do
 
     context 'of two tickets with zero price' do
       before(:all) do
+        Amadeus::Rate.stub :euro_rate => 43.0
         Conf.payture_alfa.stub(:commission).and_return('2.8%')
         @order = create(:order, :price_fare => 20010, :price_tax => 10860, :price_with_payment_commission => BigDecimal('30729.94'), :source => 'amadeus', :price_discount => -1000.5, :fix_price => true)
-        @old_tickets = [1,2].map {|n| Ticket.new(:price_fare => 10005, :price_tax => 5430, :price_discount => -500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
-        @old_tickets.every.save
+        @old_tickets = [1,2].map {|n| create(:ticket, :ticketed_date => Date.today - 5.days, :original_price_fare => 10005.to_money("RUB"), :original_price_tax => 5430.to_money("RUB"), :price_discount => -500.25, :kind => 'ticket', :status => 'ticketed', :code => '123', :number => "123456789#{n}", :order => @order)}
         @new_ticket_hashes = [
-          {:number => '1234567871', :code => '123', :price_fare => 0, :price_tax => 0, :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
-          {:number => '1234567872', :code => '123', :price_fare => 0, :price_tax => 0, :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
+          {:number => '1234567871', :code => '123', :ticketed_date => Date.today - 2.days, :original_price_fare => 0.to_money("RUB"), :original_price_tax => 0.to_money("RUB"), :source => 'amadeus', :parent_id => @old_tickets[0].id, :status => 'ticketed'},
+          {:number => '1234567872', :code => '123', :ticketed_date => Date.today - 2.days, :original_price_fare => 0.to_money("RUB"), :original_price_tax => 0.to_money("RUB"), :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
         @order.reload_tickets
@@ -181,7 +184,9 @@ describe Order do
       describe 'old_ticket' do
         subject { @old_ticket }
 
+        its(:original_price_fare) {should == 10005.to_money("RUB")}
         its(:price_fare) {should == 10005}
+        its(:original_price_tax) {should == 5430.to_money("RUB")}
         its(:price_tax) {should == 5430}
 
         its(:recalculated_price_with_payment_commission) {should == 15364.97}
@@ -192,9 +197,11 @@ describe Order do
       describe 'new ticket' do
         subject { @new_ticket }
 
+        its(:original_price_fare) {should == 0.to_money("RUB")}
         its(:price_fare) {should == 0}
         its(:price_tax_and_markup_and_payment) {should == 0}
         its(:price_tax) {should == 0}
+        its(:original_price_tax) {should == 0.to_money("RUB")}
         its(:recalculated_price_with_payment_commission) {should == 0}
 
       end
@@ -246,8 +253,8 @@ describe Order do
           :first_name => 'ALEXANDRA MRS',
           :passport => '4510108712',
           :ticketed_date => Date.new(2011, 8, 30),
-          :price_tax => 1281,
-          :price_fare => 1400,
+          :original_price_total => 2681.to_money("RUB"),
+          :original_price_fare => 1400.to_money("RUB"),
           :validating_carrier => 'SU',
           :status => 'ticketed',
           :office_id => 'MOWR2219U',
@@ -255,6 +262,33 @@ describe Order do
           :baggage_info => ['1N']
         ))
         @order.load_tickets
+      end
+
+      it 'loads tickets with bucks correctly' do
+        @order = create :order
+        @new_ticket_hashes = [
+          {:number => '123456787',
+           :code => '123',
+           :source => 'amadeus',
+           :status => 'ticketed',
+           :original_price_fare => 683.22.to_money("USD"),
+           :original_price_tax => 192.25.to_money("USD"),
+           :parent_number => '123456789',
+           :parent_code => '123',
+           :price_fare_base => 0.to_money("RUB"),
+           :ticketed_date => Date.new(2011, 8, 30)}
+        ]
+        Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
+        bank = Money::Bank::VariableExchange.new
+        bank.add_rate("USD", "RUB", 31.6)
+        CBR.stub(:exchange_on).with(Date.new(2011, 8, 30)).and_return(bank)
+        #layered_exchange.stub(:exchange_with).and_return(31.6)
+        @order.load_tickets
+        @new_ticket = @order.tickets.first
+        @new_ticket.original_price_fare.should == 683.22.to_money("USD")
+        @new_ticket.price_fare.should == 21589.75
+        @new_ticket.original_price_tax.should == 192.25.to_money("USD")
+        @new_ticket.price_tax.should == 6075.10
       end
 
       it "shouldn't update tickets updated by airline" do
@@ -274,12 +308,13 @@ describe Order do
           :validator => '87823412'
         }}
         pnr_resp = stub('Amadeus::Response::PNRRetrieve')
+        pnr_resp.stub(:additional_pnr_numbers).and_return({})
         pnr_resp.should_receive(:tickets).and_return(new_ticket_hash)
         pnr_resp.stub(:flights).and_return(nil)
         pnr_resp.stub(:exchanged_tickets).and_return({})
         pnr_resp.stub(:additional_pnr_numbers).and_return({})
         tst_resp = stub('Amadeus::Response::TicketDisplayTST')
-        tst_resp.stub(:prices_with_refs).and_return({})
+        tst_resp.stub(:money_with_refs).and_return({})
         tst_resp.stub(:baggage_with_refs).and_return({})
         @order.stub_chain(:tickets, :where, :every, :update_attribute)
         @order.stub_chain(:tickets, :reload)
@@ -380,6 +415,18 @@ describe Order do
     its(:price_tax_and_markup_and_payment) {should == active_ticket.price_tax_and_markup_and_payment}
     its(:fee) {should == active_ticket.fee}
     its(:recalculated_price_with_payment_commission) {should == 1500}
+
+  end
+
+  describe "original_price_tax_as_string with bad price in tickets" do
+    subject do
+      build(:order).tap do |o|
+        o.stub_chain(:sold_tickets, :present?).and_return(true)
+        o.stub_chain(:sold_tickets, :every, :original_price_tax, :sum).and_return(0)
+      end
+    end
+
+    its(:original_price_tax_as_string){should be_nil}
 
   end
 

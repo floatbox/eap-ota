@@ -4,7 +4,7 @@ class Notification < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::TextHelper
   belongs_to :order
-  belongs_to :typus_user
+  belongs_to :typus_user, class_name: 'DeckUser'
 
   #validates :destination, :presence => true
   #before_validation :set_order_data

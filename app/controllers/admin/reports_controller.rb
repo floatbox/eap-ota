@@ -109,6 +109,8 @@ class Admin::ReportsController < Admin::BaseController
       data[:conv] = !data[:enter].zero? ? data[:orders].order_count.to_f / data[:enter].to_f  * 100 : 0
       data[:conv_success] = !data[:enter_success].zero? ? data[:orders].order_count.to_f / data[:enter_success].to_f  * 100 : 0
 
+      data[:by_office] = StatReports.by_office StatReports.build_datetime_conditions('created_at', d)
+
       @report << data
     end
   end

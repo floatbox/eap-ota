@@ -19,65 +19,70 @@
     <p class="bfrsm-text bfrsm-number"><%= raw t 'booking.success.pnr', :number => content_tag(:span, pnr_number, :class => 'bfr-pnr') %></p>
 </div>
 
-<% ostrovok_url = ostrovok_link(@order_form) %>
-<% insurance_url = cherehapa_insurance_uri(@order_form) %>
-<% tripster_url = tripster_link(@order_form) %>
-<% weatlas_url = weatlas_link(@order_form) unless tripster_url %>
+<% if I18n.locale == :ru %>
 
-<% if ostrovok_url || insurance_url || weatlas_url || tripster_url %>
-<div class="bfrs-addition">
-    <% if ostrovok_url %>
-    <div class="bfrs-hotels">
-        <h5 class="bfrsa-title">Отели<br><%= ostrovok_city(@order_form) %></h5>
-        <ul class="bfrsa-features">
-            <li class="bfrsa-feature">Самые низкие цены</li>
-            <li class="bfrsa-feature">Большой выбор разных отелей</li>
-            <li class="bfrsa-feature">Мгновенная оплата</li>
-            <li class="bfrsa-feature">Моментальное подтверждение</li>
-        </ul>
-        <div class="bfrsa-bar">
-            <a class="bfrsa-link" href="<%= ostrovok_url %>" target="_blank">Выбрать и&nbsp;забронировать отель</a>
+    <% ostrovok_url = ostrovok_link(@order_form) %>
+    <% insurance_url = cherehapa_insurance_uri(@order_form) %>
+    <% tripster_url = tripster_link(@order_form) %>
+    <% weatlas_url = weatlas_link(@order_form) unless tripster_url %>
+
+    <% if ostrovok_url || insurance_url || weatlas_url || tripster_url %>
+    <div class="bfrs-addition">
+        <% if ostrovok_url %>
+        <div class="bfrs-hotels">
+            <h5 class="bfrsa-title">Отели<br><%= ostrovok_city(@order_form) %></h5>
+            <ul class="bfrsa-features">
+                <li class="bfrsa-feature">Самые низкие цены</li>
+                <li class="bfrsa-feature">Большой выбор разных отелей</li>
+                <li class="bfrsa-feature">Мгновенная оплата</li>
+                <li class="bfrsa-feature">Моментальное подтверждение</li>
+            </ul>
+            <div class="bfrsa-bar">
+                <a class="bfrsa-link" href="<%= ostrovok_url %>" target="_blank">Выбрать и&nbsp;забронировать отель</a>
+            </div>
+            <div class="bfrsa-partner">Совместно с партнером Ostrovok.ru</div>
         </div>
-        <div class="bfrsa-partner">Совместно с партнером Ostrovok.ru</div>
+        <% end %>
+
+        <% if insurance_url %>
+        <div class="bfrs-insurance">
+            <iframe src="<%= insurance_url %>" style="border: none; width: 197px; height: 210px;"></iframe>
+        </div>
+        <% end %>
+
+        <% if tripster_url %>
+        <div class="bfrs-excursion">
+            <h5 class="bfrsa-title">Чем заняться<br><%= city_case_in(@order_form) %></h5>
+            <ul class="bfrsa-features">
+                <li class="bfrsa-feature">Экскурсии от местных жителей</li>
+                <li class="bfrsa-feature">Все самое интересное в городе</li>
+                <li class="bfrsa-feature">Индивидуальные программы</li>
+                <li class="bfrsa-feature">Онлайн-бронирование</li>
+            </ul>
+            <div class="bfrsa-bar">
+                <a class="bfrsa-link" href="<%= tripster_url %>" target="_blank">Выбрать и&nbsp;забронировать</a>
+            </div>
+            <div class="bfrsa-partner">Совместно с Tripster</div>
+        </div>
+        <% elsif weatlas_url %>
+        <div class="bfrs-excursion">
+            <h5 class="bfrsa-title">Чем заняться<br><%= city_case_in(@order_form) %></h5>
+            <ul class="bfrsa-features">
+                <li class="bfrsa-feature">Индивидуальные экскурсии</li>
+                <li class="bfrsa-feature">Персональные гиды</li>
+                <li class="bfrsa-feature">Нестандартные впечатления</li>
+                <li class="bfrsa-feature">Онлайн-бронирование</li>
+            </ul>
+            <div class="bfrsa-bar">
+                <a class="bfrsa-link" href="<%= weatlas_url %>" target="_blank">Выбрать и&nbsp;забронировать</a>
+            </div>
+            <div class="bfrsa-partner">Совместно с партнером Weatlas.com</div>
+        </div>
+        <% end %>
     </div>
     <% end %>
 
-    <% if insurance_url %>
-    <div class="bfrs-insurance">
-        <iframe src="<%= insurance_url %>" style="border: none; width: 197px; height: 210px;"></iframe>
-    </div>
-    <% end %>
-
-    <% if tripster_url %>
-    <div class="bfrs-excursion">
-        <h5 class="bfrsa-title">Чем заняться<br><%= city_case_in(@order_form) %></h5>
-        <ul class="bfrsa-features">
-            <li class="bfrsa-feature">Экскурсии от местных жителей</li>
-            <li class="bfrsa-feature">Все самое интересное в городе</li>
-            <li class="bfrsa-feature">Индивидуальные программы</li>
-            <li class="bfrsa-feature">Онлайн-бронирование</li>
-        </ul>
-        <div class="bfrsa-bar">
-            <a class="bfrsa-link" href="<%= tripster_url %>" target="_blank">Выбрать и&nbsp;забронировать</a>
-        </div>
-        <div class="bfrsa-partner">Совместно с Tripster</div>
-    </div>
-    <% elsif weatlas_url %>
-    <div class="bfrs-excursion">
-        <h5 class="bfrsa-title">Чем заняться<br><%= city_case_in(@order_form) %></h5>
-        <ul class="bfrsa-features">
-            <li class="bfrsa-feature">Индивидуальные экскурсии</li>
-            <li class="bfrsa-feature">Персональные гиды</li>
-            <li class="bfrsa-feature">Нестандартные впечатления</li>
-            <li class="bfrsa-feature">Онлайн-бронирование</li>
-        </ul>
-        <div class="bfrsa-bar">
-            <a class="bfrsa-link" href="<%= weatlas_url %>" target="_blank">Выбрать и&nbsp;забронировать</a>
-        </div>
-        <div class="bfrsa-partner">Совместно с партнером Weatlas.com</div>
-    </div>
-    <% end %>
-</div>
 <% end %>
+
 <p class="latent" id="bfh-mail"><%= raw t 'booking.success.whattodo.hint' %></p>
 </div>

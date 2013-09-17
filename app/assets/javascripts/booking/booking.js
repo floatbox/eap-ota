@@ -12,11 +12,12 @@ init: function() {
     results.header.select.find('.rhs-link').click(function() {
         that.cancel();
     });
-    this.content.delegate('.bf-hint', 'click', function(event) {
-        var content = $('#' + $(this).attr('data-hint')).html();
-        hint.show(event, content);
+    this.content.on('click', '.bf-hint', function(event) {
+        var control = $(this);
+        var content = $('#' + control.attr('data-hint')).html();
+        hint.show(event, content, control.attr('data-width'));
     });
-    this.content.delegate('.od-alliance', 'click', function(event) {
+    this.content.on('click', '.od-alliance', function(event) {
         var el = $(this);
         hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-carriers') + '.');
     });
@@ -28,7 +29,8 @@ abort: function() {
         delete this.request;
     }
     if (this.offer) {
-        this.offer.book.removeClass('ob-disabled').show();
+        results.content.el.find('.rc-overlay').hide();
+        this.offer.book.removeClass('ob-disabled ob-fade').show();
         this.offer.updateBook();
     }
     delete this.variant;
@@ -51,7 +53,8 @@ prebook: function(offer) {
         },
         timeout: 120000
     });
-    offer.book.addClass('ob-disabled');
+    results.content.el.find('.rc-overlay').show();
+    offer.book.addClass('ob-disabled ob-fade');
     offer.state.html('<span class="ob-progress">' + I18n.t('prebooking.progress') + '</span>');
     this.variant = offer.selected;
     this.offer = offer;
@@ -62,7 +65,7 @@ prebook: function(offer) {
 process: function(result) {
     var that = this;
     if (result && result.success) {
-        this.offer.state.html(I18n.t('prebooking.available'));
+        this.offer.state.find('.ob-progress').html(I18n.t('prebooking.available'));
         this.key = result.number;
         this.ltimer = setTimeout(function() {
             that.load();
@@ -74,11 +77,12 @@ process: function(result) {
 },
 failed: function() {
     var tip = 'Так бывает вследствие несвоевременного или&nbsp;некорректного обновления авиакомпанией информации о&nbsp;наличии мест в&nbsp;системах бронирования. К&nbsp;сожалению, от&nbsp;нас это не&nbsp;зависит. Спасибо за&nbsp;понимание.';
-    this.offer.book.addClass('ob-failed');
+    this.offer.book.addClass('ob-failed').removeClass('ob-fade');
     this.offer.state.html('Авиакомпания не подтвердила наличие мест по этому тарифу. Выберите <span class="obs-cancel">другой вариант</span>. <span class="link obs-hint">Почему так бывает?</span>');
     this.offer.state.find('.obs-hint').click(function(event) {
         hint.show(event, tip);
     });
+    results.content.el.find('.rc-overlay').hide();
     _kmq.push(['record', 'PRE-BOOKING: fail']);
     _gaq.push(['_trackEvent', 'Бронирование', 'Невозможно выбрать вариант']);
 },
@@ -124,7 +128,8 @@ preview: function(content) {
         return 'segment' + (i + 1);
     });
     results.content.el.hide();
-    this.offer.book.removeClass('ob-disabled');
+    results.content.el.find('.rc-overlay').hide();
+    this.offer.book.removeClass('ob-disabled ob-fade');
     this.offer.updateBook();
     this.comparePrices();
     this.el.show();
@@ -181,7 +186,7 @@ hide: function() {
     results.header.edit.show();
     results.content.el.show();
     $w.scrollTop(this.offer.details.offset().top - offset);
-    $w.delay(300).smoothScrollTo(Math.max(this.offer.el.offset().top - 36 - results.header.height - 90, 0));
+    $w.delay(300).smoothScrollTo(Math.max(this.offer.el.offset().top - 62 - results.header.height - 90, 0));
     page.title.set(I18n.t('page.results', {title: results.data.titles.window}));
     page.location.set('booking');
     _gaq.push(['_trackPageview', page.location.track()]);
@@ -272,7 +277,7 @@ start: function() {
     this.counter = this.el.find('.bft-counter');
     this.timer = setInterval(function() {
         var now = new Date().getTime();
-        var time = Math.max(0, 1200 - Math.round((now - from) / 1000));
+        var time = Math.max(0, 1800 - Math.round((now - from) / 1000));
         if (time === 0) {
             that.expire();
             that.stop();
@@ -281,7 +286,7 @@ start: function() {
         }
     }, 5000);
     this.minutes = undefined;
-    this.show(1200);
+    this.show(1800);
 },
 show: function(time) {
     var minutes = Math.ceil(time / 60);

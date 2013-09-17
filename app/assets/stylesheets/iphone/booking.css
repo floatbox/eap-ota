@@ -399,6 +399,8 @@
     margin: 8px 0 0;
 }
 .bf-result iframe,
+.bfrs-social,
+.bfrsm-pnr,
 .bfrs-addition {
     display: none;
 }
@@ -414,11 +416,23 @@
     font-weight: bold;
     color: #f90a6f;
 }
+.bfnp-content {
+    margin: 0 0 5px;
+}
+.bfnp-tip {
+    color: #777777;
+    font-size: 13px;
+    line-height: 15px;
+}
+.bfnp-data {
+    display: none;
+}
 
 /* Button */
 .bfr-controls {
-    height: 36px;
-    margin: 10px -3px 0;
+    width: 290px;
+    height: 37px;
+    margin: 10px 0 0;
     line-height: 38px;
 }
 .bfrc-addition {
@@ -432,25 +446,25 @@
     letter-spacing: -0.03em;
 }
 .obb-side {
-    height: 42px;
-    background: url(/images/booking/continue.png) no-repeat;
+    height: 39px;
+    background: url(/images/results/book.png?2) no-repeat;
 }
 .obb-left {
     position: absolute;
-    top: -2px;
-    left: -2px;
+    top: -1px;
+    left: -1px;
     width: 100%;
-    padding-right: 6px;
+    padding-right: 2px;
     background-position: 100% 0;    
 }
 .obb-right {
-    margin-right: 19px;
+    margin-right: 18px;
 }
 .obb-title {
     position: relative;
     z-index: 1;
     padding: 8px 17px 8px 18px;
-    border-radius: 18px;
+    border-radius: 5px;
     font-weight: bold;
     text-align: center;
     color: #FFF;

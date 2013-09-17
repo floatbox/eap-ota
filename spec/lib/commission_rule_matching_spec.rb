@@ -8,14 +8,7 @@ describe Commission::Rule::Matching do
 
     RSpec::Matchers.define(:match_recommendation) do |recommendation|
       match do |subject_rule|
-        begin
-          # FIXME сделать другой выключатель проверки интерлайнов
-          old, Commission::Rule.skip_interline_validity_check = Commission::Rule.skip_interline_validity_check, false
-          @reason = subject_rule.turndown_reason(recommendation)
-        ensure
-          Commission::Rule.skip_interline_validity_check = old
-        end
-        ! @reason
+        !subject_rule.turndown_reason(recommendation)
       end
 
       failure_message_for_should do |subject_rule|
@@ -31,18 +24,10 @@ describe Commission::Rule::Matching do
       end
     end
 
-    # определяет класс комиссий с единственным правилом и возвращает это правило
+    # считывает одно единственное правило
+    # FIXME может быть, прокинуть в define перевозчика?
     def rule(&block)
-
-      Commission::Reader.new.define do
-        # FIXME дефолт для Recommendation.example
-        carrier 'SU'
-        # здесь как бы выполняется блок определения комиссии
-        instance_eval &block
-        # неопределенная агентская/субагентская комиссия
-        commission '/'
-      end.rules.first
-
+      Commission::Reader::Rule.new.define(&block)
     end
 
     let(:no_interline)             { Recommendation.example('SVOCDG CDGSVO') }

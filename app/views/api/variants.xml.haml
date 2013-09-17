@@ -5,7 +5,7 @@
     - recommendation.variants.each do |variant|
       %variant
         -# округляем цену. может быть, временно
-        %price= @cheat_partner ? recommendation.price_total.ceil : recommendation.price_with_payment_commission.ceil
+        %price= recommendation.price_for_partner(@partner)
         %url= yandex_newurl(@search, recommendation, variant)
         %recommendation= recommendation.serialize(variant)
         %validatingCarrier= recommendation.validating_carrier.iata

@@ -8,6 +8,15 @@ require 'csv'
 
 module DataMigration
 
+  # удаляет всех пользователей из deck_users и накатывает заново копиями из старого typus_users
+  def self.migrate_admin_users
+    DeckUser.delete_all
+    DeckUser.connection.execute %(
+      insert into deck_users (id, email, first_name, last_name, created_at, locked_at, roles)
+        select id, email, first_name, last_name, created_at, if(status, null, updated_at), role from typus_users
+    )
+  end
+
   def self.get_cancelled_flights
     order_ids = StoredFlight.where('dept_date > ?', Date.today).every.tickets.flatten.every.order_id.uniq
     result = []
@@ -113,48 +122,107 @@ module DataMigration
     end
   end
 
-  # set price acquiring compensation and price difference
-  def self.upgrade_to_fee_schemas
-    PaperTrail.controller_info = {:done => 'upgrade_to_fee_schemas second run'}
-    Order.where(fee_scheme: '').order('created_at DESC').map do |o|
-      o.fee_scheme = Conf.site.fee_scheme
-      o.tickets.every.save!
-      o.update_prices_from_tickets || o.save
-    end
-  end
-
-  def self.fill_in_parent_pnr_number
-    PaperTrail.controller_info = {:done => 'fill_in_parent_pnr_number'}
-    orders = Order.where('(pnr_number is null or pnr_number = "") and (parent_pnr_number is null or parent_pnr_number = "") and payment_type = "card" and payment_status = "charged"').includes(:order_comments)
-    orders.each do |o|
-      parent_pnr_from_desc = o.description.scan(/\b([A-ZА-Я\d]{6})\b/)
-      comment_text =  o.order_comments.every.text.join(' ')
-      parent_ids = comment_text.scan(/\/orders\/show\/(\d+)/)
-      raw_pnr_number = comment_text.scan(/\b([A-ZА-Я\d]{6})\b/)
-
-      parent_pnr = ''
-      if parent_pnr_from_desc.count == 1
-        parent_pnr = parent_pnr_from_desc[0][0]
-      elsif parent_ids.count == 1 && (parent = Order.find_by_id(parent_ids[0][0]))
-        parent_pnr = parent.pnr_number
-      elsif raw_pnr_number.count == 1
-        parent_pnr = raw_pnr_number[0][0]
+  def self.ticket_original_prices(order)
+    if order.sold_tickets.every.office_id.uniq.include?('FLL1S212V')
+      ticket_hashes = order.strategy.get_tickets
+      ticket_hashes.map do |th|
+        stored_ticket = order.tickets.select{|t| t.code.to_s == th[:code].to_s && t.number.to_s[0..9] == th[:number].to_s}.first
+        if stored_ticket && !stored_ticket.parent && th[:original_price_fare] && th[:original_price_total]
+          {
+            :id => stored_ticket.id,
+            :original_price_fare => th[:original_price_fare].with_currency,
+            :original_price_total => th[:original_price_total].with_currency
+          }
+        else
+          nil
+        end
       end
-      if parent_pnr.present?
-        o.update_attributes(parent_pnr_number: parent_pnr)
-      else
-        print "** Got nothing #{o.id}: ", o.description, comment_text, "\n"
+    else
+      order.sold_tickets.map do |t| {
+        :id => t.id,
+        :original_price_fare => t.price_fare.to_money('RUB').with_currency,
+        :original_price_tax => t.price_tax.to_money('RUB').with_currency
+        }
       end
     end
   end
 
-  def self.set_price_with_payment_commission_in_tickets
-    Order.order('id DESC').every.update_price_with_payment_commission_in_tickets
+
+  def self.downtown_prices_migration
+    Ticket.update_all "original_price_fare_cents = (price_fare * 100),
+                       original_price_fare_currency = 'RUB',
+                       original_price_tax_cents = (price_tax * 100),
+                       original_price_tax_currency = 'RUB'"
+    Ticket.update_all "original_price_penalty_cents = (price_penalty * 100),
+                       original_price_penalty_currency = 'RUB'"
+    Order.update_all('old_downtown_booking = 1', 'commission_ticketing_method = "downtown" and ticket_status = "ticketed"')
+    Order.update_all('fee_scheme = "v3"', 'commission_ticketing_method = "downtown" and payment_type = "card"')
+    load_ticket_prices_from_amadeus(Date.today - 1.day)
+    #load_ticket_prices_from_csv #Предполагаем, что в tickets.csv лежат цены всех билетов
   end
 
-  def self.set_status_in_refunds
-    Ticket.update_all('status = "processed"', 'kind = "refund" AND processed = 1')
-    Ticket.update_all('status = "pending"', 'kind = "refund" AND processed = 0')
+  def self.load_ticket_prices_from_csv
+    PaperTrail.controller_info = {:done => 'filling in prices in downtown tickets'}
+    CSV.foreach('tickets.csv') do |id, fare, total|
+      load_downtown_price(id, fare, total)
+    end
+  end
+
+  def self.load_downtown_price(id, fare, total)
+    t = Ticket.find(id)
+    t.update_attributes(:original_price_total => total.to_money, :original_price_fare => fare.to_money)
+    o = t.order
+    if o.tickets.present? && o.tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed' && t.original_price_fare_currency.present? && t.original_price_fare_currency != 'RUB' && t.corrected_price == 0}
+      o.update_attributes(old_downtown_booking: false) if o.payment_type == "card"
+      o.tickets.each do |t|
+        t.corrected_price = t.calculated_price_with_payment_commission
+        t.save
+      end
+      o.update_prices_from_tickets
+    end
+  end
+
+  def self.load_ticket_prices_from_amadeus(date = Date.today)
+    PaperTrail.controller_info = {:done => 'filling in prices in downtown tickets'}
+    ticket_hashes = Order.by_office_id('FLL1S212V').where(:ticket_status => 'ticketed').where('orders.created_at >= ?', date).order('created_at DESC').each do |o|
+      print o.id
+      begin
+        ticket_original_prices(o).each do |ph|
+          load_downtown_price(ph[:id], ph[:original_price_fare], ph[:original_price_total])
+        end
+      rescue
+      end
+    end
+  end
+
+  def self.set_corrected_price_in_downtown_tickets
+    PaperTrail.controller_info = {:done => 'filling in corrected_price in downtown tickets'}
+    Order.FLL1S212V.where(ticket_status: 'ticketed').order('created_at DESC').each do |order|
+      o = Order.find_by_id order.id
+      if o.tickets.present? && o.tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed' && t.original_price_fare_currency.present? && t.corrected_price == 0}
+        o.tickets.each do |t|
+          t.corrected_price = t.calculated_price_with_payment_commission
+          t.save
+        end
+        o.update_prices_from_tickets
+      end
+    end
+  end
+
+  def self.create_price_migration_csv(date = Date.today - 11.month)
+    ticket_hashes = Order.by_office_id('FLL1S212V').where(:ticket_status => 'ticketed').where('orders.created_at >= ?', date).inject([]) do |memo ,o|
+      print o.id
+      begin
+        memo + ticket_original_prices(o).compact
+      rescue
+        memo
+      end
+    end
+    CSV.open("tickets.csv", "wb") do |csv|
+      ticket_hashes.each do |t|
+        csv << t.values
+      end
+    end
   end
 
   def self.get_tz_from_lat_and_lng(lat, lng)
@@ -172,30 +240,30 @@ module DataMigration
                    :average_time_delta => d.average_time_delta,
                    :hot_offers_counter => d.hot_offers_counter}
       dest = DestinationMongo.create(attr_hash)
-    end
-    HotOffer.limit(20).each do |h|
-      attr_hash = {:code => h.code,
-                   :url => h.url,
-                   :description => h.description,
-                   :price => h.price,
-                   :for_stats_only => h.for_stats_only,
-                   :destination_id => h.destination_id,
-                   :time_delta => h.time_delta,
-                   :price_variation => h.price_variation,
-                   :price_variation_percent => h.price_variation_percent}
-      hot_offer = HotOfferMongo.create(attr_hash)
-    end
+  end
+  HotOffer.limit(20).each do |h|
+  attr_hash = {:code => h.code,
+    :url => h.url,
+    :description => h.description,
+    :price => h.price,
+    :for_stats_only => h.for_stats_only,
+    :destination_id => h.destination_id,
+    :time_delta => h.time_delta,
+    :price_variation => h.price_variation,
+    :price_variation_percent => h.price_variation_percent}
+hot_offer = HotOfferMongo.create(attr_hash)
+  end
   end
 
   def self.fill_in_timezones_for_cities
-    City.find(:all, :conditions => 'timezone = "" and lat is not null and lng is not null and lat and lng').each do |c|
-      c.update_attribute :timezone, get_tz_from_lat_and_lng(c.lat, c.lng)
-      sleep 0.5
-    end
+  City.find(:all, :conditions => 'timezone = "" and lat is not null and lng is not null and lat and lng').each do |c|
+c.update_attribute :timezone, get_tz_from_lat_and_lng(c.lat, c.lng)
+  sleep 0.5
+  end
   end
 
 
-  def self.fill_in_morpher_fields(klass, first_id = 0)
+def self.fill_in_morpher_fields(klass, first_id = 0)
     klass.all(:conditions => ['((proper_to = "") or (proper_to is NULL)) and (morpher_to is NULL or morpher_to = "") and (name_ru != "") and (name_ru is not NULL) and (id >= ?)', first_id]).each do |c|
       c.save_guessed
     end

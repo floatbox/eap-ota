@@ -45,11 +45,14 @@ amadeus:
   euro_rate: 40
   session_pool_size: 10
   no_ltd_restrictions: no
+  check_rate_date: no
   cancel_stale: no
   ignored_carriers: []
   forbid_class_changing: no
   default_office: MOWR228FA
   search_sax: yes
+  production:
+    check_rate_date: yes
   offices:
     MOWR228FA:
       alias: booking
@@ -67,6 +70,10 @@ amadeus:
       password: MI8VX87M
     IEVU228GZ:
       alias: zagorye
+      organization: NMC-UKRAIN
+      password: AMADEUS
+    LWOU228AP:
+      alias: lviv
       organization: NMC-UKRAIN
       password: AMADEUS
 payment:
@@ -181,11 +188,7 @@ riemann:
     request_performance: yes
     stat_counters: yes
     meter: yes
-search_urls:
-  segment_separator: '-'
-  internal_separator: '-'
-  short_rt: yes
-  short_chains: yes
-  reversed_dates: yes
-  short_pax_codes: no
-  upcase_all: no
+performance:
+  # очищать ли CodeStash между запросами?
+  # поведение для "no" не тестировано, возможны проблемы с ActiveRecord::IdentityMap
+  clear_code_stash: yes

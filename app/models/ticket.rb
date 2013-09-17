@@ -37,6 +37,8 @@ class Ticket < ActiveRecord::Base
   has_and_belongs_to_many :stored_flights
   has_and_belongs_to_many :imports
   serialize :baggage_info, JoinedArray.new
+  serialize :booking_classes, JoinedArray.new(' ')
+  serialize :cabins, JoinedArray.new(' ')
 
   # для отображения в админке билетов. Не очень понятно,
   # как запретить добавление новых, впрочем.
@@ -55,27 +57,56 @@ class Ticket < ActiveRecord::Base
 
   # FIXME - временно, эквайринг должен браться из суммы пейментов
   delegate :acquiring_percentage, :to => :order
-
+  extend MoneyColumns
+  has_money_columns :original_price_fare, :original_price_tax, :original_price_penalty
+  has_money_helpers :original_price_fare, :original_price_tax, :original_price_penalty
   extend Commission::Columns
   has_commission_columns :commission_agent, :commission_subagent, :commission_consolidator, :commission_blanks, :commission_discount, :commission_our_markup
   include Pricing::Ticket
-
+# set_refund_data нужно запускать до check_currency
+  before_validation :set_refund_data, :if => :refund?
+  before_validation :update_prices_and_add_parent, :if => :original_price_total
+  before_validation :check_currency
   before_save :recalculate_commissions, :set_validating_carrier
 
   scope :uncomplete, where(:ticketed_date => nil)
   scope :sold, where(:status => ['ticketed', 'exchanged', 'returned', 'processed'])
   scope :reported, where(:status => ['ticketed'])
 
-  before_save :set_refund_data, :if => lambda {kind == "refund"}
-  validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => lambda {kind = 'refund'}
-  before_validation :update_price_fare_and_add_parent, :if => :parent_number
+  validates_presence_of :price_fare, :price_tax, :price_our_markup, :price_penalty, :price_discount, :price_consolidator, :if => :refund?
   after_save :update_parent_status, :if => :parent
   after_destroy :update_parent_status, :if => :parent
-  validates_presence_of :comment, :if => lambda {kind == "refund"}
-  attr_accessor :parent_number, :parent_code
+  validates_presence_of :comment, :if => :refund?
+  attr_accessor :parent_number, :parent_code, :original_price_total
   attr_writer :price_fare_base, :flights
   before_validation :set_info_from_flights
   before_save :set_prices
+
+  def refund?
+    kind == 'refund'
+  end
+
+  def ticket?
+    kind == 'ticket'
+  end
+
+  # для csv и typus
+  def cabins_joined
+    cabins.join(' ')
+  end
+
+  def booking_classes_joined
+    booking_classes.join(' ')
+  end
+
+  # для typus
+  def cabins_joined= cabs
+    write_attribute(:cabins, cabs.strip.split(' '))
+  end
+
+  def booking_classes_joined= bcs
+    write_attribute(:booking_classes, bcs.strip.split(' '))
+  end
 
   def set_prices
     self.price_acquiring_compensation = price_payment_commission if corrected_price && kind == 'ticket'
@@ -108,7 +139,8 @@ class Ticket < ActiveRecord::Base
         end
       end
       self.route = @flights.map{|fl| "#{fl.departure_iata} \- #{fl.arrival_iata} (#{fl.marketing_carrier_iata})"}.uniq.join('; ')
-      self.cabins = @flights.every.cabin.compact.join(' + ')
+      self.cabins = @flights.every.cabin
+      self.booking_classes = @flights.every.booking_class
       self.dept_date = @flights.first.dept_date
 
       # и закидываем в базу
@@ -120,17 +152,14 @@ class Ticket < ActiveRecord::Base
     stored_flights.map(&:to_flight).sort_by(&:departure_datetime_utc)
   end
 
-  def booking_classes
-    cabins.split(' + ')
-  end
-
   def price_fare_base
-    @price_fare_base = BigDecimal(@price_fare_base) if @price_fare_base && @price_fare_base.class == String
     @price_fare_base ||= if parent && parent.created_at && created_at  && parent.created_at < created_at
-      price_fare + parent.price_fare_base
+      original_price_fare + parent.price_fare_base
     else
-      price_fare
+      original_price_fare
     end
+  rescue TypeError
+  #  TODO: придумать, что делать в случае несовпадения типов
   end
 
    # whitelist офис-айди, имеющих к нам отношение. В брони иногда попадают "не наши" билеты
@@ -166,14 +195,21 @@ class Ticket < ActiveRecord::Base
     baggage_info.map{|code| [BaggageLimit.deserialize(code)]}
   end
 
-  def update_price_fare_and_add_parent
-    if exchanged_ticket = order.tickets.select{|t| t.code.to_s == parent_code.to_s && t.number.to_s[0..9] == parent_number.to_s}.first
+  def update_prices_and_add_parent
+    if parent_number &&
+        (exchanged_ticket = order.tickets.select{|t| t.code.to_s == parent_code.to_s && t.number.to_s[0..9] == parent_number.to_s}.first)
       self.parent = exchanged_ticket
-      if price_fare_base && price_fare_base > 0
-        self.price_tax += parent.price_fare_base #в противном случае tax может получиться отрицательным
-        self.price_fare = price_fare_base - parent.price_fare_base
+      if price_fare_base && price_fare_base.to_f > 0
+        self.original_price_tax = original_price_total - price_fare_base + parent.price_fare_base #в противном случае tax может получиться отрицательным
+        self.original_price_fare = price_fare_base - parent.price_fare_base
+      else
+        self.original_price_tax = original_price_total - original_price_fare
       end
+    else
+      self.original_price_tax = original_price_total - original_price_fare
     end
+  rescue TypeError
+  #  TODO: придумать, что делать в случае несовпадения типов
   end
 
   def update_parent_status
@@ -270,14 +306,14 @@ class Ticket < ActiveRecord::Base
         :validating_carrier
       self.status = 'pending' if status.blank?
     end
-    self.price_penalty *= -1 if price_penalty < 0
+    self.original_price_penalty *= -1 if original_price_penalty && original_price_penalty.cents < 0
     self.price_discount *= -1 if price_discount < 0
     self.price_our_markup *= -1 if price_our_markup > 0
-    self.price_tax *= -1 if price_tax > 0
-    self.price_fare *= -1 if price_fare > 0
+    self.original_price_tax *= -1 if original_price_tax && original_price_tax.cents > 0
+    self.original_price_fare *= -1 if original_price_fare && original_price_fare.cents > 0
     self.price_consolidator *= -1 if price_consolidator > 0
-    self.commission_subagent = 0 if price_fare != -parent.price_fare && !parent.commission_subagent.percentage?
-    self.commission_agent = 0 if price_fare != -parent.price_fare && !parent.commission_agent.percentage?
+    self.commission_subagent = 0 if original_price_fare != -parent.original_price_fare && !parent.commission_subagent.percentage?
+    self.commission_agent = 0 if original_price_fare != -parent.original_price_fare && !parent.commission_agent.percentage?
     self.price_acquiring_compensation *= -1 if price_acquiring_compensation > 0
     self.corrected_price = price_with_payment_commission
   end
@@ -343,6 +379,21 @@ class Ticket < ActiveRecord::Base
     validating_carrier.present? ? validating_carrier : commission_carrier
   end
 
+  def check_currency
+    if original_price_fare_currency && original_price_fare_currency != "RUB"
+      self.price_fare = CBR.exchange_on(ticketed_date || Date.today).exchange_with(original_price_fare,"RUB").to_f
+    end
+    if original_price_tax_currency && original_price_tax_currency != "RUB"
+      self.price_tax = CBR.exchange_on(ticketed_date || Date.today).exchange_with(original_price_tax,"RUB").to_f
+    end
+    if original_price_penalty_currency && original_price_penalty_currency != "RUB"
+      self.price_penalty = CBR.exchange_on(ticketed_date || Date.today).exchange_with(original_price_penalty,"RUB").to_f
+    end
+    self.price_fare = original_price_fare.to_f if original_price_fare_currency == "RUB"
+    self.price_tax = original_price_tax.to_f if original_price_tax_currency == "RUB"
+    self.price_penalty = original_price_penalty.to_f if original_price_penalty_currency == "RUB"
+  end
+
   # для тайпуса
   def description
     CustomTemplate.new.render(:partial => "admin/tickets/description", :locals => {:ticket => self}).html_safe
@@ -374,4 +425,9 @@ class Ticket < ActiveRecord::Base
   rescue => e
     e.message
   end
+
+  def rate
+    CBR.exchange_on(ticketed_date || Date.today).get_rate(original_price_fare_currency, "RUB").to_f if original_price_fare_currency
+  end
+
 end

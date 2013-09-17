@@ -93,6 +93,35 @@
     position: relative;
 }
 
+/* Arrows */
+.sdc-arrows {
+    display: none;
+    position: relative;
+    width: 960px;
+    height: 0;
+    margin: 0 auto;
+    font-size: 11px;
+    line-height: 13px;
+    color: #FFF;
+}
+.sdca-prev,    
+.sdca-next {
+    position: absolute;
+    top: 23px;
+    cursor: pointer;
+}
+.sdca-prev {    
+    right: 970px;
+}
+.sdca-next {
+    left: 970px;
+}
+@media screen and (min-width: 1150px) {
+    .sdc-arrows {
+        display: block;
+    }
+}
+
 /* Month */
 .sdc-month {
     float: left;
@@ -119,7 +148,6 @@
     position: relative;
     z-index: 1;
 }
-
 
 /* Week */
 .sdc-week {
@@ -162,7 +190,7 @@
 }
 .sdc-day .month {
     display: none;
-    font-size: 11px;
+    font-size: 13px;
     line-height: 11px;
 }
 .sdc-days .disabled {

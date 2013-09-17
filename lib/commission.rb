@@ -5,11 +5,7 @@ module Commission
 
   class << self
 
-    delegate \
-      :exists_for?,
-      :find_for,
-      :rules,
-      :carriers,
+    delegate :carriers,
         to: :default_book
 
     # lazy считывание дефолтных комиссий
@@ -19,9 +15,14 @@ module Commission
 
     # перечитывает дефолтные комиссии. бонус - если в файле
     # комиссий синтаксическая ошибка, останутся действовать старые комиссии!
-    def reload!(filename='config/commissions.rb')
-      Rails.logger.debug('Reloading commissions')
+    def reload!(filename='config/commissions')
+      Rails.logger.info('Reloading commissions')
       @default_book = Commission::Reader.new.read_file(filename)
+    end
+
+    # перечитывает комиссии, только если они не были загружены раньше
+    def preload!
+      default_book
     end
 
   end

@@ -175,7 +175,7 @@ describe Ticket do
 
         its(:vat_status) {should == '0'}
         its(:route) {should == 'CDG - SVO (SU); SVO - PEE (SU); PEE - CDG (S7)'}
-        its(:cabins) {should == 'Y + C + F'}
+        its(:cabins) {should == %W[Y C F]}
         its(:dept_date) {should == Date.new(2012, 10, 21)}
       end
 
@@ -258,31 +258,85 @@ describe Ticket do
     end
   end
 
-  describe "#update_price_fare_and_add_parent" do
+  describe '#update_prices_and_add_parent' do
 
-    before(:each) do
-      @old_ticket = Ticket.new(:price_fare => 1000, :code => '456', :number => '2341111111', :id => 10)
-      subject.valid?
+    context 'simple ticket' do
+      subject do
+        new_ticket_hash = {
+          :number => '123',
+          :code => '456',
+          :original_price_fare => original_price_fare,
+          :original_price_total => original_price_total,
+          :price_fare_base => original_price_fare}
+        ticket = Ticket.new(new_ticket_hash)
+        ticket.stub_chain(:order, :tickets).and_return([@old_ticket])
+        ticket.valid?
+        ticket
+      end
+      let(:original_price_fare) {1000.to_money("RUB")}
+      let(:original_price_total) {1500.to_money("RUB")}
+      its(:original_price_tax) {should == (original_price_total - original_price_fare)}
     end
 
-    subject do
-      new_ticket_hash = {:number => '123', :code => '456', :price_fare => price_fare, :price_tax => 500, :parent_number => '2341111111', :parent_code => '456', :price_fare_base => price_fare}
-      ticket = Ticket.new(new_ticket_hash)
-      ticket.stub_chain(:order, :tickets).and_return([@old_ticket])
-      ticket
+    context 'exchange' do
+      before(:each) do
+        @old_ticket = Ticket.new(:original_price_fare => 1000.to_money("RUB"), :code => '456', :number => '2341111111', :id => 10)
+        subject.valid?
+      end
+
+      subject do
+        new_ticket_hash = {
+          :number => '123',
+          :code => '456',
+          :original_price_fare => original_price_fare,
+          :original_price_total => original_price_total,
+          :parent_number => '2341111111',
+          :parent_code => '456',
+          :price_fare_base => original_price_fare}
+        ticket = Ticket.new(new_ticket_hash)
+        ticket.stub_chain(:order, :tickets).and_return([@old_ticket])
+        ticket
+      end
+
+      let(:original_price_total){original_price_fare + 500.to_money("RUB")}
+
+      context 'sets correct price_fare for ticket with fare upgrade' do
+        let(:original_price_fare) {1200.to_money("RUB")}
+        its(:original_price_fare){should == 200.to_money("RUB")}
+      end
+
+      context 'sets correct price_tax for ticket without fare upgrade but with nonzero price fare' do
+        let(:original_price_fare) {1000.to_money("RUB")}
+
+        its(:original_price_fare) {should == 0.to_money("RUB")}
+        its(:original_price_tax){should == 1500.to_money("RUB")}
+      end
     end
 
-    context 'sets correct price_fare for ticket with fare upgrade' do
-      let(:price_fare) {1200}
-      its(:price_fare){should == 200}
-    end
+    context 'exchange with split' do
 
-    context 'sets correct price_tax for ticket without fare upgrade but with nonzero price fare' do
-      let(:price_fare) {1000}
-      its(:price_fare) {should == 0}
-      its(:price_tax){should == 1500}
-    end
+      subject do
+        Ticket.new(
+          :number => '123',
+          :code => '456',
+          :original_price_fare => original_price_fare,
+          :original_price_total => original_price_total,
+          :parent_number => '2341111111',
+          :parent_code => '456',
+          :price_fare_base => original_price_fare
+        ).tap do |t|
+          t.stub_chain(:order, :tickets).and_return([])
+          t.update_prices_and_add_parent
+        end
+      end
 
+      let(:original_price_total){original_price_fare + 60.to_money("USD")}
+
+      let(:original_price_fare) {430.to_money("USD")}
+
+      its(:original_price_fare) {should == 430.to_money("USD")}
+      its(:original_price_tax){should == 60.to_money("USD")}
+    end
   end
 
   describe 'price_with_payment_commission' do
@@ -353,4 +407,21 @@ describe Ticket do
     end
 
   end
+
+  context "should validate money fields" do
+   specify { ticket = Ticket.new(:original_price_fare_as_string => "10 USD")
+     ticket.original_price_fare.should == "10 USD".to_money }
+   specify { ticket = Ticket.new(:original_price_tax_as_string => "10 USD")
+     ticket.original_price_tax.should == "10 USD".to_money }
+   specify { ticket = Ticket.new(:original_price_fare_as_string => "")
+     ticket.should_not have_errors_on(:original_price_fare_as_string) }
+   specify { ticket = Ticket.new(:original_price_fare_as_string => "10 RUR")
+     ticket.should have_errors_on(:original_price_fare_as_string)
+     ticket.original_price_fare.should be_nil }
+   specify { ticket = Ticket.new(:original_price_tax_as_string => "10")
+     ticket.original_price_tax_as_string.should == "10"
+     ticket.should have_errors_on(:original_price_tax_as_string)
+     ticket.original_price_fare.should be_nil }
+   end
+
 end

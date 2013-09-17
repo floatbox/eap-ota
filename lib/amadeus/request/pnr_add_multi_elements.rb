@@ -11,7 +11,7 @@ module Amadeus
       attr_accessor :pnr_action
       attr_accessor :recommendation #сейчас не используется
 
-      # может принимать PricerForm
+      # можно научить принимать Recommendation
       def initialize(opts)
         # defaults
         @pnr_action = :ER
@@ -82,7 +82,7 @@ module Amadeus
           agent_commission.complex? || agent_commission.percentage?
         # рублевая комиссия округляется до ближайшего целого
         # евро подставляются в дефолтных параметрах формулы из конфига (зря?)
-        agent_commission.call.round
+        agent_commission.apply.round
       end
 
       # подавление ошибки

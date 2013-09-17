@@ -135,7 +135,7 @@ module Pricing
     private :acquiring_compensation
 
     def vat
-      if sold_tickets.present?
+      if has_data_in_tickets?
         sold_tickets.every.vat.sum
       end
     end
@@ -159,12 +159,13 @@ module Pricing
       # price_tax получаются из pnr
       # price_fare получаются из pnr
       # price_difference - неактуально и неверно? грохнуть?
-      self.price_agent = commission_agent.call(price_fare, :multiplier =>  blank_count)
-      self.price_subagent = commission_subagent.call(price_fare, :multiplier =>  blank_count)
-      self.price_consolidator = commission_consolidator.call(price_fare, :multiplier => blank_count)
-      self.price_blanks = commission_blanks.call(price_fare, :multiplier => blank_count)
-      self.price_discount = -commission_discount.call(price_fare, :multiplier => blank_count)
-      self.price_our_markup = commission_our_markup.call(price_fare, :multiplier => blank_count)
+      self.price_agent = commission_agent.apply(price_fare, :multiplier =>  blank_count)
+      self.price_subagent = commission_subagent.apply(price_fare, :multiplier =>  blank_count)
+      self.price_consolidator = commission_consolidator.apply(price_fare, :multiplier => blank_count)
+      self.price_blanks = commission_blanks.apply(price_fare, :multiplier => blank_count)
+      # FIXME с появлением отрицательных формул могут быть интересные результаты
+      self.price_discount = -commission_discount.apply(price_fare, :multiplier => blank_count)
+      self.price_our_markup = commission_our_markup.apply(price_fare, :multiplier => blank_count)
     end
   end
 end

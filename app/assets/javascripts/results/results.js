@@ -86,6 +86,10 @@ slide: function() {
     this.content.el.show();
     this.filters.el.show();
     this.fixed.update();
+    this.content.tabs.removeClass('rt-compact');
+    if (this.content.tabs.height() > 50) {
+        this.content.tabs.addClass('rt-compact');
+    }
     page.title.set(I18n.t('page.results', {title: this.data.titles.window}));
 },
 update: function(data) {
@@ -298,7 +302,7 @@ extendData: function() {
     var height = page.innerHeight() - 150; // заголовок и табы
     height -= sl * 60; // сортировка и ссылки на скрытые варианты
     height -= 62; // цена и часть подробностей
-    this.data.capacity = Math.max(sl * 2, Math.floor(height / 35));
+    this.data.capacity = Math.max(sl * 2, Math.floor(height / 37));
     this.data.sl = sl;
 },
 getOfferTemplate: function() {

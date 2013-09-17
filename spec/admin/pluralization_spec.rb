@@ -23,9 +23,7 @@ describe "russian pluralization" do
     specify { pluralize_model(Region).should == 'Регионы' }
     specify { pluralize_model(Country).should == 'Страны' }
     specify { pluralize_model(AirlineAlliance).should == 'Альянсы авиакомпаний' }
-    specify { pluralize_model(GlobalDistributionSystem).should == 'Глобальные дистрибьюторские системы' }
     specify { pluralize_model(Carrier).should == 'Перевозчики' }
-    specify { pluralize_model(Consolidator).should == 'Консолидаторы' }
     specify { pluralize_model(Airplane).should == 'Самолеты' }
     specify { pluralize_model(TypusUser).should == 'Пользователи Typus' }
 

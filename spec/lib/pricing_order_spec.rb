@@ -12,8 +12,8 @@ describe Pricing::Order do
     before do
       create(:payture_charge, :charged, order: subject, price: 2040, commission: '2%')
       create(:cash_charge, :charged, order: subject, price: 1000, commission: '1%')
-      ticket = create(:ticket, :aviacenter, order: subject, price_fare: 1000, price_tax: 100)
-      create(:refund, parent: ticket, price_fare: 1000, price_tax: 100, price_penalty: 100)
+      ticket = create(:ticket, :aviacenter, order: subject, original_price_fare: 1000, original_price_tax: 100)
+      create(:refund, parent: ticket, original_price_fare: 1000, original_price_tax: 100, price_penalty: 100)
     end
     its(:balance) {should == 2899.20}
 

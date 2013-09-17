@@ -120,6 +120,9 @@ module Amadeus
         deffered.callback &on_success
         deffered.errback do |err|
           Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
+          err.backtrace.each do |str|
+            Rails.logger.error "ERROR: #{str}"
+          end
         end
       end
 

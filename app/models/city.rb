@@ -2,7 +2,15 @@
 class City < ActiveRecord::Base
   include HasSynonyms
   include Cases
-  extend IataStash
+  extend CodeStash
+
+  def self.fetch_by_code(code)
+    find_by_iata(code)  # || find_by_iata_ru(code)
+  end
+
+  def codes
+    [iata, iata_ru]
+  end
 
   has_paper_trail
 

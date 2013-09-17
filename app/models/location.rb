@@ -8,7 +8,7 @@ class Location
 
   def self.[](iata)
     City[iata]
-  rescue IataStash::NotFound
+  rescue CodeStash::NotFound
     Airport[iata]
   end
 

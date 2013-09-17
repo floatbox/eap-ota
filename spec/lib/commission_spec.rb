@@ -2,13 +2,13 @@
 require 'spec_helper'
 
 # TODO написать rspec_matcher для комиссий, с более внятным выводом причин
-describe Commission do
+describe Commission, :commissions do
 
   RSpec::Matchers.define(:match_rule) do |page, rule|
 
     match_for_should do |example|
       @recommendation = example.recommendation
-      @proposed = page.find_rule(@recommendation)
+      @proposed = page.find_rule_for_rec(@recommendation)
       if @proposed != rule
         @reason = rule.turndown_reason(@recommendation)
         false
@@ -19,8 +19,8 @@ describe Commission do
 
     match_for_should_not do |example|
       @recommendation = example.recommendation
-      @proposed = page.find_rule(@recommendation)
-      !@proposed
+      @proposed = page.find_rule_for_rec(@recommendation)
+      @proposed.nil? || !@proposed.sellable?
     end
 
     failure_message_for_should do |example|
@@ -54,7 +54,7 @@ describe Commission do
   book = Commission.default_book
   book.pages.each do |page|
 
-    describe "#{page.carrier} on #{page.start_date || 'beginning of time'}" do
+    describe "#{page.carrier},#{page.ticketing_method} on #{page.start_date || 'beginning of time'}" do
       page.rules.each do |rule|
 
         describe rule.inspect do

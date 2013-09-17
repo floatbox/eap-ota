@@ -93,10 +93,12 @@ class Admin::OrdersController < Admin::EviterraResourceController
   # FIXME перенести куда-то логику.
   def show_commission
     unless @order.source == 'amadeus' && @order.pnr_number
-      render :text => 'incomplete order'
+      redirect_to :back, alert: 'works only for amadeus order with PNR number'
     else
       @recommendation = Strategy::Amadeus.new(order: @order).recommendation_from_booking
-      render
+      # FIXME надо бы убрать. что мешает сериализации работать без комиссии?
+      @recommendation.find_commission!
+      redirect_to check_admin_commissions_url(:code => @recommendation.serialize)
     end
   #rescue
   #  render :text => $!.message

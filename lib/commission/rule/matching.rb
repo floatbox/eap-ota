@@ -6,10 +6,6 @@ module Commission::Rule::Matching
 
   extend ActiveSupport::Concern
 
-  included do
-    cattr_accessor :skip_interline_validity_check
-  end
-
   # можно ли показывать клиентам и продавать предложения
   # по данному комиссинному правилу?
   # TODO Переместить в другой модуль?
@@ -30,15 +26,14 @@ module Commission::Rule::Matching
   end
 
   def turndown_reason recommendation
-    skipped? and return "правило не проверяется"
+    skipped?                                and return :skipped     # "правило не проверяется"
     # carrier == recommendation.validating_carrier_iata and
-    applicable_interline?(recommendation) or return "интерлайн/не интерлайн"
-    valid_interline?(recommendation) or return "нет интерлайн договора между авиакомпаниями"
-    applicable_classes?(recommendation) or return "не подходит класс бронирования"
-    applicable_subclasses?(recommendation) or return "не подходит подкласс бронирования"
-    applicable_custom_check?(recommendation) or return "не прошло дополнительную проверку"
-    applicable_routes?(recommendation) or return "маршрут не в списке применимых"
-    applicable_geo?(recommendation) or return "не тот тип МВЛ/ВВЛ"
+    applicable_interline?(recommendation)    or return :interline   # "интерлайн/не интерлайн"
+    applicable_classes?(recommendation)      or return :classes     # "не подходит класс бронирования"
+    applicable_subclasses?(recommendation)   or return :subclasses  # "не подходит подкласс бронирования"
+    applicable_custom_check?(recommendation) or return :check       # "не прошло дополнительную проверку"
+    applicable_routes?(recommendation)       or return :routes      # "маршрут не в списке применимых"
+    applicable_geo?(recommendation)          or return :geo         # "не тот тип МВЛ/ВВЛ"
     nil
   end
 
@@ -65,15 +60,8 @@ module Commission::Rule::Matching
       when :less_than_half
         recommendation.interline? and
         recommendation.validating_carrier_makes_more_than_half_of_itinerary?
-      else
-        raise ArgumentError, "неизвестный тип interline у #{carrier}: '#{interline}' (line #{source})"
       end
     end
-  end
-
-  # надо использовать self.class.skip..., наверное
-  def valid_interline? recommendation
-    Commission::Rule.skip_interline_validity_check || recommendation.valid_interline?
   end
 
   CLASS_CABIN_MAPPING = {:economy => %w(M W Y), :business => %w(C), :first => %w(F)}
@@ -97,7 +85,6 @@ module Commission::Rule::Matching
 
   def applicable_geo? recommendation
     return true unless domestic || international
-    raise "wtf?" if domestic && international
     domestic && recommendation.domestic? || international && recommendation.international?
   end
 

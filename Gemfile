@@ -7,17 +7,27 @@ group :assets do
   #gem 'therubyracer'
   gem "uglifier"
   gem 'sass-rails'
+  gem 'coffee-script-source', '~> 1.4.0'
   gem 'coffee-rails'
 end
 
 # консолька вместо IRB
+# если убрать в группу :development, не грузит больше в rails c
+# возможно, отжирает память и ресурсы
 gem 'pry-rails'
-gem 'pry-doc', require: false
-# расцветка строки ввода. убрал, ибо глушат полезные хоткеи
-# gem 'pry-coolline' #, :git => 'https://github.com/pry/pry-coolline.git'
-gem 'pry-editline', require: false
-# для rake "db:migrate" и т.п. в rails console
-gem 'commands', group: [:development, :test]
+# включает pry-rescue. Разматываю зависимости сам.
+# gem 'pry-plus'
+# включается даже в продакшне, перехватывает SIGQUIT
+# gem 'pry-rescue', require: false
+# возможно, вызывает проблему `expand_path': non-absolute home (ArgumentError)
+# gem 'pry-doc'
+# gem 'pry-docmore'
+gem 'pry-debugger'
+gem 'pry-stack_explorer'
+gem 'bond'
+gem 'jist'
+
+gem 'commands'
 
 # Deploy with Capistrano
 group :deployment do
@@ -36,6 +46,7 @@ gem 'riemann-client', require: false
 # для импорта zip файлов
 gem 'zip'
 gem 'money'
+gem 'central_bank_of_russia'
 gem 'kaminari'
 gem 'daemons'
 gem 'nokogiri'
@@ -64,6 +75,7 @@ gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
 gem "devise", "~> 2.2.6"
+gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 #gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
@@ -72,6 +84,9 @@ gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rail
 gem 'haml'
 gem 'hpricot', require: false
 
+gem 'activeadmin'
+gem 'cancan'
+gem 'draper'
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
@@ -110,10 +125,6 @@ group :test do
   gem 'webmock'
   # тестирование завтрашних комиссий
   gem 'timecop'
-end
-
-group :debug do
-  gem 'ruby-debug19', :require => 'ruby-debug', :platforms => :ruby_19
 end
 
 group :profiling do

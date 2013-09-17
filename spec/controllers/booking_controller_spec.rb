@@ -30,22 +30,21 @@ describe BookingController do
       }
     end
 
-    it 'creates appropriate pricer_form' do
-      pricer_form = mock('PricerForm')
+    it 'creates appropriate avia_search' do
+      avia_search = mock('AviaSearch')
       recommendation = mock('Recommendation')
       recommendation.stub(:deserialize)
 
-      PricerForm.should_receive(:simple).with(hash_including(
+      AviaSearch.should_receive(:simple).with(hash_including(
         :from => 'LED',
         :to => 'MOW',
         :date1 => '280911',
         :adults => 1,
         :cabin => 'C',
-        :partner => 'rambler')).and_return(pricer_form)
-      pricer_form.stub(:valid?).and_return('true')
-      pricer_form.stub(:save_to_cache).and_return('true')
-      pricer_form.stub(:query_key)
-      pricer_form.stub(:partner).and_return('rambler')
+        :partner => 'rambler')).and_return(avia_search)
+      avia_search.stub(:valid?).and_return('true')
+      avia_search.stub(:query_key)
+      avia_search.stub(:partner).and_return('rambler')
       get :api_rambler_booking, request_params.merge(:format => 'xml')
     end
 
@@ -98,7 +97,7 @@ describe BookingController do
         :marker => 'rebkloi'
       }
     end
-    let(:pricer){PricerForm.simple(:from => 'MOW', :to => 'PAR', :date1 => DateTime.tomorrow.strftime("%d.%m.%Y"))}
+    let(:pricer){AviaSearch.simple(:from => 'MOW', :to => 'PAR', :date1 => DateTime.tomorrow.strftime("%d.%m.%Y"))}
 
     describe '#preliminary_booking' do
 
@@ -106,10 +105,11 @@ describe BookingController do
         # stubbing preliminary_booking internal methods
         recommendation = Recommendation.new(:booking_classes => ['Y'])
         recommendation.stub(:find_commission!)
+        recommendation.stub(:sellable?).and_return(true)
         Recommendation.stub(:deserialize).and_return(recommendation)
         strategy = mock('Strategy', check_price_and_availability: nil).as_null_object
         Strategy.stub(:select).and_return(strategy)
-        PricerForm.stub(:from_code).and_return(pricer)
+        AviaSearch.stub(:from_code).and_return(pricer)
       end
 
       it 'saves both partner and marker if they present' do
@@ -139,7 +139,7 @@ describe BookingController do
 
     describe '#api_redirect' do
       it 'saves partner if it is present' do
-        PricerForm.stub(:simple).and_return(mock('pricer').as_null_object)
+        AviaSearch.stub(:simple).and_return(mock('pricer').as_null_object)
         Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
         get :api_redirect, partner_present
@@ -149,7 +149,7 @@ describe BookingController do
 
       # зачем этот тест?
       it "doesn't touch cookie if there's no partner"  do
-        PricerForm.stub(:simple).and_return(mock('pricer').as_null_object)
+        AviaSearch.stub(:simple).and_return(mock('pricer').as_null_object)
         Partner.stub(:find_by_token)
 
         get :api_redirect, marker_present
@@ -160,7 +160,7 @@ describe BookingController do
   end
   describe '#log_referrer' do
     it "doesn't log if source and target hosts are the same" do
-      PricerForm.stub(:simple).and_return(mock('pricer').as_null_object)
+      AviaSearch.stub(:simple).and_return(mock('pricer').as_null_object)
       logger = mock('logger')
       controller.stub(:logger).and_return(logger)
 
@@ -172,7 +172,7 @@ describe BookingController do
     end
 
     it "logs if source and target hosts are the same" do
-      PricerForm.stub(:simple).and_return(mock('pricer').as_null_object)
+      AviaSearch.stub(:simple).and_return(mock('pricer').as_null_object)
       logger = mock('logger')
       controller.stub(:logger).and_return(logger)
 

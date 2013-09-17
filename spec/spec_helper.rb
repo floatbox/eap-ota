@@ -21,6 +21,8 @@ Spork.prefork do
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
   RSpec.configure do |config|
+    # RSpec 3 behaviour now.
+    config.treat_symbols_as_metadata_keys_with_true_values = true
     # == Mock Framework
     #
     # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -40,6 +42,9 @@ Spork.prefork do
     config.use_transactional_examples = true
 
     config.include SpecExtensions::LetOnce
+    config.before(:each) do
+      Amadeus::Rate.stub :euro_rate => 43.0
+    end
   end
 
 end

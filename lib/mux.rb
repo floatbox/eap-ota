@@ -12,40 +12,38 @@ class Mux
   include KeyValueInit
   attr_accessor :suggested_limit, :lite, :admin_user
 
-  def save_to_mongo(form, recommendations)
-    RamblerCache.create_from_form_and_recs(form, recommendations)
+  def save_to_mongo(avia_search, recommendations)
+    RamblerCache.create_from_form_and_recs(avia_search, recommendations)
   end
 
-  def pricer(form)
+  def pricer(avia_search)
     # FIXME делает сортировку дважды
     benchmark 'Pricer, total' do
       (
-        sirena_pricer(form) + amadeus_pricer(form)
+        amadeus_pricer(avia_search) + sirena_pricer(avia_search)
       ).sort_by(&:price_total)
     end
   end
 
-  def calendar(form)
+  def calendar(avia_search)
     return [] unless Conf.amadeus.enabled && Conf.amadeus.calendar
 
     amadeus = Amadeus.booking
-    recommendations = amadeus.fare_master_pricer_calendar(form).recommendations
+    recommendations = amadeus.fare_master_pricer_calendar(avia_search).recommendations
     amadeus.release
 
-    recommendations = recommendations.reject(&:ignored_carriers)
-    benchmark 'commission matching calendar' do
-      recommendations.every.find_commission!
+    benchmark 'commission matching' do
+      recommendations.find_commission!
     end
-    recommendations = recommendations.select(&:sellable?) unless admin_user
-    recommendations.delete_if(&:without_full_information?)
-    recommendations.every.clear_variants
-    recommendations.delete_if{|r| r.variants.blank?}
 
-    recommendations
+    recommendations.select_valid! do |r|
+      r.select!(&:sellable?) unless admin_user
+      r.map(&:clear_variants)
+    end
   end
 
   # TODO exception handling
-  def amadeus_pricer(form)
+  def amadeus_pricer(avia_search)
     return [] unless Conf.amadeus.enabled
     benchmark 'Pricer amadeus, total' do
       request_ws = {:suggested_limit => suggested_limit, :lite => lite}
@@ -53,11 +51,11 @@ class Mux
       amadeus = Amadeus.booking
       # non threaded variant
       recommendations_ws = benchmark 'Pricer amadeus, with stops' do
-        amadeus.fare_master_pricer_travel_board_search(form, request_ws).recommendations
+        amadeus.fare_master_pricer_travel_board_search(avia_search, request_ws).recommendations
       end
       recommendations_ns = if Conf.amadeus.nonstop_search && !lite
         benchmark 'Pricer amadeus, without stops' do
-          amadeus.fare_master_pricer_travel_board_search(form, request_ns).recommendations
+          amadeus.fare_master_pricer_travel_board_search(avia_search, request_ns).recommendations
         end
       else [] end
 
@@ -66,7 +64,7 @@ class Mux
     end
   rescue
     with_warning
-    []
+    RecommendationSet.new
   end
 
   def amadeus_merge_and_cleanup(recommendations)
@@ -79,28 +77,29 @@ class Mux
         log_examples(recommendations)
       end
 
-      recommendations.delete_if(&:without_full_information?)
-      recommendations.delete_if(&:ground?)
+      recommendations.select!(&:full_information?)
 
-      recommendations = recommendations.reject(&:ignored_carriers)
       benchmark 'commission matching' do
-        recommendations.every.find_commission!
+        recommendations.find_commission!
       end
-      recommendations = recommendations.select(&:sellable?) unless admin_user
-      unless lite
-        # sort
-        recommendations = recommendations.sort_by(&:price_total)
-        # regroup
-        recommendations = Recommendation.corrected(recommendations)
+
+      recommendations.select_valid! do |r|
+        r.delete_if(&:ground?)
+        r.delete_if(&:ignored_carriers)
+
+        # TODO пометить как непродаваемые, для админов?
+        r.select!(&:sellable?) unless admin_user
+
+        # сортируем и группируем, если ищем для морды
+        recommendations.sort_and_group! unless lite
+        # удаляем рекоммендации на сегодня-завтра
+        recommendations.each(&:clear_variants)
       end
-      # TODO пометить как непродаваемые, для админов?
-      recommendations.every.clear_variants unless admin_user
-      recommendations.delete_if{|r| r.variants.blank?}
-      recommendations
     end
+    recommendations
   end
 
-  def amadeus_async_pricer(form, &block)
+  def amadeus_async_pricer(avia_search, &block)
     return [] unless Conf.amadeus.enabled
     request_ws = {:suggested_limit => suggested_limit, :lite => lite}
     request_ns = {:suggested_limit => suggested_limit, :lite => lite, :nonstop => true}
@@ -109,57 +108,57 @@ class Mux
     reqs.each do |req|
       session = Amadeus::Session.book(Amadeus::Session::BOOKING)
       amadeus = Amadeus::Service.new(:session => session, :driver => amadeus_driver)
-      amadeus.async_fare_master_pricer_travel_board_search(form, req) do |res|
+      amadeus.async_fare_master_pricer_travel_board_search(avia_search, req) do |res|
         amadeus.release
         block.call(res)
       end
     end
   end
 
-  def sirena_pricer(form)
+  def sirena_pricer(avia_search)
     return [] unless Conf.sirena.enabled
     return [] if lite && !Conf.sirena.enabled_in_lite
-    return [] unless sirena_searchable?(form)
-    recommendations = []
+    return [] unless sirena_searchable?(avia_search)
+    recommendations = RecommendationSet.new
     benchmark 'Pricer sirena' do
-      recommendations = Sirena::Service.new.pricing(form, :lite => lite).recommendations || []
+      recommendations = Sirena::Service.new.pricing(avia_search, :lite => lite).recommendations || []
       sirena_cleanup(recommendations)
     end
 
     recommendations
   rescue
     with_warning
-    []
+    RecommendationSet.new
   end
 
   def sirena_cleanup(recs)
-    recs.delete_if(&:without_full_information?)
-    # временно из-за проблем с тарифами AB и LX удаляем из рекоммендации
-    recs.delete_if {|r| ['AB', 'LX', 'ЮХ'].include? r.validating_carrier_iata }
-    recs.every.clear_variants
-    recs.delete_if{|r| r.variants.blank?}
+    recs.select_valid! do |recs|
+      recs.each(&:clear_variants)
+      # временно из-за проблем с тарифами AB и LX удаляем из рекоммендации
+      recs.delete_if {|r| ['AB', 'LX', 'ЮХ'].include? r.validating_carrier_iata }
+    end
   end
 
-  def sirena_async_pricer(form, &block)
+  def sirena_async_pricer(avia_search, &block)
     return [] unless Conf.sirena.enabled
     return [] if lite && !Conf.sirena.enabled_in_lite
-    return [] unless sirena_searchable?(form)
+    return [] unless sirena_searchable?(avia_search)
 
     sirena = Sirena::Service.new(:driver => async_sirena_driver)
-    sirena.async_pricing(form, :lite => lite, &block)
+    sirena.async_pricing(avia_search, :lite => lite, &block)
   end
 
-  def async_pricer(form)
+  def async_pricer(avia_search)
     benchmark 'Pricer, async total' do
-      amadeus_recommendations = []
-      sirena_recommendations = []
-      amadeus_async_pricer(form) do |res|
+      amadeus_recommendations = RecommendationSet.new
+      sirena_recommendations = RecommendationSet.new
+      amadeus_async_pricer(avia_search) do |res|
         benchmark "Amadeus::Recommendations: parsing" do
           logger.info "Mux: amadeus recs: #{res.recommendations.size}"
           amadeus_recommendations += res.recommendations
         end
       end
-      sirena_async_pricer(form) do |res|
+      sirena_async_pricer(avia_search) do |res|
         logger.info "Mux: sirena recs: #{res.recommendations.size}"
         sirena_recommendations += res.recommendations
       end
@@ -168,7 +167,7 @@ class Mux
 
       recommendations = amadeus_merge_and_cleanup(amadeus_recommendations) + sirena_cleanup(sirena_recommendations)
       benchmark 'creating and saving rambler cache' do
-        save_to_mongo(form, recommendations) if Conf.api.store_rambler_cache && !admin_user && !form.complex_route?
+        save_to_mongo(avia_search, recommendations) if Conf.api.store_rambler_cache && !admin_user && !avia_search.complex_route?
       end
       if lite
         recommendations
@@ -205,8 +204,8 @@ class Mux
   SNG_COUNTRY_CODES = ["RU", "AZ", "AM", "BY", "GE", "KZ", "KG", "LV", "LT", "MD", "TJ", "TM", "UZ", "UA", "EE"]
   def sirena_searchable?(form)
     return false if form.segments.size > 2
-    return false if form.segments.any? {|fs| fs.from_as_object == fs.to_as_object}
-    locations = (form.segments.every.from_as_object + form.segments.every.to_as_object).uniq
+    return false if form.segments.any? {|fs| fs.from == fs.to}
+    locations = (form.segments.every.from + form.segments.every.to).uniq
 
     !Conf.sirena.restrict ||
       # form.adults == 1 &&

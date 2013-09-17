@@ -75,7 +75,7 @@ select: function(index, smooth) {
         this.summaries[variant.segments[i]].addClass('os-selected');
     }
     var disabled = smooth && this.book.hasClass('ob-disabled'); // Если переключили во время проверки доступности, анимация не нужна
-    this.book.removeClass('ob-disabled ob-failed');
+    this.book.removeClass('ob-disabled ob-failed ob-fade');
     this.selected = variant;
     if (smooth && !disabled) {
         var that = this;
@@ -336,6 +336,10 @@ updateDetails: function() {
     for (var s = 0, sm = segments.length; s < sm; s++) {
         var content = offer.el.find('.o-segment .os-details[data-flights="' + segments[s] + '"]').clone();
         content.addClass('segment' + (s + 1)).appendTo(odSegments);
+    }
+    var diffClasses = odSegments.find('.osdt-hlcab, .osdn-hlcab');
+    if (diffClasses.length) {
+        odSegments.prepend('<div class="osd-cabins"><span class="osdn-hlcab">Обратите внимание: некоторые сегменты выполняются ' + diffClasses.eq(0).attr('data-ins') + '</span></div>');
     }
     var odComments = $('<div class="od-comments"></div>');
     offer.el.find('.o-comments .od-comment').each(function() {

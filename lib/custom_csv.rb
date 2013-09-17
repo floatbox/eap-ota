@@ -26,7 +26,9 @@ module CustomCSV
             if res.is_a? BigDecimal
               res.to_s.sub('.', ',') + ' р.'
             elsif res.is_a? Commission::Formula
-              if res.percentage?
+              if res.complex?
+                res.to_s
+              elsif res.percentage?
                 res.to_s.sub('.', ',')
               else
                 res.to_s.sub('.', ',') + ' р.'

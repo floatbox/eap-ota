@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::FarePricePNRWithLowerFares do
+describe Amadeus::Response::FarePricePNRWithLowerFares, :amadeus do
 
   subject do
     amadeus_response 'spec/amadeus/xml/Fare_PricePNRWithLowerFares.xml'

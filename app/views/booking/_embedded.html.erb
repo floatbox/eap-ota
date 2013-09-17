@@ -9,6 +9,10 @@
 <div class="b-details">
 <div class="od-segments">
 <% cabins = different_cabins(recommendation, @search.cabin) %>
+<% diffCabins = cabins.flatten.compact %>
+<% unless diffCabins.empty? %>
+    <div class="osd-cabins"><span class="osdn-hlcab">Обратите внимание: некоторые сегменты выполняются <%= t(diffCabins.first, :scope => 'offer.details.cabin_ins') %></span></div>
+<% end %>
 <% recommendation.variants.first.segments.each_with_index do |segment, scounter| %>
     <%= render :partial => '/pricer/details', :locals => {
         :segment => segment,
@@ -39,9 +43,7 @@
     <div class="bf-section bf-persons" data-type="persons">
         <div class="bfs-title">
             <h4 class="bfst-text"><%= t @order_form.people.one? ? 'one' : 'few', :scope => 'booking.passengers' %></h4>
-            <div class="bfst-line"></div>
-            <p class="bfp-hint" id="bfph-passport"><span class="bfph-link bf-hint" data-hint="bfh-passport"><%= raw t 'booking.passengers.document.hint' %></span></p>
-            <p class="bfp-hint" id="bfph-expiration"><span class="bfph-link bf-hint" data-hint="bfh-expiration"><%= raw t 'booking.passengers.expiration.hint' %></span></p>                        
+            <!--<div class="bfst-line"></div>-->
         </div>
         <p class="bfp-order" style="display: <%= @order_form.people_count[:infants] > 0 && @order_form.people_count[:adults] > 1 ? 'block' : 'none' %>;"><%= t 'booking.passengers.order' %></p>
 

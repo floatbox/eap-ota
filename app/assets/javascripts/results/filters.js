@@ -348,6 +348,8 @@ init: function() {
     this.sliders = this.el.find('.rfd-slider');
     this.sliders.mousedown(function(event) {
         that.drag($(this).attr('data-name'), event);
+    }).click(function(event) {
+        event.stopPropagation();
     });
     this.el.find('.rfd-control').click(function(event) {
         that.click(event.pageX);
@@ -495,9 +497,9 @@ apply: function() {
     }
     if (merged !== this.conditions) {
         this.conditions = merged;
+        this.group.apply();
+        results.filters.apply();
     }
-    this.group.apply();
-    results.filters.apply();
 }
 };
 

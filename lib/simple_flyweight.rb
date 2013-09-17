@@ -16,4 +16,8 @@ module SimpleFlyweight
     @pool ||= {}
     @pool[args] ||= super
   end
+
+  def clear_cache
+    @pool = {}
+  end
 end

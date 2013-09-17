@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Sirena::Request::PricingVariant do
+describe Sirena::Request::PricingVariant, :sirena do
 
   describe '#initialize' do
 
-    context "with pricer form" do
-      let(:form){PricerForm.simple(:from => "MOV", :to => "LED", :date1 => "290912", :date2 => "300912", :infants => 1, :children => 1, :cabin => "Y")}
+    context "with AviaSearch" do
+      let(:form){AviaSearch.simple(:from => "MOV", :to => "LED", :date1 => "290912", :date2 => "300912", :infants => 1, :children => 1, :cabin => "Y")}
       subject {described_class.new form}
 
       it{should have(3).passengers}

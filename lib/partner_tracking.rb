@@ -21,9 +21,13 @@ module PartnerTracking
   end
 
   def set_partner_cookies(partner, marker, days_to_remember)
-   cookies[:partner] = { :value => partner, :expires => days_to_remember.days.from_now}
-   # маркер надо перезатирать, даже если его не указали
-   cookies[:marker] = { :value => marker, :expires => days_to_remember.days.from_now}
+    Conf.api.url_base =~ /https?:\/\/([\w\.]+)\/?/
+    domain = ".#{$1}"
+    # возможно стоит юзать session_store ..., domain: :all
+    # для того чтобы избежать этой проблемы в дальнейшем
+    cookies[:partner] = { value: partner, expires: days_to_remember.days.from_now, domain: domain }
+    # маркер надо перезатирать, даже если его не указали
+    cookies[:marker] = { value: marker, expires: days_to_remember.days.from_now, domain: domain }
   end
 
   def partner

@@ -8,7 +8,7 @@ module Strategy::Amadeus::Tickets
     ::Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
       tst_resp = amadeus.ticket_display_tst
-      prices = tst_resp.prices_with_refs
+      prices = tst_resp.money_with_refs
       baggage_with_refs = tst_resp.baggage_with_refs
       amadeus.pnr_ignore
     end
@@ -33,6 +33,7 @@ module Strategy::Amadeus::Tickets
           :source => 'amadeus',
           :baggage_info => baggage_info,
           :pnr_number => @order.pnr_number,
+          :original_price_penalty => "0 RUB",
           :additional_pnr_number => add_number
         })
       end

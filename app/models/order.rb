@@ -1,7 +1,9 @@
 # encoding: utf-8
 class Order < ActiveRecord::Base
+
   include CopyAttrs
   include Pricing::Order
+  extend MoneyColumns
   include TypusOrder
   include ProfileOrder
   include OrderAttrs
@@ -11,10 +13,12 @@ class Order < ActiveRecord::Base
   scope :MOWR221F9, lambda { by_office_id 'MOWR221F9' }
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
-  scope :for_manual_ticketing, lambda { where("payment_status IN ('blocked', 'charged') AND
+  scope :for_manual_ticketing, lambda { where("orders.payment_status IN ('blocked', 'charged') AND
     ticket_status = 'booked' AND
-    pnr_number != '' AND
-    (NOT auto_ticket OR updated_at < ?)", Time.now - 40.minutes ) }
+    orders.pnr_number != '' AND
+    (NOT auto_ticket OR orders.updated_at < ?)", Time.now - 40.minutes ) }
+
+  has_money_helpers :original_price_fare, :original_price_tax
 
   def self.by_office_id office_id
     joins(:tickets).where('tickets.office_id' => office_id).uniq
@@ -68,7 +72,7 @@ class Order < ActiveRecord::Base
   end
 
   def show_vat
-    sold_tickets.present? && sold_tickets.all?(&:show_vat) && sold_tickets.every.office_id.uniq != ['FLL1S212V']
+    has_data_in_tickets? && sold_tickets.all?(&:show_vat)
   end
 
   def calculated_payment_status
@@ -153,11 +157,12 @@ class Order < ActiveRecord::Base
   def ok_to_auto_ticket?
     auto_ticket && ticket_status == 'booked' &&
       ['blocked', 'charged'].include?(payment_status) &&
+      no_auto_ticket_reason == '' &&
       Conf.site.auto_ticketing['enabled']
   end
 
   def has_data_in_tickets?
-    sold_tickets.present? && sold_tickets.all?{|t| t.office_id != 'FLL1S212V'}
+    !old_booking && !old_downtown_booking && sold_tickets.present?
   end
 
   def display_fee_details
@@ -232,7 +237,7 @@ class Order < ActiveRecord::Base
   scope :ticket_not_sent, where("orders.pnr_number != '' AND email_status != 'ticket_sent' AND ticket_status = 'ticketed'").where("orders.created_at > ?", 10.days.ago)
   scope :sent_manual, where(:email_status => 'manual')
   scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("orders.pnr_number != ''")
-  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != '' AND payment_status = 'blocked'")
+  scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != '' AND orders.payment_status = 'blocked'")
 
 
   scope :stale, lambda {
@@ -388,7 +393,7 @@ class Order < ActiveRecord::Base
 
   def recalculate_prices
     #считаем, что в данном случае не бывает обменов/возвратов, иначе с ценами будет полная жопа
-    return if old_booking || !has_data_in_tickets?
+    return if !has_data_in_tickets?
     if tickets.present? && tickets.all?{|t| t.kind == 'ticket' && t.status == 'ticketed'}
       if fix_price?
         tickets.every.save
@@ -418,7 +423,7 @@ class Order < ActiveRecord::Base
   def update_prices_from_tickets
     tickets.reload
     # не обновляем цены при загрузке билетов, если там вдруг нет комиссий
-    return if old_booking || !has_data_in_tickets?
+    return if !has_data_in_tickets?
     price_total_old = self.price_total
 
     sum_and_copy_attrs sold_tickets, self,
@@ -438,6 +443,7 @@ class Order < ActiveRecord::Base
     self.ticketed_date = first_ticket.ticketed_date if !ticketed_date && first_ticket # для тех случаев, когда билет переводят в состояние ticketed руками
     update_incomes
     save
+    update_has_refunds
   end
 
   def update_has_refunds
@@ -506,7 +512,7 @@ class Order < ActiveRecord::Base
   end
 
   def charge!
-    res = last_payment.charge!
+    res = last_payment.charged? || last_payment.charge!
     update_attribute(:payment_status, 'charged') if res
     res
   end
@@ -526,11 +532,31 @@ class Order < ActiveRecord::Base
   end
 
   def recalculated_price_with_payment_commission
-    if tickets.present? && sold_tickets.every.office_id.uniq != ['FLL1S212V']
+    if has_data_in_tickets?
       sold_tickets.every.price_with_payment_commission.sum
     else
       price_with_payment_commission
     end
+  end
+
+  def original_price_fare
+    if sold_tickets.present?
+      sold_tickets.every.original_price_fare.sum
+    else
+      nil
+    end
+  rescue
+    nil
+  end
+
+  def original_price_tax
+    if sold_tickets.present?
+      sold_tickets.every.original_price_tax.sum
+    else
+      nil
+    end
+  rescue
+    nil
   end
 
   def money_blocked!
@@ -602,6 +628,14 @@ class Order < ActiveRecord::Base
     end
   end
 
+  def self.set_error_ticket_status!
+    where(ticket_status: 'processing_ticket').
+      where('updated_at < ?', 30.minutes.ago).
+      map do |o|
+        o.ticket! || o.update_attributes(ticket_status: 'error_ticket')
+      end
+  end
+
   def set_customer
     if (customer && first_email != customer.email) || (!customer && !first_email.blank?)
       self.customer = Customer.create_from_order(first_email)
@@ -618,7 +652,7 @@ class Order < ActiveRecord::Base
   end
 
   def settled?
-    !(ticket_status == 'canceled') && !has_refunds? && income > 0 && tickets.all?{|t| t.status == 'ticketed'}
+    !(ticket_status == 'canceled') && !has_refunds? && tickets.all?{|t| t.status == 'ticketed'}
   end
 
   def api_stats_hash

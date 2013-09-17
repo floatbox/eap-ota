@@ -11,12 +11,8 @@ class Commission::Book
   # Inspection
   ############
 
-  def exists_for?(recommendation)
-    pages_for(carrier: recommendation.validating_carrier_iata).present?
-  end
-
   def rules
-    pages.map(&:rules).flatten.sort_by(&:source)
+    pages.flat_map(&:rules).sort_by(&:source)
   end
 
   def carriers
@@ -24,34 +20,46 @@ class Commission::Book
   end
 
   def pages
-    @index.values.flatten
+    sections.flat_map(&:pages)
   end
 
+  def sections
+    @index.values.flat_map(&:values)
+  end
+
+  # FIXME отдает страницы только по одному методу выписки
+  # нужен ли еще?
   def pages_for(opts)
-    carrier = opts[:carrier] or raise ArgumentError, "carrier not specified"
-    @index[carrier]
+    section = find_section(opts) or return
+    section.pages
   end
 
-  # временный метод, отображающий только активные страницы
-  def current_pages
-    carriers.map do |carrier|
-      find_page(carrier: carrier)
-    end
+  def current_pages(date=Date.today)
+    sections.map {|s| s.current_page(date) }.compact
+  end
+
+  def current_rules(date=Date.today)
+    current_pages(date).flat_map(&:rules)
   end
 
   # Recommendation finders
   ########################
 
-  def find_for(recommendation)
-    page = find_page(carrier: recommendation.validating_carrier_iata) or return Commission::Rule::Null
-    page.find_rule(recommendation) or return Commission::Rule::Null
+  # принимает список ticketing_method-ов
+  def find_rules_for_rec(recommendation, opts={})
+    carrier = recommendation.validating_carrier_iata
+    ticketing_methods = Array(opts[:ticketing_method] || @index[carrier].try(&:keys))
+    sections = ticketing_methods.map {|m| find_section(carrier: carrier, ticketing_method: m) }.compact
+    pages = sections.map {|s| s.current_page }.compact
+    pages.map {|p| p.find_rule_for_rec(recommendation) }.compact
   end
 
-  # выбирает активную страницу для
-  # FIXME выбирает активну
+  # выбирает страницу с указанным перевозчиком
+  # по умолчанию - действующую в данный момент
   def find_page(opts)
-    pages = pages_for(opts) or return
-    page = pages.find {|p| p.start_date.nil? || p.start_date <= Date.today }
+    section = find_section(opts) or return
+    date = opts[:date] || Date.today
+    page = section.current_page(date)
   end
 
   # создает и вносит в индекс страницу
@@ -61,24 +69,30 @@ class Commission::Book
     register_page page
   end
 
-  LONG_TIME_AGO = Date.new(2000,1,1)
   # вносит в индекс страницу
-  # TODO ugly and untested
   # @return Commission::Page
   def register_page(page)
-    pages = @index[page.carrier] || []
-    pages += [page]
-    pages.sort_by! {|p| p.start_date || LONG_TIME_AGO }
-    pages.reverse!
-    if pages.map(&:start_date).uniq.size != pages.size
-      raise ArgumentError, "#{page} with #{page.start_date} already registered in book"
-    end
-    @index[page.carrier] = pages
-    page
+    section = find_or_create_section(carrier: page.carrier, ticketing_method: page.ticketing_method)
+    section.register_page(page)
+  end
+
+  def find_section(opts)
+    carrier = opts[:carrier]
+    ticketing_method = opts[:ticketing_method] || "unknown"
+    @index[carrier] && @index[carrier][ticketing_method]
+  end
+
+  def find_or_create_section(opts)
+    carrier = opts[:carrier]
+    ticketing_method = opts[:ticketing_method] || "unknown"
+    @index[carrier] ||= {}
+    @index[carrier][ticketing_method] ||=
+      Commission::Section.new(carrier: carrier, ticketing_method: ticketing_method)
   end
 
   def all_with_reasons_for(recommendation)
     page = find_page(carrier: recommendation.validating_carrier_iata) or return []
     page.all_with_reasons_for(recommendation)
   end
+
 end

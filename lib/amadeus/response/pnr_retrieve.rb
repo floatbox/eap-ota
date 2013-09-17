@@ -37,6 +37,13 @@ module Amadeus
              ).map(&:to_s)
       end
 
+      def cabins
+        xpath( "//r:itineraryInfo[r:elementManagementItinerary/r:segmentName='AIR']" +
+              "[r:travelProduct/r:companyDetail/r:identification]" +
+              "/r:cabinDetails/r:cabinDetails/r:classDesignator"
+             ).map(&:to_s)
+      end
+
       def passengers
         xpath('//r:travellerInformation').map do |ti|
           surname = ti.xpath('r:traveller/r:surname').to_s
@@ -101,7 +108,7 @@ module Amadeus
         m = s.to_s.match(
           %r{
             (?<inf>PAX|INF)\ (?<code> \d+ )-(?<number> [\d-]+ )
-            / [DE] (?<status> [TRV] ) (?<validating_carrier> \w{2} )
+            / [DEV] (?<status> [TRV] ) (?<validating_carrier> \w{2} )
             /? [^/]*
             / (?<ticketed_date> \w+ )
             / (?<office_id> \w+ )
@@ -136,7 +143,8 @@ module Amadeus
             :departure_time =>         fi.xpath("r:travelProduct/r:product/r:depTime").to_s,
             :equipment_type_iata =>    fi.xpath("r:flightDetail/r:productDetails/r:equipment").to_s,
             :departure_term =>         fi.xpath("r:flightDetail/r:departureInformation/r:departTerminal").to_s,
-            :cabin =>                  fi.xpath("r:travelProduct/r:productDetails/r:classOfService").to_s,
+            :booking_class =>          fi.xpath("r:travelProduct/r:productDetails/r:classOfService").to_s,
+            :cabin =>                  fi.xpath("r:cabinDetails/r:cabinDetails/r:classDesignator").to_s,
             :warning =>                fi.xpath("r:errorInfo/r:errorfreeFormText/r:text").to_s,
             :amadeus_ref => ref
           }
@@ -182,7 +190,7 @@ module Amadeus
 
       def exchanged_tickets
         @exchanged_tickets ||= xpath( "//r:dataElementsIndiv[r:elementManagementData/r:reference[r:qualifier='OT']]/r:otherDataFreetext[r:freetextDetail/r:type='45']/r:longFreetext"
-        ).inject({}) do |res, fa|
+        ).each_with_object({}) do |fa, res|
           ticket_hash = parsed_exchange_string(fa.to_s)
           infant_flag = ticket_hash.delete(:inf) == 'INF' ? 'i': 'a'
           passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i || tickets.keys.find{|(_, flag), _| flag == infant_flag}[0][0]
@@ -194,7 +202,7 @@ module Amadeus
             new_ticket = tickets.find{|k, v| k[0] == [passenger_ref, infant_flag] && v[:number] != ticket_hash[:number]}
             segments_refs = new_ticket[0][1] if new_ticket
           end
-          res.merge({[[passenger_ref, infant_flag], segments_refs] => ticket_hash}) if segments_refs.present?
+          res.merge!({[[passenger_ref, infant_flag], segments_refs] => ticket_hash}) if segments_refs.present?
         end
       end
 

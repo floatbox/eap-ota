@@ -13,42 +13,54 @@ describe Commission::Writer::Book do
     book_string = unindent(<<-END)
       carrier "AB"
 
-      example "SVOCDG/AB"
-      example "SVOCDG CDGSVO/AB"
+      rule 1 do
+      ticketing_method "aviacenter"
+      agent "2%"
+      subagent "0.05"
+      discount "4%"
+      our_markup "1eur"
+      consolidator "2%"
+      blanks "50"
+      tour_code "FOOBAR"
+      designator "123"
       comment "есть проблемы"
       comment "и не одна"
-      agent "* Какой-то текст"
-      agent "продолжается и здесь"
-      subagent "* Какой-то текст со странными правками"
-      subagent "продолжается и здесь"
+      agent_comment "* Какой-то текст"
+      agent_comment "продолжается и здесь"
+      subagent_comment "* Какой-то текст со странными правками"
+      subagent_comment "продолжается и здесь"
       classes :business, :economy
       subclasses "ABCDEFGH"
       routes "MOW...US/ALL", "MOW-PAR-MOW"
-      consolidator "2%"
-      blanks "50"
-      discount "4%"
-      our_markup "1eur"
-      ticketing_method "aviacenter"
-      tour_code "FOOBAR"
-      designator "123"
       check %{
         includes_only(operating_carrier_iatas.first, 'AB HG') and
           includes(city_iatas, 'MOW NYC')
       }
-      commission "2%/0.05"
+      example "SVOCDG/AB"
+      example "SVOCDG CDGSVO/AB"
+      end
 
-      example "SVOLED/AB"
+      rule 2 do
+      no_commission "Катя просила выключить"
       important!
       domestic
-      no_commission "Катя просила выключить"
+      example "SVOLED/AB"
+      end
+
+      carrier "FV", start_date: "2013-10-01", no_commission: "сдулись"
 
       carrier "FV", start_date: "2013-06-30"
 
+      rule 1 do
       no_commission
+      end
 
       carrier "FV"
 
-      commission "3%/1%"
+      rule 1 do
+      agent "3%"
+      subagent "1%"
+      end
 
     END
     book = Commission::Reader.new.read book_string

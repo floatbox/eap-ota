@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::FareMasterPricerTravelBoardSearch do
+describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
   context 'with NO ITINERARY FOUND' do
 
     let_once! :response do

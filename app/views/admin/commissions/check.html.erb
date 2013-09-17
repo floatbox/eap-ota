@@ -2,12 +2,14 @@
 <%= link_to 'Все комиссии', admin_commissions_path %>
 </p>
 <%= render 'form' %>
+<%= render 'recommendation' %>
+<hr>
 <% if @rules_with_reasons.blank? %>
 <p>
   нет комиссий для авиакомпании
 <p>
 <% end %>
-<% @rules_with_reasons.each do |rule,status,reason| %>
+<% (@rules_with_reasons || []).each do |rule,status,reason| %>
   <% case status %>
   <% when :fail %>
     <h2 style="color:red">не подошло (<%= reason %>):</h2>
@@ -17,6 +19,6 @@
     <h2 style="color:gray">не проверяли<% if reason %> (но был бы "<%= reason %>")<% end %>:</h2>
   <% end %>
 
-  <%= render 'rule', :rule => rule %>
+  <%= render 'rule', :rule => rule, :error => reason %>
 <hr>
 <% end %>

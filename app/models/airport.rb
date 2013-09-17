@@ -2,7 +2,27 @@
 class Airport < ActiveRecord::Base
   include HasSynonyms
   include Cases
-  extend IataStash
+  extend CodeStash
+
+  class << self
+    def fetch_by_code(code)
+      known.find_by_iata(code) # || find_by_iata_ru(code)
+    end
+
+    def make_by_code(code)
+      # нет поддержки кириллицы для сирены
+      # если сделать validate_uniqueness_of :iata, то вторую проверку следует опустить
+      if code =~ /^[A-Z]{3}$/ && !find_by_iata(code)
+        create(iata: code, auto_save: true, city: nil)
+        Rails.logger.info "Airport with iata '#{code}' autosaved to db"
+      end
+      nil
+    end
+  end
+
+  def codes
+    [iata, iata_ru]
+  end
 
   has_paper_trail
 
@@ -26,13 +46,19 @@ class Airport < ActiveRecord::Base
 
   scope :important, where("importance > 0")
   scope :not_important, where("importance = 0")
+
   scope :with_country, where("city_id is not null").includes(:city => :country)
+  scope :lost, where(city_id: nil)
+  scope :known, where('airports.city_id IS NOT NULL')
+  scope :autosaved, where(auto_save: true)
+
+  def known?
+    !!city
+  end
 
   def name
     name_ru.presence || name_en.presence || iata
-
   end
-
 
   def equal_to_city
     city && city.name_ru == name_ru && city.iata == iata

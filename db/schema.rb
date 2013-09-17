@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130718131818) do
+ActiveRecord::Schema.define(:version => 20130901140434) do
+
+  create_table "active_admin_comments", :force => true do |t|
+    t.string   "resource_id",   :null => false
+    t.string   "resource_type", :null => false
+    t.integer  "author_id"
+    t.string   "author_type"
+    t.text     "body"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "namespace"
+  end
+
+  add_index "active_admin_comments", ["author_type", "author_id"], :name => "index_active_admin_comments_on_author_type_and_author_id"
+  add_index "active_admin_comments", ["namespace"], :name => "index_active_admin_comments_on_namespace"
+  add_index "active_admin_comments", ["resource_type", "resource_id"], :name => "index_admin_notes_on_resource_type_and_resource_id"
 
   create_table "airline_alliances", :force => true do |t|
     t.string "name",               :null => false
@@ -27,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.datetime "updated_at"
     t.string   "engine_type", :default => "jet"
     t.string   "iata_ru"
+    t.boolean  "auto_save",   :default => false, :null => false
   end
 
   add_index "airplanes", ["iata"], :name => "index_airplanes_on_iata"
@@ -45,7 +61,7 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.integer  "city_id"
     t.float    "lat"
     t.float    "lng"
-    t.integer  "importance",    :default => 0, :null => false
+    t.integer  "importance",    :default => 0,     :null => false
     t.string   "synonym_list"
     t.string   "proper_to"
     t.string   "proper_from"
@@ -56,6 +72,7 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.string   "iata_ru"
     t.string   "sirena_name"
     t.boolean  "disabled"
+    t.boolean  "auto_save",     :default => false, :null => false
   end
 
   add_index "airports", ["iata"], :name => "index_airports_on_iata"
@@ -84,8 +101,6 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.string   "ru_longname"
     t.integer  "airline_alliance_id"
     t.string   "bonus_program_name"
-    t.integer  "gds_id"
-    t.integer  "consolidator_id"
     t.text     "interlines",          :null => false
     t.string   "color"
     t.string   "font_color"
@@ -125,12 +140,6 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
   add_index "cities", ["iata"], :name => "index_cities_on_iata"
   add_index "cities", ["name_en"], :name => "index_cities_on_name_en"
   add_index "cities", ["name_ru"], :name => "index_cities_on_name_ru"
-
-  create_table "consolidators", :force => true do |t|
-    t.string "name"
-    t.string "booking_office"
-    t.string "ticketing_office"
-  end
 
   create_table "countries", :force => true do |t|
     t.string   "name_en"
@@ -194,6 +203,28 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
   add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
   add_index "customers", ["reset_password_token"], :name => "index_customers_on_reset_password_token", :unique => true
 
+  create_table "deck_users", :force => true do |t|
+    t.string   "email",                  :default => "", :null => false
+    t.string   "encrypted_password",     :default => "", :null => false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          :default => 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.string   "first_name",             :default => "", :null => false
+    t.string   "last_name",              :default => "", :null => false
+    t.datetime "locked_at"
+    t.string   "roles",                  :default => "", :null => false
+  end
+
+  add_index "deck_users", ["email"], :name => "index_deck_users_on_email", :unique => true
+  add_index "deck_users", ["reset_password_token"], :name => "index_deck_users_on_reset_password_token", :unique => true
+
   create_table "destinations", :force => true do |t|
     t.integer  "to_id"
     t.integer  "from_id"
@@ -232,10 +263,6 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.string   "proper_in"
     t.float    "lat"
     t.float    "lng"
-  end
-
-  create_table "global_distribution_systems", :force => true do |t|
-    t.string "name"
   end
 
   create_table "hot_offers", :force => true do |t|
@@ -337,8 +364,8 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.decimal  "price_consolidator_markup",     :precision => 9, :scale => 2, :default => 0.0,      :null => false
     t.string   "name_in_card"
     t.string   "last_digits_in_card"
-    t.text     "commission_agent_comments",                                                         :null => false
-    t.text     "commission_subagent_comments",                                                      :null => false
+    t.string   "commission_agent_comments",                                   :default => ""
+    t.string   "commission_subagent_comments",                                :default => ""
     t.string   "source",                                                      :default => "other"
     t.string   "sirena_lead_pass"
     t.string   "code"
@@ -385,6 +412,7 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.string   "commission_designator"
     t.boolean  "auto_ticket",                                                 :default => false
     t.string   "no_auto_ticket_reason",                                       :default => ""
+    t.boolean  "old_downtown_booking",                                        :default => false
     t.boolean  "needs_visa_notification",                                     :default => false
     t.string   "additional_pnr_number"
   end
@@ -417,6 +445,7 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.integer  "suggested_limit"
     t.boolean  "cheat",               :default => false
     t.text     "notes"
+    t.string   "cheat_mode",          :default => "no"
   end
 
   add_index "partners", ["token"], :name => "index_partners_on_token"
@@ -452,6 +481,7 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
 
   add_index "payments", ["order_id"], :name => "index_payments_on_order_id"
   add_index "payments", ["pan"], :name => "index_payments_on_pan"
+  add_index "payments", ["ref"], :name => "payments_ref"
   add_index "payments", ["status"], :name => "index_payments_on_status"
 
   create_table "promo_codes", :force => true do |t|
@@ -528,11 +558,11 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.string   "source"
     t.string   "pnr_number"
     t.string   "number"
-    t.decimal  "price_fare",                   :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_fare",                                   :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "commission_subagent"
-    t.decimal  "price_tax",                    :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_share",                  :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_consolidator_markup",    :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_tax",                                    :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_share",                                  :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_consolidator_markup",                    :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -547,31 +577,38 @@ ActiveRecord::Schema.define(:version => 20130718131818) do
     t.string   "office_id"
     t.date     "ticketed_date"
     t.string   "validating_carrier"
-    t.string   "kind",                                                       :default => "ticket"
+    t.string   "kind",                                                                       :default => "ticket"
     t.integer  "parent_id"
-    t.decimal  "price_penalty",                :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_penalty",                                :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.text     "comment"
     t.string   "commission_agent"
     t.string   "commission_consolidator"
     t.string   "commission_blanks"
-    t.decimal  "price_consolidator",           :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_blanks",                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_agent",                  :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_subagent",               :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_consolidator",                           :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_blanks",                                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_agent",                                  :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_subagent",                               :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "commission_discount"
-    t.decimal  "price_discount",               :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_discount",                               :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "mso_number"
-    t.decimal  "corrected_price",              :precision => 9, :scale => 2
+    t.decimal  "corrected_price",                              :precision => 9, :scale => 2
     t.string   "commission_our_markup"
-    t.decimal  "price_our_markup",             :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.string   "vat_status",                                                 :default => "unknown", :null => false
+    t.decimal  "price_our_markup",                             :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.string   "vat_status",                                                                 :default => "unknown", :null => false
     t.date     "dept_date"
-    t.decimal  "price_extra_penalty",          :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_extra_penalty",                          :precision => 9, :scale => 2, :default => 0.0,       :null => false
     t.string   "baggage_info"
-    t.decimal  "price_operational_fee",        :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_acquiring_compensation", :precision => 9, :scale => 2, :default => 0.0,       :null => false
-    t.decimal  "price_difference",             :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_operational_fee",                        :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_acquiring_compensation",                 :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.decimal  "price_difference",                             :precision => 9, :scale => 2, :default => 0.0,       :null => false
+    t.integer  "original_price_fare_cents"
+    t.string   "original_price_fare_currency",    :limit => 3
+    t.integer  "original_price_tax_cents"
+    t.string   "original_price_tax_currency",     :limit => 3
+    t.integer  "original_price_penalty_cents"
+    t.string   "original_price_penalty_currency", :limit => 3
     t.string   "additional_pnr_number"
+    t.string   "booking_classes"
   end
 
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"

@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe Commission::Book do
-  describe "#find_for" do
+  describe "#find_rules_for_rec" do
     subject :book do
       Commission::Book.new
     end
@@ -11,12 +11,12 @@ describe Commission::Book do
       book.create_page carrier: 'AB'
     end
 
-    it "should return nil when no page for carrier present" do
-      book.find_for(Recommendation.new(validating_carrier_iata: 'ZZ')).should == Commission::Rule::Null
+    it "should return [] when no page for carrier present" do
+      book.find_rules_for_rec(Recommendation.new(validating_carrier_iata: 'ZZ')).should == []
     end
 
-    it "should return nil when no findable commissions on page present" do
-      book.find_for(Recommendation.new(validating_carrier_iata: 'AB')).should == Commission::Rule::Null
+    it "should return [] when no findable commissions on page present" do
+      book.find_rules_for_rec(Recommendation.new(validating_carrier_iata: 'AB')).should == []
     end
 
     pending "test normal matching"

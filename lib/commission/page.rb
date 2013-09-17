@@ -11,8 +11,14 @@ class Commission::Page
   # @return String IATA код перевозчика
   attr_accessor :carrier
 
+  # @return String метод выписки для правил
+  attr_accessor :ticketing_method
+
   # @return Date дата начала действия комиссии
   attr_accessor :start_date
+
+  # @return String причина отключения продаж по данной странице
+  attr_accessor :no_commission
 
   def initialize(*)
     @index = []
@@ -28,6 +34,8 @@ class Commission::Page
   # вносит в книгу готовую комиссию
   def register rule
     rule.number = @index.size + 1
+    rule.carrier = carrier
+    rule.no_commission = no_commission if no_commission
     if rule.important
       @index.unshift rule
     else
@@ -56,13 +64,10 @@ class Commission::Page
   # Recommendation finders
   ########################
 
-  def find_rule(recommendation)
-    rule = @index.find do |r|
+  def find_rule_for_rec(recommendation)
+    @index.find do |r|
       r.applicable?(recommendation)
     end
-    return unless rule
-    return if rule.disabled?
-    rule
   end
 
   # Применяет каждое правило в странице к рекомендации.

@@ -11,7 +11,7 @@
 .o-book {
     position: relative;
     background: #FFF;
-    margin-left: 16px;    
+    margin-left: 16px;
     padding: 8px 20px 8px 8px;
     font-size: 20px;
     line-height: 20px;
@@ -33,7 +33,7 @@
     left: -1px;
     width: 100%;
     padding-right: 2px;
-    background-position: 100% 0;    
+    background-position: 100% 0;
 }
 .obb-right {
     margin-right: 18px;
@@ -44,7 +44,7 @@
     border-radius: 5px;
     font-weight: bold;
     color: #FFF;
-    text-shadow: rgba(0, 0, 0, 0.3) -1px -1px 0;    
+    text-shadow: rgba(0, 0, 0, 0.3) -1px -1px 0;
     cursor: pointer;
 }
 .obbt-sum,
@@ -111,7 +111,7 @@
     display: none;
     position: absolute;
     top: -12px;
-    left: 0; 
+    left: 0;
     width: 988px;
     height: 12px;
     background: url(/images/results/pshadow.png) no-repeat;
@@ -176,6 +176,29 @@
     background-position: -350px -41px;
 }
 
+/* Fade */
+.ob-fade {
+    position: relative;
+    z-index: 21;
+}
+.ob-fixed .ob-fade {
+    z-index: 21;
+}
+.ob-fade .ob-line {
+    border-color: #B2B2B2;
+}
+.ob-fade .ob-overlay:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 16px;
+    height: 26px;
+    background: #666;
+    opacity: 0.5;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50);
+}
+
 /* Failed booking */
 .ob-failed .ob-button {
     display: none;
@@ -209,22 +232,26 @@
 .os-title {
     margin: 0 0 2px;
     font-size: 12px;
-    line-height: 14px;
+    line-height: 16px;
     color: #5A5A5A;
 }
 .ost-item {
     float: left;
-    padding: 2px 0;
+    padding: 3px 0;
 }
 .ost-name {
-    width: 200px;
+    width: 190px;
+    margin-right: 10px;
+    font-size: 14px;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .ost-dpt {
     width: 190px;
 }
 .ost-duration {
     width: 366px;
-    padding: 2px 14px;
+    padding: 3px 14px;
 }
 .ost-sort {
     text-decoration: underline;
@@ -243,7 +270,7 @@
     text-decoration: none;
 }
 .ostn-text {
-    padding: 2px 14px;
+    padding: 3px 14px;
     font-weight: bold;
     color: #FFF;
 }
@@ -273,7 +300,7 @@
     background: #dcdfe1;
     cursor: pointer;
     font-size: 13px;
-    line-height: 13px;    
+    line-height: 13px;
 }
 .oss-wrap {
     margin-left: 200px;
@@ -393,7 +420,7 @@
     float: left;
     overflow: hidden;
     height: 4px;
-    border-bottom: 4px solid #e7e7e7;    
+    border-bottom: 4px solid #e7e7e7;
 }
 .segment1 .ossb-flight {
     background: #86a900;
@@ -600,7 +627,7 @@
     left: -16px;
     width: 16px;
     height: 26px;
-    background: url(/images/common/dgrey.png) #bfc4c8;  
+    background: url(/images/common/dgrey.png) #bfc4c8;
 }
 
 /* Excess variants */
@@ -651,8 +678,11 @@
     font-weight: bold;
     font-size: 18px;
     line-height: 18px;
-    letter-spacing: -0.03em;    
+    letter-spacing: -0.03em;
     color: #777;
+}
+.osd-cabins {
+    margin: 14px 14px 20px 196px;
 }
 .osd-flight {
     padding: 8px 0 2px;
@@ -674,7 +704,7 @@
     font-weight: bold;
     font-size: 26px;
     line-height: 26px;
-    letter-spacing: -0.03em;    
+    letter-spacing: -0.03em;
 }
 .osd-action {
     margin: 5px 0 11px 132px;
@@ -701,7 +731,7 @@
     top: -5px;
 }
 .osd-notice {
-    margin: 10px 0 0 132px; 
+    margin: 10px 0 0 132px;
 }
 .osdn-item {
     margin-top: 6px;
@@ -709,6 +739,10 @@
 .osdn-hl {
     padding: 2px 4px;
     background: #e2ea5f;
+}
+.osdn-hlcab {
+    padding: 2px 4px;
+    background: #ff9eb6;
 }
 .osdn-hll {
     position: relative;

@@ -1,111 +1,95 @@
 <% as_table ||= false %>
+<% error ||= nil %>
+<% examples ||= [] %>
+<% highlight_error = proc {|kind| raw 'style="color:red"' if kind == error } %>
 <% strype = cycle('background-color: #fff', 'background-color: #ddd') %>
 <% if as_table %>
 <table>
   <tr style="<%= strype %>; text-align:right; <%= 'background-color: #fdd' if rule.disabled? %>">
-    <td width="4%">
-      <%= link_to "#{rule.carrier} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %>
+    <td width="10%">
+      <%= link_to "#{rule.carrier} #{rule.ticketing_method} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %>
     </td>
-    <td width="10%"> <%= rule.system %> </td>
-    <td width="10%"> <%= rule.ticketing_method %> </td>
-    <td width="10%" style="<%= 'color: blue' if rule.ticketing_method == 'direct' %>"     title="<%= rule.agent_comments %>"> <%= rule.agent %> </td>
-    <td width="10%" style="<%= 'color: blue' if rule.ticketing_method == 'aviacenter' %>" title="<%= rule.subagent_comments %>"> <%= rule.subagent %> </td>
+    <td width="10%" style="<%= 'color: blue' if rule.ticketing_method == 'direct' %>" title="<%= rule.agent_comments %>"> <%= rule.agent %> </td>
+    <td width="10%" style="<%= 'color: blue' if rule.ticketing_method != 'direct' %>" title="<%= rule.subagent_comments %>"> <%= rule.subagent %> </td>
     <td width="10%" title="сбор агента 1%/2%"> <%= rule.consolidator %> </td>
     <td width="10%" style="<%= 'color:green' unless rule.discount.try(:zero?) %>" title="скидка"> <%= rule.discount %> </td>
     <td width="10%" style="<%= 'color:green' unless rule.our_markup.try(:zero?) %>" title="надбавка"> <%= rule.our_markup %> </td>
-    <td width="26%" style="color:red"> <%= "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </td>
+    <td width="30%" style="color:red"> <%= "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </td>
   </tr>
 </table>
 <% else %>
 <table>
   <tr style="<%= strype %>">
-    <td width="4%" style="<%= 'color: red' if rule.disabled? %>">
-      <%= link_to "#{rule.carrier} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %>
-    </td>
-    <th width="48%">агентский договор</th>
-    <th width="48%">субагентский договор</th>
+    <th width="10%" style="<%= 'color: red' if rule.disabled? %>">
+      <%= link_to "#{rule.carrier} #{rule.ticketing_method} ##{rule.number}", admin_commissions_path(:anchor => "#{rule.carrier}_#{rule.number}"), :id => "#{rule.carrier}_#{rule.number}" %> </th>
+    <th width="10%" style="<%= 'color: cyan' if rule.ticketing_method == 'direct' %>" title="<%= rule.agent_comments %>">
+      <%= rule.agent %> </th>
+    <th width="10%" style="<%= 'color: cyan' if rule.ticketing_method != 'direct' %>" title="<%= rule.subagent_comments %>">
+      <%= rule.subagent %> </th>
+    <th width="10%" title="сбор агента 1%/2%">
+      <%= rule.consolidator unless rule.consolidator.try(:zero?) %> </th>
+    <th width="10%" style="<%= 'color:green' unless rule.discount.try(:zero?) %>" title="скидка">
+      <%= rule.discount unless rule.discount.try(:zero?) %> </th>
+    <th width="10%" style="<%= 'color:green' unless rule.our_markup.try(:zero?) %>" title="надбавка">
+      <%= rule.our_markup unless rule.our_markup.try(:zero?) %> </th>
+    <th width="10%">
+      <% if rule.tour_code %>
+        tour code: <%= rule.tour_code %>
+      <% end %>
+      <% if rule.designator %>
+        designator: <%= rule.designator %>
+      <% end %>
+    </th>
+    <th width="10%" style="color:red"> <%= rule.subagent - rule.discount + rule.our_markup %>
+    <%# "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </th>
   </tr>
   <tr style="<%= strype %>">
-    <td></td>
-    <th> <%= rule.agent %> </td>
-    <th> <%= rule.subagent %> </td>
+    <td colspan=4><h3>агентский договор</h3> <%= raw (rule.agent_comments || '--').gsub("\n", "<br>") %> </td>
+    <td colspan=4><h3>субагентский договор</h3> <%= raw (rule.subagent_comments || '--').gsub("\n", "<br>") %> </td>
   </tr>
   <tr style="<%= strype %>">
-    <td></td>
-    <td> <%= raw (rule.agent_comments || '--').gsub("\n", "<br>") %> </td>
-    <td> <%= raw (rule.subagent_comments || '--').gsub("\n", "<br>") %> </td>
-  </tr>
-  <tr style="<%= strype %>">
-    <td></td>
-    <td>
-      <% if rule.no_commission %>
-        <h3>прячем из поиска</h3>
-      <% else %>
+    <td colspan=4>
         <h3>правила</h3>
         <ul>
-          <% if rule.disabled? %>
-            <li style="color:red">продажа отключена <%= reason_of_disability(rule) %> </li>
-          <% end %>
-          <li> выписка <strong><%= rule.ticketing_method %></strong> (<%= rule.system %>) </li>
-
-          <% if rule.tour_code %>
-            <li> tour code: <%= rule.tour_code %></li>
-          <% end %>
-          <% if rule.designator %>
-            <li> designator: <%= rule.designator %></li>
-          <% end %>
-
-          <% unless rule.consolidator.try(:zero?) %>
-            <li> авиацентр <strong><%= rule.consolidator %></strong> </li>
-          <% end %>
-          <% unless rule.blanks.try(:zero?) %>
-            <li> за бланки <strong><%= rule.blanks %></strong> </li>
-          <% end %>
-          <% unless rule.discount.try(:zero?) %>
-            <li> скидка <strong><%= rule.discount %></strong> </li>
-          <% end %>
-          <% unless rule.our_markup.try(:zero?) %>
-            <li> надбавка <strong><%= rule.our_markup %></strong> </li>
-          <% end %>
-          <% if rule.classes.present? %>
-            <li> классы <%= rule.classes.join(' ') %> </li>
-          <% end %>
-          <% if rule.subclasses %>
-            <li> подклассы <%= rule.subclasses.join(' ') %> </li>
-          <% end %>
-          <% if rule.interline && rule.interline != [:no] %>
-            <li> интерлайн: <%= rule.interline.every.to_s.to_sentence %></li>
-          <% end %>
-          <% if rule.routes.present? %>
-            <li> маршруты <%= rule.routes.join(' ') %> </li>
-          <% end %>
-          <% if rule.domestic %>
-            <li> только внутренние авиаперевозки </li>
-          <% end %>
-          <% if rule.international %>
-            <li> только международные авиаперевозки </li>
-          <% end %>
-          <% if rule.check %>
-            <li>дополнительная сложная проверка предложения</li>
-          <% end %>
-
           <% if rule.important %>
             <li> пытаемся применить раньше других комиссионных правил</li>
           <% end %>
+          <% if rule.disabled? %>
+            <li style="color:red">продажа отключена <%= reason_of_disability(rule) %> </li>
+          <% end %>
+          <% if rule.classes.present? %>
+            <li <%= highlight_error[:classes] %>> классы: <%= rule.classes.join(' ') %> </li>
+          <% end %>
+          <% if rule.subclasses %>
+            <li <%= highlight_error[:subclasses] %>> подклассы: <%= rule.subclasses.join(' ') %> </li>
+          <% end %>
+          <% if rule.interline %>
+            <li <%= highlight_error[:interline] %>> интерлайн: <%= rule.interline.every.to_s.to_sentence %></li>
+          <% end %>
+          <% if rule.routes.present? %>
+            <li <%= highlight_error[:routes] %>> маршруты: <%= rule.routes.join(' ') %> </li>
+          <% end %>
+          <% if rule.domestic %>
+            <li <%= highlight_error[:geo] %>> только внутренние авиаперевозки </li>
+          <% end %>
+          <% if rule.international %>
+            <li <%= highlight_error[:geo] %>> только международные авиаперевозки </li>
+          <% end %>
+          <% if rule.check %>
+            <li <%= highlight_error[:check] %>>дополнительная сложная проверка предложения</li>
+          <% end %>
+
+
           </ul>
-        <% end %>
-
-
-      <br>
-      <br>
 
     </td>
-    <td>
-      <% if rule.examples.present? %>
+    <td colspan=4>
+      <% provided_examples = examples.presence || (rule.examples || []).map(&:code) %>
+      <% if provided_examples.present? %>
         <h3>примеры</h3>
         <ul>
-          <% rule.examples.each do |example| %>
-            <li><%= example.code %></li>
+          <% provided_examples.each do |example| %>
+            <li><%= link_to(example, check_admin_commissions_url(example: example, carrier: rule.carrier), target: '_blank') %></li>
           <% end %>
         </ul>
       <% end %>

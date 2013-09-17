@@ -110,15 +110,16 @@ module Pricing
 
       case kind
       when 'ticket'
-        self.price_agent = commission_agent.call(price_fare)
-        self.price_subagent = commission_subagent.call(price_fare)
-        self.price_consolidator = commission_consolidator.call(price_fare)
-        self.price_blanks = commission_blanks.call(price_fare)
-        self.price_discount = -commission_discount.call(price_fare)
-        self.price_our_markup = commission_our_markup.call(price_fare)
+        self.price_agent = commission_agent.apply(price_fare)
+        self.price_subagent = commission_subagent.apply(price_fare)
+        self.price_consolidator = commission_consolidator.apply(price_fare)
+        self.price_blanks = commission_blanks.apply(price_fare)
+        self.price_discount = -commission_discount.apply(price_fare)
+        self.price_our_markup = commission_our_markup.apply(price_fare)
       when 'refund'
-        self.price_agent = commission_agent.percentage? ? commission_agent.call(price_fare) : -commission_agent.call(price_fare)
-        self.price_subagent = commission_subagent.percentage? ? commission_subagent.call(price_fare) : -commission_subagent.call(price_fare)
+        # FIXME с появлением отрицательных формул могут быть интересные странности
+        self.price_agent = commission_agent.percentage? ? commission_agent.apply(price_fare) : -commission_agent.apply(price_fare)
+        self.price_subagent = commission_subagent.percentage? ? commission_subagent.apply(price_fare) : -commission_subagent.apply(price_fare)
       else
         raise ArgumentError, 'Unknown kind of ticket'
       end

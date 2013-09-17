@@ -38,7 +38,7 @@ class BookingController < ApplicationController
     # оставил в таком виде, чтобы не ломалось при рендере
     # если переделаем урлы и тут - заработает
     @partner = Partner[params[:partner]]
-    @search = PricerForm.from_code(params[:query_key])
+    @search = AviaSearch.from_code(params[:query_key])
     unless @search && @search.valid?
       # необходимо очистить anchor вручную
       return redirect_to '/#'
@@ -63,7 +63,7 @@ class BookingController < ApplicationController
     redirect_to uri
 
   # FIXME можно указать :formats => [:xml], но я задал дефолтный формат в роутинге
-  rescue IataStash::NotFound => iata_error
+  rescue CodeStash::NotFound => iata_error
     render 'api/rambler_failure', :status => :not_found, :locals => { :message => iata_error.message }
   rescue ArgumentError => argument_error
     render 'api/rambler_failure', :status => :bad_request, :locals => { :message => argument_error.class }
@@ -72,16 +72,16 @@ class BookingController < ApplicationController
   end
 
   def api_redirect
-    @search = PricerForm.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
+    @search = AviaSearch.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
     # FIXME если partner из @search не берется больше - переделать на before_filter save_partner_cookies
     track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?
       StatCounters.inc %W[enter.api_redirect.success]
-      redirect_to "#{Conf.api.url_base}/##{@search.query_key}"
+      redirect_to "#{Conf.api.url_base}/##{@search.encode_url}"
     else
       redirect_to "#{Conf.api.url_base}/"
     end
-  rescue # IataStash::NotFound, ArgumentError, etc
+  rescue # CodeStash::NotFound, ArgumentError, etc
     redirect_to "#{Conf.api.url_base}/"
   ensure
     StatCounters.inc %W[enter.api_redirect.total]
@@ -98,7 +98,7 @@ class BookingController < ApplicationController
     @order_form.recommendation.find_commission!
     @order_form.init_people
     @order_form.admin_user = admin_user
-    @search = PricerForm.from_code(@order_form.query_key)
+    @search = AviaSearch.from_code(@order_form.query_key)
 
     if params[:iphone]
       render :partial => 'iphone'
@@ -113,11 +113,10 @@ class BookingController < ApplicationController
   def recalculate_price
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
-    # Среагировать на изменение продаваемости/цены
     @order_form.recommendation.find_commission!
     @order_form.admin_user = admin_user
     @order_form.valid?
-    if @order_form.update_price_and_counts
+    if @order_form.recommendation.sellable? && @order_form.update_price_and_counts
       render :partial => 'newprice'
     else
       render :partial => 'failed_booking'
@@ -195,12 +194,8 @@ class BookingController < ApplicationController
   end
 
   def get_destination
-    return if !@search.segments
-    segment = @search.segments[0]
-    return if ([segment.to_as_object.class, segment.from_as_object.class] - [City, Airport]).present? || @search.complex_route?
-    to = segment.to_as_object.class == Airport ? segment.to_as_object.city : segment.to_as_object
-    from = segment.from_as_object.class == Airport ? segment.from_as_object.city : segment.from_as_object
-    Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
+    return if @search.segments.blank?
+    Destination.get_by_search @search
   end
 
   def log_referrer

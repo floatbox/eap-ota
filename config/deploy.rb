@@ -62,7 +62,7 @@ task :eviterra do
 load 'lib/recipes/unicorn'
   set :rails_env, 'production'
   role :app, 'flexo.eviterra.com', 'bender.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com'
-  role :web, 'hermes.eviterra.com', 'deck.eviterra.com', 'calculon.eviterra.com', 'flexo.eviterra.com', 'bender.eviterra.com'
+  role :web, 'hermes.eviterra.com', 'deck.eviterra.com'
   role :db, 'deck.eviterra.com', :primary => true
   role :daemons, 'deck.eviterra.com'
 end
@@ -133,46 +133,29 @@ namespace :deploy do
 
   # daemons
 
-  task :restart_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon restart"
-  end
-
-  task :start_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon start"
-  end
-
-  task :stop_rambler_daemon, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/rambler_daemon stop"
-  end
-
   task :restart_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job restart"
+    run "sudo /usr/bin/sv restart /etc/service/delayed_job"
   end
 
   task :start_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job start"
+    run "sudo /usr/bin/sv start /etc/service/delayed_job"
   end
 
   task :stop_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "cd #{current_path}; RAILS_ENV=#{rails_env} script/delayed_job stop"
+    run "sudo /usr/bin/sv stop /etc/service/delayed_job"
   end
 
   task :restart_services do
-    # уже полгода не используем
-    # restart_rambler_daemon
     restart_delayed_job
   end
 
   task :start_services do
-    start_rambler_daemon
     start_delayed_job
   end
 
   task :stop_services do
-    stop_rambler_daemon
     stop_delayed_job
   end
-
 
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
@@ -182,6 +165,11 @@ namespace :deploy do
   after "deploy:rollback", "deploy:restart_services"
 
   after "deploy:update", "newrelic:notice_deployment"
+
+  task :fix_i18njs, :roles => :web do
+    run "cd #{latest_release} && touch tmp/i18n-js.cache"
+  end
+  before "deploy:assets:precompile", "deploy:fix_i18njs"
 end
 
 desc "Edit local config on all servers and restart instances if updated"

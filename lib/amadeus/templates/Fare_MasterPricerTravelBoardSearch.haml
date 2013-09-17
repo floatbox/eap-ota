@@ -78,7 +78,7 @@
             %distanceUnit K
           %locationId= segment.from_iata
       -else
-        - segment.from_as_object.main_city_iatas.each do |code|
+        - segment.from.main_city_iatas.each do |code|
           %depMultiCity
             %locationId= code
     %arrivalLocalization
@@ -89,12 +89,12 @@
             %distanceUnit K
           %locationId= segment.to_iata
       -else
-        - segment.to_as_object.main_city_iatas.each do |code|
+        - segment.to.main_city_iatas.each do |code|
           %arrivalMultiCity
             %locationId= code
     %timeDetails
       %firstDateTimeDetail
-        %date= segment.date
+        %date= segment.date_for_render
 
 -# additional Office Ids
 -# %officeIdDetails

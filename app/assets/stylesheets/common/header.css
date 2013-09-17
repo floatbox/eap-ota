@@ -5,8 +5,7 @@
     z-index: 15;
     min-width: 1002px;
     width: 100%;
-    height: 33px;
-    border-bottom: 3px solid #929292;
+    height: 62px;
     background: #f2f2f2;
 }
 .ipad #page-header {
@@ -19,61 +18,124 @@
     margin: 0 auto;
 }
 .ph-placeholder {
-    height: 36px;
+    height: 62px;
 }
 #page-header.fixed {
     position: fixed;
 }
 
-/* Logo */
-.ph-logo {
+/* Logo and language */
+.ph-bar {
     position: absolute;
     top: 0; left: -900px;
-    width: 1000px; height: 33px;
-    border-bottom: 3px solid #961f51;
+    width: 1000px; height: 62px;
     background: #f90a6f;
-    text-align: right;
+}
+.ph-logo {
+    margin-left: 880px;
+}
+.ph-lang {
+    margin-left: 900px;
+    font-size: 11px;
+    line-height: 13px;
+}
+.phl-item {
+    float: left;
+    margin-right: 14px;
+    color: #FFF;
+}
+.phl-link {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-/* Teaser */
-#ph-teaser {
+/* Tabs */
+.ph-tabs {
     float: left;
     margin-left: 100px;
-    padding: 10px 0 0 15px;
-    font-size: 13px;
-    line-height: 15px;
-    color: #555;
 }
-.pht-wrapper {
-    display: inline;
+.ph-tab {
     position: relative;
+    float: left;
+    margin-right: 1px;
+    background: #d8d8cf;
 }
-.pht-why {
-    color: #F90A6F;
+.pht-content {
+    display: block;
+    width: 160px;
+    height: 54px;
+    padding: 8px 10px 0 14px;
+    text-decoration: none;
+    color: #333;
 }
+.pht-title {
+    display: block;
+    margin: 0 0 3px;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 17px;
+}
+.pht-tip {
+    display: block;
+    font-size: 11px;
+    line-height: 12px;
+    color: #777;
+}
+.phtt-link {
+    cursor: pointer;
+    text-decoration: underline;
+}
+a.pht-content:hover {
+    color: #333;
+}
+a.pht-content:hover .pht-title {
+    text-decoration: underline;
+}
+.pht-selected {
+    background: url("/images/common/dark.jpg") #373941;
+}
+.pht-selected .pht-title {
+    color: #FFF;
+}
+.pht-selected .pht-tip {
+    color: #a7a8ab;
+}
+
+/* Tab popup */
 .pht-popup {
     display: none;
     position: absolute;
-    top: -20px;
-    left: -15px;
+    top: 100%;
+    left: 50%;
     z-index: 10;
-    width: 200px;
-    padding: 20px 15px 12px;
+    width: 240px;
+    margin: 5px 0 0 -135px;
+    padding: 1px 15px 12px;
+    font-size: 13px;
+    line-height: 16px;
     background: #f1b346;
     color: #333;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
+.pht-popup:before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -10px;
+    width: 1px;
+    height: 1px;
+    margin-left: -10px;
+    border: 10px solid transparent;
+    border-top: none;
+    border-bottom-color: #f1b346;
+}
 .phtp-close {
     float: right;
-    margin: -2px -4px 0 0;
+    margin: 4px -8px 0 0;
     padding: 0 2px;
     font-size: 20px;
     line-height: 20px;
     cursor: pointer;
-}
-.phtp-title {
-    margin: 0 0 10px;
-    font-weight: bold;
 }
 .phtp-text {
     margin: 10px 0 0;
@@ -91,26 +153,42 @@
     color: #777;
 }
 
-/* Language */
-.ph-lang {
+/* Social icons */
+.ph-social {
+    float: right;
+    clear: right;
+    margin: 9px 0 0 10px;
+}
+.phs-icon {
     float: left;
-    margin: 10px 0 0 25px;
-    font-size: 13px;
-    line-height: 15px;
+    width: 16px;
+    height: 16px;
+    margin-left: 10px;
+    background: url(/images/common/social-header.png) no-repeat;
+    text-decoration: none;
+}
+.phs-facebook {
+    background-position: 0 -34px;
+}
+.phs-twitter {
+    background-position: 0 -17px;
+}
+.phs-google {
+    background-position: 0 -51px;
 }
 
 /* User */
 .ph-user {
     float: left;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 .phu-wrapper {
     position: relative;
     z-index: 10;
+    padding: 10px 15px;
 }
 .phu-control {
     position: relative;
-    padding: 10px 15px;
     font-size: 13px;
     line-height: 15px;
     text-decoration: underline;
@@ -119,9 +197,10 @@
 .phuc-bar {
     display: none;
     position: absolute;
-    top: -10px;
-    left: 0;
+    top: -20px;
+    left: -15px;
     width: 100%;
+    padding: 0 15px;
     height: 50px;
     background: #EDEDE3;
     clip: rect(10px 160px 46px -10px);
@@ -299,40 +378,43 @@
 
 /* User */
 .phu-link {
-    padding: 10px 15px;
+    padding: 10px 0 0 15px;
     font-size: 13px;
     line-height: 15px;
 }
-.phu-logout {
-    display: none;
+.phul-wrapper {
+    float: left;
+    max-width: 150px;
+    height: 16px;
+    overflow: hidden;
+}
+.phul-text {
+    float: left;
+    height: 16px;
+    text-decoration: underline;
+}
+.phul-overflow {
+    float: right;
+    position: relative;
+    top: -16px;
+    margin-left: -19px;
+    width: 20px;
+    height: 16px;
+    background: -webkit-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
+    background: -moz-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
+    background: -ms-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
+    background: -o-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
+    background: linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
 }
 .phul-logout {
+    float: left;
+    margin-left: 2px;
     padding: 0 3px;
     cursor: pointer;
 }
 .phul-icon {
     vertical-align: -2px;
 }
-
-/* Social icons */
-.ph-social {
-    float: right;
-    margin: 9px 0 0 10px;
-}
-.phs-icon {
-    float: left;
-    width: 16px;
-    height: 16px;
-    margin-left: 10px;
-    background: url(/images/common/social-header.png) no-repeat;
-    text-decoration: none;
-}
-.phs-facebook {
-    background-position: 0 -34px;
-}
-.phs-twitter {
-    background-position: 0 -17px;
-}
-.phs-google {
-    background-position: 0 -51px;
+.phu-logout {
+    display: none;
 }

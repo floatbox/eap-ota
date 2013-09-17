@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Amadeus::Response::PNRCancel do
+describe Amadeus::Response::PNRCancel, :amadeus do
 
   describe 'error_message' do
 

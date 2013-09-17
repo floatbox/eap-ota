@@ -1,9 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe RamblerCache do
-
-  next "выключаю, не пользуемся уже год"
+describe RamblerCache, :rambler do
 
   describe '#rambler_data_from_recs' do
 
@@ -45,8 +43,8 @@ describe RamblerCache do
       seg2 = Segment.new(:flights => [fl3])
       variant = Variant.new(:segments => [seg1, seg2])
       recommendation = Recommendation.new(:variants => [variant], :cabins => ['Y', 'Y', 'Y'], :source => 'amadeus', :booking_classes => ['M', 'N', 'K'], :validating_carrier_iata => 'SU', :price_fare => 1000, :price_tax => 2000)
-      pricer_form = PricerForm.simple(:from => 'MOW', :to => 'LON', :date1 => '131211', :date2 => '141211', :adults => 1)
-      @result = RamblerCache.create_from_form_and_recs(pricer_form, [recommendation]).data[0]
+      avia_search = AviaSearch.simple(:from => 'MOW', :to => 'LON', :date1 => '131211', :date2 => '141211', :adults => 1)
+      @result = RamblerCache.create_from_form_and_recs(avia_search, [recommendation]).data[0]
     end
 
     it 'sets correct cabins' do

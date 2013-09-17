@@ -26,7 +26,10 @@ init: function() {
             that.apply();
         }
     });
+    this.el.find('.rh-left').css('width', 960 - $('#search-options .so-cabin').width()); // Выравниваем кнопку по селектору класса
+    this.loader = this.el.find('.rb-validating');
     this.height = this.el.height();
+    preloadImages('/images/results/validating.gif');
 },
 hide: function() {
     this.buttonEnabled.fadeOut(150);
@@ -34,6 +37,8 @@ hide: function() {
 },
 show: function(message, ready) {
     var that = this;
+    clearTimeout(this.showLoader);
+    this.loader.hide();
     this.summary.queue(function(next) {
         that.summary.css('font-size', '');
         that.summary.css('line-height', '');
@@ -46,6 +51,12 @@ show: function(message, ready) {
         }
         next();
     }).fadeIn(150);
+},
+wait: function() {
+    var that = this;
+    this.showLoader = setTimeout(function() {
+        that.loader.show();
+    }, 500); 
 },
 adjust: function() {
     var size = 21;
@@ -70,6 +81,6 @@ apply: function() {
     }
 },
 position: function() {
-    return this.el.position().top - 36;
+    return this.el.position().top - 62;
 }
 };
