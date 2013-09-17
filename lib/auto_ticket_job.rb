@@ -10,7 +10,7 @@ class AutoTicketJob
       order = Order.find(@order_id)
       if order.ok_to_auto_ticket?
         order.strategy.ticket
-        order.ticket! || LoadTicketsJob.new(:order_id => order.id).delay
+        order.ticket! || LoadTicketsJob.new(:order_id => order.id).delay(queue: 'autoticketing')
       end
     end
   end
