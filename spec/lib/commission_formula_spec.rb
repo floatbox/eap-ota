@@ -222,6 +222,10 @@ describe Commission::Formula do
     specify { Fx("1eur").extract("%").should == Fx(0) }
   end
 
+  describe "#round" do
+    specify { Fx("5.245% - 1.351eur").round(2).should == Fx("5.25% - 1.35eur") }
+  end
+
   describe "freezed formula arithmetic" do
     it "should compute even in frozen state" do
       first_formula = Fx('3% + 5rub')
