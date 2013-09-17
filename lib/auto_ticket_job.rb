@@ -6,10 +6,12 @@ class AutoTicketJob
   end
 
   def perform
-    order = Order.find(@order_id)
-    if order.ok_to_auto_ticket?
-      order.strategy.ticket
-      order.ticket! || LoadTicketsJob.new(:order_id => order.id).delay
+    Order.transaction do
+      order = Order.find(@order_id)
+      if order.ok_to_auto_ticket?
+        order.strategy.ticket
+        order.ticket! || LoadTicketsJob.new(:order_id => order.id).delay
+      end
     end
   end
 
