@@ -114,8 +114,8 @@ agent "7%"
 subagent "6%"
 discount "8%"
 agent_comment "все через dtt"
-interline :no, :yes
+interline :no
 example "svocdg"
-example "svocdg cdgsvo/ab"
+example "svocdg cdgsvo"
 end
 
