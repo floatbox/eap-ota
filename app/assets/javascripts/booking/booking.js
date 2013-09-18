@@ -37,21 +37,10 @@ abort: function() {
     delete this.offer;
 },
 prebook: function(offer) {
-    var that = this;
-    var params = {
+    this.abort();
+    this.prebookRequest({
         query_key: results.data.query_key,
         recommendation: offer.selected.id
-    };
-    this.abort();
-    this.request = $.ajax({
-        url: '/booking/preliminary_booking?' + $.param(params),
-        success: function(data) {
-            that.process(data);
-        },
-        error: function(xhr, status) {
-            if (status !== 'abort') that.failed();
-        },
-        timeout: 120000
     });
     results.content.el.find('.rc-overlay').show();
     offer.book.addClass('ob-disabled ob-fade');
@@ -61,6 +50,26 @@ prebook: function(offer) {
     _kmq.push(['record', 'RESULTS: variant selected']);
     _kmq.push(['record', 'RESULTS: ' + results.content.selected + ' variant selected']);
     _gaq.push(['_trackEvent', 'Бронирование', 'Выбор варианта']);
+},
+prebookRequest: function(params, retry) {
+    var that = this;
+    this.request = $.ajax({
+        url: '/booking/preliminary_booking?' + $.param(params),
+        success: function(data) {
+            that.process(data);
+        },
+        error: function(xhr, status) {
+            if (status === 'abort') return;
+            if (retry) {
+                that.failed();
+            } else { 
+                setTimeout(function() {
+                    that.prebookRequest(params, true); // Пробуем ещё раз
+                }, 100);
+            }
+        },
+        timeout: 90000
+    });
 },
 process: function(result) {
     var that = this;
@@ -72,6 +81,8 @@ process: function(result) {
         }, 1000);
         _kmq.push(['record', 'PRE-BOOKING: success']);
     } else {
+        this.offer.selected.disabled = true;
+        this.offer.countPrices();
         this.failed();
     }
 },
