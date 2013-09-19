@@ -99,6 +99,14 @@ module ProfileOrder
     end
   end
 
+  def profile_exchanged_tickets
+    tickets.where(:kind=>'ticket', :status =>'exchanged')
+  end
+
+  def profile_exchanged_tickets_numbers
+    profile_exchanged_tickets.collect {|t| t.number_with_code}
+  end
+
   def profile_ticket_parents
     ids = tickets.pluck(:parent_id).compact
     !ids.empty? ? '(' + ids.compact.join(',') + ')' : nil

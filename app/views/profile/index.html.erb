@@ -1,5 +1,4 @@
 <% content_for :title do %>Личный кабинет <%= current_customer.email.downcase %><% end %>
-
 <% content_for :tabs do %>
 <div id="profile-tabs">
 <ul class="pt-content wrap">
@@ -71,7 +70,7 @@
         <th>Распечатать</th>
     </tr>
     <% order.profile_tickets.each do |ticket| %>
-        <tr <% if !ticket.profile_active? %>style="color: #999"<% end %>>
+        <tr <% if !ticket.profile_active? || @exchanged_tickets_numbers.include?(ticket.number_with_code) %>style="color: #999"<% end %>>
             <td><%= ticket.profile_name %></td>
             <td><%= ticket.number_with_code %></td>
             <td><%= ticket.profile_status %>
