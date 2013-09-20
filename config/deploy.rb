@@ -132,17 +132,18 @@ namespace :deploy do
   end
 
   # daemons
+  DJ_QUEUES = %W{notifications autoticketing}
 
   task :restart_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "sudo /usr/bin/sv restart /etc/service/delayed_job"
+    DJ_QUEUES.each { |queue| run "sudo /usr/bin/sv restart /etc/service/delayed_job_#{queue}" }
   end
 
   task :start_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "sudo /usr/bin/sv start /etc/service/delayed_job"
+    DJ_QUEUES.each { |queue| run "sudo /usr/bin/sv start /etc/service/delayed_job_#{queue}" }
   end
 
   task :stop_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
-    run "sudo /usr/bin/sv stop /etc/service/delayed_job"
+    DJ_QUEUES.each { |queue| run "sudo /usr/bin/sv stop /etc/service/delayed_job_#{queue}" }
   end
 
   task :restart_services do
