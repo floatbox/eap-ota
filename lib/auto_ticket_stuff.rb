@@ -38,7 +38,9 @@ class AutoTicketStuff
   end
 
   def create_auto_ticket_job
-    Delayed::Job.enqueue AutoTicketJob.new(order_id: order.id), run_at: 30.minutes.from_now
+    Delayed::Job.enqueue AutoTicketJob.new(order_id: order.id),
+      run_at: 30.minutes.from_now,
+      queue: 'autoticketing'
   end
 
   def job_run_at
