@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "downtown"
 agent "8%"
 subagent "6%"
-discount "8%"
+discount "4.2%"
 comment "только собственные рейсы AB и HG"
 agent_comment "8% по всем направлениям через DTT"
 subagent_comment "6% по всем направлениям через DTT"
