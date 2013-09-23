@@ -34,6 +34,15 @@ subagent_comment "3.5%"
 end
 
 rule 4 do
+important!
+agent "3%"
+subagent "1%"
+agent_comment "снова EY по U классу нам дают комиссию как веб-тарифа, 3%"
+subagent_comment "1%"
+subclasses "U"
+end
+
+rule 5 do
 not_implemented "не умеем распознавать веб-тарифы"
 agent "3%"
 subagent "1%"
