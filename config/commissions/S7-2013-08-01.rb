@@ -1,12 +1,13 @@
 carrier "S7", start_date: "2013-08-01"
 
 rule 1 do
-ticketing_method "direct"
+ticketing_method "aviacenter"
+consolidator "2%"
 agent "0.1%"
-subagent "0.1%"
-agent_comment "При продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, вознаграждение составляет 0,1%"
-subagent_comment "0.1%"
-subclasses "W"
+subagent "0.05"
+agent_comment "при продаже перевозок по коду бронирования W, оформленных на ПД на рейсы Перевозчика, включая данную перевозку в комбинации с другими участками в составе трансферной перевозки по единому сквозному тарифу (системный трансфер), вознаграждение составит:  0,1%(0,05р+2% сбор АЦ) от тарифа. "
+subagent_comment ""
+check %{ includes(booking_classes, "W") }
 end
 
 rule 2 do
