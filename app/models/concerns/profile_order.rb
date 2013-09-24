@@ -22,7 +22,9 @@ module ProfileOrder
     airports = []
     cities = []
     route_flights = route_string.gsub(/([A-Z]{3}); \1/, '\1').split('; ').map{|s| s.split(' - ')}
-    if rt && route_flights.size == 1 && route_flights.first == route_flights.first.reverse
+    if route_flights.first.size == 1
+      route_flights.first.first
+    elsif rt && route_flights.size == 1 && route_flights.first == route_flights.first.reverse
       rt_flight = [ route_flights.first.first, route_flights.first[route_flights.first.size / 2] ]
       rt_flight.each do |iata|
         cities << Airport[iata].city.name
