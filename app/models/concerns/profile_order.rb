@@ -79,7 +79,7 @@ module ProfileOrder
   end
 
   def profile_flights
-    sold_tickets.first.flights.presence if sold_tickets.present?
+    sold_tickets.present? ? sold_tickets.first.flights : []
   end
 
   def profile_booking_classes
