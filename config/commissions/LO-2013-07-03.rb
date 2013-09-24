@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
-discount "4.5%"
+discount "5%"
 agent_comment "5%(3%)(3%) с вылетом из России от опубликованных прямых и трансферных тарифов Эконом и Бизнес класса на собств. рейсы LO (кроме прямых перелетов из Санкт-Петербурга в Варшаву и из Варшавы в Санкт-Петербург), и кроме тарифов: промо и групповых: L, O, U, G; (Например: 5% от трансферного тарифа Санкт-Петербург-Варшава-Барселона);"
 subagent_comment "3%"
 classes :economy, :business
@@ -23,7 +23,7 @@ important!
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
-discount "2.5%"
+discount "3%"
 agent_comment "1 евро (5 руб)(0%) для прямых перелетов из Санкт-Петербурга в Варшаву и из Варшавы в Санкт-Петербург Эконом и Бизнес класса; "
 subagent_comment "5р"
 classes :economy, :business
@@ -36,7 +36,7 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "6.5%"
+discount "7%"
 agent_comment "7%(5%)(5%) с вылетом из России только на дальне-магистральные маршруты Бизнес класса (Z/C/D) и Премиум эконом (A/P) (собств. рейсы LO  и совм. рейсы с а/к  SU); "
 subagent_comment "5%"
 interline :no, :yes
@@ -50,7 +50,7 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
-discount "2.5%"
+discount "3%"
 agent_comment "1%(0,5%)(0%) с вылетом из России на рейсы Interline, условии наличия в билете хотя бы одного сегмента собств.рейса LO; "
 subagent_comment "0.5%"
 interline :yes
@@ -62,7 +62,7 @@ rule 5 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
-discount "2.5%"
+discount "3%"
 agent_comment "1 евро(5 руб)(0%) на вылеты из других стран, а также на промо, групповые (L,O,U,G), корпоративные, туроператорские, веб-тарифы и т.д."
 subagent_comment "5 руб"
 example "svoprg/l prgwaw/u"
