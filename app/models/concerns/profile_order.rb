@@ -13,11 +13,16 @@ module ProfileOrder
   end
 
   def profile_route
-    route.blank? ? tickets.first.route.gsub(/ \([A-Z0-9]{2}\)/, '') : route
+    if route.blank?
+      tickets.first ? tickets.first.route.gsub(/ \([A-Z0-9]{2}\)/, '') : ''
+     else
+       route
+     end
   end
 
   def profile_route_smart
     route_string = profile_route
+    return '-' if route_string.blank?
     rt = route_string.split(';').size.even?
     airports = []
     cities = []
@@ -63,6 +68,7 @@ module ProfileOrder
   end
 
   def profile_people
+    return [] if full_info.blank?
     full_info.split("\n").collect do |t|
       data = t.split('/')
       {
@@ -73,7 +79,7 @@ module ProfileOrder
   end
 
   def profile_flights
-    sold_tickets.first.flights.presence
+    sold_tickets.first.flights.presence if sold_tickets.present?
   end
 
   def profile_booking_classes
@@ -112,6 +118,10 @@ module ProfileOrder
   def profile_ticket_parents
     ids = tickets.pluck(:parent_id).compact
     !ids.empty? ? '(' + ids.compact.join(',') + ')' : nil
+  end
+
+  def profile_departure_date
+      profile_flights.present? ? profile_flights.first.dept_date : departure_date
   end
 
   def profile_arrival_date
