@@ -35,6 +35,7 @@ end
 
 rule 4 do
 important!
+ticketing_method "aviacenter"
 agent "3%"
 subagent "1%"
 agent_comment "снова EY по U классу нам дают комиссию как веб-тарифа, 3%"
