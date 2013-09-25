@@ -54,17 +54,16 @@ example "svotlv/su tlvsvo"
 end
 
 rule 5 do
-disabled "вовь через dtt"
 ticketing_method "aviacenter"
+important!
 agent "1eur"
 subagent "5"
 discount "3.25%"
 consolidator "2%"
 agent_comment "1 евро с билета на собств. рейсы SU с началом перевозки за пределами РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
 subagent_comment "5 (пять) руб. с билета на собств. рейсы SU с началом перевозки за пределами РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
-interline :no, :yes
+interline :yes
 check %{ not includes_only(country_iatas.first, 'RU') }
-example "cdgsvo"
 example "cdgsvo/ab svocdg/su"
 end
 
