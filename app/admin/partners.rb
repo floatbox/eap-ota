@@ -14,10 +14,12 @@ ActiveAdmin.register Partner do
 
   index do
     column :token
-    column :hide_income
-    column :cookies_expiry_time
+    column :hide_income, class: 'align-center' do |resource|
+      icon(:check) if resource.hide_income
+    end
+    column :cookies_expiry_time, class: 'align-right'
     column :income_at_least
-    column :cheat_mode do |resource|
+    column :cheat_mode, class: 'align-center' do |resource|
       status_tag resource.cheat_mode
     end
     actions do |resource|
