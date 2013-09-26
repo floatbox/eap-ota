@@ -132,7 +132,7 @@ namespace :deploy do
   end
 
   # daemons
-  DJ_QUEUES = %W{notifications autoticketing}
+  DJ_QUEUES = %W{notifications autoticketing old}
 
   task :restart_delayed_job, :roles => :daemons, :on_no_matching_servers => :continue do
     DJ_QUEUES.each { |queue| run "sudo /usr/bin/sv restart /etc/service/delayed_job_#{queue}" }
