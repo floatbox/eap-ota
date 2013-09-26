@@ -259,8 +259,9 @@ class Ticket < ActiveRecord::Base
     end
   end
 
+  # значения для фильтра в админке, иначе выполняются долгие select distinct все время
   def self.validators
-    uniq.pluck(:validator).compact.sort
+    %W{92228065 92223412 92222701 10729143}
   end
 
   def self.sources
