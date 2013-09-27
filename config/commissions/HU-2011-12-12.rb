@@ -177,7 +177,6 @@ rule 12 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
-discount "4.5%"
 consolidator "2%"
 agent_comment "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"
 subagent_comment "0% по опубл. тарифам отдельные перелеты с вылетами из Пекина по Китаю на собств. рейсы HU"

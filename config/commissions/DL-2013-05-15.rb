@@ -160,7 +160,6 @@ rule 12 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
-discount "4.5%"
 consolidator "2%"
 comment "ньюйорк - детройт - торонто"
 agent_comment "0% на перевозки, нач.в США (включая Пуэрто Рико, Острова Вирджинии и Канада)"

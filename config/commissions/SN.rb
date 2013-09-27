@@ -49,7 +49,6 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "0.5%"
 subagent "5"
-discount "4.5%"
 agent_comment "0,5% от опубл. тарифам на собств. рейсы SN;"
 subagent_comment "5 руб. с билета по опубл. тарифам на собств. рейсы SN;"
 example "svocdg"
@@ -61,7 +60,6 @@ rule 5 do
 ticketing_method "aviacenter"
 agent "0.5%"
 subagent "5"
-discount "4.5%"
 agent_comment "0,5% от опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
 subagent_comment "5 руб. с билета по опубл. тарифам в случае применения совмещенного тарифа авиакомпаний;"
 interline :yes
