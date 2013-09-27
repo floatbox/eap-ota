@@ -1,7 +1,9 @@
 # encoding: utf-8
 Eviterra::Application.routes.draw do
 
-  devise_for :deck_users, ActiveAdmin::Devise.config
+  devise_for :deck_users, ActiveAdmin::Devise.config.merge(class_name: 'Deck::User')
+  # оверрайд logout для typus
+  get "deck/logout(.:format)", to: "active_admin/devise/sessions#destroy", as: "destroy_admin_session"
 
 #  devise_for :customers, :controllers => { :sessions => "customers/sessions" }
   devise_scope :customer do

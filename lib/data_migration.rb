@@ -10,8 +10,8 @@ module DataMigration
 
   # удаляет всех пользователей из deck_users и накатывает заново копиями из старого typus_users
   def self.migrate_admin_users
-    DeckUser.delete_all
-    DeckUser.connection.execute %(
+    Deck::User.delete_all
+    Deck::User.connection.execute %(
       insert into deck_users (id, email, first_name, last_name, created_at, locked_at, roles)
         select id, email, first_name, last_name, created_at, if(status, null, updated_at), role from typus_users
     )

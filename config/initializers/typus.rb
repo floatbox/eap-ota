@@ -14,8 +14,8 @@ Typus.setup do |config|
 
   # Authentication: +:none+, +:http_basic+
   # Run `rails g typus:migration` if you need an advanced authentication system.
-  config.authentication = :devise
-  config.user_class_name = 'DeckUser'
+  config.authentication = :eviterra_devise
+  config.user_class_name = 'Deck::User'
 
   # Define master_role.
   # config.master_role = "admin"

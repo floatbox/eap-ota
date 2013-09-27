@@ -1,4 +1,5 @@
-class DeckUser < ActiveRecord::Base
+class Deck::User < ActiveRecord::Base
+  self.table_name = 'deck_users'
 
   ROLES = %w[admin hoteditor]
 

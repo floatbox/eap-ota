@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
     case resource
     when Customer
       profile_path
-    when DeckUser
+    when Deck::User
       # deck_dashboard_path
       admin_dashboard_index_path
     end

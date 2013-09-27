@@ -8,7 +8,7 @@ class Ability
     end
     # defaults
     can :read, :all
-    can :update, DeckUser, id: user.id
+    can :update, Deck::User, id: user.id
   end
 
   def admin

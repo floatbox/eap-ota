@@ -16,7 +16,7 @@ class Version < ActiveRecord::Base
   end
 
   def self.whodunnits
-    DeckUser.pluck(:email).sort
+    Deck::User.pluck(:email).sort
   end
 
   # костыль, устраняет проблему с методом changeset для записей, содержащих

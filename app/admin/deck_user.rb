@@ -1,5 +1,5 @@
 # encoding: utf-8
-ActiveAdmin.register DeckUser, :as => "User" do
+ActiveAdmin.register Deck::User, :as => "User" do
 
   actions :all, :except => [:destroy]
 
