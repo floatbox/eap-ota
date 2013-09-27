@@ -46,7 +46,7 @@ comment "интерлайны"
 agent_comment "3% от примененных тарифов на сегментах перевозки рейсов интерлайн-партнеров U6 ( наличие участка U6 в билете обязательно)"
 subagent_comment "1% от примененных тарифов на рейсы интерлайн-партнеров U6 (наличие участка U6 в билете обязательно)"
 interline :yes
-check %{ not includes(operating_carrier_iatas, 'NN S7') }
+check %{ not includes(operating_carrier_iatas, 'NN S7 UT') }
 example "svocdg/ab cdgsvo"
 end
 
