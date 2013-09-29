@@ -1,4 +1,5 @@
 #!script/rails runner
+# vim: ft=ruby
 puts "reading book"
 old_book = Commission::Reader.new.read_file('config/commissions')
 puts "splitting pages"

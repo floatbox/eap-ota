@@ -42,11 +42,6 @@ describe Commission, :commissions do
     end
   end
 
-  before do
-    Commission::Rule.stub(:skip_interline_validity_check).and_return(true)
-  end
-
-
   # будет (и должно!) валиться,
   # если в config/commissions.rb - синтаксическая ошибка.
   Commission.reload!
