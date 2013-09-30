@@ -2,7 +2,6 @@
 require "rvm/capistrano"
 require "capistrano_colors"
 
-set :default_shell, :bash
 set :rvm_type, :system
 # закрепил версию, чтобы не прыгала в продакшне
 set :rvm_ruby_string, 'ruby-1.9.3-p327'
