@@ -1,20 +1,14 @@
 # -*- encoding: utf-8 -*-
+require 'handsoap/multi_curb_driver'
+
 module Amadeus
 
   class Service < Handsoap::Service
 
   endpoint :uri => Conf.amadeus.endpoint, :version => 1
 
-  # сжатие
-  #require 'handsoap/compressed_curb_driver'
-  #Handsoap.http_driver = :compressed_curb
-  #require 'handsoap/typhoeus_driver'
-  #Handsoap.http_driver = :typhoeus
-  require 'handsoap/multi_curb_driver'
-  Handsoap.http_driver = :multicurb
-
+  Handsoap.http_driver = :net_http
   Handsoap.timeout = 60
-
 
   # response logger
   include FileLogger
@@ -36,6 +30,13 @@ module Amadeus
       self.session = args[:session]
     end
     @driver = args[:driver]
+
+    # mostly for debugging
+    if @driver
+      Rails.logger.info("Handsoap driver set to #{@driver.class} for current request")
+    else
+      Rails.logger.info("Handsoap driver set to default #{Handsoap.http_driver}")
+    end
   end
 
   def http_driver_instance
