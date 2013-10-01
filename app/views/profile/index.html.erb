@@ -81,6 +81,9 @@
             <td>
             <% if ticket.status == 'ticketed' && ticket.profile_stored? %>
                 <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a>
+                <% if ticket.parent_id %>
+                  <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.parent_id) %>" target="_blank">[обмен]</a>
+                <% end %>
                 <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id, :lang=> 'en') %>" target="_blank">in English</a>
             <% end %>                
             </td>
