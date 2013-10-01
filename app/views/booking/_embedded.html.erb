@@ -153,19 +153,19 @@
     <p style="margin: 0 0 12px;"><%= raw t 'booking.farerules.service' %></p>
     <p><%= raw t 'booking.farerules.cancellation' %></p>
     <% few_rules = @order_form.recommendation.rules.length > 1 %>
-    <% @order_form.recommendation.rules.each do |(airline, fare, from, to, passenger_type) ,rule| %>
+    <% @order_form.recommendation.rules.each do |fare_rule| %>
     <div class="bff-group">
         <% if @order_form.recommendation.source != 'sirena' %>
             <div class="bffg-translate"></div>
         <% end %>
         <h5 class="bffg-title">
         <% if few_rules %>
-            <%= t 'offer.details.segment', :from => dict(from, :from), :to => dict(to, :to) %>, <span style="text-transform: lowercase;"><%= t 'booking.farerules.fare' %></span> <%= fare %>
+            <%= t 'offer.details.segment', :from => dict(fare_rule.from, :from), :to => dict(fare_rule.to, :to) %>, <span style="text-transform: lowercase;"><%= t 'booking.farerules.fare' %></span> <%= fare_rule.fare_base %>
         <% else %>
-            <%= t 'booking.farerules.fare' %> <%= fare %>
+            <%= t 'booking.farerules.fare' %> <%= fare_rule.fare_base %>
         <% end %>
         </h5>
-        <pre class="bffg-content"><%= raw(rule) %></pre>
+        <pre class="bffg-content"><%= raw(fare_rule.rule_text) %></pre>
     </div>
     <% end %>
 </div>

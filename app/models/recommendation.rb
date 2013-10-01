@@ -3,7 +3,7 @@ class Recommendation
 
   include KeyValueInit
 
-  attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rules,
+  attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rule_hashes,
     :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date, :declared_price, :baggage_array
 
   delegate :marketing_carriers, :marketing_carrier_iatas,
@@ -27,6 +27,12 @@ class Recommendation
     #триггеринг автолоад
     Recommendation; Variant; Flight; Segment; TechnicalStop; BaggageLimit
     YAML.load(str)
+  end
+
+  def rules
+    if rule_hashes.present?
+      rule_hashes.map{|rh| FareRule.new(rh)}
+    end
   end
 
 

@@ -120,6 +120,7 @@ class Order < ActiveRecord::Base
   has_many :secured_payments, conditions: { status: %W[ blocked charged processing_charge ]}, class_name: 'Payment'
   belongs_to :customer
   has_and_belongs_to_many :stored_flights
+  has_many :fare_rules
 
   # не_рефанды
   def last_payment

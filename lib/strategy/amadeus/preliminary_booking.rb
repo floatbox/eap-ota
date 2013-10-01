@@ -99,7 +99,7 @@ module Strategy::Amadeus::PreliminaryBooking
     @rec.price_fare, @rec.price_tax = info_resp.prices
     @rec.baggage_array = info_resp.baggage
 
-    @rec.rules = amadeus.fare_check_rules.rules
+    @rec.rule_hashes = amadeus.fare_check_rules.rule_hashes
 
     # FIXME не очень надежный признак
     if @rec.price_fare.to_i == 0

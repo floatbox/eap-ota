@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130901140434) do
+ActiveRecord::Schema.define(:version => 20130930140428) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -234,6 +234,16 @@ ActiveRecord::Schema.define(:version => 20130901140434) do
     t.integer  "average_price"
     t.integer  "average_time_delta"
     t.integer  "hot_offers_counter", :default => 0
+  end
+
+  create_table "fare_rules", :force => true do |t|
+    t.string  "carrier"
+    t.string  "fare_base"
+    t.string  "to_iata"
+    t.string  "from_iata"
+    t.string  "passenger_type"
+    t.text    "rule_text"
+    t.integer "order_id"
   end
 
   create_table "flight_groups", :force => true do |t|
