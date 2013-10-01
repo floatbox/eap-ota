@@ -39,7 +39,7 @@
         <td><%= order.departure_date ? l(order.profile_departure_date, :format => :human_year) : '-' %></td>
         <td><%= order.pnr_number %><% if order.additional_pnr_number %>&nbsp;/&nbsp;<%= order.additional_pnr_number %><% end %></td>
         <td><%= order.profile_status %></td>
-        <td class="ors-right"><%= decorate_price short_price(order.profile_payment_price) %></td>
+        <td class="ors-right"><%= !order.profile_payment_price.zero? ? decorate_price(short_price order.profile_payment_price) : ' ' %></td>
     </tr>
 </table>
 <div class="order-controls">
@@ -79,7 +79,7 @@
               <% end %>
             </td>
             <td>
-            <% if ticket.status == 'ticketed' && ticket.flights.present? %>
+            <% if ticket.status == 'ticketed' && ticket.profile_stored? %>
                 <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a>
                 <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id, :lang=> 'en') %>" target="_blank">in English</a>
             <% end %>                
