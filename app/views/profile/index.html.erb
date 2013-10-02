@@ -63,7 +63,9 @@
     <% end %>    
     </td>
     <td style="width: 180px;">
-        <div class="ors-price"><%= decorate_price short_price(order.profile_payment_price), '<strong>', '</strong>' %></div>
+        <% unless order.profile_payment_price.zero? %>
+            <div class="ors-price"><%= decorate_price short_price(order.profile_payment_price), '<strong>', '</strong>' %></div>
+        <% end %>
         <div class="ors-state"><%= order.profile_status %></div>
     </td>
 </tr>
@@ -87,7 +89,7 @@
     </tr>
     <% order.profile_tickets.each do |ticket| %>
     <% if !ticket.profile_active? || @exchanged_tickets_numbers.include?(ticket.number_with_code) %>
-    <tr class="ordp-inactive">
+    <tr class="ordp-inactive" style="color: #999;">
     <% else %>
     <tr>
     <% end %>
@@ -99,8 +101,11 @@
             <% end %>
         </td>
         <td>
-        <% if ticket.status == 'ticketed' && ticket.flights.present? %>
+        <% if ticket.status == 'ticketed' && ticket.profile_stored? %>
             <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a>
+            <% if ticket.parent_id %>
+                <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.parent_id) %>" target="_blank">[обмен]</a>
+            <% end %>
             <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id, :lang=> 'en') %>" target="_blank">in English</a>
         <% end %>                
         </td>
@@ -140,6 +145,7 @@
         <% if order.profile_active? %> Живой! <% else %> Мертвый! <% end %>
         <% if order.profile_all_tickets_returned? %> Возврат! <% end %>
         sold_tickets=<%= order.profile_sold_tickets_count %> / ticketed?=<%= order.profile_ticketed? %> / stored?=<%= order.profile_stored? %>
+        <a class="orc-link" href="<%= profile_itinerary_path(:id => order.pnr_number) %>" target="_blank">PNR</a>
     </p>
     <p>Route: <%= order.profile_route %></p>
     <p>Статусы заказа: <%= order.payment_type %> / <%= order.payment_status %> / <%= order.ticket_status %></p>
