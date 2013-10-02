@@ -196,8 +196,8 @@ end
 
 rule 4 do
 important!
-check %{ includes(booking_classes, "A") }
 interline :no, :yes
+check %{ includes(booking_classes, "A") }
 example "svocdg/a"
 example "svocdg cdgsvo/a"
 example "svocdg/ab/a cdgsvo"
