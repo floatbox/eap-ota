@@ -194,3 +194,12 @@ example "svoauh/ab auhsvo"
 example "svoamm/ab ammsvo"
 end
 
+rule 4 do
+important!
+check %{ includes(booking_classes, "A") }
+interline :no, :yes
+example "svocdg/a"
+example "svocdg cdgsvo/a"
+example "svocdg/ab/a cdgsvo"
+end
+
