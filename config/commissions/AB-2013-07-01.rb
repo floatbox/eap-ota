@@ -2,12 +2,12 @@ carrier "AB", start_date: "2013-07-01"
 
 rule 1 do
 ticketing_method "downtown"
-agent "8%"
+agent "10%"
 subagent "6%"
-discount "6%"
+discount "8%"
 comment "только собственные рейсы AB и HG"
-agent_comment "8% по всем направлениям через DTT"
-subagent_comment "6% по всем направлениям через DTT"
+agent_comment "10% по всем направлениям через DTT"
+subagent_comment "8% по всем направлениям через DTT"
 check %{ includes_only(operating_carrier_iatas, 'AB HG 4T') }
 example "cdgfra/m fracdg/s"
 end
