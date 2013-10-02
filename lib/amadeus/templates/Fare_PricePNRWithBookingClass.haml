@@ -1,10 +1,7 @@
 %overrideInformation
-  %attributeDetails
-    -# %attributeType NOP
-    %attributeType ETK
-  -# public and unifares
-  %attributeDetails
-    %attributeType RP
+  - request_options.each do |option|
+    %attributeDetails
+      %attributeType= option
   - if unifares
     %attributeDetails
       %attributeType RU
