@@ -61,6 +61,16 @@
     color: #333;
     cursor: default;
 }
+.pt-amount {
+    margin-left: 5px;
+    padding: 5px 10px;
+    background: #FFF;
+    vertical-align: 2px;
+    font-weight: normal;
+    font-size: 18px;
+    color: #777;
+    
+}
 
 /* Временно, пока нет других табов */
 #profile-tabs {
@@ -76,9 +86,6 @@
     line-height: 30px;
 }
 
-
-
-
 /* No orders */
 .orders-empty {
     position: absolute;
@@ -93,46 +100,62 @@
 
 /* Order */
 .order {
-    margin: 0 -14px 15px;
+    margin: 0 -14px 25px;
     background: #FFF;
+    -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Summary */
 .order-summary {
     width: 100%;
 }
-.order-summary th {
-    padding: 10px 0 0 14px;
-    font-size: 11px;
-    line-height: 13px;
-    color: #777;
-    text-transform: uppercase;
-}
 .order-summary td {
-    padding: 6px 0 0 14px;
+    padding: 12px 0 12px 14px;
+    font-size: 13px;
     line-height: 16px;
+    color: #777;
 }
-.order-summary .ors-right {
-    padding-right: 14px;
-    text-align: right;
+.ors-date {
+    margin: 0 0 10px;
 }
-.ors-route-raw {
-    margin-top: 5px;
+.ors-number {
+    margin: 5px 0 0;
+}
+.orsn-title {
     font-size: 11px;
-    line-height: 13px;
+    line-height: 11px;
+}
+.orsn-text {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 20px;
+    color: #F90A6F;
+}
+.ors-route {
+    margin: -1px 0 2px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 18px;
+}
+.ors-passengers {
+    margin: 10px 0 0;
+}
+.ors-price {
+    margin: 0 0 3px;
+    font-size: 18px;
+    line-height: 18px;
 }
 
 /* Controls */
 .order-controls {
-    padding: 14px 14px 10px;
-    overflow: hidden;
-    font-size: 12px;
-    line-height: 14px;
+    background: #EDEDE3;
+    font-size: 13px;
+    line-height: 15px;
 }
 .orc-show,
 .orc-hide {
-    float: left;
-    margin-right: 25px;
+    padding: 8px 14px 8px 168px;
     color: #777;
     text-decoration: underline;
     cursor: pointer;
@@ -140,70 +163,74 @@
 .orc-hide {
     display: none;
 }
-.orc-links {
-    margin: 0 -6px;
-    padding: 4px 6px;
-    color: #777;
-}
-.orc-link {
-    margin-left: 5px;
-    color: #777;
-}
 
 /* Details */
 .order-details {
     display: none;
+    background: #EDEDE3; 
 }
 
 /* Passengers */
-.ord-passengers {
-    border-top: 1px solid #DDD;
-    padding: 6px 0 14px;
+.ordp-wrapper {
+    margin-left: 168px;
+    padding: 5px 0 15px;
 }
 .ord-passengers th {
-    padding: 10px 0 0 14px;
-    font-size: 11px;
-    line-height: 13px;
+    padding: 0 14px 2px 0;
+    font-size: 13px;
+    line-height: 15px;
+    text-transform: lowercase;    
     color: #777;
-    text-transform: uppercase;
 }
 .ord-passengers td {
-    padding: 6px 0 0 14px;
+    padding: 6px 14px 0 0;
+    font-size: 14px;
     line-height: 16px;
+    color: #333;
+}
+.ordp-status {
+    margin-left: 5px;
+    vertical-align: 1px;
+    font-size: 11px;
+    color: #777;
 }
 .ordp-ticket {
     margin-right: 5px;
+    color: #333;
+}
+.ordp-debug {
+    position: absolute;
+    margin: -16px 0 0 -458px;
+    font-size: 11px;
     color: #777;
 }
 
 /* Flights */
 .ord-flights {
-    border-top: 1px solid #DDD;
-    padding: 6px 0 20px;
+    border-top: 1px solid #d5d5cd;
+    padding: 12px 0 20px;
 }
 .ord-flights table {
     width: 100%;
 }
 .ord-flights th {
-    padding: 10px 0 0 14px;
-    font-size: 11px;
-    line-height: 13px;
+    padding-left: 14px;
+    font-size: 13px;
+    line-height: 15px;
+    text-transform: lowercase;
     color: #777;
-    text-transform: uppercase;
 }
 .ord-flights td {
     padding: 14px 0 0 14px;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 16px;
 }
 .ordf-route {
-    margin: 0 0 2px;
+    margin: 0 0 5px;
     font-weight: bold;
-    font-size: 14px;    
 }
 .ordf-date {
     margin: 0 0 2px;
-    font-weight: bold;
     font-size: 14px;
 }
 .ordf-time {
@@ -212,15 +239,18 @@
     font-size: 16px;
 }
 .ordf-fare {
-    margin: 0 0 2px;
+    margin: 0 0 5px;
     font-size: 14px;
 }
 
 /* Debug */
 .order-debug {
-    background: #454752;
-    color: #d9d9d9;
+    border-top: 1px dashed #AAA;
+    background: #F0F0F0; 
     padding: 8px 14px;
+    color: #777;
+    font-size: 12px;
+    line-height: 14px;
 }
 
 .order-debug-info {
