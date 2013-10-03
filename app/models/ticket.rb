@@ -427,8 +427,9 @@ class Ticket < ActiveRecord::Base
     e.message
   end
 
+  # Используется только в админке
   def rate
-    CBR.exchange_on(ticketed_date || Date.today).get_rate(original_price_fare_currency, "RUB").to_f if original_price_fare_currency
+    CBR.exchange_on(ticketed_date || Date.today).get_rate(original_price_fare_currency, "RUB").to_f if original_price_fare_currency && original_price_fare_currency != "RUB"
   end
 
 end
