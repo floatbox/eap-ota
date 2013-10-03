@@ -91,6 +91,11 @@ gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
 
+# nested exceptions
+gem 'nesty'
+# возможно, имеет смысл включить вместо nesty, глобально
+# gem 'nested_exceptions', require: 'nested_exceptions/global'
+
 # appservers
 gem 'thin', :require => false
 gem 'passenger', :require => false

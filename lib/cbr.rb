@@ -1,4 +1,7 @@
 module CBR
+
+  class RateTransientError < TransientError; end
+
   class << self
     include LayeredExchange
     def exchanges
@@ -8,8 +11,12 @@ module CBR
     class LoggingCBR < CentralBankOfRussia
 
       def update_rates(date)
-        Rails.logger.info "Getting CBR rates for #{date}"
-        super
+        begin
+          Rails.logger.info "Getting CBR rates for #{date}"
+          super
+        rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT, OpenURI::HTTPError
+          raise RateTransientError, "can't get CBR rates for #{date.inspect}"
+        end
       end
 
     end
@@ -21,7 +28,10 @@ module CBR
           InverseRatesFor.new({from: 'RUB'},
             RatesUpdatedWithFallback.new(
               ActiveRecordRates.new(CurrencyRate.where(date: date, bank: 'cbr')),
-              LazyRates.new { LoggingCBR.new.update_rates(date) } ))){|p| p.round}
+              LazyRates.new { LoggingCBR.new.update_rates(date) }
+            )
+          )
+        ){ |p| p.round }
     end
 
     def preload_rate
