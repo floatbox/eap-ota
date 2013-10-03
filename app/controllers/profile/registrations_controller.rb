@@ -24,7 +24,7 @@ class Profile::RegistrationsController < Devise::RegistrationsController
       end
 
     elsif exist_resource.not_registred?   ## кастомер есть но не создавал ЛК
-      exist_resource.send_registration_instructions
+      exist_resource.send_confirmation_instructions
       success
     elsif exist_resource.pending_confirmation?    ## кастомер зарегистрировался но не конфермил ЛК по ссылке
       not_confirmed
