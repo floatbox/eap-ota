@@ -22,7 +22,7 @@ class Location
           loc[:latitude] == "60" && loc[:longitude] == "100"
           return Location.default
         end
-        return City.nearest_to loc[:latitude], loc[:longitude]
+        return City.nearest_to(loc[:latitude], loc[:longitude]).first || Location.default
       end
     # для оффлайна
     rescue Errno::EHOSTUNREACH, SocketError, JSON::ParserError, Timeout::Error, RestClient::Exception

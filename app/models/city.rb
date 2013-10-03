@@ -32,26 +32,18 @@ class City < ActiveRecord::Base
   scope :with_country, includes(:country)
   scope :has_coords, where("lat is not null AND lng is not null")
 
-  # UGLY
-  # order теперь складывается, importance забивает все, except(:order) - не помог
-  # выключил default_scope
-  # c радиусом - неэффективно, но повторять "формулу"
-  # три раза - некайф. а в 1.8 у lambda нет optional args
-  scope :with_distance_to, lambda {|lat, lng, radius|
+  scope :nearest_to, -> lat, lng, radius = 4.5 {
     formulae = "(ABS(lat - #{lat.to_f}) + ABS(lng - #{lng.to_f}))"
-    select( "*, #{formulae} as distance") \
-      .where( radius && ["#{formulae} < ?", radius] ) \
-      .has_coords \
+
+    # .has_coords не нужен, between отсечет
+    select( "*, #{formulae} as distance")
+      .where( lat: lat.to_f-radius..lat.to_f+radius)
+      .where( lng: lng.to_f-radius..lng.to_f+radius)
       .order("distance asc")
   }
 
-  def self.nearest_to lat, lng
-    return unless lat.present? && lng.present?
-    with_distance_to( lat, lng, false).first
-  end
-
   def nearby_cities
-    City.with_distance_to( lat, lng, 4.5)\
+    City.nearest_to( lat, lng, 4.5)\
       .where("id != ?", id).important.limit(10).to_a
   end
 
