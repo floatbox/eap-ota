@@ -43,6 +43,7 @@ admin:
   PromoCode: create, update, read
   StoredFlight: create, update, read, update_from_gds
   Version: read
+  FareRule: read
 
 hoteditor:
   #HotOffer: read, delete

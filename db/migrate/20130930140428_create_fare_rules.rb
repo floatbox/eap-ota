@@ -8,6 +8,8 @@ class CreateFareRules < ActiveRecord::Migration
       t.string :passenger_type
       t.text :rule_text
       t.references :order, index: true
+      t.timestamps
     end
+    add_index :fare_rules, :order_id
   end
 end

@@ -381,9 +381,18 @@ class Order < ActiveRecord::Base
 
       #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
       tickets.reload
+      load_fare_rules
       true
     else
       false
+    end
+  end
+
+  def load_fare_rules
+    strategy.fare_rule_hashes.each do |rule_hash|
+      if fare_rules.where(rule_hash).blank?
+        fare_rules.create(rule_hash)
+      end
     end
   end
 
