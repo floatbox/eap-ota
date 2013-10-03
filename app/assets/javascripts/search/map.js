@@ -25,7 +25,10 @@ resize: function(instant) {
     dh += search.dates.el.height() + 2;
     dh += search.options.el.height();
     dh += results.header.height;
-    var mh = Math.max(36, $w.height() - dh);
+    var mh = $w.height() - dh;
+    if (mh < 150) {
+        mh = 36; // Если высота маленькая, не показываем вообще
+    }
     this.content.height(mh);
     this.toggleZoom(mh);
     if (this.api && this.bounds) {
@@ -81,8 +84,7 @@ slideDown: function() {
         search.dates.toggleHidden(true);
         google.maps.event.trigger(that.api, 'resize');
         that.wrapper.height('').css('overflow', '');
-        that.toggleZoom(ch + dh);
-        that.fitBounds();
+        that.resize();
     });
     search.dates.el.find('.sdt-tab').delay(150).fadeOut(150);
 },
@@ -101,7 +103,7 @@ slideUp: function() {
         if (that.prices.el.find('.smp-collapse').length) {
             that.prices.showExpand();
         }
-        that.fitBounds();
+        that.resize();        
     });
     search.dates.el.find('.sdt-tab').fadeIn(150);
 },
