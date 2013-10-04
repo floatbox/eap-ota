@@ -103,6 +103,7 @@ describe Order do
           {:ticketed_date => Date.today - 2.days, :number => '123456787', :code => '123', :source => 'amadeus', :status => 'ticketed', :original_price_fare => 21590.to_money("RUB"), :original_price_total => 6075.to_money("RUB"), :parent_number => '123456789', :parent_code => '123', :price_fare_base => 21590.to_money("RUB")}
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
+        @order.stub(:load_fare_rules)
         @order.reload_tickets
         @old_ticket.reload
         @new_ticket = @order.tickets.find_by_number('123456787')
@@ -165,6 +166,7 @@ describe Order do
           {:number => '1234567872', :code => '123', :ticketed_date => Date.today - 2.days, :original_price_fare => 0.to_money("RUB"), :original_price_tax => 0.to_money("RUB"), :source => 'amadeus', :parent_id => @old_tickets[1].id, :status => 'ticketed'},
         ]
         Strategy.stub_chain(:select, :get_tickets).and_return(@new_ticket_hashes)
+        @order.stub(:load_fare_rules)
         @order.reload_tickets
         @old_ticket = @old_tickets[0]
         @old_ticket.reload
@@ -219,6 +221,7 @@ describe Order do
         ticket = stub_model(Ticket, :new_record? => true)
         order_tickets = stub('order_tickets', :find_by_number => nil, :reload => nil)
         @order.stub(:tickets).and_return(order_tickets)
+        @order.stub(:load_fare_rules)
         order_tickets.should_receive(:create).twice.with(hash_including({:code=>"262"}))
         @order.load_tickets
       end
@@ -230,6 +233,7 @@ describe Order do
 
       before(:each) do
         @order = build(:order, :source => 'amadeus', :commission_subagent => '1%', :pnr_number => '123456')
+        @order.stub(:load_fare_rules)
         @amadeus = mock('Amadeus')
         @amadeus.stub(
           pnr_retrieve:
@@ -266,6 +270,7 @@ describe Order do
 
       it 'loads tickets with bucks correctly' do
         @order = create :order
+        @order.stub(:load_fare_rules)
         @new_ticket_hashes = [
           {:number => '123456787',
            :code => '123',
