@@ -60,6 +60,7 @@ ru:
       remove: "Убрать перелет"
     map:
       link: "Куда дешево улететь %{from} в\_%{dates}?"
+      link_hidden: "Карта дешевых перелетов в\_%{dates}?"
       title: "Цены от %{min}"
       limit: "до %{max} <span class=\"ruble\">Р</span>"
       expand: "Развернуть карту"

@@ -54,6 +54,7 @@ en:
       remove: "Remove flight"
     map:
       link: "Cheap flights %{from} in\_%{dates}?"
+      link_hidden: "Cheap flights in\_%{dates}?"      
       title: "Price from %{min}"
       limit: "up to %{max} <span class=\"ruble\">Р</span>"
       expand: "Expand map"

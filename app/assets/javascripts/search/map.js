@@ -25,12 +25,15 @@ resize: function(instant) {
     dh += search.dates.el.height() + 2;
     dh += search.options.el.height();
     dh += results.header.height;
-    var mh = $w.height() - dh;
-    if (mh < 150) {
-        mh = 36; // Если высота маленькая, не показываем вообще
+    var height = $w.height() - dh;
+    if (height < 150) {
+        this.el.addClass('sm-hidden');
+        this.content.height(26);
+    } else {
+        this.el.removeClass('sm-hidden');
+        this.content.height(height);
+        this.toggleZoom(height);
     }
-    this.content.height(mh);
-    this.toggleZoom(mh);
     if (this.api && this.bounds) {
         this.fitBounds();
     }
@@ -78,6 +81,7 @@ slideDown: function() {
     var ch = this.content.height();
     var dh = wh - ch - search.dates.tlheight;
     this.wrapper.height(wh).css('overflow', 'hidden');
+    this.el.removeClass('sm-hidden');
     this.content.animate({
         height: Math.max(36, ch + dh)
     }, 300, function() {
@@ -167,8 +171,9 @@ updatePrices: function(segments) {
     if (segments[0] && segments[0].dpt && !segments[0].arv && search.mode.selected !== 'mw') {
         var sd = search.dates;
         var dates = sd.monthes[sd.position].ptitle + ' — ' + sd.monthes[sd.position + 1].ptitle;
+        var template = this.el.hasClass('sm-hidden') ? 'search.map.link_hidden' : 'search.map.link';
         this.prices.update({
-            title: I18n.t('search.map.link', {from: segments[0].dpt.from.nowrap(), dates: dates}),
+            title: I18n.t(template, {from: segments[0].dpt.from.nowrap(), dates: dates}),
             from: segments[0].dpt.iata,
             date: sd.monthes[sd.position].el.find('.first').attr('data-dmy')
         });
