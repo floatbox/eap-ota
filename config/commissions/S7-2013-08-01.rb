@@ -195,6 +195,7 @@ example "svoamm/ab ammsvo"
 end
 
 rule 4 do
+no_commission "выключил подкласс A"
 important!
 interline :no, :yes
 check %{ includes(booking_classes, "A") }
