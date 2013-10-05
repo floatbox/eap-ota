@@ -46,9 +46,10 @@ class Mux
   def amadeus_pricer(avia_search)
     return [] unless Conf.amadeus.enabled
     benchmark 'Pricer amadeus, total' do
+      session = Amadeus::Session.book(Amadeus::Session::BOOKING)
+      amadeus = Amadeus::Service.new(:session => session, :driver => async_amadeus_driver)
       request_ws = {:suggested_limit => suggested_limit, :lite => lite}
       request_ns = {:suggested_limit => suggested_limit, :lite => lite, :nonstop => true}
-      amadeus = Amadeus.booking
       # non threaded variant
       recommendations_ws = benchmark 'Pricer amadeus, with stops' do
         amadeus.fare_master_pricer_travel_board_search(avia_search, request_ws).recommendations
