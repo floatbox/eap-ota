@@ -54,10 +54,11 @@ gem 'sax-machine', :git => 'https://github.com/gregwebs/sax-machine.git'
 gem 'yajl-ruby'
 gem 'whenever', :require => false
 gem 'cucumber'
-#gem 'handsoap', :git => 'git://github.com/codesnik/handsoap.git', :branch => 'fixing_async_again'
+# заменить на обычный gem handsoap после выхода версии 1.3.0+
 gem 'handsoap', :git => 'git://github.com/dredozubov/handsoap.git'
 gem 'curb'
-gem 'typhoeus'
+# нужен для typhoeus driver у handsoap
+# gem 'typhoeus'
 gem 'crack'
 gem "every"
 gem "memoize"
