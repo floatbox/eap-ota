@@ -81,13 +81,7 @@ module Amadeus
       xml_string = read_latest_log_file(request.action)
       xml_response = parse_string(xml_string)
     else
-      if session.nil? && request.needs_session?
-        raise ArgumentError, 'called without session'
-      end
-      invoke_opts = {}
-      invoke_opts[:soap_action] = request.soap_action
-      invoke_opts[:soap_header] = {'SessionId' => session.session_id} if session
-      xml_response = invoke(request.action, invoke_opts) do |body|
+      xml_response = invoke(request.action, invoke_opts(request)) do |body|
         body.set_value request.soap_body, :raw => true
       end
       # FIXME среагировать на HTTP error
@@ -100,9 +94,6 @@ module Amadeus
 
   def invoke_async_request request, &on_success
     Rails.logger.info "Amadeus::Service: #{request.action} async queued"
-    invoke_opts = {}
-    invoke_opts[:soap_action] = request.soap_action
-    invoke_opts[:soap_header] = {'SessionId' => session.session_id}
 
     if Conf.amadeus.fake
       xml_string = read_latest_log_file(request.action)
@@ -121,7 +112,7 @@ module Amadeus
       end
 
       async(callbacks) do |dispatcher|
-        dispatcher.request(request.action, invoke_opts) do |body|
+        dispatcher.request(request.action, invoke_opts(request)) do |body|
           body.set_value request.soap_body, :raw => true
         end
         dispatcher.response do |xml_response|
@@ -131,6 +122,17 @@ module Amadeus
       end
     end
   end
+
+  def invoke_opts(request)
+    if session.nil? && request.needs_session?
+      raise ArgumentError, 'called without session'
+    end
+    invoke_opts = {}
+    invoke_opts[:soap_action] = request.soap_action
+    invoke_opts[:soap_header] = {'SessionId' => session.session_id} if session
+    invoke_opts
+  end
+  private :invoke_opts
 
   # Amadeus::Service#pnr_add_multi_elements etc.
   Amadeus::Request::SOAP_ACTIONS.keys.each do |action|
