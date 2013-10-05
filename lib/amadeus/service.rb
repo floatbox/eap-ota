@@ -76,18 +76,12 @@ module Amadeus
 
     Rails.logger.info "Amadeus::Service: #{request.action} started"
 
-    xml_response = nil
-    if Conf.amadeus.fake
-      xml_string = read_latest_log_file(request.action)
-      xml_response = parse_string(xml_string)
-    else
-      xml_response = invoke(request.action, invoke_opts(request)) do |body|
-        body.set_value request.soap_body, :raw => true
-      end
-      # FIXME среагировать на HTTP error
-      session.increment if session
-      log_file(request.action, xml_response.to_xml) unless request.action =~ /Pricer/
+    xml_response = invoke(request.action, invoke_opts(request)) do |body|
+      body.set_value request.soap_body, :raw => true
     end
+    # FIXME среагировать на HTTP error
+    session.increment if session
+    log_file(request.action, xml_response.to_xml) unless request.action =~ /Pricer/
 
     request.process_response(xml_response)
   end
@@ -95,30 +89,23 @@ module Amadeus
   def invoke_async_request request, &on_success
     Rails.logger.info "Amadeus::Service: #{request.action} async queued"
 
-    if Conf.amadeus.fake
-      xml_string = read_latest_log_file(request.action)
-      xml_response = parse_string(xml_string)
-      on_success.call( request.process_response(xml_response) )
-
-    else
-      callbacks = Proc.new do |deffered|
-        deffered.callback &on_success
-        deffered.errback do |err|
-          Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
-          err.backtrace.each do |str|
-            Rails.logger.error "ERROR: #{str}"
-          end
+    callbacks = Proc.new do |deffered|
+      deffered.callback &on_success
+      deffered.errback do |err|
+        Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
+        err.backtrace.each do |str|
+          Rails.logger.error "ERROR: #{str}"
         end
       end
+    end
 
-      async(callbacks) do |dispatcher|
-        dispatcher.request(request.action, invoke_opts(request)) do |body|
-          body.set_value request.soap_body, :raw => true
-        end
-        dispatcher.response do |xml_response|
-          session.increment
-          request.process_response(xml_response)
-        end
+    async(callbacks) do |dispatcher|
+      dispatcher.request(request.action, invoke_opts(request)) do |body|
+        body.set_value request.soap_body, :raw => true
+      end
+      dispatcher.response do |xml_response|
+        session.increment
+        request.process_response(xml_response)
       end
     end
   end
