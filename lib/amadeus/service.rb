@@ -30,13 +30,6 @@ module Amadeus
       self.session = args[:session]
     end
     @driver = args[:driver]
-
-    # mostly for debugging
-    if @driver
-      Rails.logger.info("Handsoap driver set to #{@driver.class} for current request")
-    else
-      Rails.logger.info("Handsoap driver set to default #{Handsoap.http_driver}")
-    end
   end
 
   def http_driver_instance
