@@ -2,6 +2,7 @@
 module Amadeus
   module Macros
 
+    # В отличие от pnr_ingore_and_retrieve, достает не текущий, а произвольный PNR.
     def pnr_retrieve_and_ignore(args)
       pnr_retrieve(args)
     ensure
@@ -28,18 +29,22 @@ module Amadeus
       # pnr_ignore
     end
 
+    # Не сохраняет последние изменения и закрывает PNR.
     def pnr_ignore
       pnr_add_multi_elements :pnr_action => :IG
     end
 
+    # Не сохраняет последние изменения, оставляет PNR открытым.
     def pnr_ignore_and_retrieve
       pnr_add_multi_elements :pnr_action => :IR
     end
 
+    # Сохраняет изменения, закрывает PNR.
     def pnr_commit
       pnr_add_multi_elements :pnr_action => :ET
     end
 
+    # Сохраняет изменения, оставляет PNR открытым.
     def pnr_commit_and_retrieve
       pnr_add_multi_elements :pnr_action => :ER
     end
