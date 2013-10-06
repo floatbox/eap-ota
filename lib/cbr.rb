@@ -14,7 +14,7 @@ module CBR
         begin
           Rails.logger.info "Getting CBR rates for #{date}"
           super
-        rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT, OpenURI::HTTPError
+        rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT, OpenURI::HTTPError, SocketError
           raise RateTransientError, "can't get CBR rates for #{date.inspect}"
         end
       end
@@ -37,6 +37,12 @@ module CBR
     def preload_rate
       date = Time.now.hour > 16 ? Date.today + 1.day : Date.today
       CBR.exchange_on(date).exchange_with("1 USD".to_money, "RUB")
+    rescue CBR::RateTransientError => e
+      fails ||= 0
+      fails += 1
+      Rails.logger.warn "#{e.message}: failed for #{fails} time"
+      sleep(10) && retry if fails < 3
+      with_warning
     rescue Exception
       with_warning
     end
