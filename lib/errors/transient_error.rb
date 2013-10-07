@@ -4,6 +4,8 @@
 # чаще всего, можно сделать retry
 #
 # see http://avdi.org/talks/exceptional-ruby-2011-02-04/
-class TransientError < StandardError
-  include Errors::Nested
+module Errors
+  class TransientError < StandardError
+    include Errors::Nested
+  end
 end

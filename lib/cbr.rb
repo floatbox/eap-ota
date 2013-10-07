@@ -1,6 +1,6 @@
 module CBR
 
-  class RateTransientError < TransientError; end
+  class RateTransientError < Errors::TransientError; end
 
   class << self
     include LayeredExchange
