@@ -50,7 +50,7 @@
             <div class="bfp-date">
                 <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bday">ДД</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-bday" name="person_attributes[$n][birthday(3i)]" maxlength="2" title="День рождения"></div>
                 <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-bmonth">ММ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-bmonth" name="person_attributes[$n][birthday(2i)]" maxlength="2" title="Месяц рождения"></div>
-                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-byear">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-byear" name="person_attributes[$n][birthday(1i)]" maxlength="4" title="Год рождения" data-current="<%= Date.current.strftime('%Y') %>"></div>
+                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-byear">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-byear" name="person_attributes[$n][birthday(1i)]" maxlength="4" title="Год рождения"></div>
             </div>
         </td>
     </tr>
@@ -77,7 +77,7 @@
             <div class="bfp-date wrap">
                 <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-day">ДД</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-day" id="bfp$n-exp-day" name="person_attributes[$n][document_expiration_date(3i)]" maxlength="2" title="День окончания срока действия документа"></div>
                 <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-month">ММ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-month" id="bfp$n-exp-month" name="person_attributes[$n][document_expiration_date(2i)]" maxlength="2" title="Месяц окончания срока действия документа"></div>
-                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-exp-year" name="person_attributes[$n][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа" data-current="<%= Date.current.strftime('%Y') %>"></div>
+                <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-exp-year" name="person_attributes[$n][document_expiration_date(1i)]" maxlength="4" title="Год окончания срока действия документа"></div>
             </div>
             <div class="bf-checkbox">
                 <input type="checkbox" value="1" name="person_attributes[$n][document_noexpiration]" id="bfp$n-permanent">
