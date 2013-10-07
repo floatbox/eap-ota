@@ -5,5 +5,5 @@
 #
 # see http://avdi.org/talks/exceptional-ruby-2011-02-04/
 class TransientError < StandardError
-  include Nesty::NestedError
+  include Errors::Nested
 end

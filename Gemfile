@@ -94,7 +94,7 @@ gem "flot-rails"
 gem 'delayed_job_mongoid'
 
 # nested exceptions
-gem 'nesty'
+# gem 'nesty'
 # возможно, имеет смысл включить вместо nesty, глобально
 # gem 'nested_exceptions', require: 'nested_exceptions/global'
 
