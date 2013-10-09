@@ -1,3 +1,14 @@
+module Amadeus
+  class Error < StandardError
+  end
+
+  class SoapError < StandardError
+    include Errors::Nested
+  end
+end
+
+# rescue Handsoap::Fault => e
+#  raise Amadeus::Error, e.reason
 
 # Handsoap::Fault
 # code, reason

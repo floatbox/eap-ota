@@ -1,8 +1,6 @@
 # encoding: utf-8
+require 'amadeus/errors'
 module Amadeus
-
-  class Error < StandardError
-  end
 
   module Shortcuts
 
