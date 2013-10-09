@@ -1,18 +1,28 @@
-<div class="ph-user" id="user">
 <% if customer_signed_in? %>
-    <div class="phu-link">
-        <a class="phul-wrapper" href="<%= profile_path %>">
-            <span class="phul-text"><%= current_customer.email.downcase %></span>
-            <span class="phul-overflow">&nbsp;</span>
-        </a>
-        <span class="phul-logout" title="Выйти из личного кабинета"><img class="phul-icon" src="/images/common/exit.png" alt="Выйти"></span>
+<% if controller.controller_name == 'profile' %>
+<div class="ph-tab pht-selected" id="user">
+    <div class="pht-content">
+<% else %>
+<div class="ph-tab" id="user">
+    <a class="pht-content" href="<%= profile_path %>">
+<% end %>
+        <span class="pht-title">Личный кабинет</span>
+        <span class="pht-tip phu-email"><%= current_customer.email.downcase %></span>
+        <span class="pht-tip phul-logout">Выйти</span>
+<% if controller.controller_name == 'profile' %>
     </div>
+<% else %>
+    </a>
+<% end %>
     <div class="phu-logout">
         <%= button_to('Выйти', destroy_customer_session_path, :method => :delete) %>    
     </div>
+</div>
 <% else %>
-<div class="phu-wrapper">
-    <div class="phu-control">Личный кабинет<span class="phuc-bar"></span></div>
+<div class="ph-tab" id="user">
+    <div class="pht-content phu-control">
+        <span class="pht-title">Личный кабинет</span>
+    </div>
     <div class="phu-popup" id="phup-authorization">
         <div class="phu-stator">
         <div class="phu-slider">
@@ -119,4 +129,3 @@
 </div>
 <div class="phu-fade"></div>
 <% end %>
-</div>

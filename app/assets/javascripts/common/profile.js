@@ -4,7 +4,8 @@ init: function() {
     if (this.el.length) {
         var logout = this.el.find('.phu-logout form');
         if (logout.length) {
-            this.el.find('.phul-logout').on('click', function() {
+            this.el.find('.phul-logout').on('click', function(event) {
+                event.preventDefault();
                 logout.submit();
             });
             this.show = $.noop;
@@ -27,11 +28,12 @@ initPopup: function() {
     });
     this.el.find('.phu-control').on('click', function(event) {
         event.stopPropagation();
-        that[that.el.hasClass('phu-active') ? 'hide' : 'show']();
+        that.show();
     });
     this._hide = function(event) {
         if (event.type == 'click' && !event.button || event.which == 27) that.hide();
     };
+    this.fade = this.el.closest('.ph-tabs').find('.phu-fade');
 },
 initPlaceholders: function() {
     var fields = this.el.find('.phuf-input');
@@ -45,7 +47,7 @@ initPlaceholders: function() {
 },
 show: function(id) {
     var that = this;
-    this.el.addClass('phu-active');
+    this.fade.show();
     this.opened = this[id || 'authorization'].el.show();
     this.opened.find('.phuf-input').trigger('change');
     setTimeout(function() {
@@ -56,8 +58,8 @@ show: function(id) {
     }
 },
 hide: function() {
-    this.el.removeClass('phu-active');
     this.opened.hide();
+    this.fade.hide();    
     $w.off('click keydown', this._hide);
 },
 };
