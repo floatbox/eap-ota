@@ -3,7 +3,7 @@ module Amadeus
   end
 
   class SoapError < StandardError
-    include Errors::Nested
+    include ::Errors::Nested
   end
 end
 
