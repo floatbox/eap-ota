@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "4%"
 subagent "3%"
-discount "2.1%"
+discount "3%"
 agent_comment "С 11.06.12г. 4% от опубл. тарифа на собств. рейсы КС по маршрутам внутри Республики Казахстан;"
 subagent_comment "3% от тарифа по маршрутам внутри Республики Казахстан;"
 domestic
@@ -36,7 +36,7 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "4%"
 subagent "3%"
-discount "2.1%"
+discount "3%"
 agent_comment "С 11.06.12г. 4% от опубл. тарифа на рейсы Interline БЕЗ сегмента КС разрешается только на Qatar Airways (QR)."
 subagent_comment "С 11.06.12г. 3% от опубл. тарифа на рейсы Interline БЕЗ сегмента КС разрешается только на Qatar Airways (QR)."
 interline :absent
