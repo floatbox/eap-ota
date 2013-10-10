@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "3.5%"
+discount "4.5%"
 agent_comment "5% от тарифов Первого и Бизнес классов на рейсы EK;"
 subagent_comment "3,5% от тарифов Первого и Бизнес классов на рейсы EK;"
 classes :first, :business
@@ -17,7 +17,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "3.5%"
+discount "4.5%"
 agent_comment "5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
 subagent_comment "3,5% от комб. тарифов Первого и/или Бизнес класса с тарифами Эконом класса на рейсы EK;"
 routes "RU..."
@@ -30,6 +30,7 @@ important!
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
+discount "1%"
 agent_comment "1 руб. с билета по опубл.тарифам Эконом класса на рейсы EK."
 subagent_comment "5 коп. с билета по опубл.тарифам Эконом класса на собств. рейсы EK."
 classes :economy
@@ -41,6 +42,7 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
+discount "1%"
 agent_comment "1 руб. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
 subagent_comment "С 01.01.13г. 5 коп. с билета по опубл.тарифам на рейсы EK с началом перевозки не в России."
 check %{ not includes_only(country_iatas.first, 'RU') }
@@ -51,7 +53,7 @@ rule 5 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "3.5%"
+discount "4.5%"
 agent_comment "5% (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
 subagent_comment "3.5%"
 interline :less_than_half
@@ -65,7 +67,7 @@ not_implemented "Пока не разруливается с чистым эко
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "3.5%"
+discount "4.5%"
 comment "интерлайновые копии"
 agent_comment "5% (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
 subagent_comment "3.5%"
@@ -78,6 +80,7 @@ rule 7 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
+discount "1%"
 agent_comment "1 рубль (Билеты «Интерлайн» могут быть выписаны, если на долю перевозчика приходится более 50% маршрута.)"
 subagent_comment "5 коп"
 interline :less_than_half
