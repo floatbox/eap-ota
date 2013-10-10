@@ -6,6 +6,7 @@ class AutoTicketStuff
   attr_accessor :recommendation
   attr_accessor :people
   attr_accessor :order
+  BAD_DOMAINS = ['hotmail', 'yahoo', 'superrito.com', 'armyspy.com', 'cuvox.de', 'dayrep.com', 'einrot.com', 'fleckens.hu', 'gustr.com', 'jourrapide.com', 'rhyta.com', 'teleworm.us']
 
   def auto_ticket
     if reason = turndown_reason
@@ -27,8 +28,9 @@ class AutoTicketStuff
     !order.offline_booking or return 'offline заказ'
     recommendation.country_iatas.uniq.all?{|ci| Country[ci].continent != 'africa'} or return 'есть хотя бы один африканский город'
     people.all?{|p| ['RU', 'UA', 'BY', 'MD'].include?(p.nationality.alpha2)} or return 'есть пассажиры, не являющиеся гражданами РФ, Украины, Белоруссии или Молдавии'
-    !order.email['hotmail']  or return 'название почтового ящика содержит hotmail'
-    !order.email['yahoo']  or return 'название почтового ящика содержит yahoo'
+    BAD_DOMAINS.each do |domain|
+      !order.email[domain]  or return "название почтового ящика содержит #{domain}"
+    end
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
     no_dupe_orders? or return "dupe (#{@dupe_summary})"
     !group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
