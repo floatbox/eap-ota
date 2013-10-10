@@ -46,7 +46,7 @@ class Strategy::Amadeus < Strategy::Base
     ::Amadeus.booking do |amadeus|
       amadeus.pnr_retrieve(number: @order.pnr_number)
       amadeus.fare_price_pnr_with_booking_class(request_options: ['NOP'], unifares: false)
-      amadeus.fare_check_rules.rule_hashes
+      amadeus.fare_check_rules(sections: []).rule_hashes
     end
   end
 
