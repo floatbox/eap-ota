@@ -63,7 +63,7 @@ class Subscription < ActiveRecord::Base
     }
     freeze
     # TODO вынести delay с параметрами прямо в Subscription
-    SubscriptionMailer.delay(queue: 'subscription', priority: 5).notice(notice_info)
+    SubscriptionMailer.delay(queue: 'subscriptions', priority: 5).notice(notice_info)
 
     StatCounters.inc %W[subscription.create_notice]
   end
