@@ -103,13 +103,23 @@
         <td>
         <% if ticket.status == 'ticketed' && ticket.profile_stored? && order.profile_correct_pnr? %>
             <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a>
-            <% if ticket.parent_id %>
-                <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.parent_id) %>" target="_blank">[обмен]</a>
-            <% end %>
             <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id, :lang=> 'en') %>" target="_blank">in English</a>
-        <% end %>                
+        <% end %>
         </td>
     </tr>
+      <% if ticket.parent_id %>
+    <tr>
+        <td>&nbsp;</td>
+        <td><%= ticket.parent.number_with_code %> <span class="ordp-status"><%= ticket.parent.profile_status %></span></td>
+        <td>
+        <% if ticket.parent.profile_stored? && order.profile_correct_pnr? %>
+            <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.parent_id) %>" target="_blank">на русском</a>
+            <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.parent_id, :lang=> 'en') %>" target="_blank">in English</a>
+        <% end %>
+        </td>
+    </tr>
+      <% end %>
+
     <% end %>
     </table>
     </div>
