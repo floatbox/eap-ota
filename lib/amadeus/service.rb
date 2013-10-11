@@ -68,7 +68,12 @@ module Amadeus
     benchmark 'invoke request' do
       debug '==============='
       debug "unixtime: #{Time.now.to_i}"
-      super
+      begin
+        super
+      rescue Handsoap::Fault => e
+        # TODO проверить бэктрейс и оригинальное сообщение об ошибке
+        raise Amadeus::SoapError.wrap(e)
+      end
     end
   end
 
@@ -92,6 +97,7 @@ module Amadeus
     callbacks = Proc.new do |deffered|
       deffered.callback &on_success
       deffered.errback do |err|
+        # TODO Amadeus::SoapError.wrap ошибку?
         Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
         err.backtrace.each do |str|
           Rails.logger.error "ERROR: #{str}"
