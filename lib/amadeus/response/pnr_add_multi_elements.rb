@@ -31,8 +31,7 @@ module Amadeus
       def success?
         xpath('//r:generalErrorInfo/r:messageErrorInformation/r:errorDetail[r:qualifier="EC"]').empty? &&
           xpath('//r:nameError/r:nameErrorInformation/r:errorDetail[r:qualifier="EC"]').empty? &&
-          xpath('//r:dataElementsIndiv[r:elementManagementData/r:status="ERR"]').empty? &&
-          xpath('//r:travellerInfo/r:nameError').empty?
+          xpath('//r:dataElementsIndiv[r:elementManagementData/r:status="ERR"]').empty?
       end
     end
   end
