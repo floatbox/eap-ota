@@ -1,5 +1,7 @@
 # encoding: utf-8
 class SubscriptionMailer < ActionMailer::Base
+  include SendGrid
+  sendgrid_category :subscription
 
   add_template_helper(ApplicationHelper)
 

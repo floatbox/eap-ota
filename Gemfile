@@ -78,6 +78,7 @@ gem 'bson_ext'
 gem 'mobile-fu'
 gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
 gem "devise", "~> 2.2.4"
+gem 'sendgrid'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 #gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'

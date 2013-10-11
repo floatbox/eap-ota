@@ -1,5 +1,8 @@
 # encoding: utf-8
 class NotifierMailer < ActionMailer::Base
+  include SendGrid
+  sendgrid_category :notification
+
   helper :pricer
   helper :booking
   helper :baggage
