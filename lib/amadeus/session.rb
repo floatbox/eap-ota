@@ -120,7 +120,7 @@ module Amadeus
     logger.info "Amadeus::Session: #{token} signing out (#{seq})"
     record.destroy
     Amadeus::Service.new(:session => self).security_sign_out
-  rescue Handsoap::Fault
+  rescue Amadeus::SoapError
     # it's ok
   end
 
