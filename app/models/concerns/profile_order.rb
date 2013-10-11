@@ -132,6 +132,10 @@ module ProfileOrder
     profile_arrival_date && profile_arrival_date > DateTime.now
   end
 
+  def profile_correct_pnr?
+    !old_downtown_booking
+  end
+
   def profile_active?
     profile_alive_tickets_exists? || ticket_status == 'booked'
   end

@@ -51,7 +51,7 @@
     </td>
     <td style="width: 160px;">
     <% if order.profile_alive_tickets_exists? || !order.profile_ticketed? %>
-    <% if order.profile_stored? && order.profile_arrival_in_future? %>
+    <% if order.profile_stored? && order.profile_arrival_in_future? && order.profile_correct_pnr? %>
         <p class="orsp-title">Маршрутная квитанция</p>
         <p class="ors-pnr">
             <a class="orsp-link" href="<%= profile_itinerary_path(:id => order.pnr_number) %>" target="_blank">на русском</a>
@@ -101,7 +101,7 @@
             <% end %>
         </td>
         <td>
-        <% if ticket.status == 'ticketed' && ticket.profile_stored? %>
+        <% if ticket.status == 'ticketed' && ticket.profile_stored? && order.profile_correct_pnr? %>
             <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.id) %>" target="_blank">на русском</a>
             <% if ticket.parent_id %>
                 <a class="ordp-ticket" href="<%= profile_itinerary_for_ticket_path(:id => order.pnr_number, :ticket_id => ticket.parent_id) %>" target="_blank">[обмен]</a>
