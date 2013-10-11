@@ -248,4 +248,4 @@ FareRule:
     default: carrier, fare_base, from_iata, to_iata, passenger_type
     list: carrier, fare_base, from_iata, to_iata, passenger_type
     show: carrier, fare_base, from_iata, to_iata, passenger_type, order
-  application: Orders, 1
+  application: Misc, 2
