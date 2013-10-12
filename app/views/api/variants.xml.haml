@@ -17,15 +17,11 @@
                 %operatingCarrier= flight.operating_carrier.iata
                 %number= flight.flight_number
                 %departure= flight.departure.iata
-                - if flight.departure.iata_ru.present?
-                  %departureRu= flight.departure.iata_ru
                 - if flight.departure_term.present?
                   %departureTerm= flight.departure_term
                 %departureDate= yandex_date(flight.departure_date)
                 %departureTime= yandex_time(flight.departure_time)
                 %arrival= flight.arrival.iata
-                - if flight.arrival.iata_ru.present?
-                  %arrivalRu= flight.arrival.iata_ru
                 - if flight.arrival_term.present?
                   %arrivalTerm= flight.arrival_term
                 %arrivalDate= yandex_date(flight.arrival_date)
