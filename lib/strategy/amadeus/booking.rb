@@ -86,12 +86,12 @@ module Strategy::Amadeus::Booking
         amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
 
 #        amadeus.pnr_transfer_ownership(:number => @order_form.pnr_number, :office_id => ::Amadeus::Session::TICKETING)
-      end
+      end.or_fail!
 
       # повторяем в случае прихода ремарок
       amadeus.pnr_commit_really_hard do
         amadeus.cmd("rp/#{::Amadeus::Session::TICKETING}/all")
-      end
+      end.or_fail!
 
       #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
       # FIXME вынести в контроллер

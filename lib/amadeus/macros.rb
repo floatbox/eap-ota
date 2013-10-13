@@ -49,21 +49,24 @@ module Amadeus
       pnr_add_multi_elements :pnr_action => :ER
     end
 
-    # сохраняет pnr!
+    # Выполняет блок и сохраняет PNR (оставляет PNR открытым в сессии).
+    # В случае однократного отказа сохранять PNR из-за одновременного изменения
+    # авиакомпаниями пробует сохранить еще ровно один раз!
+    # Возвращает pnr reply.
+    # Имеет смысл делать .or_fail! на случай невозможности сохранить и со второй попытки
     def pnr_commit_really_hard
       yield
       result = pnr_commit_and_retrieve
       # закоммитить такое не удастся. надо повторять
-      if result.error_message == "SIMULTANEOUS CHANGES TO PNR - USE WRA/RT TO PRINT OR IGNORE"
+      if result.error_message && result.error_message["SIMULTANEOUS CHANGES TO PNR - USE WRA/RT TO PRINT OR IGNORE"]
         #FIXME добавить логгинг
         pnr_ignore_and_retrieve
         yield
         result = pnr_commit_and_retrieve
       end
+      return result if result.success?
       # ER;ER трюк - двойной коммит для обхода ворнингов
-      unless result.success?
-        pnr_commit_and_retrieve
-      end
+      pnr_commit_and_retrieve
       # если и сейчас не вышло - не судьба!
     end
 
