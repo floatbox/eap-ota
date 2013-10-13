@@ -107,6 +107,7 @@ module Strategy::Amadeus::Tickets
 
       # даем доступы для наших офисов
       # TODO может, при создании брони сразу вбивать оба офиса
+      # TODO или заменить на full_access: у pnr_add_multi_elements
       amadeus.cmd("ES/G MOWR2233B-B, MOWR228FA-B")
 
       # дальше полные права на американский офис,
@@ -154,6 +155,8 @@ module Strategy::Amadeus::Tickets
       ## что такое @SF? какое-то форматирование?
       # amadeus.cmd("RM*MS98S*VCprocfe*TT11*TF<?SERV FEE AMOUNT@SF>*CM0*FPCHECK*pi")
 
+      # сейчас должно делаться add_multi_elements-ом
+      # amadeus.pnr_add_multi_elements received_from: true
       amadeus.cmd('RF WS')
 
       amadeus.pnr_commit_and_retrieve

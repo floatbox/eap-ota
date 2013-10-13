@@ -9,12 +9,17 @@ module Amadeus
       pnr_ignore
     end
 
-    # PNR, как он виден в системе
-    def pnr_raw(pnr_number)
+    # PNR, как он виден в системе. Без аргументов покажет текущий.
+    def pnr_raw(pnr_number='')
       cmd_full("RT#{pnr_number}", true) rescue $!.message
     ensure
       # временно не нужно - все равно сессию закрываем
       # pnr_ignore
+    end
+
+    # история текущего PNR, как она видна в системе.
+    def pnr_history_raw
+      cmd_full("RH/ALL", true) rescue $!.message
     end
 
     def ticket_raw(ticket_number)
@@ -109,10 +114,6 @@ module Amadeus
         amadeus.pnr_retrieve(:number => pnr_number)
         amadeus.doc_issuance_issue_ticket.or_fail!
       end
-    end
-
-    def give_permission_to_offices *office_ids
-      cmd("ES " + office_ids.map{|id| "#{id}-B"}.join(','))
     end
 
     def conversion_rate(from, to = 'RUB', date = Date.today)

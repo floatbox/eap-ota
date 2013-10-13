@@ -1,6 +1,8 @@
 # encoding: utf-8
 module Strategy::Amadeus::Booking
 
+  include CopyAttrs
+
   def create_booking
     ::Amadeus.booking do |amadeus|
       # FIXME могут ли остаться частичные резервирования сегментов, если одно из них не прошло?
@@ -17,7 +19,29 @@ module Strategy::Amadeus::Booking
       end
       # FIXME если отваливается здесь по таймауту, то мы не узнаем номер брони и не запишем в базу.
       # А она может быть сохраненная и с местами.
-      add_multi_elements = amadeus.pnr_add_multi_elements(@order_form)
+      add_multi_elements = amadeus.pnr_add_multi_elements(
+        collect_attrs( @order_form,
+          :people_count,
+          :email,
+          :phone,
+          :people,
+          :adults,
+          :children,
+          :infants,
+          :validating_carrier,
+          :agent_commission,
+          :tk_xl
+        ).merge(
+          archive: true,
+          received_from: true,
+          full_access: [::Amadeus::Session::BOOKING, ::Amadeus::Session::TICKETING],
+          remarks: 'INTERNET BOOKING',
+          form_of_payment: true,
+          our_contacts: true,
+          pnr_action: :ER
+        )
+      )
+
       unless add_multi_elements.success?
         if add_multi_elements.pnr_number
           logger.error "Strategy::Amadeus: номер брони есть, но возникла какая-то ошибка"

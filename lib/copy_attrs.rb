@@ -11,6 +11,13 @@ module CopyAttrs
     end
   end
 
+  # возвращает хэш атрибутов с заданным именем
+  def collect_attrs from, *attrs
+    Hash[ attrs.map { |attr|
+      [attr, from.send(attr)]
+    }]
+  end
+
   # суммирует атрибуты каждого элемента froms и копирует суммы в атрибуты to
   def sum_and_copy_attrs froms, to, opts={}, *attrs
     unless opts.is_a? Hash
