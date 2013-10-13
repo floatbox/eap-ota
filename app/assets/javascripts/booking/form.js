@@ -742,7 +742,7 @@ initExpiration: function() {
     this.controls.push(expiration, permanent);
 },
 togglePermanent: function() {
-    if (this.nationality.val() == 170) {
+    if (this.nationality.val() == 'RUS') {
         this.permanent.set(true);
         this.expiration.apply();
     }

@@ -7,7 +7,7 @@ describe Person do
      "birthday(1i)"=>"1984",
      "birthday(2i)"=>"06",
      "birthday(3i)"=>"16",
-     "nationality_id"=>"170",
+     "nationality_code"=>"RUS",
      #"bonuscard_type"=>"[FILTERED]",
      #"bonuscard_number"=>"[FILTERED]",
      "document_expiration_date(1i)"=>"2014",
