@@ -1,6 +1,30 @@
 # encoding: utf-8
 module BookingHelper
 
+  NEAR_ABROAD_ISO = %W[ AZE ARM BLR GEO KAZ KGZ LVA LTU MDA TJK TKM UZB UKR EST ]
+
+  def options_for_nationality_select
+    # FIXME заменить на pluck в четвертых рельсах?
+    nationalities = Country.select([:name_en, :name_ru, :alpha3]).all.map do |c|
+      [dict(c), c.alpha3]
+    end.sort
+
+    nationality_groups = nationalities.group_by do |name, alpha3|
+      case alpha3
+      when 'RUS';            :default
+      when *NEAR_ABROAD_ISO; :near_abroad
+      else                   :rest
+      end
+    end
+
+    separator = '&mdash;&mdash;&mdash;&mdash;'.html_safe
+
+    [ ['',         nationality_groups[:default]],
+      [ separator, nationality_groups[:near_abroad]],
+      [ separator, nationality_groups[:rest]]
+    ]
+  end
+
   def uniq_cities segments
     (([segments.first.departure.city.case_to] + segments.map{|s| s.arrival.city.case_to}).uniq)[1..-1]
   end

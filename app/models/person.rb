@@ -4,7 +4,9 @@ class Person
   field :first_name, :type => String
   field :last_name, :type => String
   field :sex, :type => String
+  # FIXME убрать где-нибудь в ноябре
   field :nationality_id, :type => Integer
+  field :nationality_code, :type => String
   field :birthday, :type => Date
   field :document_expiration_date, :type => Date
   field :passport, :type => String
@@ -17,7 +19,7 @@ class Person
 
   attr_accessor :passenger_ref, :tickets, :associated_infant
 
-  validates_presence_of :first_name, :last_name, :sex, :nationality_id, :birthday, :passport
+  validates_presence_of :first_name, :last_name, :sex, :nationality, :birthday, :passport
   validates_presence_of :document_expiration_date, :unless => :document_noexpiration
   # FIXME WRONG! фамилии через дефис? два имени? сокращения?
   validates_format_of :first_name, :with => /^[a-zA-Z-]*$/, :message => "Некорректное имя"
@@ -131,7 +133,11 @@ class Person
   end
 
   def nationality
-    Country.find_by_id(nationality_id) if nationality_id
+    if nationality_id
+      Country.find_by_id(nationality_id)
+    elsif nationality_code
+      Country.find_by_alpha3(nationality_code)
+    end
   end
 end
 

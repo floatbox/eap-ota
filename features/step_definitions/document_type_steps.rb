@@ -7,7 +7,7 @@ end
 end
 
 Пусть /^гражданство "([^"]*)"$/ do |nationality|
-  @person.nationality_id = Country.find_by_alpha2(nationality).id
+  @person.nationality_code = Country.find_by_alpha2(nationality).alpha3
 end
 
 Пусть /^срок действия документа "([^"]*)"$/ do |document_expires|
