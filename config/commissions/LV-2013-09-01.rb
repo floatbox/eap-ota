@@ -28,7 +28,7 @@ important!
 ticketing_method "aviacenter"
 agent "9.7%"
 subagent "6.7%"
-discount "7.699999999999999%"
+discount "7.7%"
 agent_comment "9.7% от опубл. тарифов F, C, I, D."
 subagent_comment "6.7% от опубл. тарифов F, C, I, D."
 subclasses "FCID"
