@@ -24,7 +24,7 @@ class Customer < ActiveRecord::Base
     customer = find_or_initialize_by_email(email)
     customer.skip_confirmation_notification!
     ## TODO закоментить в продакшн до выкатки
-    customer.send_first_purchase_instructions if customer.not_registred?
+    # customer.send_first_purchase_instructions if customer.not_registred?
     customer.save unless customer.persisted?
     customer
   end
