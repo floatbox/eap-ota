@@ -32,7 +32,7 @@ class SubscriptionMailer < ActionMailer::Base
   end
 
   def buy_link
-    "https://eviterra.com/##{@notice[:query_key]}"
+    "https://eviterra.com/?partner=email##{@notice[:query_key]}"
   end
 
 end
