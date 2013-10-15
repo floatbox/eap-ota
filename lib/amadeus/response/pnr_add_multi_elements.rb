@@ -4,7 +4,7 @@ module Amadeus
     class PNRAddMultiElements < PNRRetrieve
 
       def error_text
-        (xpath('//r:messageErrorText/r:text').every.to_s + name_errors + srfoid_errors).map(&:strip).join(', ').squeeze
+        (xpath('//r:messageErrorText/r:text').every.to_s + name_errors + srfoid_errors).map(&:strip).join(', ').squeeze(' ')
       end
 
       def error_message
