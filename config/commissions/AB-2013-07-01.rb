@@ -3,7 +3,7 @@ carrier "AB", start_date: "2013-07-01"
 rule 1 do
 ticketing_method "downtown"
 agent "10%"
-subagent "6%"
+subagent "8%"
 discount "8%"
 comment "только собственные рейсы AB и HG"
 agent_comment "10% по всем направлениям через DTT"
