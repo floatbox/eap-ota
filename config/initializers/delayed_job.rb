@@ -11,3 +11,6 @@ Delayed::Worker.max_run_time = 5.minutes
 #Delayed::Worker.read_ahead = 10
 # делать задачи неасинхронно в тестах.
 #Delayed::Worker.delay_jobs = !Rails.env.test?
+
+# мониторинг
+Delayed::Worker.plugins << Monitoring::Plugins::DelayedJob::RiemannPlugin
