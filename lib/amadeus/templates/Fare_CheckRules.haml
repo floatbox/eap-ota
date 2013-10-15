@@ -4,7 +4,8 @@
 %itemNumber
   %itemNumberDetails
     %number= 1
-- sections.each do |section|
+- if sections.present?
   %fareRule
     %tarifFareRule
-      %ruleSectionId= section
+      - sections.each do |section|
+        %ruleSectionId= section
