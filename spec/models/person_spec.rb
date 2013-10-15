@@ -4,15 +4,15 @@ require 'spec_helper'
 describe Person do
   let(:adult_attributes) do
     {"document_noexpiration"=>"0",
-     "birthday(1i)"=>"1984",
-     "birthday(2i)"=>"06",
-     "birthday(3i)"=>"16",
+     "birthday_year"=>"1984",
+     "birthday_month"=>"06",
+     "birthday_day"=>"16",
      "nationality_code"=>"RUS",
      #"bonuscard_type"=>"[FILTERED]",
      #"bonuscard_number"=>"[FILTERED]",
-     "document_expiration_date(1i)"=>"2014",
-     "document_expiration_date(2i)"=>"09",
-     "document_expiration_date(3i)"=>"08",
+     "document_expiration_year"=>"2014",
+     "document_expiration_month"=>"09",
+     "document_expiration_day"=>"08",
      "sex"=>"m",
      "last_name"=>"IVASHKIN",
      "bonus_present"=>"0",
@@ -23,7 +23,7 @@ describe Person do
   subject { Person.new(adult_attributes).tap(&:valid?) }
 
   its(:birthday) {should == Date.new(1984, 6, 16)}
-  its(:document_expiration_date) {should == Date.new(2014, 9, 8)}
+  its(:document_expiration) {should == Date.new(2014, 9, 8)}
 
   describe '#too_long_names?' do
     subject do

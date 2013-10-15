@@ -18,14 +18,14 @@ describe InsuranceHelper do
         :first_name => 'Grown',
         :last_name => 'Up',
         :birthday => Date.today - 39.years,
-        :document_expiration_date => Date.today + 1.year,
+        :document_expiration => Date.today + 1.year,
         :passport => '123999343',
         :sex => 'f'),
       Person.new(
         :first_name => 'Wanna',
         :last_name => 'Be',
         :birthday => Date.today - 2.years,
-        :document_expiration_date => Date.today + 1.year,
+        :document_expiration => Date.today + 1.year,
         :passport => '999999342',
         :sex => 'm') ]
     end

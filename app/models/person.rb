@@ -8,7 +8,7 @@ class Person
   field :nationality_id, :type => Integer
   field :nationality_code, :type => String
   field :birthday, :type => Date
-  field :document_expiration_date, :type => Date
+  field :document_expiration, :type => Date
   field :passport, :type => String
   field :document_noexpiration, :type => Boolean, :default => false
   field :bonus_present, :type => Boolean, :default => false
@@ -20,7 +20,7 @@ class Person
   attr_accessor :passenger_ref, :tickets, :associated_infant
 
   validates_presence_of :first_name, :last_name, :sex, :nationality, :birthday, :passport
-  validates_presence_of :document_expiration_date, :unless => :document_noexpiration
+  validates_presence_of :document_expiration, :unless => :document_noexpiration
   # FIXME WRONG! фамилии через дефис? два имени? сокращения?
   validates_format_of :first_name, :with => /^[a-zA-Z-]*$/, :message => "Некорректное имя"
   validates_format_of :last_name,  :with => /^[a-zA-Z-]*$/, :message => "Некорректная фамилия"
@@ -29,7 +29,7 @@ class Person
 
   # совместимость с "активрекордным" стилем
   before_validation :set_birthday
-  before_validation :set_document_expiration_date
+  before_validation :set_document_expiration, :unless => :document_noexpiration
   before_validation :clear_first_name_and_last_name
 
 
@@ -63,20 +63,26 @@ class Person
     last_name.gsub!(/[^\w]+/, '')
   end
 
+  # FIXME (1i) стиль параметров - временный. убрать позже
   def set_birthday
-    self.birthday ||=
-      (1..3).collect { |n| attributes["birthday(#{n}i)"] }.join('-')
+    self.birthday =
+      attributes["birthday"] ||
+      attributes["birthday(1i)"] && (1..3).collect { |n| attributes["birthday(#{n}i)"] }.join('-') ||
+      attributes["birthday_year"] && %W(year month day).collect { |n| attributes["birthday_#{n}"] }.join('-')
   end
 
-  def set_document_expiration_date
-    unless document_noexpiration
-      self.document_expiration_date ||=
-        (1..3).collect { |n| attributes["document_expiration_date(#{n}i)"] }.join('-')
-    end
+  # FIXME (1i) стиль параметров - временный. убрать позже
+  def set_document_expiration
+    # TODO можно будет убрать, если этот хук не дергать в OrderForm#validate_people
+    return if document_noexpiration
+    self.document_expiration =
+      attributes["document_expiration"] ||
+      attributes["document_expiration_date(1i)"] && (1..3).collect { |n| attributes["document_expiration_date(#{n}i)"] }.join('-') ||
+      attributes["document_expiration_year"] && %W(year month day).collect { |n| attributes["document_expiration_#{n}"] }.join('-')
   end
 
   def smart_document_expiration_date
-    document_noexpiration ? (Date.today + 18.months) : document_expiration_date
+    document_noexpiration ? (Date.today + 18.months) : document_expiration
   end
 
   def coded
