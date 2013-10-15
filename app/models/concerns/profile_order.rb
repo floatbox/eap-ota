@@ -5,7 +5,7 @@ module ProfileOrder
   extend ActiveSupport::Concern
 
   included do
-    scope :profile_orders, where("pnr_number != ''").where(:ticket_status => ['booked', 'ticketed']).order("created_at DESC")
+    scope :profile_orders, where(:source => 'amadeus').where("pnr_number != ''").where(:ticket_status => ['booked', 'ticketed']).order("created_at DESC")
   end
 
   def can_use? current_customer
@@ -13,16 +13,23 @@ module ProfileOrder
   end
 
   def profile_route
-    route.blank? ? tickets.first.route.gsub(/ \([A-Z0-9]{2}\)/, '') : route
+    if route.blank?
+      tickets.first ? tickets.first.route.gsub(/ \([A-Z0-9]{2}\)/, '') : ''
+     else
+       route
+     end
   end
 
   def profile_route_smart
     route_string = profile_route
+    return '-' if route_string.blank?
     rt = route_string.split(';').size.even?
     airports = []
     cities = []
     route_flights = route_string.gsub(/([A-Z]{3}); \1/, '\1').split('; ').map{|s| s.split(' - ')}
-    if rt && route_flights.size == 1 && route_flights.first == route_flights.first.reverse
+    if route_flights.first.size == 1
+      route_flights.first.first
+    elsif rt && route_flights.size == 1 && route_flights.first == route_flights.first.reverse
       rt_flight = [ route_flights.first.first, route_flights.first[route_flights.first.size / 2] ]
       rt_flight.each do |iata|
         cities << Airport[iata].city.name
@@ -45,10 +52,9 @@ module ProfileOrder
 
   def profile_status
     # FIXME некрасиво, переписать надо
-    return 'денежные средства заблокированы на карте' if payment_type == 'card' && payment_status == 'blocked'
-    return 'денежные средства списаны с карты' if payment_type == 'card' && payment_status == 'charged'
-    return 'оплачен' if ['cash','invoice'].include?(payment_type) && payment_status == 'charged'
-    return 'оплачен' if payment_type == 'card' && ticket_status == 'ticketed'
+    return 'заблокировано на карте' if payment_type == 'card' && payment_status == 'blocked'
+    return 'оплачено' if payment_type == 'card' && (payment_status == 'charged' || ticket_status == 'ticketed')
+    return 'оплачено' if ['cash','invoice'].include?(payment_type) && payment_status == 'charged'
     return 'ожидает оплаты' if payment_status == 'pending'
     return 'ожидает оплаты'
   end
@@ -62,6 +68,7 @@ module ProfileOrder
   end
 
   def profile_people
+    return [] if full_info.blank?
     full_info.split("\n").collect do |t|
       data = t.split('/')
       {
@@ -72,7 +79,7 @@ module ProfileOrder
   end
 
   def profile_flights
-    sold_tickets.first.flights.presence
+    sold_tickets.present? ? sold_tickets.first.flights : []
   end
 
   def profile_booking_classes
@@ -100,9 +107,21 @@ module ProfileOrder
     end
   end
 
+  def profile_exchanged_tickets
+    tickets.where(:kind=>'ticket', :status =>'exchanged')
+  end
+
+  def profile_exchanged_tickets_numbers
+    profile_exchanged_tickets.collect {|t| t.number_with_code}
+  end
+
   def profile_ticket_parents
     ids = tickets.pluck(:parent_id).compact
     !ids.empty? ? '(' + ids.compact.join(',') + ')' : nil
+  end
+
+  def profile_departure_date
+      profile_flights.present? ? profile_flights.first.dept_date : departure_date
   end
 
   def profile_arrival_date
@@ -111,6 +130,10 @@ module ProfileOrder
 
   def profile_arrival_in_future?
     profile_arrival_date && profile_arrival_date > DateTime.now
+  end
+
+  def profile_correct_pnr?
+    !old_downtown_booking
   end
 
   def profile_active?

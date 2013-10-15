@@ -5,6 +5,7 @@ class ProfileController < ApplicationController
 
   def index
     @orders = current_customer.orders.profile_orders
+    @exchanged_tickets_numbers = current_customer.orders.profile_orders.collect {|o| o.profile_exchanged_tickets_numbers}.flatten || []
   end
 
   # FIXME обязательно убрать этот метод при выкладке на прод
@@ -12,6 +13,7 @@ class ProfileController < ApplicationController
     if admin_user
       current_customer = Customer.find(params[:id])
       @orders = current_customer.orders.profile_orders
+      @exchanged_tickets_numbers = current_customer.orders.profile_orders.collect {|o| o.profile_exchanged_tickets_numbers}.flatten || []
       render :index, :locals => {:current_customer => current_customer}
     else
       redirect_to :profile

@@ -53,8 +53,10 @@ en:
     mailer:
       confirmation_instructions:
         subject: 'Confirmation instructions'
-      registration_instructions:
-        subject: 'Registration instructions'
+      first_purchase_instructions:
+        subject: 'Confirmation instructions'
+      invite_instructions:
+        subject: 'Confirmation instructions'
       reset_password_instructions:
         subject: 'Reset password instructions'
       unlock_instructions:

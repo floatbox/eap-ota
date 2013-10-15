@@ -76,8 +76,8 @@ gem 'newrelic_rpm'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
+gem "devise", "~> 2.2.6"
 gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
-gem "devise", "~> 2.2.4"
 gem 'sendgrid'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'

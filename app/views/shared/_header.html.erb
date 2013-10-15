@@ -127,9 +127,8 @@ I18n.locale = '<%= I18n.locale %>';
             </a>
         </div>
         <% end %>
+        <%= render "profile/popup" if admin_user %>
     </div>
-
-    <%= render "profile/popup" if admin_user %>
 
     <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
     <div class="ph-social">

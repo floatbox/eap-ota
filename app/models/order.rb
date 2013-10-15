@@ -144,8 +144,8 @@ class Order < ActiveRecord::Base
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
   before_save :set_prices
-  before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
-  after_save :create_order_notice
+  before_create :generate_code, :set_payment_status, :set_email_status
+  after_save :create_order_notice, :set_customer
 
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
@@ -470,6 +470,11 @@ class Order < ActiveRecord::Base
     [price_fare, price_tax]
   end
 
+  def first_email
+    email.strip.split(/[,; ]+/).first.downcase
+  end
+
+
   # считывание offline брони из GDS
   ######################################
   extend CastingAccessors
@@ -642,11 +647,9 @@ class Order < ActiveRecord::Base
   end
 
   def set_customer
-    if !email.blank?
-      self.customer = Customer.find_or_initialize_by_email(email)
-      # TODO этот вызов надо будет убрать при запуске ЛК
-      customer.skip_confirmation_notification!
-      customer.save unless customer.persisted?
+    if (customer && first_email != customer.email) || (!customer && !first_email.blank?)
+      self.customer = Customer.create_from_order(first_email)
+      save
     end
   end
 
