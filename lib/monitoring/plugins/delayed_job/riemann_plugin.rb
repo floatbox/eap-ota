@@ -10,7 +10,7 @@ module Monitoring::Plugins::DelayedJob
           @attributes['handler'] =~ /\/object:(\w+)/
           klass = $1
           Monitoring.gauge(
-            service: :"jobs_startup_time_#{klass.downcase}",
+            service: "jobs.startup.time.#{klass.downcase}",
             metric: delay_time
           )
           Rails.logger.info "#{klass} started! Waited for #{delay_time}"
