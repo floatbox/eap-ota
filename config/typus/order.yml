@@ -209,5 +209,5 @@ Order:
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
   filters:  created_at, source, payment_status, ticket_status, payment_type, has_refunds, partner
-  relationships: payments, tickets, order_comments, notifications
+  relationships: payments, tickets, order_comments, notifications, fare_rules
   application: Orders, 1

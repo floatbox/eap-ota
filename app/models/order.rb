@@ -120,6 +120,7 @@ class Order < ActiveRecord::Base
   has_many :secured_payments, conditions: { status: %W[ blocked charged processing_charge ]}, class_name: 'Payment'
   belongs_to :customer
   has_and_belongs_to_many :stored_flights
+  has_many :fare_rules
 
   # не_рефанды
   def last_payment
@@ -380,9 +381,18 @@ class Order < ActiveRecord::Base
 
       #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
       tickets.reload
+      load_fare_rules
       true
     else
       false
+    end
+  end
+
+  def load_fare_rules
+    strategy.fare_rule_hashes.each do |rule_hash|
+      if fare_rules.where(rule_hash).blank?
+        fare_rules.create(rule_hash)
+      end
     end
   end
 

@@ -42,6 +42,14 @@ class Strategy::Amadeus < Strategy::Base
     end
   end
 
+  def fare_rule_hashes
+    ::Amadeus.booking do |amadeus|
+      amadeus.pnr_retrieve(number: @order.pnr_number)
+      amadeus.fare_price_pnr_with_booking_class(request_options: ['NOP'], unifares: false)
+      amadeus.fare_check_rules(sections: []).rule_hashes
+    end
+  end
+
   def raw_ticket
     case office = @ticket.office_id
     when 'MOWR2233B', 'MOWR228FA'

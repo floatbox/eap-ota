@@ -242,3 +242,10 @@ Version:
   order_by: -id
   filters: created_at, item_type, event, whodunnit
   application: Misc, 2
+
+FareRule:
+  fields:
+    default: carrier, fare_base, from_iata, to_iata, passenger_type
+    list: carrier, fare_base, from_iata, to_iata, passenger_type
+    show: carrier, fare_base, from_iata, to_iata, passenger_type, order
+  application: Misc, 2

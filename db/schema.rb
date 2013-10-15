@@ -237,6 +237,20 @@ ActiveRecord::Schema.define(:version => 20131003132118) do
     t.integer  "hot_offers_counter", :default => 0
   end
 
+  create_table "fare_rules", :force => true do |t|
+    t.string   "carrier"
+    t.string   "fare_base"
+    t.string   "to_iata"
+    t.string   "from_iata"
+    t.string   "passenger_type"
+    t.text     "rule_text"
+    t.integer  "order_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "fare_rules", ["order_id"], :name => "index_fare_rules_on_order_id"
+
   create_table "flight_groups", :force => true do |t|
     t.text     "code"
     t.datetime "created_at"
