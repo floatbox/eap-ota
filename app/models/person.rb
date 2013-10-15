@@ -87,7 +87,7 @@ class Person
 
   def coded
     res = "#{first_name}/#{last_name}/#{sex}/#{nationality.alpha3}/#{birthday.strftime('%d%b%y').upcase}/#{passport}/"
-    res += "expires:#{document_expiration_date.strftime('%d%b%y').upcase}/" unless document_noexpiration
+    res += "expires:#{document_expiration.strftime('%d%b%y').upcase}/" unless document_noexpiration
     res += "bonus: #{bonuscard_type}#{bonuscard_number}/" if bonus_present
     res += "child" if child
     res += "infant" if infant
