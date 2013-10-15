@@ -305,12 +305,12 @@ def self.fill_in_morpher_fields(klass, first_id = 0)
   ## Набор дата-миграций для приведения в порядок поля email в Order и Customer
   # 1. чистим поле email в ордере
   def self.trim_orders_email
-    Order.update_all('email = TRIM(email)', 'email != TRIM(email)', :limit => 10)
+    Order.update_all('email = TRIM(email)', 'email != TRIM(email)')
   end
 
   # 2. меняем всем разделители нескольких email на запятые
   def self.fix_orders_email_delim
-    Order.update_all('email = REPLACE(email, ";", ",")', 'INSTR(orders.email, ";")', :limit => 10)
+    Order.update_all('email = REPLACE(email, ";", ",")', 'INSTR(orders.email, ";")')
   end
 
   # 3. перепривязываем ордер к кастомеру по первому email в поле, если он в ордере вдруг изменился
@@ -331,7 +331,7 @@ def self.fill_in_morpher_fields(klass, first_id = 0)
 
   #5. Переводим email всех кастомеров в нижний регистр
   def self.delete_customers_without_orders
-    Customer.without_orders.limit(100).each do |customer|
+    Customer.without_orders.limit(200).each do |customer|
       customer.delete
     end
   end
