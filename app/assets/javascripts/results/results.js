@@ -108,7 +108,7 @@ load: function() {
         data.restore_results = true;
     }
     this.getPriceTemplate();
-    this.all.load('/pricer_/', data, 150000);
+    this.all.load('/pricer/', data, 150000);
     this.matrix.load('/calendar/', data, 75000);
     page.showData(this.data);
     this.data.fresh = false;
@@ -164,6 +164,7 @@ processCollections: function() {
     if (this.all.offers.length || this.matrix.offer.variants.length) {
         if (this.all.offers.length) {
             this.content.tabs.show();
+            this.matrix.content.find('.rm-notice').hide();
             var tab = page.location.offer;
             if (tab && results[tab] && !results[tab].control.hasClass('rt-disabled')) {
                 this.content.select(tab);
@@ -171,6 +172,7 @@ processCollections: function() {
                 this.content.selectFirst();
             }
         } else {
+            this.matrix.content.find('.rm-notice').show();
             this.content.tabs.hide();
             this.content.select('matrix');        
             this.filters.hide();
@@ -182,8 +184,6 @@ processCollections: function() {
                 that.slide();
             }
         }, 30);
-        
-        
         var human = this.content.el.find('.r-human').html();
         if (human != this.data.options.human) {
             this.data.options.human = human;
