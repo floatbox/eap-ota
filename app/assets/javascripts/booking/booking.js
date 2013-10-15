@@ -234,7 +234,7 @@ init: function() {
     });
     this.el.find('.bffg-content').each(function() {
         var content = $(this);
-        content.html(content.html().replace(/\n/gm, '<br>'));
+        content.html('<p>' + content.html().replace(/\n/gm, '</p><p>') + '</p>');
     });
     booking.el.find('.bffd-farerules').click(function(event) {
         that.show();
