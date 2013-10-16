@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
-discount "3.5%"
+discount "4%"
 agent_comment "С 01.02.2011г. 5% от всех опубл.и конфиденциальных тарифов на международные рейсы TG"
 subagent_comment "С 01.02.2011г. 3% от опубл. и конфиде.тарифов на международные рейсы TG"
 international

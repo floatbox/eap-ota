@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "5.5%"
+discount "6%"
 agent_comment "7% от опубл. тарифов на собств. рейсы ET"
 subagent_comment "5% от опубл. тарифов на собств. рейсы ET"
 example "svocdg"
@@ -14,7 +14,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "4%"
+discount "4.5%"
 agent_comment "5 % от опубл. тарифов на рейсы Interline с участком ET"
 subagent_comment "3,5 % от опубл. тарифов на рейсы Interline с участком ET"
 interline :yes
