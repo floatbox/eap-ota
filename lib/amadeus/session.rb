@@ -11,7 +11,8 @@ module Amadeus
   end
 
   cattr_accessor :pool do
-    Amadeus::Session::MongoStore
+    Amadeus::Session::RedisStore
+    #Amadeus::Session::MongoStore
     #Amadeus::Session::ARStore
   end
 
@@ -19,7 +20,7 @@ module Amadeus
     Conf.amadeus.default_office
   end
 
-  INACTIVITY_TIMEOUT = 10*60
+  INACTIVITY_TIMEOUT = 10.minutes
   MAX_SESSIONS = 10
 
   class << self
