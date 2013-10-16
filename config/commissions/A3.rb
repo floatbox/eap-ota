@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "3.5%"
+discount "5%"
 agent_comment " 7% для тарифов Экономического класса"
 subagent_comment "5% для тарифов Эконом класса"
 international
@@ -16,7 +16,7 @@ important!
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
-discount "4.9%"
+discount "7%"
 agent_comment "9% для тарифов Бизнес класса"
 subagent_comment "7% для тарифов Бизнес класса"
 classes :business
@@ -28,6 +28,7 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
+discount "5"
 consolidator "2%"
 agent_comment "Внутренние перелеты: 1% для тарифов Экономического и Бизнес классов"
 subagent_comment "5 руб. с билета для тарифов Эконом и Бизнес классов"
