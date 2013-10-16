@@ -4,6 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
+discount "4.9%"
 agent_comment "MU междунар или регион-ные* рейсы Бизнес класс, вылет из Москвы – 9%"
 subagent_comment "MU междунар или регион-ные* рейсы Бизнес класс, вылет из Москвы – 7%"
 classes :business
@@ -19,6 +20,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
+discount "3.5%"
 agent_comment "MU междунар или регион-ные* рейсы Экономический  класс – 7%"
 subagent_comment "MU междунар или регион-ные* рейсы Экономический класс – 5%"
 classes :economy
@@ -32,6 +34,7 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
+discount "3.5%"
 agent_comment "MU междунар или регион-ные* рейсы Бизнес + Эконом класс – 7%"
 subagent_comment "MU междунар или регион-ные* рейсы Бизнес + Эконом класс – 5%"
 classes :economy, :business
@@ -43,6 +46,7 @@ rule 4 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
+discount "2.1%"
 agent_comment "MU междунар или регион-ные* рейсы + рейсы Других авиакомпаний на одном бланке – 5%"
 subagent_comment "MU междунар или регион-ные* рейсы + рейсы Других авиакомпаний на одном бланке – 3%"
 interline :yes
