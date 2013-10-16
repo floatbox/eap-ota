@@ -1,6 +1,7 @@
 carrier "WY"
 
 rule 1 do
+no_commission "Не BSP"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -11,6 +12,7 @@ example "svocdg"
 end
 
 rule 2 do
+no_commission "Не BSP"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
