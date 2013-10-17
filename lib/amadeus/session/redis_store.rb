@@ -41,6 +41,8 @@ module Amadeus
 
     class RedisStore
 
+      KEY_BASE = "amadeus_sessions::#{Conf.amadeus.env}"
+
       attr_accessor :session
 
       delegate \
@@ -66,12 +68,12 @@ module Amadeus
 
       def self.free_by_office(office)
         Rails.logger.info __method__
-        "amadeus_sessions::#{Conf.amadeus.env}::free::#{office}"
+        "#{KEY_BASE}::free::#{office}"
       end
 
       def self.by_token(token)
         Rails.logger.info __method__
-        "amadeus_sessions::#{Conf.amadeus.env}::#{token}"
+        "#{KEY_BASE}::#{token}"
       end
 
       def self.push_free(token, seq, office)
@@ -118,20 +120,29 @@ module Amadeus
         redis.llen(free_by_office(office))
       end
 
-      def self.each_stale(office)
-        Rails.logger.info __method__
-        # по сути метод нужен только для совместимости с текущим интерфейсом
-        []
-      end
-
       def self.delete_all(args={})
         Rails.logger.info __method__
         args.assert_valid_keys :office
-        redis.find( default_condition.merge(args) ).remove_all
+        redis.keys("#{KEY_BASE}*").each do |key|
+          redis.pipelined do
+            redis.del(key)
+          end
+        end
       end
 
       def release
         RedisStore.push_free(session.token, session.seq, session.office)
+      end
+
+      # заглушки, нужны только для совместимости с текущим интерфейсом
+
+      def self.each_stale(office)
+        Rails.logger.info __method__
+        []
+      end
+
+      def self.default_condition
+        {}
       end
 
     end

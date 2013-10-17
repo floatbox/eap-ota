@@ -466,9 +466,6 @@ DEPENDENCIES
   paper_trail
   pry-rails
   rails (= 3.2.12)
-  rb-fchange
-  rb-fsevent
-  rb-inotify
   redis
   riemann-client
   rollbar

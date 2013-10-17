@@ -135,4 +135,11 @@ describe 'session pool' do
     it_should_behave_like :session_pool_store
   end
 
+  describe Amadeus::Session::RedisStore do
+    def create_free_session_record
+      create(:amadeus_session_redis_store, office: test_office)
+    end
+
+    it_should_behave_like :session_pool_store
+  end
 end
