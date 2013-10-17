@@ -3,7 +3,28 @@
     %reservation
       %controlNumber= number
 %pnrActions
-  %optionCode 10
-%cancelElements
-  %entryType I
+  - option_codes.each do |option_code|
+    %optionCode= option_code
 
+%cancelElements
+
+  - if itinerary
+    %entryType I
+
+  - else
+    %entryType E
+
+    - Array(element).each do |number|
+      %element
+        %identifier OT
+        %number= number
+
+    - Array(passenger).each do |number|
+      %element
+        %identifier PT
+        %number= number
+
+    - Array(segment).each do |number|
+      %element
+        %identifier ST
+        %number= number

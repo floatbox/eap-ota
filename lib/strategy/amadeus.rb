@@ -18,7 +18,7 @@ class Strategy::Amadeus < Strategy::Base
   def cancel
     ::Amadeus.booking do |amadeus|
       logger.error "Strategy::Amadeus: canceling #{@order.pnr_number}"
-      @order.cancel! if amadeus.pnr_cancel(:number => @order.pnr_number).success?
+      @order.cancel! if amadeus.pnr_cancel_itinerary(:number => @order.pnr_number).success?
     end
   end
 

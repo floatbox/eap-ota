@@ -45,7 +45,7 @@ module Strategy::Amadeus::Booking
       unless add_multi_elements.success?
         if add_multi_elements.pnr_number
           logger.error "Strategy::Amadeus: номер брони есть, но возникла какая-то ошибка"
-          amadeus.pnr_cancel
+          amadeus.pnr_cancel_itinerary.or_fail!
         else
           logger.error "Strategy::Amadeus: Не получили номер брони"
           amadeus.pnr_ignore
@@ -92,7 +92,7 @@ module Strategy::Amadeus::Booking
         unless @order_form.price_with_payment_commission == new_rec.price_with_payment_commission
           logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@order_form.price_with_payment_commission} -> #{new_rec.price_with_payment_commission}"
           # не попытается ли сохранить бронь после выхода из блока?
-          amadeus.pnr_cancel
+          amadeus.pnr_cancel_itinerary.or_fail!
           @order_form.price_with_payment_commission = new_rec.price_with_payment_commission
           @order_form.recommendation = new_rec
           @order_form.update_in_cache
@@ -102,7 +102,7 @@ module Strategy::Amadeus::Booking
         if !lax && !TimeChecker.ok_to_sell(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
           logger.error "Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
-          amadeus.pnr_cancel
+          amadeus.pnr_cancel_itinerary.or_fail!
           return :failed
         end
 

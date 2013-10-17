@@ -99,7 +99,7 @@ module Amadeus
       # Внесение полетных сегментов. Сейчас не используется.
       attr_accessor :recommendation
 
-      def initialize(opts)
+      def initialize(*)
         # defaults
         # ...
         super

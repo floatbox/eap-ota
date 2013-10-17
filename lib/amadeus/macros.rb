@@ -54,6 +54,11 @@ module Amadeus
       pnr_add_multi_elements :pnr_action => :ER
     end
 
+    # Удаляет полетные сегменты и закрывает PNR.
+    def pnr_cancel_itinerary(opts={})
+      pnr_cancel opts.reverse_merge(itinerary: true, pnr_action: :ET)
+    end
+
     # Выполняет блок и сохраняет PNR (оставляет PNR открытым в сессии).
     # В случае однократного отказа сохранять PNR из-за одновременного изменения
     # авиакомпаниями пробует сохранить еще ровно один раз!
