@@ -17,7 +17,7 @@ rule 2 do
 ticketing_method "downtown"
 agent "5%"
 subagent "4.5%"
-discount "7.5%"
+discount "8.5%"
 agent_comment "правила для выписки авиакомпании SU в DTT"
 agent_comment "При вылете НЕ из России - все классы - агентская 5%, субагентская   4.5%, скидка 4%"
 subagent_comment "4.5%"

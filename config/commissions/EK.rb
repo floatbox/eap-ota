@@ -30,7 +30,7 @@ important!
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
-discount "0.5%"
+discount "3.5%"
 agent_comment "1 руб. с билета по опубл.тарифам Эконом класса на рейсы EK."
 subagent_comment "5 коп. с билета по опубл.тарифам Эконом класса на собств. рейсы EK."
 classes :economy
