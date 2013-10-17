@@ -4,7 +4,8 @@ class Recommendation
   include KeyValueInit
 
   attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rule_hashes,
-    :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date, :declared_price, :baggage_array
+    :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date, :declared_price, :baggage_array,
+    :fare_bases, :published_fare
 
   delegate :marketing_carriers, :marketing_carrier_iatas,
     :operating_carriers, :operating_carrier_iatas,

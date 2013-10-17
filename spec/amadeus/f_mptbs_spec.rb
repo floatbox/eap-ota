@@ -41,6 +41,8 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
         its(:validating_carrier_iata) { should == 'OS'}
         its(:cabins) { should == %W( M M M M ) }
         its(:booking_classes) { should == %W( T T T T ) }
+        its(:fare_bases) { should == %W( TSSRU7 TSSRU7 TSSRU7 TSSRU7 ) }
+        its(:published_fare) { should be_true }
 
         its(:price_fare) { should == 22480.0 }
         its(:price_tax) { should == 20656.0 }
@@ -134,6 +136,8 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
         its(:blank_count) { should == 1 }
         its(:cabins) { should == %W( M ) }
         its(:booking_classes) { should == %W( V ) }
+        its(:fare_bases) {should == %W( VRU )}
+        its(:published_fare) {should be_true}
 
         its(:price_fare) { should == 15000.0 }
         its(:price_tax) { should == 122.0 }
@@ -177,6 +181,18 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
           end
         end
       end
+    end
+  end
+
+  context 'with nego fare' do
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_with_nego_fare.xml')
+    end
+
+    describe "response" do
+      subject { response }
+
+      specify{subject.recommendations.to_a.any?{|r| !r.published_fare}.should be_true}
     end
   end
 
