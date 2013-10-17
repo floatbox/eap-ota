@@ -95,27 +95,33 @@ module Amadeus
   end
 
   def invoke_async_request request, &on_success
-    Rails.logger.info "Amadeus::Service: #{request.action} async queued"
+    ActiveSupport::Notifications.instrument( 'async_request.amadeus' ) do |async_payload|
 
-    callbacks = Proc.new do |deffered|
-      deffered.callback &on_success
-      deffered.errback do |err|
-        # TODO Amadeus::SoapError.wrap ошибку?
-        Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
-        err.backtrace.each do |str|
-          Rails.logger.error "ERROR: #{str}"
+      callbacks = Proc.new do |deffered|
+        deffered.callback &on_success
+        deffered.errback do |err|
+          # WTF: никогда не вызывается. Возможно, баг в multicurb-драйвере
         end
       end
-    end
 
-    async(callbacks) do |dispatcher|
-      dispatcher.request(request.action, invoke_opts(request)) do |body|
-        body.set_value request.soap_body, :raw => true
+      async(callbacks) do |dispatcher|
+        dispatcher.request(request.action, invoke_opts(request)) do |body|
+          body.set_value request.soap_body, :raw => true
+        end
+        dispatcher.response do |xml_response|
+          # FIXME сейчас будет активно врать про duration запроса. В четвертых рельсах
+          # есть instrumenter.start и finish, позволит замерять время адекватнее
+          ActiveSupport::Notifications.instrument( 'request.amadeus',
+            service: self,
+            request: request,
+            xml_response: xml_response
+          ) do |payload|
+            session.increment
+            payload[:response] = request.process_response(xml_response)
+          end
+        end
       end
-      dispatcher.response do |xml_response|
-        session.increment
-        request.process_response(xml_response)
-      end
+
     end
   end
 
