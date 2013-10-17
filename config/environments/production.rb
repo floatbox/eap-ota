@@ -25,7 +25,7 @@ Eviterra::Application.configure do
 
   # новая фича в rails 3.2. Возможные варианты - :uuid, :subdomain, :pid, :remote_ip
   # добавляет в лог указанные аттрибуты для каждого запроса
-  config.log_tags = [:uuid]
+  config.log_tags = [:uuid, :remote_ip]
 
   # Settings specified here will take precedence over those in config/application.rb
 
