@@ -325,15 +325,15 @@ def self.fill_in_morpher_fields(klass, first_id = 0)
   end
 
   # 4. удаляем кастомеров без единого ордера
-  def self.lowercase_customers_email
-    Customer.update_all('email = TRIM(LCASE(email))', 'BINARY LCASE(email) != email', :limit => 200)
-  end
-
-  #5. Переводим email всех кастомеров в нижний регистр
   def self.delete_customers_without_orders
     Customer.without_orders.limit(200).each do |customer|
       customer.delete
     end
+  end
+
+  #5. Переводим email всех кастомеров в нижний регистр
+  def self.lowercase_customers_email
+    Customer.update_all('email = TRIM(LCASE(email))', 'BINARY LCASE(email) != email', :limit => 200)
   end
 
   # Заполняем базу кастомеров по старым заказам

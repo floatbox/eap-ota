@@ -81,7 +81,7 @@ focusEmpty: function() {
     for (var i = 0, im = this.items.length; i < im; i++) {
         var item = this.items[i];
         if (!item.value && !item.field.prop('disabled')) {
-            item.field.select();
+            if (!search.overlayed) item.field.select();
             item.clonePrev();
             return item;
         }
@@ -368,7 +368,7 @@ clonePrev: function() {
 },
 focusNext: function() {
     if (this.next && !this.next.field.prop('disabled')) {
-        this.next.field.select();
+        if (!search.overlayed) this.next.field.select();
         this.next.clonePrev();
     } else {
         this.field.blur();

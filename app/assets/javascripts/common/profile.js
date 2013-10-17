@@ -56,11 +56,13 @@ show: function(id) {
     if (id === 'password') {
         $('#new-password-1').focus();
     }
+    search.overlayed = true;
 },
 hide: function() {
     this.opened.hide();
     this.fade.hide();    
     $w.off('click keydown', this._hide);
+    search.overlayed = false;
 },
 };
 
