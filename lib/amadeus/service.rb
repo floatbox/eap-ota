@@ -79,16 +79,19 @@ module Amadeus
 
   def invoke_request request
 
-    Rails.logger.info "Amadeus::Service: #{request.action} started"
+    ActiveSupport::Notifications.instrument( 'request.amadeus',
+      service: self,
+      request: request
+    ) do |payload|
+      payload[:xml_response] = invoke(request.action, invoke_opts(request)) do |body|
+        body.set_value request.soap_body, :raw => true
+      end
+      # FIXME среагировать на HTTP error
+      # FIXME или перенести в ensure, не забыв поправить Amadeus::LogSubscriber
+      session.increment if session
 
-    xml_response = invoke(request.action, invoke_opts(request)) do |body|
-      body.set_value request.soap_body, :raw => true
+      payload[:response] = request.process_response( payload[:xml_response] )
     end
-    # FIXME среагировать на HTTP error
-    session.increment if session
-    log_file(request.action, xml_response.to_xml) unless request.action =~ /Pricer/
-
-    request.process_response(xml_response)
   end
 
   def invoke_async_request request, &on_success

@@ -39,6 +39,10 @@ module Amadeus::Request
       true
     end
 
+    # дебажная информация для логов: краткое содержание запроса
+    def summary
+    end
+
     # response handling
     def process_response(*args)
       Amadeus::Response.for(action).new(*args)

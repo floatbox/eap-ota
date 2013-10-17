@@ -91,6 +91,9 @@ module Amadeus
         %W[AB UN HR B2 PS AZ CY LX KK OS KM SQ F7 ET 9W PG CI SW MU FJ WY].exclude? validating_carrier
       end
 
+      def summary
+        pnr_action.to_s if pnr_action != :NOP
+      end
     end
   end
 end

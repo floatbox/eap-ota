@@ -2,3 +2,5 @@
 require 'our/curl/log_subscriber'
 # логгинг в риман
 require 'our/curl/monitoring_log_subscriber'
+# лог Amadeus::Service
+require 'amadeus/log_subscriber'
