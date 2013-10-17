@@ -42,6 +42,10 @@ module Eviterra
 
     config.middleware.use "CodeStash::Middleware"
 
+    # X-Forwarded-For парсится слишком поздно, в логах светился ip балансера зачем-то.
+    config.middleware.delete "ActionDispatch::RemoteIp"
+    config.middleware.insert_before "Rails::Rack::Logger", "ActionDispatch::RemoteIp"
+
     config.generators do |g|
       g.orm :active_record
     end
