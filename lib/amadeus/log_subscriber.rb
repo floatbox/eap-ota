@@ -15,9 +15,9 @@ module Amadeus
 
       # FIXME сейчас предполагается, что сессия инкрементится до создания event.
       # это не верно в случае HTTP ошибок.
-      msg << "(#{session.token}|#{session.seq - 1}) " if session
       msg << "#{color(request.action, GREEN)} (#{event.duration.to_i}ms)"
-      msg << " request: #{color(request_summary, CYAN)}" if request_summary
+      msg << " (#{color(request_summary, CYAN)})" if request_summary
+      msg << " #{session.token}(#{session.seq - 1})" if session
       msg << " error: #{color(response.error_message.to_s, RED)}" if response && !response.success?
       msg << " exception: #{color(exception.to_s, RED, true)}" if exception
 
