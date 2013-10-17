@@ -8,7 +8,7 @@
 <% end %>
         <span class="pht-title">Личный кабинет</span>
         <span class="pht-tip phu-email"><%= current_customer.email.downcase %></span>
-        <span class="pht-tip phul-logout">Выйти</span>
+        <span class="pht-tip"><span class="phtt-link phul-logout">Выйти</span></span>
 <% if controller.controller_name == 'profile' %>
     </div>
 <% else %>
@@ -22,6 +22,7 @@
 <div class="ph-tab" id="user">
     <div class="pht-content phu-control">
         <span class="pht-title">Личный кабинет</span>
+        <span class="pht-tip"><span class="phtt-link">Войти</span></span>
     </div>
     <div class="phu-popup" id="phup-authorization">
         <div class="phu-stator">

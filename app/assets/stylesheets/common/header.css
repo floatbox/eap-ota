@@ -369,10 +369,6 @@ a.pht-content:hover .pht-title {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.phul-logout {
-    text-decoration: underline;
-    cursor: pointer;
-}
 .phu-logout {
     display: none;
 }
