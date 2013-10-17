@@ -13,12 +13,13 @@
 </div>
 <% end %>
 
-<% if @recommendations.present? %>
-<% data = @recommendations.filters_data %>
 <% human = [human_people(@search.adults, @search.children, @search.infants), t(@search.cabin, :scope => 'results.header.cabin', :default => '')] %>
 <% human.delete(''); %>
-<div class="r-average latent"><%= @average_price.round.to_i if @average_price %></div>
 <div class="r-human latent"><%= human.join(', ') %></div>
+
+<% if @recommendations.present? %>
+<% data = @recommendations.filters_data %>
+<div class="r-average latent"><%= @average_price.round.to_i if @average_price %></div>
 
 <div class="rf-data" id="rfg-time">
 <% data[:time].each_with_index do |times, i| %>

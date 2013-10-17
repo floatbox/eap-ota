@@ -33,6 +33,9 @@ init: function() {
     };
 },
 show: function(smooth) {
+    if (this.empty) {
+        return this.el.hide();
+    }
     if (smooth) {
         var el = this.el;
         el.css('overflow', 'hidden').height(12).show();
@@ -90,11 +93,15 @@ hideGroup: function() {
     }
 },
 update: function() {
+    this.empty = true;
     this.lists = [];
     for (var i = this.groups.length; i--;) {
         var group = this.groups[i];
         group.update();
         this.lists = this.lists.concat(group.lists);
+        if (group.columns !== 0) {
+            this.empty = false;
+        }
     }
     this.getVariants();
 },

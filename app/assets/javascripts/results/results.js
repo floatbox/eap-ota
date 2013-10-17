@@ -84,7 +84,7 @@ slide: function() {
     var that = this;
     this.message.el.hide();
     this.content.el.show();
-    this.filters.el.show();
+    this.filters.show();
     this.fixed.update();
     this.content.tabs.removeClass('rt-compact');
     if (this.content.tabs.height() > 50) {
@@ -161,12 +161,21 @@ processSubscription: function() {
 },
 processCollections: function() {
     var that = this;
-    if (this.all.offers.length) {
-        var tab = page.location.offer;
-        if (tab && results[tab] && !results[tab].control.hasClass('rt-disabled')) {
-            this.content.select(tab);
+    if (this.all.offers.length || this.matrix.offer.variants.length) {
+        if (this.all.offers.length) {
+            this.content.tabs.show();
+            this.matrix.content.find('.rm-notice').hide();
+            var tab = page.location.offer;
+            if (tab && results[tab] && !results[tab].control.hasClass('rt-disabled')) {
+                this.content.select(tab);
+            } else {
+                this.content.selectFirst();
+            }
         } else {
-            this.content.selectFirst();
+            this.matrix.content.find('.rm-notice').show();
+            this.content.tabs.hide();
+            this.content.select('matrix');        
+            this.filters.hide();
         }
         this.processSubscription();
         setTimeout(function() {
