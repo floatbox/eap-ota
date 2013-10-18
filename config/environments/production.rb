@@ -1,6 +1,11 @@
 # encoding: utf-8
 Eviterra::Application.configure do
 
+  config.after_initialize do
+    # тут можно понизить или повысить level у отдельных логгеров
+    # Moped.logger = ForwardLogging.new(Rails.logger, Logger::DEBUG)
+  end
+
   # # изменения в логгере: lumberjack + syslog
   # # закомменчено до проверки на staging
   # template = lambda do |entry| 
