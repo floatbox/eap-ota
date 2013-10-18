@@ -1,0 +1,16 @@
+<% few_rules = @order_form.recommendation.rules.length > 1 %>
+<% @order_form.recommendation.rules.each do |fare_rule| %>
+<div class="bff-group">
+    <% if @order_form.recommendation.source != 'sirena' %>
+        <div class="bffg-translate"></div>
+    <% end %>
+    <h5 class="bffg-title">
+    <% if few_rules %>
+        <%= t 'offer.details.segment', :from => dict(fare_rule.from, :from), :to => dict(fare_rule.to, :to) %>, <span style="text-transform: lowercase;"><%= t 'booking.farerules.fare' %></span> <%= fare_rule.fare_base %>
+    <% else %>
+        <%= t 'booking.farerules.fare' %> <%= fare_rule.fare_base %>
+    <% end %>
+    </h5>
+    <pre class="bffg-content"><%= raw(fare_rule.rule_text) %></pre>
+</div>
+<% end %>

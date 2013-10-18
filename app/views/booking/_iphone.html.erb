@@ -305,13 +305,5 @@
         <p class="bff-text"><%= raw t 'booking.farerules.service' %></p>
         <p class="bff-text"><%= raw t 'booking.farerules.cancellation' %></p>
     </div>
-    <% @order_form.recommendation.rules.each do |(airline, fare) ,rule| %>
-    <div class="bff-group">
-        <% if @order_form.recommendation.source != 'sirena' %>
-            <div class="bffg-translate"></div>
-        <% end %>
-        <h5 class="bffg-title"><%= t 'booking.farerules.fare' %> <%= fare %></h5>
-        <pre class="bffg-content"><%= raw(rule) %></pre>
-    </div>
-    <% end %>
+    <%= render :partial => 'rules' %>
 </div>
