@@ -39,6 +39,7 @@ class AutoTicketStuff
     !group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
     people.map{|p| [p.first_name, p.last_name]}.uniq.count == people.count or return 'есть 2 пассажира с совпадающими именем и фамилией'
     !people.any?(&:too_long_names?) or return 'слишком длинные имена пассажиров'
+    !unaccompanied_child? or return "не сопровождаемый ребенок до 18 лет"
     nil
   end
 
@@ -93,5 +94,12 @@ class AutoTicketStuff
       @other_order_pnrs = other_orders.every.pnr_number
     end
     return @other_order_pnrs.present?
+  end
+
+  def unaccompanied_child?
+    people.all?{|p| p.birthday > (recommendation.dept_date - 18.years)} &&
+      (([recommendation.validating_carrier_iata] +
+        recommendation.marketing_carrier_iatas +
+        recommendation.operating_carrier_iatas).uniq & ['KL', 'AF']).present?
   end
 end
