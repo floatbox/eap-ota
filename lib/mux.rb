@@ -63,8 +63,8 @@ class Mux
       amadeus.release
       amadeus_merge_and_cleanup(recommendations_ws + recommendations_ns)
     end
-  rescue
-    with_warning
+  rescue => e
+    with_warning unless e.message['select(): Interrupted system call']
     RecommendationSet.new
   end
 
