@@ -192,6 +192,8 @@ class Mux
   def async_perform
     # hydra.run
     multi.perform
+  rescue => e
+    raise unless e.message['select(): Interrupted system call']
   end
 
   def hydra
