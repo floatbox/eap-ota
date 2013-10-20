@@ -4,6 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
+discount "1.5%"
 our_markup "80"
 consolidator "2%"
 agent_comment "1% от опубл. тарифов на собств. рейсы SW (В договоре Interline отдельно не прописан.)"

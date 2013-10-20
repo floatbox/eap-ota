@@ -4,6 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
+discount "1.5%"
 our_markup "80"
 agent_comment "1 руб. за билет, выписанный по опубл. тарифам, в случае перевозки с вылетом из стран СНГ;"
 agent_comment "1 руб. за билет,выписанный по опубл. тарифам,  в случае вылета вне стран СНГ;"

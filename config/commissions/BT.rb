@@ -4,6 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.5"
+discount "1.5%"
 our_markup "80"
 consolidator "2%"
 agent_comment "1 руб. с билета по всем опубл. тарифам на собств. рейсы BT и рейсы Interline с участком BT"
