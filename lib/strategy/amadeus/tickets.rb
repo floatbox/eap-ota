@@ -123,6 +123,7 @@ module Strategy::Amadeus::Tickets
 
       # пересоздаем маску
       # TODO проверить новый тариф и оборвать выписку, если он существенно отличается?
+      # unifares: точно false?
       pricing = amadeus.fare_price_pnr_with_booking_class(
         validating_carrier: @order.commission_carrier,
         unifares: false
@@ -133,17 +134,18 @@ module Strategy::Amadeus::Tickets
 
       # 12P для 12%, 5.50A для 5.50 USD
 
-      amadeus.cmd("RMCOM*** CLAIM #{ encode_downtown_commission(@order.commission_agent) }")
-      amadeus.cmd("RMCOM*** AGENT COM #{ encode_downtown_commission(@order.commission_subagent) }")
+      remarks = []
+      remarks << "COM*** CLAIM " + encode_downtown_commission(@order.commission_agent)
+      remarks << "COM*** AGENT COM " + encode_downtown_commission(@order.commission_subagent)
 
       # amadeus.cmd("RM COM*** AGENT COM 0.00P")
       # если нужно не брать комиссию с детей или младенцев (зачем?)
       # RMCOM*** CLAIM 12P X/INF, CHD
 
       ## TKT DESIGNATOR IF REQUIRED
-      amadeus.cmd("RMCOM*** TKT DSGN #{ @order.commission_designator }") if @order.commission_designator.present?
+      remarks << "COM*** TKT DSGN " + @order.commission_designator if @order.commission_designator.present?
       ## TOUR CODE IF REQUIRED
-      amadeus.cmd("RMCOM*** FT #{ @order.commission_tour_code }") if @order.commission_tour_code.present?
+      remarks << "COM*** FT " + @order.commission_tour_code if @order.commission_tour_code.present?
       ## ENDORSEMENT IF ANY END IS REQUIRED (пока ни разу не понадобился)
       # RM COM*** END ...
 
@@ -155,11 +157,11 @@ module Strategy::Amadeus::Tickets
       ## что такое @SF? какое-то форматирование?
       # amadeus.cmd("RM*MS98S*VCprocfe*TT11*TF<?SERV FEE AMOUNT@SF>*CM0*FPCHECK*pi")
 
-      # сейчас должно делаться add_multi_elements-ом
-      # amadeus.pnr_add_multi_elements received_from: true
-      amadeus.cmd('RF WS')
-
-      amadeus.pnr_commit_and_retrieve
+      amadeus.pnr_add_multi_elements(
+        received_from: true,
+        remarks: remarks,
+        pnr_action: :ER
+      ).or_fail!
 
       # отправить в очередь на выписку
       # вроде бы как, это закрывает текущий PNR
