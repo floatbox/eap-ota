@@ -25,7 +25,7 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
-discount "1.5%"
+discount "2.5%"
 consolidator "2%"
 agent_comment "0 % от опубл. тарифов на рейсы Interline без участка ET"
 subagent_comment "0 % от опубл. тарифов на рейсы Interline без участка ET"

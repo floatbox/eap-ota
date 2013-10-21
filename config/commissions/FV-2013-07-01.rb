@@ -16,7 +16,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
-discount "1.5%"
+discount "2.5%"
 agent_comment "1 euro  (5 руб+2% сбор АЦ) (0%) с билета на рейсы Interline без участка FV."
 subagent_comment "5 рублей"
 interline :absent

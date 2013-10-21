@@ -14,7 +14,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
-discount "1.5%"
+discount "2.5%"
 consolidator "2%"
 agent_comment "С 15.02.2011г. 0% от опубл. тарифов на рейсы Interline"
 subagent_comment "С 21.02.2011г. 0% от опубл. тарифов на рейсы Interline"

@@ -93,7 +93,7 @@ rule 8 do
 ticketing_method "aviacenter"
 agent "3%"
 subagent "1%"
-discount "1.5%"
+discount "2.5%"
 agent_comment "3% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
 subagent_comment "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "GU"

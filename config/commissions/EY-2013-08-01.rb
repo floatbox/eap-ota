@@ -39,7 +39,7 @@ important!
 ticketing_method "aviacenter"
 agent "3%"
 subagent "1%"
-discount "1.5%"
+discount "2.5%"
 agent_comment "снова EY по U классу нам дают комиссию как веб-тарифа, 3%"
 subagent_comment "1%"
 subclasses "U"
@@ -49,7 +49,7 @@ rule 5 do
 not_implemented "не умеем распознавать веб-тарифы"
 agent "3%"
 subagent "1%"
-discount "1.5%"
+discount "2.5%"
 agent_comment "3% от тарифа за продажи авиаперевозок на рейсы EY по веб-тарифам."
 subagent_comment "1%"
 end
