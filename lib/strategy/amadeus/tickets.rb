@@ -84,10 +84,9 @@ module Strategy::Amadeus::Tickets
 
   def add_to_visa_queue
     # отправляем в очередь для получения данных о визе в америку
-    ::Amadeus.ticketing do |amadeus|
-      if @order.needs_visa_notification?
-        amadeus.pnr_retrieve(:number => @order.pnr_number).or_fail!
-        amadeus.cmd('QE8C21') if @order.needs_visa_notification?
+    if @order.needs_visa_notification?
+      ::Amadeus.ticketing do |amadeus|
+        amadeus.queue_place_pnr(number: @order.pnr_number, queue: 8, category: 21).or_fail!
       end
     end
   end
@@ -158,15 +157,11 @@ module Strategy::Amadeus::Tickets
       amadeus.pnr_add_multi_elements(
         received_from: true,
         remarks: remarks,
-        pnr_action: :ER
+        pnr_action: :ET
       ).or_fail!
 
       # отправить в очередь на выписку
-      # вроде бы как, это закрывает текущий PNR
-      # TODO заменить вызовом queue_place_pnr --->
-      # amadeus.queue_place_pnr(:office_id => 'NYC1S211F', :queue => '28', :category => '30', :number => @order.pnr_number)
-      # ^можно вызывать в "чистой" сессии
-      amadeus.cmd('QE/NYC1S211F/28C30')
+      amadeus.queue_place_pnr(number: @order.pnr_number, office_id: 'NYC1S211F', queue: 28, category: 30).or_fail!
     end
   end
 
