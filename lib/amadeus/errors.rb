@@ -15,8 +15,10 @@ module Amadeus
         SoapSyntaxError
       when 31, 91, 284, 1931
         SoapApplicationError
-      when 42, 93, 357, 2162
+      when 42, 357, 2162
         SoapNetworkError
+      when 93
+        SoapConversationError
       else
         SoapError
       end.new(handsoap_error.reason)
@@ -33,4 +35,8 @@ module Amadeus
 
   # проблемы с сетью и сессиями
   class SoapNetworkError < SoapError; end
+
+  # Счетчик в сессионном заголовке запроса не совпадает с ожидаемым.
+  # Случается, если предыдущий запрос не дошел до Амадеуса, а мы инкрементнули счетчик.
+  class SoapConversationError < SoapNetworkError; end
 end

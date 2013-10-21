@@ -31,7 +31,9 @@ describe Amadeus::SoapError do
         '42|Application|Too many opened conversations. Please close them and try again.',
         ' 42|Transport|Temporary network error:unable to reach targeted application',
         '357|Application|LINK DOWN',
-        '2162|Application|LINK DOWN - RETRY IN 2 MINUTES',
+        '2162|Application|LINK DOWN - RETRY IN 2 MINUTES'
+      ],
+      Amadeus::SoapConversationError => [
         # soap:Client
         ' 93|Session|Illogical conversation'
       ]
