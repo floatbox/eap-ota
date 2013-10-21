@@ -205,10 +205,16 @@ FactoryGirl.define do
     end
   end
 
-  factory :amadeus_session_redis_store, class: 'Amadeus::Session::ARStore' do
+  factory :amadeus_session_redis_store, class: 'Amadeus::Session::RedisStore' do
     token { generate(:amadeus_session_token) }
     seq 2
     office { 'TEST_DEFAULT_OFFICE' }
+
+    trait :booked do
+    end
+
+    trait :stale do
+    end
   end
 end
 

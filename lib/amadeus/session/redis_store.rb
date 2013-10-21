@@ -3,7 +3,7 @@
 module Amadeus
   class Session
 
-    class PseudoAR < Struct.new(:token, :seq, :office)
+    class PseudoSession < Struct.new(:token, :seq, :office)
 
       include RedisConnection
 
@@ -20,21 +20,30 @@ module Amadeus
       end
 
       def increment
-        Rails.logger.info "INCREMENT"
-        Rails.logger.info self
+        Rails.logger.info __method__
         Rails.logger.info "seq: #{seq}"
         self[:seq] += 1
       end
 
+      def release
+        Rails.logger.info __method__
+        Rails.logger.info "RELEASE 2"
+        RedisStore.push_free(token, seq, office)
+      end
+
       # заглушки для совместимости с текущим интерфейсом
+      attr_accessor :booked
+
       def booked?
+        !!booked
+      end
+
+      def stale?
         false
       end
 
-      def booked=(dontcare)
-      end
-
-      def release
+      def free?
+        true
       end
 
     end
@@ -52,18 +61,22 @@ module Amadeus
         :increment,
         :booked?, :booked=,
         :session_id, :session_id=,
+        :free?, :stale,
         to: :session
 
       extend RedisConnection
 
-      def initialize(args)
+      def initialize(args = {})
         Rails.logger.info "args: #{args}"
-        token, seq = args[:session_id].split('|')
-        seq = seq.to_i
-        office = args[:office]
-        @session = PseudoAR.new(token, seq, office)
-        Rails.logger.info "@session: #{@session}"
-        super()
+        if session_id = args[:session_id]
+          token_, seq_num = args[:session_id].split('|')
+          seq_num = seq_num.to_i
+        else
+          token_ = args[:token]
+          seq_num = args[:seq]
+        end
+        office_id = args[:office]
+        @session = PseudoSession.new(token_, seq_num, office_id)
       end
 
       def self.free_by_office(office)
@@ -93,15 +106,21 @@ module Amadeus
         Rails.logger.info __method__
         free_tokens = free_by_office(office)
 
-        return unless redis.llen(free_tokens).nonzero?
+        unless redis.llen(free_tokens).nonzero?
+          Rails.logger.info "returning nil!"
+          return
+        end
 
         token = redis.rpop(free_tokens)
+        Rails.logger.info "token: #{token}"
         # если сессия не заэкспайрена - возвращаем,
         # иначе - берем следующую
         key = by_token(token)
+        Rails.logger.info "key: #{key}"
         if seq = redis.get(key)
+          Rails.logger.info "seq: #{seq}"
           redis.expire(key, Amadeus::Session::INACTIVITY_TIMEOUT)
-          PseudoAR.new(token, seq.to_i, office)
+          PseudoSession.new(token, seq.to_i, office)
         else
           Rails.logger.info "RETRY"
           pop_free(office)
@@ -130,8 +149,13 @@ module Amadeus
         end
       end
 
+      # то тут, то там
+      # FIXME: надо этот метод убирать из api сессий
+      # и вызывать только на самой сессии, т.е. PseudoSession
       def release
-        RedisStore.push_free(session.token, session.seq, session.office)
+        Rails.logger.info __method__
+        Rails.logger.info "RELEASE 1"
+        session.release
       end
 
       # заглушки, нужны только для совместимости с текущим интерфейсом
@@ -143,6 +167,17 @@ module Amadeus
 
       def self.default_condition
         {}
+      end
+
+      # для тестов
+      def save!
+      end
+
+      # нужен только для housekeep => не нужен для RedisStore вообще
+      def destroy
+      end
+
+      def book
       end
 
     end
