@@ -95,25 +95,23 @@ module Strategy::Amadeus::Tickets
   def downtown_ticket
     ::Amadeus.ticketing do |amadeus|
 
+      # заодно открывает PNR
+      pnr_resp = amadeus.pnr_retrieve number: @order.pnr_number
+
       # удаляем старый FM
       # TODO может, не добавлять FM при бронировании, а добавлять при выписке уже?
-
-      # заодно открывает PNR
-      pnr_text = amadeus.pnr_raw( @order.pnr_number )
-
-      if m = pnr_text.match(/^ \s* (\d+) \s+ FM /x)
-        amadeus.cmd("XE #{m[1]}")
+      if fm_ref = pnr_resp.element_refs('FM').first
+        amadeus.pnr_cancel( element: fm_ref ).or_fail!
       end
 
       # даем доступы для наших офисов
       # TODO может, при создании брони сразу вбивать оба офиса
-      # TODO или заменить на full_access: у pnr_add_multi_elements
-      amadeus.cmd("ES/G MOWR2233B-B, MOWR228FA-B")
+      amadeus.pnr_add_multi_elements( full_access: ['MOWR2233B', 'MOWR228FA']).or_fail!
 
       # дальше полные права на американский офис,
       amadeus.cmd("RP/NYC1S21HX/ALL")
 
-      amadeus.pnr_commit
+      amadeus.pnr_commit.or_fail!
     end
 
     # открываем в американском офисе.

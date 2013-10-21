@@ -3,10 +3,13 @@ module Amadeus
   module Response
     class PNRRetrieve < Amadeus::Response::Base
 
-      # FIXME может быть не одно на бронирование?
-      # проверять что принадлежит амадеусу (1A)
+      # номера для PNR_Cancel
+      def element_refs(element_name)
+        xpath("//r:elementManagementData[r:segmentName='#{element_name}']/r:reference/r:number").every.to_s
+      end
+
       def pnr_number
-        xpath('//r:controlNumber').to_s
+        xpath('//r:reservationInfo/r:reservation/r:controlNumber').to_s
       end
 
       def flights

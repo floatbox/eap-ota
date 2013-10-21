@@ -134,6 +134,16 @@ describe Amadeus::Response::PNRRetrieve, :amadeus do
     its(:validating_carrier_code) { should == 'OK' }
   end
 
+  describe '#element_refs' do
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')
+    end
+
+    specify { response.element_refs('TK').should == ['6'] }
+    specify { response.element_refs('AP').should == ['10', '9', '16'] }
+    specify { response.element_refs('ZZ').should == [] }
+  end
+
   describe "#complex_tickets" do
     let_once! :response do
       amadeus_response('spec/amadeus/xml/PNR_Retrieve_complex_tickets.xml')
