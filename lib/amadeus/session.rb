@@ -4,6 +4,8 @@ module Amadeus
   # обошелся без блокировки таблиц
   class Session
 
+  extend Monitoring::Benchmarkable
+
   def self.office_for_alias(al)
     Conf.amadeus.offices.each do |office, settings|
       return office if settings["alias"] == al.to_s
@@ -53,14 +55,16 @@ module Amadeus
 
     # без параметра создает незарезервированную сессию
     def sign_in(office, booked=false)
-      office ||= default_office
-      session_id = Amadeus::Service.security_authenticate(office: office).or_fail!.session_id
-      session = new(session_id: session_id, office: office)
-      logger.info "Amadeus::Session: #{session.token} signed into #{office}"
-      session.increment
-      # saves session
-      session.booked = booked
-      session
+      benchmark 'amadeus session sign in' do
+        office ||= default_office
+        session_id = Amadeus::Service.security_authenticate(office: office).or_fail!.session_id
+        session = new(session_id: session_id, office: office)
+        logger.info "Amadeus::Session: #{session.token} signed into #{office}"
+        session.increment
+        # saves session
+        session.booked = booked
+        session
+      end
     end
 
     # для кронтасков, скоростью не блещет
