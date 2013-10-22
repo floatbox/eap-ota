@@ -190,6 +190,9 @@ performance:
   # очищать ли CodeStash между запросами?
   # поведение для "no" не тестировано, возможны проблемы с ActiveRecord::IdentityMap
   clear_code_stash: yes
+redis:
+  host: 'localhost'
+  port: 6379
 sms:
   host: 'gate10.mfms.ru'
   port: 9006
