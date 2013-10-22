@@ -111,7 +111,7 @@ module Amadeus
       end
 
       def self.free_count(office)
-        redis.llen(by_office(office))
+        redis.keys("#{KEY_BASE}::*").count - 1
       end
 
       def self.delete_all(args={})
