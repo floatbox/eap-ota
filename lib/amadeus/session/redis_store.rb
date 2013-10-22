@@ -81,6 +81,8 @@ module Amadeus
           end
           # а теперь ставим ttl на ключик с токеном
           redis.expire(ttl_key, Amadeus::Session::INACTIVITY_TIMEOUT)
+          # можно еще ltrim тут юзать, чтобы лишние элементы убирать
+          # и юзать своего рода capped list, но на масштабах только усложнит
         end
       end
 
