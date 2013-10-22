@@ -22,11 +22,6 @@ module Amadeus
       msg << " exception: #{color(exception.to_s, RED, true)}" if exception
 
       info(msg)
-
-      # TODO перенести FileLogger и это все настройки сюда.
-      if xml_response && request.action !~ /Pricer/
-        service.log_file(request.action, xml_response.to_xml)
-      end
     end
 
     attach_to :amadeus

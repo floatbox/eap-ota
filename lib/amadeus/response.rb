@@ -7,18 +7,6 @@ module Amadeus::Response
     Amadeus::Response::Base
   end
 
-  # дебажные метод
-  def self.latest_saved_for action
-    self.for(action).new(Amadeus::Service.read_latest_doc(action))
-  end
-
-  def self.grep_saved action
-    Amadeus::Service.read_each_doc(action) do |doc, path|
-      response = self.for(action).new(doc)
-      puts(path) if yield(response)
-    end
-  end
-
   class Base
 
     attr_accessor :doc

@@ -10,10 +10,6 @@ module Amadeus
   Handsoap.http_driver = :net_http
   Handsoap.timeout = 60
 
-  # response logger
-  include FileLogger
-  def debug_dir; 'log/amadeus' end
-
   # handsoap logger
   if Conf.amadeus.logging
     self.logger = open(Rails.root + 'log/amadeus.log', 'a').tap { |fh| fh.sync = true }
@@ -152,7 +148,6 @@ module Amadeus
 # метрика
 
   include NewRelic::Agent::MethodTracer
-  add_method_tracer :log_file, 'Custom/Amadeus/log'
   add_method_tracer :debug, 'Custom/Amadeus/log'
   add_method_tracer :parse_soap_response_document, 'Custom/Amadeus/xmlparse'
 # debugging
@@ -162,17 +157,6 @@ module Amadeus
     doc = Handsoap::XmlQueryFront.parse_string(xml_string, :nokogiri)
     on_response_document(doc)
     doc
-  end
-
-  def read_latest_doc(action)
-    xml_string = read_latest_log_file(action)
-    parse_string(xml_string)
-  end
-
-  def read_each_doc(action)
-    read_each_log_file(action) do |xml, path|
-      yield parse_string(xml), path
-    end
   end
 
   end
