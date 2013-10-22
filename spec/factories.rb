@@ -209,27 +209,6 @@ FactoryGirl.define do
     token { generate(:amadeus_session_token) }
     seq 2
     office { 'TEST_DEFAULT_OFFICE' }
-
-    trait :booked do
-      after :create do |session|
-        key = Amadeus::Session::RedisStore.free_by_office(session.office)
-        # убираем последний запушенный токен
-        token = Amadeus::Session::RedisStore.redis.lpop(key)
-        key = Amadeus::Session::RedisStore.by_token(token)
-        Amadeus::Session::RedisStore.redis.del(key)
-      end
-    end
-
-    trait :stale do
-      after :create do |session|
-        key = Amadeus::Session::RedisStore.free_by_office(session.office)
-        # убираем последний запушенный токен
-        token = Amadeus::Session::RedisStore.redis.lpop(key)
-        key = Amadeus::Session::RedisStore.by_token(token)
-        Amadeus::Session::RedisStore.redis.del(key)
-      end
-    end
-
   end
 end
 
