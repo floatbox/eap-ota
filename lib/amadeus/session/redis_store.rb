@@ -25,14 +25,22 @@ module Amadeus
         self[:seq] += 1
       end
 
+      # сейвится реально в release и booked=
       def release
         Rails.logger.info __method__
-        Rails.logger.info "RELEASE 2"
         RedisStore.push_free(token, seq, office)
+      end
+
+      def booked=(booked)
+        RedisStore.pop_free(office) if booked
       end
 
       # заглушки для совместимости с текущим интерфейсом
       attr_accessor :booked
+
+      def book
+        booked = true
+      end
 
       def booked?
         !!booked
@@ -59,7 +67,7 @@ module Amadeus
         :seq, :seq=,
         :token, :token=,
         :increment,
-        :booked?, :booked=,
+        :booked?, :booked=, :book,
         :session_id, :session_id=,
         :free?, :stale,
         to: :session
@@ -171,13 +179,11 @@ module Amadeus
 
       # для тестов
       def save!
+        RedisStore.push_free(token, seq, office)
       end
 
       # нужен только для housekeep => не нужен для RedisStore вообще
       def destroy
-      end
-
-      def book
       end
 
     end
