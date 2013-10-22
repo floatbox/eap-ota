@@ -24,7 +24,7 @@ module Amadeus
       info(msg)
 
       # TODO перенести FileLogger и это все настройки сюда.
-      if xml_response && !request.action =~ /Pricer/
+      if xml_response && request.action !~ /Pricer/
         service.log_file(request.action, xml_response.to_xml)
       end
     end
