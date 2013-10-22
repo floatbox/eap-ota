@@ -45,12 +45,12 @@ class AutoTicketStuff
 
   def create_auto_ticket_job
     Delayed::Job.enqueue AutoTicketJob.new(order_id: order.id),
-      run_at: 30.minutes.from_now,
+      run_at: 15.minutes.from_now,
       queue: 'autoticketing'
   end
 
   def job_run_at
-    return 30.minutes.from_now if order.commission_ticketing_method != 'aviacenter' ||
+    return 15.minutes.from_now if order.commission_ticketing_method != 'aviacenter' ||
                                   Date.today.wday != 2 ||
                                   Time.now < Time.parse('20:30')
     tomorrow_rate = CBR.exchange_on(Date.tomorrow).exchange_with('2 USD'.to_money, "RUB").to_f.ceil / 2.0 #Курс амадеуса не завтра
@@ -60,7 +60,7 @@ class AutoTicketStuff
     elsif tomorrow_rate < today_rate
       Date.tomorrow + 1.minute
     else
-      return 30.minutes.from_now
+      return 15.minutes.from_now
     end
   end
 
