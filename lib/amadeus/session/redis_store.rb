@@ -6,8 +6,6 @@ module Amadeus
     # надо эту штуку вынести выше в Amadeus::Session из Store-ов
     class PseudoSession < Struct.new(:token, :seq, :office)
 
-      include RedisConnection
-
       def session_id
         "#{token}|#{seq}"
       end
@@ -50,8 +48,6 @@ module Amadeus
         :free?, :stale,
         to: :session
 
-      extend RedisConnection
-
       def initialize(args = {})
         if session_id = args[:session_id]
           token_, seq_num = args[:session_id].split('|')
@@ -62,6 +58,10 @@ module Amadeus
         end
         office_id = args[:office]
         @session = PseudoSession.new(token_, seq_num, office_id)
+      end
+
+      def self.redis
+        RedisClient
       end
 
       def self.by_office(office)
