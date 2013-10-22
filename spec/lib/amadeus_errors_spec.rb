@@ -24,7 +24,6 @@ describe Amadeus::SoapError do
         '1931|Application|NO MATCH FOR RECORD LOCATOR',
         '284|Application|SECURED PNR',
         '31|Application|FINISH OR IGNORE',
-        '91|Application|Unknown error'
       ],
       Amadeus::SoapNetworkError => [
         # soap:Server
@@ -36,6 +35,10 @@ describe Amadeus::SoapError do
       Amadeus::SoapConversationError => [
         # soap:Client
         ' 93|Session|Illogical conversation'
+      ],
+      Amadeus::SoapUnknownError => [
+        # soap:Server
+        '91|Application|Unknown error'
       ]
     }.each do |exception, handsoap_reasons|
       context exception.to_s do

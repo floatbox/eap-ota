@@ -64,7 +64,7 @@ class Mux
       amadeus_merge_and_cleanup(recommendations_ws + recommendations_ns)
     end
   rescue => e
-    with_warning unless e.message['select(): Interrupted system call']
+    with_warning unless ignore_error?(e)
     RecommendationSet.new
   end
 
@@ -225,6 +225,17 @@ class Mux
         cryptic_logger.info r.cryptic(v)
       end
       short_logger.info r.short
+    end
+  end
+
+  def ignore_error?(e)
+    case e
+    when RuntimeError
+      e.message['select(): Interrupted system call']
+    when Amadeus::SoapSyntaxError, Amadeus::SoapUnknownError
+      true
+    else
+      false
     end
   end
 

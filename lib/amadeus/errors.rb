@@ -19,6 +19,8 @@ module Amadeus
         SoapNetworkError
       when 93
         SoapConversationError
+      when 91
+        SoapUnknownError
       else
         SoapError
       end.new(handsoap_error.reason)
@@ -32,6 +34,9 @@ module Amadeus
   # ошибки в логике, во многом аналогичны Amadeus::Error
   # TODO отнаследовать?
   class SoapApplicationError < SoapError; end
+
+  # Амадеус сам не знает, что не так.
+  class SoapUnknownError < SoapApplicationError; end
 
   # проблемы с сетью и сессиями
   class SoapNetworkError < SoapError; end
