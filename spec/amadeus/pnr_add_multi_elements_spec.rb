@@ -28,5 +28,16 @@ describe Amadeus::Response::PNRAddMultiElements, :amadeus do
     its(:error_text) {should == 'Name error: ITEM TOO LONG / NOT ENTERED /'}
   end
 
+  context 'with restricted error' do
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/PNR_AddMultiElements.restricted_error.xml')
+    end
+
+    subject {response}
+
+    its(:success?) {should be_false}
+    its(:error_text) {should == 'RESTRICTED - YOUR OFFICE IS NOT RESPONSIBLE FOR THAT PNR'}
+  end
+
 end
 
