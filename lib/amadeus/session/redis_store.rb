@@ -20,14 +20,11 @@ module Amadeus
       end
 
       def increment
-        Rails.logger.info __method__
-        Rails.logger.info "seq: #{seq}"
         self[:seq] += 1
       end
 
       # сейвится реально в release и booked=
       def release
-        Rails.logger.info __method__
         RedisStore.push_free(token, seq, office)
       end
 
@@ -46,12 +43,8 @@ module Amadeus
         !!booked
       end
 
-      def stale?
-        false
-      end
-
       def free?
-        true
+        !booked
       end
 
     end
@@ -75,7 +68,6 @@ module Amadeus
       extend RedisConnection
 
       def initialize(args = {})
-        Rails.logger.info "args: #{args}"
         if session_id = args[:session_id]
           token_, seq_num = args[:session_id].split('|')
           seq_num = seq_num.to_i
@@ -88,17 +80,14 @@ module Amadeus
       end
 
       def self.free_by_office(office)
-        Rails.logger.info __method__
         "#{KEY_BASE}::free::#{office}"
       end
 
       def self.by_token(token)
-        Rails.logger.info __method__
         "#{KEY_BASE}::#{token}"
       end
 
       def self.push_free(token, seq, office)
-        Rails.logger.info __method__
         redis.multi do
           ttl_key = by_token(token)
           redis.pipelined do
@@ -111,7 +100,6 @@ module Amadeus
       end
 
       def self.pop_free(office)
-        Rails.logger.info __method__
         free_tokens = free_by_office(office)
 
         unless redis.llen(free_tokens).nonzero?
@@ -120,35 +108,28 @@ module Amadeus
         end
 
         token = redis.rpop(free_tokens)
-        Rails.logger.info "token: #{token}"
         # если сессия не заэкспайрена - возвращаем,
         # иначе - берем следующую
         key = by_token(token)
-        Rails.logger.info "key: #{key}"
         if seq = redis.get(key)
-          Rails.logger.info "seq: #{seq}"
           redis.expire(key, Amadeus::Session::INACTIVITY_TIMEOUT)
           PseudoSession.new(token, seq.to_i, office)
         else
-          Rails.logger.info "RETRY"
           pop_free(office)
         end
       end
 
       # returns nil if no free session available
       def self.find_free_and_book(args)
-        Rails.logger.info __method__
         args.assert_valid_keys :office
         pop_free(args[:office])
       end
 
       def self.free_count(office)
-        Rails.logger.info __method__
         redis.llen(free_by_office(office))
       end
 
       def self.delete_all(args={})
-        Rails.logger.info __method__
         args.assert_valid_keys :office
         redis.keys("#{KEY_BASE}*").each do |key|
           redis.pipelined do
@@ -157,19 +138,13 @@ module Amadeus
         end
       end
 
-      # то тут, то там
-      # FIXME: надо этот метод убирать из api сессий
-      # и вызывать только на самой сессии, т.е. PseudoSession
       def release
-        Rails.logger.info __method__
-        Rails.logger.info "RELEASE 1"
         session.release
       end
 
       # заглушки, нужны только для совместимости с текущим интерфейсом
 
       def self.each_stale(office)
-        Rails.logger.info __method__
         []
       end
 

@@ -28,14 +28,12 @@ module Amadeus
     # public
     # вызывается с параметром и без (для класс-методов амадеуса)
     def book(office=nil)
-      Rails.logger.info "#{self.class} #{__method__}"
       office ||= default_office
       logger.debug { "Amadeus::Session: free sessions count: #{pool.free_count(office)}" }
       find_free_and_book(office) || sign_in(office, true)
     end
 
     def find_free_and_book(office)
-      Rails.logger.info "#{self.class} #{__method__}"
       if record = pool.find_free_and_book(office: office)
         logger.info "Amadeus::Session: #{record.token} reused (#{record.seq}) for #{record.office}"
         from_record(record)
@@ -44,7 +42,6 @@ module Amadeus
 
     # без параметра создает незарезервированную сессию
     def sign_in(office, booked=false)
-      Rails.logger.info "#{self.class} #{__method__}"
       benchmark 'amadeus session sign in' do
         office ||= default_office
         session_id = Amadeus::Service.security_authenticate(office: office).or_fail!.session_id
@@ -78,7 +75,6 @@ module Amadeus
     # не должно быть проблемой
     # без параметра удаляет сессии во всех офисах
     def delete_all(office=nil)
-      Rails.logger.info "#{self.class} #{__method__}"
       if office
         pool.delete_all(office: office)
       else
@@ -87,7 +83,6 @@ module Amadeus
     end
 
     def from_record(record)
-      Rails.logger.info "#{self.class} #{__method__}"
       session = allocate
       session.record = record
       session
@@ -114,14 +109,12 @@ module Amadeus
   # public
   # освобождение сессии (только в поиске?)
   def release
-    Rails.logger.info "#{self.class} #{__method__}"
     logger.info "Amadeus::Session: #{token} released"
     record.release
   end
 
   # public
   def destroy
-    Rails.logger.info "#{self.class} #{__method__}"
     logger.info "Amadeus::Session: #{token} signing out (#{seq})"
     record.destroy
     Amadeus::Service.new(:session => self).security_sign_out
