@@ -13,7 +13,7 @@ module Amadeus
       case code.to_i
       when 18, 3973
         SoapSyntaxError
-      when 31, 91, 284, 1931
+      when 31, 284, 1931
         SoapApplicationError
       when 42, 357, 2162
         SoapNetworkError
