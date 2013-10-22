@@ -18,7 +18,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
-discount "12.25%"
+discount "14%"
 agent_comment "9% (7%) от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
 subagent_comment "7% от всех опубл. тарифов на рейсы HU (В договоре Interline не прописан.)"
 example "peksvo svopek"
