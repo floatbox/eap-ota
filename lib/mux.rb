@@ -40,6 +40,9 @@ class Mux
       r.select!(&:sellable?) unless admin_user
       r.map(&:clear_variants)
     end
+  rescue => e
+    with_warning unless ignore_error?(e)
+    RecommendationSet.new
   end
 
   # TODO exception handling
