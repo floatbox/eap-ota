@@ -12,10 +12,6 @@ describe 'session pool' do
       described_class.delete_all(office: test_office)
     end
 
-    describe 'test helpers' do
-      specify { create_free_session_record.should be_free }
-    end
-
     describe "accessors" do
       it {should respond_to(:token)}
       it {should respond_to(:seq)}
