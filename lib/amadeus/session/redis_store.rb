@@ -3,6 +3,7 @@
 module Amadeus
   class Session
 
+    # надо эту штуку вынести выше в Amadeus::Session из Store-ов
     class PseudoSession < Struct.new(:token, :seq, :office)
 
       include RedisConnection
@@ -23,28 +24,12 @@ module Amadeus
         self[:seq] += 1
       end
 
-      # сейвится реально в release и booked=
-      def release
-        RedisStore.push_free(token, seq, office)
-      end
-
-      def booked=(booked)
-        RedisStore.pop_free(office) if booked
-      end
-
-      # заглушки для совместимости с текущим интерфейсом
       attr_accessor :booked
 
-      def book
-        booked = true
-      end
-
-      def booked?
-        !!booked
-      end
-
-      def free?
-        !booked
+      # сейвится реально в release и booked=,
+      # но второй не нужен
+      def release
+        RedisStore.push_free(token, seq, office)
       end
 
     end
@@ -79,7 +64,7 @@ module Amadeus
         @session = PseudoSession.new(token_, seq_num, office_id)
       end
 
-      def self.free_by_office(office)
+      def self.by_office(office)
         "#{KEY_BASE}::free::#{office}"
       end
 
@@ -91,7 +76,7 @@ module Amadeus
         redis.multi do
           ttl_key = by_token(token)
           redis.pipelined do
-            redis.lpush(free_by_office(office), token)
+            redis.lpush(by_office(office), token)
             redis.set(ttl_key, seq)
           end
           # а теперь ставим ttl на ключик с токеном
@@ -100,7 +85,7 @@ module Amadeus
       end
 
       def self.pop_free(office)
-        free_tokens = free_by_office(office)
+        free_tokens = by_office(office)
 
         unless redis.llen(free_tokens).nonzero?
           Rails.logger.info "returning nil!"
@@ -126,7 +111,7 @@ module Amadeus
       end
 
       def self.free_count(office)
-        redis.llen(free_by_office(office))
+        redis.llen(by_office(office))
       end
 
       def self.delete_all(args={})

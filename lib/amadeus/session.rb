@@ -51,11 +51,12 @@ module Amadeus
         # saves session
         session.booked = booked
 
-        # костыль для RedisStore
-        # FIXME не придумал как лучше сделать
-        token, seq, office = session.token, session.seq, session.office
-        # в redis сохраняем только свободные сессии, т.е. !booked
-        RedisStore.push_free(token, seq, office) if (!booked && pool.kind_of?(Amadeus::Session::RedisStore))
+        # вернул костыль для RedisStore, переопределять booked= в RedisStore как-то тупо
+        # FIXME не придумал как лучше сделать, разве что отрефакторить и не сохранять на booked=
+        if (!booked && pool.eql?(Amadeus::Session::RedisStore))
+          # в redis сохраняем только свободные сессии, т.е. !booked
+          RedisStore.push_free(session.token, session.seq, session.office)
+        end
 
         session
       end
