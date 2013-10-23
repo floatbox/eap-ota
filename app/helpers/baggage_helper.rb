@@ -14,6 +14,23 @@ module BaggageHelper
     end.join(' +<br>').html_safe
   end
 
+  def baggage_summary_extended(baggage_limitations)
+    return unless baggage_limitations
+    return if baggage_limitations.any?(&:unknown?) || baggage_limitations.blank?
+    return 'только ручная кладь' if baggage_limitations.all?(&:no_baggage?)
+
+    parts = baggage_limitations.find_all{|v| !v.no_baggage?}.group_by do |bl|
+      bl.signature
+    end.values.partition{|v| v[0].units?}.flatten(1).map do |bl_array|
+      bl = bl_array[0]
+      unless bl.no_baggage?
+        (bl_array.length > 1 ? "#{ bl_array.length } &times; " : '') + baggage_html(bl) + ' на пассажира'
+      end
+    end
+    parts << 'ручная кладь'
+    parts.compact.join(' + ').html_safe
+  end
+
   def baggage_html(bl)
     return unless bl
     if bl.no_baggage?
