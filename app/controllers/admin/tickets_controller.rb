@@ -45,6 +45,7 @@ class Admin::TicketsController < Admin::EviterraResourceController
     # FIXME не очень контроллеровая логика.
     @item.price_operational_fee = Ticket.default_refund_fee(@item.parent.order.created_at)
     @item.price_acquiring_compensation = @item.parent.refund_payment_commission.round(2)
+    @item.price_consolidator = -@item.parent.price_consolidator.round(2)
     render :action => :new
   end
 
