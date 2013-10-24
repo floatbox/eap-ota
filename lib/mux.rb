@@ -32,14 +32,16 @@ class Mux
     recommendations = amadeus.fare_master_pricer_calendar(avia_search).recommendations
     amadeus.release
 
-
     recommendations.select_valid! do |r|
-      r.select!(&:sellable?) unless admin_user
       benchmark 'commission matching' do
         r.find_commission!
       end
+      r.select!(&:sellable?) unless admin_user
       r.map(&:clear_variants)
     end
+
+    recommendations
+
   rescue => e
     with_warning unless ignore_error?(e)
     RecommendationSet.new
@@ -169,7 +171,13 @@ class Mux
 
       async_perform
 
-      recommendations = amadeus_merge_and_cleanup(amadeus_recommendations) + sirena_cleanup(sirena_recommendations)
+      amadeus_cleaned = amadeus_merge_and_cleanup(amadeus_recommendations)
+      # почему-то иногда возвращает nil
+      # в связи с ликвидацией сирены, не особо должно волновать
+      sirena_cleaned = sirena_cleanup(sirena_recommendations) || []
+
+      recommendations = amadeus_cleaned + sirena_cleaned
+
       benchmark 'creating and saving rambler cache' do
         save_to_mongo(avia_search, recommendations) if Conf.api.store_rambler_cache && !admin_user && !avia_search.complex_route?
       end

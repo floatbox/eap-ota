@@ -26,7 +26,6 @@ class RecommendationSet
             :[],
     to: :recommendations
 
-
   def initialize(recommendations=Array.new)
     @recommendations = recommendations
   end
@@ -45,12 +44,13 @@ class RecommendationSet
   end
 
   def + other
-    @recommendations += case other
-      when Array then other
-      when RecommendationSet then other.recommendations
-      else raise TypeError, "cannot concatenate #{other.class} with RecommendationSet"
-    end
-    self
+    RecommendationSet.new(
+      @recommendations + case other
+        when Array then other
+        when RecommendationSet then other.recommendations
+        else raise TypeError, "cannot concatenate #{other.class} with RecommendationSet"
+      end
+    )
   end
 
   def to_s
