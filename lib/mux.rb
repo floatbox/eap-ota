@@ -32,12 +32,12 @@ class Mux
     recommendations = amadeus.fare_master_pricer_calendar(avia_search).recommendations
     amadeus.release
 
-    benchmark 'commission matching' do
-      recommendations.find_commission!
-    end
 
     recommendations.select_valid! do |r|
       r.select!(&:sellable?) unless admin_user
+      benchmark 'commission matching' do
+        r.find_commission!
+      end
       r.map(&:clear_variants)
     end
   rescue => e

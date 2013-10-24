@@ -41,6 +41,7 @@ class RecommendationSet
 
   def each &block
     @recommendations.each &block
+    self
   end
 
   def + other
@@ -64,7 +65,7 @@ class RecommendationSet
   def select_valid!
     select_by! :full_information?, :valid_interline?
     reject_by! :ignored_carriers
-    yield(@recommendations) if block_given?
+    yield(self) if block_given?
     # чистка - пока что могут оставаться рекомендации без вариантов
     @recommendations.select! &:variants?
     self
@@ -110,10 +111,12 @@ class RecommendationSet
 
   def reject_by! *criterias
     criterias.each { |criteria| reject!(&criteria) }
+    self
   end
 
   def select_by! *criterias
     criterias.each { |criteria| select!(&criteria) }
+    self
   end
 
 end
