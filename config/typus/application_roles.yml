@@ -30,6 +30,7 @@ admin:
   AirlineAlliance: create, read, update, delete
   FlightGroup: create, read, update, delete
   Commissions: read
+  Amadeus: read, help
   Counters: read
   Partner: create, read, update, delete, show_versions
 

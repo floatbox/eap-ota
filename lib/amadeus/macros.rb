@@ -112,6 +112,38 @@ module Amadeus
       result
     end
 
+    # похоже на cmd_full, но лучше всего работает с HELP
+    def cmd_full_help(command)
+      pages = [cmd(command)]
+      until pages.last['*** END OF DISPLAY ***']
+        new_page = cmd('MD')
+        break if new_page == pages.last
+        pages << new_page
+      end
+
+     # зачем-то после каждой строки возвращается пробел
+     pages.map! { |p| p.gsub "\n ", "\n" }
+     # заголовок повторяется обычно, убираем
+     header = pages.first.lines.first.sub(/^\/\$/, '')
+      pages.map! {|page|
+        page.lines
+          .drop(1)
+          .reject{|l| l == " (PARTIAL DISPLAY)\n"}
+          .each {|l| l.sub!(/ +MD$/, '') if l.rindex(' MD') == 60 }
+          .join
+      }
+      # обрезание возможного повтора на последней неполной странице
+      if pages.size > 1
+        lbup, lp = pages[-2,2]
+        # 2..последняя строчка, 3..последняя строчка, и т.п.
+        lbup.scan(/\n(?=(.+))/m) do |part, *|
+          lp.start_with?(part) and lp.sub!(part, '') and break
+        end
+      end
+      pages.last.sub! /\s*\*\*\* END OF DISPLAY \*\*\*\Z/, ''
+      ([header] + pages).join
+    end
+
     # временное название для метода
     # WARNING - использует отдельную сессию!
     def issue_ticket(pnr_number)
