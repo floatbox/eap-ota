@@ -82,7 +82,7 @@ init: function() {
         var re = $('#forgot-email');
         re.val(le.val()).trigger('blur');
         that.el.find('.phu-forgot').show();
-        that.slider.animate({left: -260}, 200);
+        that.slider.animate({left: -280}, 200);
     });
     this.el.find('.phu-remember-link').on('click', function(event) {
         event.preventDefault();
@@ -348,7 +348,7 @@ send: function() {
                 that.process(result);
             } else if (result.errors && result.errors.length) {
                 that.button.prop('disabled', false);
-                that.showError(result.errors[0]);
+                that.showError(result.errors[0].replace('Password', 'Пароль'));
             }
         }).fail(function(jqXHR, status, message) {
             that.loading.hide();
