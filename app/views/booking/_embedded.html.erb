@@ -35,16 +35,19 @@
         <% end %>
     </div>
     <% if recommendation.baggage_array %>
-    <% baggage_summaries = recommendation.baggage_array.map{|bl| baggage_summary_extended(bl) }.uniq %>
     <div class="od-comment">
-        <p class="odc-text">Норма провоза багажа — <%= raw baggage_summaries.join(', ') %></p>
+        <% group_baggage_summaries(recommendation.baggage_array, recommendation.flights).each do |baggage_summary| %>
+            <p class="odc-text"><%= raw baggage_summary %></p>        
+        <% end %>
     </div>
     <% end %>
     <div class="od-comment">
         <p class="odc-text"><%= t 'offer.comments.time' %></p>
     </div>
     <% recommendation_comments(recommendation).each do |comment| %>
+    <% if comment[:content] %>
         <div class="od-comment odc-specific" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></div>
+    <% end %>
     <% end %>
 </div>
 </div>

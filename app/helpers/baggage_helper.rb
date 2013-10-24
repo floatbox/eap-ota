@@ -18,7 +18,6 @@ module BaggageHelper
     return unless baggage_limitations
     return if baggage_limitations.any?(&:unknown?) || baggage_limitations.blank?
     return 'только ручная кладь' if baggage_limitations.all?(&:no_baggage?)
-
     parts = baggage_limitations.find_all{|v| !v.no_baggage?}.group_by do |bl|
       bl.signature
     end.values.partition{|v| v[0].units?}.flatten(1).map do |bl_array|
@@ -29,6 +28,22 @@ module BaggageHelper
     end
     parts << 'ручная кладь'
     parts.compact.join(' + ').html_safe
+  end
+
+  def group_baggage_summaries(baggage_array, flights)
+    summaries = baggage_array.map{|bl| baggage_summary_extended(bl) }
+    if summaries.uniq.length == 1
+      ['Норма провоза багажа — ' + summaries[0]]
+    else
+      flights.map do |f|
+        #"#{ dict(f.departure.city) } — #{ dict(f.arrival.city) }"
+        "#{ f.marketing_carrier_iata }&nbsp;#{ f.flight_number }".html_safe
+      end.zip(summaries).group_by do |bl|
+        bl[1]
+      end.values.map do |bl_group|
+        'Норма провоза багажа на ' + (bl_group.length == 1 ? 'рейсе ' : 'рейсах ') + bl_group.map(&:first).to_sentence.html_safe + ' — ' + bl_group[0][1]
+      end
+    end
   end
 
   def baggage_html(bl)
