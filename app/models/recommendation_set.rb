@@ -63,12 +63,18 @@ class RecommendationSet
   end
 
   def select_valid!
+    select_full_info!
+    yield(self) if block_given?
+    postprocess!
+  end
+
+  def select_full_info!
     select_by! :full_information?, :valid_interline?
     reject_by! :ignored_carriers
-    yield(self) if block_given?
-    # чистка - пока что могут оставаться рекомендации без вариантов
-    @recommendations.select! &:variants?
-    self
+  end
+
+  def postprocess!
+    select! &:variants?
   end
 
   def sort_and_group!
