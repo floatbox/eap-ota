@@ -26,7 +26,6 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
-discount "3.5%"
 consolidator "2%"
 agent_comment "0% от оформленных под кодом 738 опубл.тарифов на рейсы Interline."
 subagent_comment "C 01.09.12г. 0% от оформленных под кодом 738 опубл.тарифов на рейсы Interline."

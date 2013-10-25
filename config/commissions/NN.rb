@@ -26,7 +26,6 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0"
-discount "3.5%"
 consolidator "2%"
 agent_comment "Интерлайн не прописан"
 subagent_comment "Интерлайн не прописан"

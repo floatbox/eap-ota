@@ -31,7 +31,6 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
-discount "3.5%"
 consolidator "2%"
 agent_comment "  0% интерлайн без участия авиакомпании  CA ."
 subagent_comment "  0% интерлайн без участия авиакомпании  CA ."

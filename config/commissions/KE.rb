@@ -15,7 +15,6 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
-discount "3.5%"
 consolidator "2%"
 agent_comment "С 01.04.2011г. 0% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута вне России."
 subagent_comment "С 01.04.2011г. 0% от опубл. тарифов на собств. рейсы KE с пунктом начала маршрута вне России."
