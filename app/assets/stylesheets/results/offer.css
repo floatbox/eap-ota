@@ -807,11 +807,15 @@
     line-height: 14px;
 }
 .od-comment {
-    width: 25%;
-    margin: 0 0 -100px -1px;
+    width: 235px;
+    margin: 0 0 -100px 0;
     border-left: 1px solid #cdcdc7;
     padding: 12px 0 104px;
     float: left;
+}
+.odc-first {
+    width: 280px;
+    border-left: none;
 }
 .odc-text {
     margin: 0 14px 8px
