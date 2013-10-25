@@ -178,3 +178,8 @@ performance:
   # очищать ли CodeStash между запросами?
   # поведение для "no" не тестировано, возможны проблемы с ActiveRecord::IdentityMap
   clear_code_stash: yes
+sms:
+  host: 'gate10.mfms.ru'
+  port: 9006
+  path: '/eviterra/connector0/service'
+
