@@ -372,10 +372,6 @@ describe Ticket do
     specify {
       Ticket.new(:source => 'amadeus', :office_id => 'FLL1S212V').commission_ticketing_method.should == 'downtown'
     }
-
-    specify {
-      Ticket.new(:source => 'sirena').commission_ticketing_method.should == 'aviacenter'
-    }
   end
 
   describe "#update_prices_in_order" do

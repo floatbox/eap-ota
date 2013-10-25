@@ -89,7 +89,6 @@ Order:
       - source
       - pnr_number
       - parent_pnr_number
-      - sirena_lead_pass
       - route
       - payment_type
       - section_recalculation
@@ -129,7 +128,6 @@ Order:
       - source
       - pnr_number
       - parent_pnr_number
-      - sirena_lead_pass
       - route
       - payment_type
       - section_recalculation

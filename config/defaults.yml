@@ -145,15 +145,6 @@ cbr:
   usd:
     2011-01-01: 30.0000
     2011-01-02: 30.0001
-sirena:
-  enabled: no
-  enabled_in_lite: no
-  restrict: no
-  fake: no
-  timeout_lite: 20
-  timeout_full: 50
-  host: localhost
-  port: 8888
 geolocation:
   enabled: no
   production:

@@ -19,9 +19,7 @@ class Mux
   def pricer(avia_search)
     # FIXME делает сортировку дважды
     benchmark 'Pricer, total' do
-      (
-        amadeus_pricer(avia_search) + sirena_pricer(avia_search)
-      ).sort_by(&:price_total)
+      amadeus_pricer(avia_search).sort_by(&:price_total)
     end
   end
 
@@ -121,63 +119,19 @@ class Mux
     end
   end
 
-  def sirena_pricer(avia_search)
-    return [] unless Conf.sirena.enabled
-    return [] if lite && !Conf.sirena.enabled_in_lite
-    return [] unless sirena_searchable?(avia_search)
-    recommendations = RecommendationSet.new
-    benchmark 'Pricer sirena' do
-      recommendations = Sirena::Service.new.pricing(avia_search, :lite => lite).recommendations || []
-      sirena_cleanup(recommendations)
-    end
-
-    recommendations
-  rescue
-    with_warning
-    RecommendationSet.new
-  end
-
-  def sirena_cleanup(recs)
-    recs.select_valid! do |recs|
-      recs.each(&:clear_variants)
-      # временно из-за проблем с тарифами AB и LX удаляем из рекоммендации
-      recs.delete_if {|r| ['AB', 'LX', 'ЮХ'].include? r.validating_carrier_iata }
-    end
-  end
-
-  def sirena_async_pricer(avia_search, &block)
-    return [] unless Conf.sirena.enabled
-    return [] if lite && !Conf.sirena.enabled_in_lite
-    return [] unless sirena_searchable?(avia_search)
-
-    sirena = Sirena::Service.new(:driver => async_sirena_driver)
-    sirena.async_pricing(avia_search, :lite => lite, &block)
-  end
-
   def async_pricer(avia_search)
     benchmark 'Pricer, async total' do
       amadeus_recommendations = RecommendationSet.new
-      sirena_recommendations = RecommendationSet.new
       amadeus_async_pricer(avia_search) do |res|
         benchmark "Amadeus::Recommendations: parsing" do
           logger.info "Mux: amadeus recs: #{res.recommendations.size}"
           amadeus_recommendations += res.recommendations
         end
       end
-      sirena_async_pricer(avia_search) do |res|
-        logger.info "Mux: sirena recs: #{res.recommendations.size}"
-        sirena_recommendations += res.recommendations
-      end
 
       async_perform
 
-      amadeus_cleaned = amadeus_merge_and_cleanup(amadeus_recommendations)
-      # почему-то иногда возвращает nil
-      # в связи с ликвидацией сирены, не особо должно волновать
-      sirena_cleaned = sirena_cleanup(sirena_recommendations) || []
-
-      recommendations = amadeus_cleaned + sirena_cleaned
-
+      recommendations = amadeus_merge_and_cleanup(amadeus_recommendations)
       benchmark 'creating and saving rambler cache' do
         save_to_mongo(avia_search, recommendations) if Conf.api.store_rambler_cache && !admin_user && !avia_search.complex_route?
       end
@@ -188,11 +142,6 @@ class Mux
       end
 
     end
-  end
-
-  def async_sirena_driver
-    # Sirena::TyphoeusDriver.new( :hydra => hydra )
-    Sirena::MultiCurbDriver.new( :multi => multi )
   end
 
   def async_amadeus_driver
@@ -213,20 +162,6 @@ class Mux
 
   def multi
     @multi ||= Curl::Multi.new
-  end
-
-  SNG_COUNTRY_CODES = ["RU", "AZ", "AM", "BY", "GE", "KZ", "KG", "LV", "LT", "MD", "TJ", "TM", "UZ", "UA", "EE"]
-  def sirena_searchable?(form)
-    return false if form.segments.size > 2
-    return false if form.segments.any? {|fs| fs.from == fs.to}
-    locations = (form.segments.every.from + form.segments.every.to).uniq
-
-    !Conf.sirena.restrict ||
-      # form.adults == 1 &&
-      # form.children == 0 && form.infants == 0 &&
-      form.segments.none?(&:multicity?) &&
-      locations.all?{|l| l.iata_ru != l.iata && l.iata_ru.present?} &&
-      locations.any?{|l| SNG_COUNTRY_CODES.include? l.country.alpha2}
   end
 
   # применяем только к амадеусу, для разбора интерлайнов

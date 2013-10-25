@@ -17,26 +17,6 @@ describe Order do
     end
   end
 
-  describe "#capitalize_pnr" do
-    it "should strip spaces" do
-      order = Order.new :pnr_number => '  БХЦ45 '
-      order.send :capitalize_pnr
-      order.pnr_number.should == 'БХЦ45'
-    end
-
-    it "should capitalize cyrillics in sirena order" do
-      order = Order.new :pnr_number => 'бхЦ45'
-      order.send :capitalize_pnr
-      order.pnr_number.should == 'БХЦ45'
-    end
-
-    it "should string class" do
-      order = Order.new :pnr_number => 'бхЦ45'
-      order.send :capitalize_pnr
-      order.pnr_number.class.should == String
-    end
-  end
-
   it "should set fee_scheme from config" do
     Conf.site.stub(:fee_scheme).and_return('v3')
     order = build(:order)
@@ -211,22 +191,6 @@ describe Order do
   end
 
   describe '#load_tickets' do
-
-    context "for sirena order" do
-
-      it 'loads tickets correctly' do
-        Sirena::Service.stub_chain(:new, :order).and_return(Sirena::Response::Order.new(File.read('spec/sirena/xml/order_with_tickets.xml')))
-        Sirena::Service.stub_chain(:new, :pnr_status, :tickets_with_dates).and_return({})
-        @order = Order.new(:source => 'sirena', :commission_subagent => '1%', :pnr_number => '123456', :created_at => (Time.now - 1.day))
-        ticket = stub_model(Ticket, :new_record? => true)
-        order_tickets = stub('order_tickets', :find_by_number => nil, :reload => nil)
-        @order.stub(:tickets).and_return(order_tickets)
-        @order.stub(:load_fare_rules)
-        order_tickets.should_receive(:create).twice.with(hash_including({:code=>"262"}))
-        @order.load_tickets
-      end
-
-    end
 
     # FIXME это все в стратегии должно быть
     context "for amadeus order" do

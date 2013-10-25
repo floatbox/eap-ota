@@ -308,7 +308,6 @@ class Order < ActiveRecord::Base
       :phone,
       :pnr_number,
       :full_info,
-      :sirena_lead_pass,
       :last_tkt_date,
       :payment_type,
       :delivery,

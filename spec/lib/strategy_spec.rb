@@ -12,11 +12,7 @@ describe Strategy do
     end
 
     context "for sirena" do
-      let( :object ) { mock('argument', source: 'sirena') }
-      specify { Strategy.select(:source => 'sirena').should be_a(Strategy::Sirena) }
-      specify { Strategy.select(:order => object).should be_a(Strategy::Sirena) }
-      specify { Strategy.select(:ticket => object).should be_a(Strategy::Sirena) }
-      specify { Strategy.select(:rec => object).should be_a(Strategy::Sirena) }
+      specify { expect {Strategy.select(:source => 'sirena') }.to raise_error(ArgumentError) }
     end
 
     context "some bullshit" do

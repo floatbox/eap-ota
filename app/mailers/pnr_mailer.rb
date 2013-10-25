@@ -15,7 +15,6 @@ class PNRMailer < ActionMailer::Base
     @pnr = PNR.get_by_number(notification.pnr_number)
     @prices = @pnr.order
     @passengers = @pnr.passengers
-    @pnr.email = @prices.email if @prices.source == 'sirena' && @pnr.email.blank?
     @last_pay_time = @pnr.order.last_pay_time
     @comment = notification.comment
     @lang = notification.lang unless notification.lang.blank?
@@ -48,12 +47,6 @@ class PNRMailer < ActionMailer::Base
     mail :to => 'a@a.com', :subject => 'Информация о визе и адресе проживания в США' do |format|
       format.text { render 'notifications/visa_notice' }
     end
-  end
-
-  def sirena_receipt(email, number)
-    @pnr = PNR.get_by_number(number)
-    attachments['eticket.pdf'] = @pnr.sirena_receipt
-    mail :to => email, :subject => "Ваш электронный билет"
   end
 
 end

@@ -7,16 +7,7 @@ class PNR
   def self.get_by_number number
     pnr = self.new
     pnr.number = number
-    if pnr.order && pnr.order.source == 'sirena'
-      order = Sirena::Service.new.order(number, pnr.order.sirena_lead_pass)
-      raise Sirena::Error, order.error if order.error
-      copy_attrs order, pnr,
-        :flights,
-        :booking_classes,
-        :passengers,
-        :phone,
-        :email
-    else
+    if pnr.order && pnr.order.source == 'amadeus'
       Amadeus.booking do |amadeus|
         pnr_resp = amadeus.pnr_retrieve(:number => number)
         copy_attrs pnr_resp, pnr,
@@ -43,10 +34,6 @@ class PNR
     @order ||= Order[number]
     raise ActiveRecord::RecordNotFound unless @order
     @order
-  end
-
-  def sirena_receipt
-    Sirena::Service.new.get_itin_receipts(number, order.sirena_lead_pass).pdf
   end
 
 end

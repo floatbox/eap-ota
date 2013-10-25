@@ -7,7 +7,6 @@ module Admin
 
     included do
       cattr_accessor :amadeus_dictionary
-      cattr_accessor :sirena_dictionary
     end
 
     def decode_amadeus
@@ -19,13 +18,5 @@ module Admin
       render :text => e.message
     end
 
-    def decode_sirena
-      get_object
-      if @item.iata_ru.present?
-        render :text => Sirena::Service.new.describe( sirena_dictionary, :code => @item.iata_ru).as_yaml
-      end
-    rescue => e
-      render :text => e.message
-    end
   end
 end

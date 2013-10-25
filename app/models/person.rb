@@ -128,14 +128,7 @@ class Person
   end
 
   def check_passport
-    #errors.add :first_name, "Некорректное имя" if first_name_sirena.length < 3
     errors.add :passport, 'Неверный номер документа' unless doccode_sirena
-  end
-
-  def first_name_sirena
-    corrected_name = first_name.mb_chars.upcase.gsub('Ё', 'Е').gsub('Ъ', 'Ь').gsub(/[^a-zA-Zа-яА-Я]+/, '')
-    #corrected_name += '.' if corrected_name.length < 3
-    corrected_name
   end
 
   def nationality

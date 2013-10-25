@@ -117,8 +117,6 @@ class Recommendation
     #удаляем варианты на сегодня/завтра
     if source == 'amadeus'
       variants.delete_if{|v| v.with_bad_time || !TimeChecker.ok_to_show(v.departure_datetime_utc)}
-    elsif source == 'sirena'
-      variants.delete_if{|v| v.with_bad_time || !TimeChecker.ok_to_show_sirena(v.departure_datetime_utc)}
     end
   end
 
@@ -296,8 +294,6 @@ class Recommendation
   end
 
   def self.deserialize(coded)
-    # временная штука, пока не инвалидируем весь кэш старых рекомендаций
-    coded = 'amadeus.' + coded unless coded =~ /^amadeus|^sirena/
     unless coded.split('.')[2] =~ /^\d+$/
       source, fv, classes, cabins, availabilities, *segment_codes = coded.split('.')
       declared_price = 0

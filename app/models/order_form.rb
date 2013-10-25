@@ -23,7 +23,6 @@ class OrderForm
   attr_accessor :partner
   attr_accessor :marker
   attr_accessor :number
-  attr_accessor :sirena_lead_pass
   attr_accessor :order # то, что сохраняется в базу
   attr_accessor :variant_id #нужен при восстановлении формы по урлу
   # Снимает ограничения на бронирование. Параметр не сохраняется в кэш.
@@ -41,7 +40,6 @@ class OrderForm
   end
 
   def last_pay_time
-    return if recommendation.source == 'sirena'
     return Time.now + 24.hours if Conf.amadeus.env != 'production' && !Rails.env.test? # так как тестовый Амадеус в прошлом
     return if recommendation.flights.first.departure_datetime_utc - 72.hours < Time.now
     return unless last_tkt_date
@@ -235,8 +233,6 @@ class OrderForm
     return if admin_user
     if recommendation.source == 'amadeus'
       errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.journey.departure_datetime_utc, recommendation.last_tkt_date)
-    elsif recommendation.source == 'sirena'
-      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell_sirena(recommendation.journey.departure_datetime_utc)
     end
   end
 

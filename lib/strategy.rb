@@ -13,8 +13,6 @@ module Strategy
     case source
     when 'amadeus'
       Strategy::Amadeus.new args
-    when 'sirena'
-      Strategy::Sirena.new args
     else
       raise ArgumentError, (source ? "unknown source #{source.inspect}" : 'source not specified')
     end
