@@ -5,10 +5,10 @@ describe Strategy do
 
     context "for amadeus" do
       let( :object ) { mock('argument', source: 'amadeus') }
-      specify { Strategy.select(:source => 'amadeus').should be_a(Strategy::Amadeus) }
-      specify { Strategy.select(:order => object).should be_a(Strategy::Amadeus) }
-      specify { Strategy.select(:ticket => object).should be_a(Strategy::Amadeus) }
-      specify { Strategy.select(:rec => object).should be_a(Strategy::Amadeus) }
+      specify { Strategy.select(:source => 'amadeus').should be_a(Amadeus::Strategy) }
+      specify { Strategy.select(:order => object).should be_a(Amadeus::Strategy) }
+      specify { Strategy.select(:ticket => object).should be_a(Amadeus::Strategy) }
+      specify { Strategy.select(:rec => object).should be_a(Amadeus::Strategy) }
     end
 
     context "for sirena" do

@@ -95,7 +95,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     unless @order.source == 'amadeus' && @order.pnr_number
       redirect_to :back, alert: 'works only for amadeus order with PNR number'
     else
-      @recommendation = Strategy::Amadeus.new(order: @order).recommendation_from_booking
+      @recommendation = Amadeus::Strategy.new(order: @order).recommendation_from_booking
       # FIXME надо бы убрать. что мешает сериализации работать без комиссии?
       @recommendation.find_commission!
       redirect_to check_admin_commissions_url(:code => @recommendation.serialize)

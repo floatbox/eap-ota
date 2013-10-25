@@ -6,7 +6,7 @@ module Amadeus::Request
   SOAP_ACTIONS_FOR_CLASS = Hash[ SOAP_ACTIONS.keys.map {|action| [action.sub('_',''), action] }]
 
   def self.for action
-    "::Amadeus::Request::#{action.sub('_','')}".constantize
+    "Amadeus::Request::#{action.sub('_','')}".constantize
   # rescue NameError
   #  Amadeus::Request::Base
   end

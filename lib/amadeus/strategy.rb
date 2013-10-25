@@ -1,30 +1,30 @@
 # encoding: utf-8
-class Strategy::Amadeus < Strategy::Base
+class Amadeus::Strategy < ::Strategy::Base
 
   def source; 'amadeus' end
 
   # preliminary booking
   # ###################
-  include Strategy::Amadeus::PreliminaryBooking
+  include Amadeus::Strategy::PreliminaryBooking
 
   # booking
   # #######
-  include Strategy::Amadeus::Booking
+  include Amadeus::Strategy::Booking
 
   # canceling
   # ########
   # FIXME обработать ошибки?
 
   def cancel
-    ::Amadeus.booking do |amadeus|
-      logger.error "Strategy::Amadeus: canceling #{@order.pnr_number}"
+    Amadeus.booking do |amadeus|
+      logger.error "Amadeus::Strategy: canceling #{@order.pnr_number}"
       @order.cancel! if amadeus.pnr_cancel_itinerary(:number => @order.pnr_number).success?
     end
   end
 
   # get tickets hashes
   # ########
-  include Strategy::Amadeus::Tickets
+  include Amadeus::Strategy::Tickets
 
   # ticketing
   # #########
@@ -37,13 +37,13 @@ class Strategy::Amadeus < Strategy::Base
   ############
 
   def raw_pnr
-    ::Amadeus.booking do |amadeus|
+    Amadeus.booking do |amadeus|
       amadeus.pnr_raw(@order.pnr_number)
     end
   end
 
   def fare_rule_hashes
-    ::Amadeus.booking do |amadeus|
+    Amadeus.booking do |amadeus|
       amadeus.pnr_retrieve(number: @order.pnr_number)
       amadeus.fare_price_pnr_with_booking_class(request_options: ['NOP'], unifares: false)
       res = amadeus.fare_check_rules(sections: []).rule_hashes
@@ -78,7 +78,7 @@ class Strategy::Amadeus < Strategy::Base
 
   def recommendation_from_booking
 
-    ::Amadeus.booking do |amadeus|
+    Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
       tst_resp = amadeus.ticket_display_tst
       amadeus.pnr_ignore
@@ -106,7 +106,7 @@ class Strategy::Amadeus < Strategy::Base
   end
 
   def booking_attributes
-    ::Amadeus.booking do |amadeus|
+    Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
       departure_date = pnr_resp.flights.first.dept_date
       tst_resp = amadeus.ticket_display_tst
@@ -128,7 +128,7 @@ class Strategy::Amadeus < Strategy::Base
   end
 
   def reprice_and_rebook
-    ::Amadeus.booking do |amadeus|
+    Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
       lower_pricing_resp = amadeus.fare_price_pnr_with_lower_fares
       if pnr_resp.booking_classes != lower_pricing_resp.new_booking_classes

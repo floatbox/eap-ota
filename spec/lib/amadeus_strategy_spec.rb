@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe Strategy::Amadeus do
+describe Amadeus::Strategy do
   let (:amadeus) { mock(Amadeus::Service, release: nil, destroy: nil) }
 
   before do
@@ -30,7 +30,7 @@ describe Strategy::Amadeus do
   # FIXME ясностью не блещет
   describe "#raw_ticket" do
     let(:ticket) { mock(Ticket, office_id: office, first_number_with_code: '123-23456789') }
-    subject { Strategy::Amadeus.new(:ticket => ticket) }
+    subject { Amadeus::Strategy.new(:ticket => ticket) }
 
     context "on whitelisted office_id" do
       before do
@@ -73,7 +73,7 @@ describe Strategy::Amadeus do
     end
 
     subject do
-      Strategy::Amadeus.new(:order => build(:order)).booking_attributes
+      Amadeus::Strategy.new(:order => build(:order)).booking_attributes
     end
 
     it {should include(:blank_count => 1)}
@@ -102,7 +102,7 @@ describe Strategy::Amadeus do
     end
 
     subject :recommendation do
-      Strategy::Amadeus.new(:order => build(:order)).recommendation_from_booking
+      Amadeus::Strategy.new(:order => build(:order)).recommendation_from_booking
     end
 
     it 'is not nil' do
@@ -138,7 +138,7 @@ describe Strategy::Amadeus do
         .with(:date => flight_date, :number => '419', :carrier => 'BT', :departure_iata => 'DME', :arrival_iata => 'RIX')\
         .and_return( mock(Amadeus::Response::AirFlightInfo, flight: flight) )
 
-      Strategy::Amadeus.new.flight_from_gds_code(code).should == flight
+      Amadeus::Strategy.new.flight_from_gds_code(code).should == flight
     end
   end
 

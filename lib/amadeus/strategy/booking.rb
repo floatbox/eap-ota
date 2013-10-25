@@ -1,10 +1,10 @@
 # encoding: utf-8
-module Strategy::Amadeus::Booking
+module Amadeus::Strategy::Booking
 
   include CopyAttrs
 
   def create_booking
-    ::Amadeus.booking do |amadeus|
+    Amadeus.booking do |amadeus|
       # FIXME могут ли остаться частичные резервирования сегментов, если одно из них не прошло?
       # может быть, при ошибке канселить бронирование на всякий случай?
       # лучше сделать IG
@@ -14,7 +14,7 @@ module Strategy::Amadeus::Booking
             :recommendation => @rec
           ).segments_confirmed?
 
-        logger.error 'Strategy::Amadeus: segments aren\'t confirmed in create_booking method'
+        logger.error 'Amadeus::Strategy: segments aren\'t confirmed in create_booking method'
         return :failed
       end
       # FIXME если отваливается здесь по таймауту, то мы не узнаем номер брони и не запишем в базу.
@@ -34,7 +34,7 @@ module Strategy::Amadeus::Booking
         ).merge(
           archive: true,
           received_from: true,
-          full_access: [::Amadeus::Session::BOOKING, ::Amadeus::Session::TICKETING],
+          full_access: [Amadeus::Session::BOOKING, Amadeus::Session::TICKETING],
           remarks: 'INTERNET BOOKING',
           form_of_payment: true,
           our_contacts: true,
@@ -44,10 +44,10 @@ module Strategy::Amadeus::Booking
 
       unless add_multi_elements.success?
         if add_multi_elements.pnr_number
-          logger.error "Strategy::Amadeus: номер брони есть, но возникла какая-то ошибка"
+          logger.error "Amadeus::Strategy: номер брони есть, но возникла какая-то ошибка"
           amadeus.pnr_cancel_itinerary.or_fail!
         else
-          logger.error "Strategy::Amadeus: Не получили номер брони"
+          logger.error "Amadeus::Strategy: Не получили номер брони"
           amadeus.pnr_ignore
           if add_multi_elements.name_errors.present? || add_multi_elements.srfoid_errors.present?
             add_multi_elements.or_fail!
@@ -57,11 +57,11 @@ module Strategy::Amadeus::Booking
       end
       unless @order_form.pnr_number = add_multi_elements.pnr_number
         # при сохранении случилась какая-то ошибка, номер брони не выдан.
-        logger.error "Strategy::Amadeus: Не получили номер брони"
+        logger.error "Amadeus::Strategy: Не получили номер брони"
         amadeus.pnr_ignore
         return :failed
       end
-      logger.info "Strategy::Amadeus: processing booking: #{add_multi_elements.pnr_number}"
+      logger.info "Amadeus::Strategy: processing booking: #{add_multi_elements.pnr_number}"
       @order_form.save_to_order
 
       # важно для дальнейшего cancel
@@ -90,7 +90,7 @@ module Strategy::Amadeus::Booking
         # FIXME отреагировать на изменение цены/продаваемости
         new_rec = @rec.dup_with_new_prices(pricing.prices)
         unless @order_form.price_with_payment_commission == new_rec.price_with_payment_commission
-          logger.error "Strategy::Amadeus: Изменилась цена при тарифицировании: #{@order_form.price_with_payment_commission} -> #{new_rec.price_with_payment_commission}"
+          logger.error "Amadeus::Strategy: Изменилась цена при тарифицировании: #{@order_form.price_with_payment_commission} -> #{new_rec.price_with_payment_commission}"
           # не попытается ли сохранить бронь после выхода из блока?
           amadeus.pnr_cancel_itinerary.or_fail!
           @order_form.price_with_payment_commission = new_rec.price_with_payment_commission
@@ -100,7 +100,7 @@ module Strategy::Amadeus::Booking
         end
 
         if !lax && !TimeChecker.ok_to_sell(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
-          logger.error "Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
+          logger.error "Amadeus::Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           amadeus.pnr_cancel_itinerary.or_fail!
           return :failed
@@ -109,12 +109,12 @@ module Strategy::Amadeus::Booking
         # FIXME среагировать на отсутствие маски
         amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
 
-#        amadeus.pnr_transfer_ownership(:number => @order_form.pnr_number, :office_id => ::Amadeus::Session::TICKETING)
+#        amadeus.pnr_transfer_ownership(:number => @order_form.pnr_number, :office_id => Amadeus::Session::TICKETING)
       end.or_fail!
 
       # повторяем в случае прихода ремарок
       amadeus.pnr_commit_really_hard do
-        amadeus.cmd("rp/#{::Amadeus::Session::TICKETING}/all")
+        amadeus.cmd("rp/#{Amadeus::Session::TICKETING}/all")
       end.or_fail!
 
       #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
@@ -124,7 +124,7 @@ module Strategy::Amadeus::Booking
       #Еще раз проверяем, что все сегменты доступны
       # вообще говоря, pnr_really_hard тоже получает эти данные. сэкономить транзакцию?
       unless amadeus.pnr_retrieve(:number => @order_form.pnr_number).all_segments_available?
-        logger.error "Strategy::Amadeus: Не подтверждены места"
+        logger.error "Amadeus::Strategy: Не подтверждены места"
         cancel
         return :failed
       end

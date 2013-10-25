@@ -1,11 +1,11 @@
 # encoding: utf-8
-module Strategy::Amadeus::Tickets
+module Amadeus::Strategy::Tickets
 
 
   # FIXME обработать tst_resp.success? == false
   def get_tickets
     pnr_resp, tst_resp, prices, baggage_with_refs = ()
-    ::Amadeus.booking do |amadeus|
+    Amadeus.booking do |amadeus|
       pnr_resp = amadeus.pnr_retrieve(:number => @order.pnr_number)
       tst_resp = amadeus.ticket_display_tst
       prices = tst_resp.money_with_refs
@@ -58,14 +58,14 @@ module Strategy::Amadeus::Tickets
     else
       raise Strategy::TicketError, "unsupported ticketing method: #{@order.commission_ticketing_method.inspect}"
     end
-  rescue ::Amadeus::Error, Curl::Err::TimeoutError => e
+  rescue Amadeus::Error, Curl::Err::TimeoutError => e
     with_warning(e)
     @order.update_attributes(:ticket_status => 'error_ticket')
     raise Strategy::TicketError, e.message
   end
 
   def amadeus_ticket(office_id)
-    ::Amadeus.session(office_id) do |amadeus|
+    Amadeus.session(office_id) do |amadeus|
       amadeus.pnr_retrieve(:number => @order.pnr_number).or_fail!
       # пересоздаем TST и сверяем цены
       # не выписываем, если цены изменились
@@ -84,7 +84,7 @@ module Strategy::Amadeus::Tickets
 
   def add_to_visa_queue
     # отправляем в очередь для получения данных о визе в америку
-    ::Amadeus.ticketing do |amadeus|
+    Amadeus.ticketing do |amadeus|
       if @order.needs_visa_notification?
         amadeus.pnr_retrieve(:number => @order.pnr_number).or_fail!
         amadeus.cmd('QE8C21') if @order.needs_visa_notification?
@@ -93,7 +93,7 @@ module Strategy::Amadeus::Tickets
   end
 
   def downtown_ticket
-    ::Amadeus.ticketing do |amadeus|
+    Amadeus.ticketing do |amadeus|
 
       # заодно открывает PNR
       pnr_resp = amadeus.pnr_retrieve number: @order.pnr_number
@@ -115,7 +115,7 @@ module Strategy::Amadeus::Tickets
     end
 
     # открываем в американском офисе.
-    ::Amadeus.downtown do |amadeus|
+    Amadeus.downtown do |amadeus|
       # пересчитываем маску: FXP (с валидирующим перевозчиком)
       amadeus.pnr_retrieve(:number => @order.pnr_number)
 

@@ -12,7 +12,7 @@ module Strategy
     source = args.delete(:source) || (args[:rec] || args[:order] || args[:ticket]).try(:source)
     case source
     when 'amadeus'
-      Strategy::Amadeus.new args
+      Amadeus::Strategy.new args
     else
       raise ArgumentError, (source ? "unknown source #{source.inspect}" : 'source not specified')
     end

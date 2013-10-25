@@ -1,21 +1,21 @@
 # encoding: utf-8
-module Strategy::Amadeus::PreliminaryBooking
+module Amadeus::Strategy::PreliminaryBooking
   CABINS_MAPPING = {'M' => 'E', 'W' => 'E', 'Y' => 'E', 'C' => 'B', 'F' => 'F'}
 
   def check_price_and_availability(forbid_class_changing = Conf.amadeus.forbid_class_changing)
     if !lax && !TimeChecker.ok_to_book(@rec.dept_date + 1.day)
-      logger.error 'Strategy::Amadeus::Check: time criteria missed'
+      logger.error 'Amadeus::Strategy::Check: time criteria missed'
       return
     end
 
     unless hahn_air_allows?(@rec)
-      logger.error 'Strategy::Amadeus::Check: forbidden by Hahn Air'
+      logger.error 'Amadeus::Strategy::Check: forbidden by Hahn Air'
       return
     end
     # считаем что в амадеусе всегда один билет на человека
     @rec.blank_count = @search.people_total
 
-    ::Amadeus.booking do |amadeus|
+    Amadeus.booking do |amadeus|
       return unless get_places_and_last_tkt_date(amadeus, forbid_class_changing)
       return unless get_price_and_rules(amadeus)
       # не нужно, booking {...} убьет бронирование
@@ -23,11 +23,11 @@ module Strategy::Amadeus::PreliminaryBooking
 
     end
     if !lax && !TimeChecker.ok_to_book(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
-      logger.error "Strategy::Amadeus::Check: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
+      logger.error "Amadeus::Strategy::Check: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
       dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
       return
     end
-    logger.info "Strategy::Amadeus::Check: Success!"
+    logger.info "Amadeus::Strategy::Check: Success!"
     @rec
   end
 
@@ -82,11 +82,11 @@ module Strategy::Amadeus::PreliminaryBooking
         @rec.last_tkt_date = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).last_tkt_date
         return @rec
       end
-      logger.error "Strategy::Amadeus::Check: segments aren't confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} #{Time.now.strftime('%H:%M %d.%m.%Y')}"
+      logger.error "Amadeus::Strategy::Check: segments aren't confirmed: recommendation: #{@rec.serialize} segments: #{air_sfr.segments_status_codes.join(', ')} #{Time.now.strftime('%H:%M %d.%m.%Y')}"
       return if forbid_class_changing
       return unless find_new_classes(amadeus)
     end
-    logger.error "Strategy::Amadeus::Check: tried to reprice 3 times, no success"
+    logger.error "Amadeus::Strategy::Check: tried to reprice 3 times, no success"
     return
   end
 
@@ -103,7 +103,7 @@ module Strategy::Amadeus::PreliminaryBooking
 
     # FIXME не очень надежный признак
     if @rec.price_fare.to_i == 0
-      logger.error 'Strategy::Amadeus::Check: price_fare is 0?'
+      logger.error 'Amadeus::Strategy::Check: price_fare is 0?'
       return
     end
     @rec
