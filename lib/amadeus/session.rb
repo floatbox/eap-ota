@@ -21,7 +21,7 @@ module Amadeus
   LVIV = office_for_alias(:lviv)
 
   cattr_accessor :logger do
-    Rails.logger
+    ForwardLogging.new(Rails.logger)
   end
 
   cattr_accessor :pool do
@@ -42,7 +42,7 @@ module Amadeus
     # вызывается с параметром и без (для класс-методов амадеуса)
     def book(office=nil)
       office ||= default_office
-      logger.info { "Amadeus::Session: free sessions count: #{pool.free_count(office)}" }
+      logger.debug { "Amadeus::Session: free sessions count: #{pool.free_count(office)}" }
       find_free_and_book(office) || sign_in(office, true)
     end
 
