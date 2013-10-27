@@ -145,7 +145,6 @@ class Mux
   end
 
   def async_amadeus_driver
-    # Handsoap::TyphoeusDriver.new( :hydra => hydra )
     Handsoap::MultiCurbDriver.new( :multi => multi )
   end
 
@@ -154,10 +153,6 @@ class Mux
     multi.perform
   rescue => e
     raise unless e.message['select(): Interrupted system call']
-  end
-
-  def hydra
-    @hydra ||= Typhoeus::Hydra.new
   end
 
   def multi
