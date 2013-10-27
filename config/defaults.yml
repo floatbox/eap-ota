@@ -24,11 +24,7 @@ site:
       direct: []
 api:
   enabled: yes
-  store_rambler_cache: no
   url_base: 'https://eviterra.com'
-  rambler_url: 'http://in.avia.rambler.ru/eviterra/'
-  send_to_rambler: no
-  rambler_hash_size: 30
   passwords: {}
   test:
     passwords:

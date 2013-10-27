@@ -12,10 +12,6 @@ class Mux
   include KeyValueInit
   attr_accessor :suggested_limit, :lite, :admin_user
 
-  def save_to_mongo(avia_search, recommendations)
-    RamblerCache.create_from_form_and_recs(avia_search, recommendations)
-  end
-
   def pricer(avia_search)
     # FIXME делает сортировку дважды
     benchmark 'Pricer, total' do
@@ -132,9 +128,6 @@ class Mux
       async_perform
 
       recommendations = amadeus_merge_and_cleanup(amadeus_recommendations)
-      benchmark 'creating and saving rambler cache' do
-        save_to_mongo(avia_search, recommendations) if Conf.api.store_rambler_cache && !admin_user && !avia_search.complex_route?
-      end
       if lite
         recommendations
       else
