@@ -3,8 +3,6 @@
 # читается как "мэкс", если что.
 class Mux
 
-  cattr_accessor :cryptic_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log') end
-  cattr_accessor :short_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log') end
   cattr_accessor :logger do Rails.logger end
 
   include Monitoring::Benchmarkable
@@ -73,9 +71,8 @@ class Mux
       recommendations.uniq! unless lite
 
       # log amadeus recommendations
-      benchmark 'log_examples' do
-        log_examples(recommendations)
-      end
+      ActiveSupport::Notifications.instrument 'amadeus_merged.mux',
+        recommendations: recommendations
 
       recommendations.select!(&:full_information?)
 
@@ -150,16 +147,6 @@ class Mux
 
   def multi
     @multi ||= Curl::Multi.new
-  end
-
-  # применяем только к амадеусу, для разбора интерлайнов
-  def log_examples(recommendations)
-    recommendations.each do |r|
-      r.variants.each do |v|
-        cryptic_logger.info r.cryptic(v)
-      end
-      short_logger.info r.short
-    end
   end
 
   def ignore_error?(e)
