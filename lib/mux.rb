@@ -152,7 +152,7 @@ class Mux
     # hydra.run
     multi.perform
   rescue => e
-    raise unless e.message['select(): Interrupted system call']
+    raise unless ignore_error?(e)
   end
 
   def multi
