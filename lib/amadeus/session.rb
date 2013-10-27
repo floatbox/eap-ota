@@ -6,20 +6,6 @@ module Amadeus
 
   extend Monitoring::Benchmarkable
 
-  def self.office_for_alias(al)
-    Conf.amadeus.offices.each do |office, settings|
-      return office if settings["alias"] == al.to_s
-    end
-    raise ArgumentError, "no office_id defined for alias #{al}"
-  end
-
-  # FIXME избавиться от констант
-  BOOKING = office_for_alias(:booking)
-  TICKETING = office_for_alias(:ticketing)
-  DOWNTOWN = office_for_alias(:downtown)
-  ZAGORYE = office_for_alias(:zagorye)
-  LVIV = office_for_alias(:lviv)
-
   cattr_accessor :logger do
     ForwardLogging.new(Rails.logger)
   end

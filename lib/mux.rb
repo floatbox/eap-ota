@@ -43,7 +43,7 @@ class Mux
   def amadeus_pricer(avia_search)
     return [] unless Conf.amadeus.enabled
     benchmark 'Pricer amadeus, total' do
-      session = Amadeus::Session.book(Amadeus::Session::BOOKING)
+      session = Amadeus::Session.book(Amadeus.office(:booking))
       amadeus = Amadeus::Service.new(:session => session, :driver => async_amadeus_driver)
       request_ws = {:suggested_limit => suggested_limit, :lite => lite}
       request_ns = {:suggested_limit => suggested_limit, :lite => lite, :nonstop => true}
@@ -103,7 +103,7 @@ class Mux
     reqs = (lite || !Conf.amadeus.nonstop_search) ? [request_ws] : [request_ns, request_ws]
     amadeus_driver = async_amadeus_driver
     reqs.each do |req|
-      session = Amadeus::Session.book(Amadeus::Session::BOOKING)
+      session = Amadeus::Session.book(Amadeus.office(:booking))
       amadeus = Amadeus::Service.new(:session => session, :driver => amadeus_driver)
       amadeus.async_fare_master_pricer_travel_board_search(avia_search, req) do |res|
         amadeus.release

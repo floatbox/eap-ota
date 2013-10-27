@@ -34,7 +34,7 @@ module Amadeus::Strategy::Booking
         ).merge(
           archive: true,
           received_from: true,
-          full_access: [Amadeus::Session::BOOKING, Amadeus::Session::TICKETING],
+          full_access: [Amadeus.office(:booking), Amadeus.office(:ticketing)],
           remarks: 'INTERNET BOOKING',
           form_of_payment: true,
           our_contacts: true,
@@ -109,12 +109,12 @@ module Amadeus::Strategy::Booking
         # FIXME среагировать на отсутствие маски
         amadeus.ticket_create_tst_from_pricing(:fares_count => pricing.fares_count).or_fail!
 
-#        amadeus.pnr_transfer_ownership(:number => @order_form.pnr_number, :office_id => Amadeus::Session::TICKETING)
+#        amadeus.pnr_transfer_ownership(:number => @order_form.pnr_number, :office_id => Amadeus.office(:ticketing))
       end.or_fail!
 
       # повторяем в случае прихода ремарок
       amadeus.pnr_commit_really_hard do
-        amadeus.cmd("rp/#{Amadeus::Session::TICKETING}/all")
+        amadeus.cmd("rp/#{Amadeus.office(:ticketing)}/all")
       end.or_fail!
 
       #amadeus.queue_place_pnr(:number => @order_form.pnr_number)
