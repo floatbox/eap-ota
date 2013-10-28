@@ -60,9 +60,9 @@ module SMS
 
               xml.outMessageList_ {
                 messages.each_with_index { |message, index|
-                  # TODO тут cliendId это тупо 0-based индекс,
+                  # TODO тут clientId это тупо 0-based индекс,
                   # уточнить потом и исправить, если надо
-                  xml.outMessage_(cliendId: index) {
+                  xml.outMessage_(clientId: index) {
                     compose_message(xml, message)
                   }
                 }
@@ -91,16 +91,17 @@ module SMS
         code = xml.xpath('/consumeOutMessageResponse/payload/code').text
         fail SMSError, "SMS not sent, error_code received: #{code}" unless code == 'ok'
 
-        parsed_response = Hash.new do |hash|
-          xml.xpath('consumeOutMessageResponse/payload/outMessageList//outMessage').map do |message|
-            client_id = message.attr('clientId')
-            provider_id = message.attr('providerId')
-            code = message('./code')
-            if code == 'ok'
-              hash[client_id] = {provider_id: provider_id, code: code}
-            end
-          end
+        parsed_response = {}
+
+        xml.xpath('consumeOutMessageResponse/payload/outMessageList//outMessage').map do |message|
+          client_id = message.attr('clientId')
+          provider_id = message.attr('providerId')
+          code = message.xpath('./code').text
+          parsed_response[client_id] = {provider_id: provider_id, code: code}
         end
+
+        parsed_response
+
       end
 
       def convert_date(date)
