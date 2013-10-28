@@ -25,7 +25,6 @@ module SMS
         with_warning(e)
       end
 
-
       private
 
       def send_one(hash)
@@ -71,24 +70,23 @@ module SMS
 
             }
           }
-        end.to_xml.tap { |x| p "request: #{x}" }
+        end.to_xml.tap { |x| print "request: #{x}" }
       end
 
       def compose_message(xml, message)
-        Rails.logger.info "message: #{message}"
-        xml.address_               message[:address]                if message[:address]
-        xml.startTime_             message[:start_time]             if message[:start_time]
-        xml.validityPeriodMinutes_ message[:validity_period]        if message[:validity_period]
-        xml.content_               message[:content]                if message[:content]
-        xml.comment_               message[:comment]                if message[:comment]
-        xml.priority_              (message[:priority] || 'medium') if message[:priority]
-        xml.subject_               'Eviterra'                       if message[:subject]
+        xml.address_               message[:address]                  if message[:address]
+        xml.startTime_             convert_date(message[:start_time]) if message[:start_time]
+        xml.validityPeriodMinutes_ message[:validity_period]          if message[:validity_period]
+        xml.content_               message[:content]                  if message[:content]
+        xml.comment_               message[:comment]                  if message[:comment]
+        xml.priority_              (message[:priority] || 'medium')   if message[:priority]
+        xml.subject_               'Eviterra'                         if message[:subject]
         xml.contentType_           'text'
       end
 
       def parse_response(response)
         xml = Nokogiri::XML(response.body)
-        p "xml: #{xml}"
+        print "response: #{xml}"
 
         code = xml.xpath('/consumeOutMessageResponse/payload/code').text
         fail SMSError, "SMS not sent, error_code received: #{code}" unless code == 'ok'
