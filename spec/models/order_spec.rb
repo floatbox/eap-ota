@@ -172,8 +172,7 @@ describe Order do
         its(:price_tax) {should == 5430}
 
         its(:recalculated_price_with_payment_commission) {should == 15364.97}
-        its(:price_tax_and_markup_and_payment) {should == 15364.97 - 10005}
-
+        its(:price_tax_and_markup_and_payment) {should == BigDecimal.new(15364.97, 7) - 10005}
       end
 
       describe 'new ticket' do
