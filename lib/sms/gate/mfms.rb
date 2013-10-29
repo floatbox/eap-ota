@@ -60,13 +60,11 @@ module SMS
 
               xml.outMessageList_ {
                 messages.each_with_index { |message, index|
-                  # TODO тут clientId это тупо 0-based индекс,
-                  # уточнить потом и исправить, если надо
                   digest = Digest::MD5.new << message[:address] + Time.now.to_i.to_s
 
                   yield digest if block_given?
 
-                  xml.outMessage_(clientId: index) {
+                  xml.outMessage_(clientId: digest) {
                     compose_message(xml, message)
                   }
                 }
