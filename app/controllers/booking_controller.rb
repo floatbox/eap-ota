@@ -2,7 +2,7 @@
 class BookingController < ApplicationController
   include BookingEssentials
   protect_from_forgery :except => :confirm_3ds
-  before_filter :log_referrer, :only => [:api_redirect, :api_booking, :rambler_booking]
+  before_filter :log_referrer, :only => [:api_redirect, :api_booking]
   before_filter :log_user_agent
 
   # before_filter :save_partner_cookies, :only => [:preliminary_booking, :api_redirect]
@@ -55,20 +55,6 @@ class BookingController < ApplicationController
 
   ensure
     StatCounters.inc %W[enter.api.total]
-  end
-
-  def api_rambler_booking
-    uri = RamblerApi.redirecting_uri params
-    StatCounters.inc %W[enter.rambler_cache.success]
-    redirect_to uri
-
-  # FIXME можно указать :formats => [:xml], но я задал дефолтный формат в роутинге
-  rescue CodeStash::NotFound => iata_error
-    render 'api/rambler_failure', :status => :not_found, :locals => { :message => iata_error.message }
-  rescue ArgumentError => argument_error
-    render 'api/rambler_failure', :status => :bad_request, :locals => { :message => argument_error.class }
-  ensure
-    StatCounters.inc %W[enter.rambler_cache.total]
   end
 
   def api_redirect

@@ -43,7 +43,6 @@ Eviterra::Application.routes.draw do
   # какой-то жаваскрипт фигачит посты сюда. убрать потом
   post 'api/booking/edit' => proc { [404, {}, []] }
   match 'api/booking/:query_key(.:format)' => 'booking#api_booking', :via => :get
-  match 'api/rambler_booking(.:format)' => 'booking#api_rambler_booking', :via => :get, :format => :xml, :as => :api_rambler_booking
   match 'api/order_stats' => 'api_order_stats#index'
   match 'api/v1/preliminary_booking' => 'api_booking#preliminary_booking', :as => :api_preliminary_booking
   post 'api/v1/pay' => 'api_booking#pay', :as => :api_booking_pay

@@ -6,3 +6,5 @@ require 'our/curl/monitoring_log_subscriber'
 require 'amadeus/log_subscriber'
 # лог xml файлов
 require 'amadeus/response_log_subscriber'
+# лог рекомендаций
+require 'recommendation_log_subscriber'
