@@ -16,7 +16,8 @@ module SMS
       # Принимает либо хеш с параметрами смс,
       # либо Enumerable таких хешей
       # В любом случае отправляет одним запросом.
-      def send_sms(params)
+      def send_sms(params, &block_client_id)
+        @client_id_hook = &block_client_id
         case params
           when Hash then send_one(params)
           when Enumerable then send_multiple(params)
@@ -27,8 +28,8 @@ module SMS
 
       private
 
-      def send_one(hash, &block)
-        xml = compose([hash], &block)
+      def send_one(hash)
+        xml = compose([hash])
         response = invoke_post_request(xml)
       end
 
@@ -62,7 +63,7 @@ module SMS
                 messages.each_with_index { |message, index|
                   digest = Digest::MD5.new << message[:address] + Time.now.to_i.to_s
 
-                  yield digest if block_given?
+                  yield digest if @client_id_hook
 
                   xml.outMessage_(clientId: digest) {
                     compose_message(xml, message)
