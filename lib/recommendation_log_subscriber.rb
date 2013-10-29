@@ -2,7 +2,7 @@
 # FIXME
 #
 # сейчас применяем только к амадеусу, для разбора интерлайнов
-class RecommendationLogSubscriber < ActiveSuppor::LogSubscriber
+class RecommendationLogSubscriber < ActiveSupport::LogSubscriber
 
   include ActiveSupport::Benchmarkable
 
