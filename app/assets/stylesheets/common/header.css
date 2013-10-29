@@ -372,3 +372,10 @@ a.pht-content:hover .pht-title {
 .phu-logout {
     display: none;
 }
+.phul-logout {
+    padding-right: 14px;
+    background: url('/images/common/exit.png') no-repeat 100% 1px;
+}
+.phul-logout:hover {
+    color: #333;
+}
