@@ -1,24 +1,6 @@
 carrier "LO", start_date: "2013-07-03"
 
 rule 1 do
-ticketing_method "aviacenter"
-agent "5%"
-subagent "3%"
-discount "3%"
-agent_comment "5%(3%)(3%) с вылетом из России от опубликованных прямых и трансферных тарифов Эконом и Бизнес класса на собств. рейсы LO (кроме прямых перелетов из Санкт-Петербурга в Варшаву и из Варшавы в Санкт-Петербург), и кроме тарифов: промо и групповых: L, O, U, G; (Например: 5% от трансферного тарифа Санкт-Петербург-Варшава-Барселона);"
-subagent_comment "3%"
-classes :economy, :business
-check %{ includes(country_iatas.first, "RU") and not includes(booking_classes, "L O U G") and 
-  (
-    not includes_only(city_iatas, "MOW WAW") or
-    not includes_only(city_iatas, "LED WAW")
-  )
-}
-example "svowaw/economy wawsvo/business"
-example "ledwaw/business wawbcn/business"
-end
-
-rule 2 do
 important!
 ticketing_method "aviacenter"
 agent "1eur"
@@ -31,7 +13,7 @@ example "ledwaw/economy wawled/business"
 example "ledwaw/business wawled/business"
 end
 
-rule 3 do
+rule 2 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -45,7 +27,7 @@ example "svojfk/z jfksvo/su/c"
 example "svobkk/p bkksvo/su/a"
 end
 
-rule 4 do
+rule 3 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
@@ -56,7 +38,7 @@ routes "RU..."
 example "svocdg/ab cdgsvo"
 end
 
-rule 5 do
+rule 4 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
