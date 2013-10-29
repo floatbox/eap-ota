@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "1.75%"
+discount "3.5%"
 agent_comment "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent_comment "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :first, :business
@@ -27,7 +27,7 @@ important!
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"
-discount "4%"
+discount "4.5%"
 tour_code "USAN002"
 agent_comment "с сегодня на QR если в маршруте есть Россия (OW/RT, origin/destination) - агентская 5%"
 subagent_comment "у нас 3%"
