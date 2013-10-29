@@ -17,7 +17,7 @@ module SMS
       # либо Enumerable таких хешей
       # В любом случае отправляет одним запросом.
       def send_sms(params, &block_client_id)
-        @client_id_hook = &block_client_id
+        @client_id_hook = block_client_id
         case params
           when Hash then send_one(params)
           when Enumerable then send_multiple(params)
@@ -61,11 +61,11 @@ module SMS
 
               xml.outMessageList_ {
                 messages.each_with_index { |message, index|
-                  digest = Digest::MD5.new << message[:address] + Time.now.to_i.to_s
+                  digest = (Digest::MD5.new << message[:address] + Time.now.to_i.to_s).to_s
 
-                  yield digest if @client_id_hook
+                  @client_id_hook.call digest if @client_id_hook
 
-                  xml.outMessage_(clientId: digest) {
+                  xml.outMessage_(clientId: digest.to_s) {
                     compose_message(xml, message)
                   }
                 }
