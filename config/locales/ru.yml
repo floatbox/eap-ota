@@ -162,6 +162,8 @@ ru:
         created_at: "Создан"
         external_gateway_link: "Детальная история"
         <<: *PRICING_ATTRIBUTES
+      customer:
+        password: "Пароль"
 
 
   views:

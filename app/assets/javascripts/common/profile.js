@@ -348,7 +348,7 @@ send: function() {
                 that.process(result);
             } else if (result.errors && result.errors.length) {
                 that.button.prop('disabled', false);
-                that.showError(result.errors[0].replace('Password', 'Пароль'));
+                that.showError(result.errors[0]);
             }
         }).fail(function(jqXHR, status, message) {
             that.loading.hide();
