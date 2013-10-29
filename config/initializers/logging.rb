@@ -7,4 +7,4 @@ require 'amadeus/log_subscriber'
 # лог xml файлов
 require 'amadeus/response_log_subscriber'
 # лог рекомендаций
-require 'recommendations_log_subscriber'
+require 'recommendation_log_subscriber'
