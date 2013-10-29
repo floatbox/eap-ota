@@ -27,8 +27,8 @@ module SMS
 
       private
 
-      def send_one(hash)
-        xml = compose([hash])
+      def send_one(hash, &block)
+        xml = compose([hash], &block)
         response = invoke_post_request(xml)
       end
 
@@ -62,6 +62,10 @@ module SMS
                 messages.each_with_index { |message, index|
                   # TODO тут clientId это тупо 0-based индекс,
                   # уточнить потом и исправить, если надо
+                  digest = Digest::MD5.new << message[:address] + Time.now.to_i.to_s
+
+                  yield digest if block_given?
+
                   xml.outMessage_(clientId: index) {
                     compose_message(xml, message)
                   }
