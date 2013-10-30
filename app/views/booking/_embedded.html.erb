@@ -38,11 +38,14 @@
         <% end %>
     </div>
     <% if recommendation.baggage_array %>
-    <div class="od-comment">
-        <% group_baggage_summaries(recommendation.baggage_array, recommendation.flights).each do |baggage_summary| %>
-            <p class="odc-text"><%= raw baggage_summary %></p>        
+        <% baggage_groups = group_baggage_summaries(recommendation.baggage_array, recommendation.flights) %>
+        <% if baggage_groups %>
+        <div class="od-comment">
+            <% baggage_groups.each do |baggage_summary| %>
+                <p class="odc-text"><%= raw baggage_summary %></p>
+            <% end %>
+        </div>
         <% end %>
-    </div>
     <% end %>
     <div class="od-comment">
         <p class="odc-text"><%= t 'offer.comments.time' %></p>
@@ -82,11 +85,11 @@
         </div>
         <div class="latent" id="bfh-withseat"><%= raw t 'booking.passengers.with_seat.description' %></div>
         <div class="latent" id="bfh-passport"><%= raw t 'booking.passengers.document.description' %></div>
-        <div class="latent" id="bfh-expiration"><%= raw t 'booking.passengers.expiration.description' %></div>        
+        <div class="latent" id="bfh-expiration"><%= raw t 'booking.passengers.expiration.description' %></div>
     </div>
 
     <%= render 'contacts_form' %>
-    
+
     <div class="bf-section" data-type="payment">
         <div class="bfs-title">
             <h4 class="bfst-text"><%= t @order_form.last_pay_time ? 'card_cash' : 'only_card', :scope => 'booking.payment' %></h4>
@@ -115,7 +118,7 @@
         <%= render 'payment_cash_form' if @order_form.enabled_delayed_payment? %>
         <%= render 'payment_card_form', :f => f %>
     </div>
-    
+
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
     <% price_discount = -@order_form.recommendation.price_discount.round.to_i %>
@@ -165,7 +168,7 @@
             <div class="bff-required"></div>
         </div>
     </div>
-    
+
 <% end %>
 
 <div class="bf-farerules">
