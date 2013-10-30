@@ -1,11 +1,10 @@
-carrier "FV", start_date: "2013-07-01"
+carrier "FV", start_date: "2014-01-01"
 
 rule 1 do
 ticketing_method "aviacenter"
-agent "4%"
-subagent "2%"
-discount "3%"
-agent_comment "4% (2%) (2%) от опубл. тарифов на собств. (включая code-share) рейсы FV и рейсы Interline c участком FV"
+agent "2.5%"
+subagent "0.5%"
+agent_comment "2.5% от опубл. тарифов на собств. (включая code-share) рейсы FV и рейсы Interline c участком FV"
 subagent_comment "2% от опубл. тарифов на собств. рейсы FV и рейсы Interline c участком FV"
 interline :no, :yes
 example "svocdg"
