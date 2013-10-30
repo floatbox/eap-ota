@@ -106,7 +106,7 @@ class AutoTicketStuff
   end
 
   def used_card_with_different_name?
-    order.payment_type == 'card' && Order.where(pan: order.pan).where("name_in_card != ?", order.name_in_card).present?
+    order.payment_type == 'card' && Order.where(pan: order.pan).where("name_in_card != ? AND created_at > ?", order.name_in_card, 60.days.ago).present?
   end
 
   def looks_like_fraud?
