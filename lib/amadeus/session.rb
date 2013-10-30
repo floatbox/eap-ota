@@ -6,22 +6,8 @@ module Amadeus
 
   extend Monitoring::Benchmarkable
 
-  def self.office_for_alias(al)
-    Conf.amadeus.offices.each do |office, settings|
-      return office if settings["alias"] == al.to_s
-    end
-    raise ArgumentError, "no office_id defined for alias #{al}"
-  end
-
-  # FIXME избавиться от констант
-  BOOKING = office_for_alias(:booking)
-  TICKETING = office_for_alias(:ticketing)
-  DOWNTOWN = office_for_alias(:downtown)
-  ZAGORYE = office_for_alias(:zagorye)
-  LVIV = office_for_alias(:lviv)
-
   cattr_accessor :logger do
-    Rails.logger
+    ForwardLogging.new(Rails.logger)
   end
 
   cattr_accessor :pool do
@@ -42,7 +28,7 @@ module Amadeus
     # вызывается с параметром и без (для класс-методов амадеуса)
     def book(office=nil)
       office ||= default_office
-      logger.info { "Amadeus::Session: free sessions count: #{pool.free_count(office)}" }
+      logger.debug { "Amadeus::Session: free sessions count: #{pool.free_count(office)}" }
       find_free_and_book(office) || sign_in(office, true)
     end
 

@@ -13,7 +13,7 @@ describe Amadeus::Response::PNRAddMultiElements, :amadeus do
 
     its(:srfoid_errors) {should == ['SRFOID error: UN: INVALID TEXT DATA']}
     its(:success?) {should be_false}
-    its(:error_text) {should == 'SRFOID error: UN: INVALID TEXT DATA'}
+    its(:error_text) {should include('SRFOID error: UN: INVALID TEXT DATA')}
   end
 
   context 'with name error' do
@@ -25,7 +25,7 @@ describe Amadeus::Response::PNRAddMultiElements, :amadeus do
 
     its(:srfoid_errors) {should == []}
     its(:success?) {should be_false}
-    its(:error_text) {should == 'Name error: ITEM TOO LONG / NOT ENTERED /'}
+    its(:error_text) {should include('Name error: ITEM TOO LONG / NOT ENTERED /')}
   end
 
   context 'with restricted error' do

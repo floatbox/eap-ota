@@ -3,18 +3,12 @@
 # читается как "мэкс", если что.
 class Mux
 
-  cattr_accessor :cryptic_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_cryptic.log') end
-  cattr_accessor :short_logger do ActiveSupport::BufferedLogger.new(Rails.root + 'log/rec_short.log') end
   cattr_accessor :logger do Rails.logger end
 
   include Monitoring::Benchmarkable
 
   include KeyValueInit
   attr_accessor :suggested_limit, :lite, :admin_user
-
-  def save_to_mongo(avia_search, recommendations)
-    RamblerCache.create_from_form_and_recs(avia_search, recommendations)
-  end
 
   def pricer(avia_search)
     # FIXME делает сортировку дважды
@@ -49,7 +43,7 @@ class Mux
   def amadeus_pricer(avia_search)
     return [] unless Conf.amadeus.enabled
     benchmark 'Pricer amadeus, total' do
-      session = Amadeus::Session.book(Amadeus::Session::BOOKING)
+      session = Amadeus::Session.book(Amadeus.office(:booking))
       amadeus = Amadeus::Service.new(:session => session, :driver => async_amadeus_driver)
       request_ws = {:suggested_limit => suggested_limit, :lite => lite}
       request_ns = {:suggested_limit => suggested_limit, :lite => lite, :nonstop => true}
@@ -77,9 +71,8 @@ class Mux
       recommendations.uniq! unless lite
 
       # log amadeus recommendations
-      benchmark 'log_examples' do
-        log_examples(recommendations)
-      end
+      ActiveSupport::Notifications.instrument 'amadeus_merged.mux',
+        recommendations: recommendations
 
       recommendations.select!(&:full_information?)
 
@@ -110,7 +103,7 @@ class Mux
     reqs = (lite || !Conf.amadeus.nonstop_search) ? [request_ws] : [request_ns, request_ws]
     amadeus_driver = async_amadeus_driver
     reqs.each do |req|
-      session = Amadeus::Session.book(Amadeus::Session::BOOKING)
+      session = Amadeus::Session.book(Amadeus.office(:booking))
       amadeus = Amadeus::Service.new(:session => session, :driver => amadeus_driver)
       amadeus.async_fare_master_pricer_travel_board_search(avia_search, req) do |res|
         amadeus.release
@@ -132,9 +125,6 @@ class Mux
       async_perform
 
       recommendations = amadeus_merge_and_cleanup(amadeus_recommendations)
-      benchmark 'creating and saving rambler cache' do
-        save_to_mongo(avia_search, recommendations) if Conf.api.store_rambler_cache && !admin_user && !avia_search.complex_route?
-      end
       if lite
         recommendations
       else
@@ -145,7 +135,6 @@ class Mux
   end
 
   def async_amadeus_driver
-    # Handsoap::TyphoeusDriver.new( :hydra => hydra )
     Handsoap::MultiCurbDriver.new( :multi => multi )
   end
 
@@ -153,25 +142,11 @@ class Mux
     # hydra.run
     multi.perform
   rescue => e
-    raise unless e.message['select(): Interrupted system call']
-  end
-
-  def hydra
-    @hydra ||= Typhoeus::Hydra.new
+    raise unless ignore_error?(e)
   end
 
   def multi
     @multi ||= Curl::Multi.new
-  end
-
-  # применяем только к амадеусу, для разбора интерлайнов
-  def log_examples(recommendations)
-    recommendations.each do |r|
-      r.variants.each do |v|
-        cryptic_logger.info r.cryptic(v)
-      end
-      short_logger.info r.short
-    end
   end
 
   def ignore_error?(e)
