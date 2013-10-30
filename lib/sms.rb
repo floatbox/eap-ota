@@ -13,8 +13,10 @@ module SMS
 
   end
 
-  def sms_gate(*args)
-    @gate || DEFAULT.new(*args)
+  def gate(*args)
+    return @gate if args && @gate_args == args
+    @gate_args = args
+    @gate = DEFAULT.new(*args)
   end
 
 end
