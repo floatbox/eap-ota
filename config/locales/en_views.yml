@@ -53,7 +53,7 @@ en:
       add: "Add flight"
       remove: "Remove flight"
     map:
-      link: "Cheap flights %{from} in\_%{dates}?"
+      link: "Cheap flights in\_%{dates}"
       title: "Price from %{min}"
       limit: "up to %{max} <span class=\"ruble\">Р</span>"
       expand: "Expand map"
@@ -255,7 +255,8 @@ en:
       alliance: "%{alliance_link} bonus programmes are applied."
       time: "All time displayed is local."
     availability:
-      text: "%{seats} available at this fare. Don't postpone the booking."
+      text: "%{seats} available at this fare."
+      postpone: "Don't postpone the booking."
       one: "%{count} seat"
       other: "%{count} seats"
   prebooking:

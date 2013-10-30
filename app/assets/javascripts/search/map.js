@@ -25,9 +25,15 @@ resize: function(instant) {
     dh += search.dates.el.height() + 2;
     dh += search.options.el.height();
     dh += results.header.height;
-    var mh = Math.max(36, $w.height() - dh);
-    this.content.height(mh);
-    this.toggleZoom(mh);
+    var height = $w.height() - dh;
+    if (height < 150) {
+        this.el.addClass('sm-hidden');
+        this.content.height(26);
+    } else {
+        this.el.removeClass('sm-hidden');
+        this.content.height(height);
+        this.toggleZoom(height);
+    }
     if (this.api && this.bounds) {
         this.fitBounds();
     }
@@ -75,14 +81,14 @@ slideDown: function() {
     var ch = this.content.height();
     var dh = wh - ch - search.dates.tlheight;
     this.wrapper.height(wh).css('overflow', 'hidden');
+    this.el.removeClass('sm-hidden');
     this.content.animate({
         height: Math.max(36, ch + dh)
     }, 300, function() {
         search.dates.toggleHidden(true);
         google.maps.event.trigger(that.api, 'resize');
         that.wrapper.height('').css('overflow', '');
-        that.toggleZoom(ch + dh);
-        that.fitBounds();
+        that.resize();
     });
     search.dates.el.find('.sdt-tab').delay(150).fadeOut(150);
 },
@@ -101,7 +107,7 @@ slideUp: function() {
         if (that.prices.el.find('.smp-collapse').length) {
             that.prices.showExpand();
         }
-        that.fitBounds();
+        that.resize();        
     });
     search.dates.el.find('.sdt-tab').fadeIn(150);
 },

@@ -233,12 +233,28 @@
     <% end %>
     </div>
     <div class="o-comments">
-        <p class="od-comment"><%= t 'offer.comments.carrier', :carrier_name => dict(recommendation.validating_carrier) %><% if recommendation.validating_carrier.alliance %> <%= raw t 'offer.comments.alliance', :alliance_link => content_tag('span', nbsp(recommendation.validating_carrier.alliance.name), :class => 'od-alliance', 'data-carriers' => recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence) %><% end %> <%= t 'offer.comments.time' %></p>    
+        <div class="od-comment odc-first">
+            <p class="odc-text">Тариф — <%= t @search.cabin, :scope => 'search.options.cabin' %></p>
+            <% if recommendation_deficit(recommendation) %>
+                <p class="odc-text">
+                    <strong><%= t 'offer.availability.text', :seats => t('offer.availability', {count: recommendation.availability}) %></strong><br>
+                    <%= t 'offer.availability.postpone' %>
+                </p>
+            <% end %>
+        </div>
+        <div class="od-comment">
+            <p class="odc-text"><%= t 'offer.comments.carrier', :carrier_name => dict(recommendation.validating_carrier) %></p>
+            <% if recommendation.validating_carrier.alliance %>
+                <p class="odc-text odc-aux"><%= raw t 'offer.comments.alliance', :alliance_link => content_tag('span', nbsp(recommendation.validating_carrier.alliance.name), :class => 'od-alliance', 'data-carriers' => recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence) %></p>
+            <% end %>
+        </div>
+        <div class="od-comment">
+            <p class="odc-text"><%= t 'offer.comments.time' %></p>
+        </div>
         <% recommendation_comments(recommendation).each do |comment| %>
-            <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
-        <% end %>
-        <% if recommendation_deficit(recommendation) %>
-            <p class="od-comment"><span class="odc-hl"><%= t 'offer.availability.text', :seats => t('offer.availability', {count: recommendation.availability}) %></span></p>
+        <% if comment[:content] %>
+            <div class="od-comment odc-specific" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></div>
+        <% end %>        
         <% end %>
     </div>
     <% if admin_user %>

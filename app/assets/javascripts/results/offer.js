@@ -96,7 +96,7 @@ choose: function(segment, code) {
     target[segment] = code;
     for (var i = this.variants.length; i--;) {
         var variant = this.variants[i];
-        if (variant.improper) continue;
+        if (variant.improper || variant.disabled) continue;
         var precision = 0;
         var segments = variant.segments;
         for (var s = segments.length; s--;) {
@@ -123,6 +123,9 @@ selectSegment: function(segment, flights) {
     this.showCompatible();
     this.otherSegments();
     this.otherCarriers();
+    if (this.prices) {
+        this.showDisabled();
+    }
     if (this.prices && this.prices.different) {
         this.otherPrices();
     }
@@ -135,6 +138,19 @@ selectSegment: function(segment, flights) {
     if (this.complex) {
         results.fixed.move();
     }
+},
+showDisabled: function() {
+    var prices = this.prices;
+    this.summaries.all.each(function() {
+        var el = $(this);
+        if (!prices[el.attr('data-flights')]) {
+            el.removeClass('os-incompatible');
+            if (!el.hasClass('os-disabled')) {
+                el.find('.ossc-title').hide().after('<div class="oss-disabled">нет доступных мест</div>');
+                el.addClass('os-disabled');
+            }
+        }
+    });
 },
 showCompatible: function() {
     var variants = this.variants;
@@ -149,19 +165,19 @@ showCompatible: function() {
         for (var s = sl; s--;) {
             if (segments[s] !== selected[s]) different.push(segments[s]);
         }
-        if (different.length === 1) {
+        if (different.length === 1 && !variants[v].disabled) {
             compatible[different[0]] = true;
         }
     }
     this.summaries.all.each(function() {
         var el = $(this);
-        el.toggleClass('os-disabled', !compatible[el.attr('data-flights')]);
+        el.toggleClass('os-incompatible', !compatible[el.attr('data-flights')]);
     });
 },
 otherSegments: function() {
     this.el.find('.oss-incompatible').remove();
     this.el.find('.o-segment').each(function(i) {
-        var disabled = $(this).find('.os-disabled');
+        var disabled = $(this).find('.os-incompatible');
         if (disabled.length) {
             disabled.find('.oss-parts').append('<p class="oss-incompatible">' + results.data.ostitles[i] + '</p>');
         }
@@ -172,23 +188,25 @@ countPrices: function() {
     var prices = {}, sample;
     for (var v = this.variants.length; v--;) {
         var variant = this.variants[v];
-        var price = variant.visiblePrice;
-        for (var s = sl; s--;) {
-            var flights = variant.segments[s];
-            var range = prices[flights];
-            if (range) {
-                range.min = Math.min(range.min, price);
-                range.max = Math.max(range.max, price);
-            } else {
-                prices[flights] = {min: price, max: price};
+        if (!variant.disabled) {
+            var price = variant.visiblePrice;
+            for (var s = sl; s--;) {
+                var flights = variant.segments[s];
+                var range = prices[flights];
+                if (range) {
+                    range.min = Math.min(range.min, price);
+                    range.max = Math.max(range.max, price);
+                } else {
+                    prices[flights] = {min: price, max: price};
+                }
             }
+            if (sample === undefined) {
+                sample = price;
+            } else if (price !== sample) {
+                prices.different = true;
+            }
+            prices[variant.segments.join(' ')] = price;
         }
-        if (sample === undefined) {
-            sample = price;
-        } else if (price !== sample) {
-            prices.different = true;
-        }
-        prices[variant.segments.join(' ')] = price;
     }
     this.prices = prices;
 },
@@ -216,13 +234,13 @@ otherPrices: function() {
         $(this).find('.os-summary').each(function() {
             var el = $(this), value;
             var flights = el.attr('data-flights');
-            if (el.hasClass('os-disabled')) {
-                value = prices[flights].min;
+            if (el.hasClass('os-incompatible')) {
+                value = prices[flights] && prices[flights].min;
             } else {
                 segments[s] = flights;
                 value = prices[segments.join(' ')];
             }
-            if (value !== sp) {
+            if (value && value !== sp) {
                 var type = value > sp ? 'rise' : 'fall';
                 var absp = I18n.t('currencies.RUR.sign', {value: value.separate()});
                 var sample = $('<div class="oss-price"></div>').addClass('ossp-' + type);
@@ -312,7 +330,7 @@ toggleExcess: function(segment, amount) {
         items[i] = {
             el: el,
             price: price.min || price,
-            disabled: el.hasClass('os-disabled') ? 1 : 0,
+            disabled: el.hasClass('os-incompatible') ? 1 : 0,
             duration: Number(el.attr('data-duration'))
         };
     });
