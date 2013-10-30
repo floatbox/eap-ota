@@ -47,7 +47,6 @@ agent "3%"
 subagent "1%"
 discount "2%"
 our_markup "500"
-comment "говноклассы с 21.06"
 agent_comment "3% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
 subagent_comment "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "GU"
@@ -66,6 +65,18 @@ subagent_comment "3% от тарифа на рейсы Interline c участк�
 subagent_comment "участка UN"
 interline :yes
 example "aerdme dmeaer/ab"
+end
+
+rule 5 do
+important!
+ticketing_method "aviacenter"
+agent "10%"
+subagent "8%"
+agent_comment "Для перевозок Interline, при продаже авиаперевозок на бланках с кодом 670 на рейсы авиакомпаний OS, LX, UA, с учаском перевозки на UN, составляет:"
+agent_comment "10% от применяемых опубл.тарифов первого, бизнес, экономического и туристического классов"
+subagent_comment "8% от применяемых опубл.тарифов первого, бизнес, экономического и туристического классов"
+check %{ includes(operating_carrier_iatas, "OS LX UA") }
+interline :yes
 end
 
 rule 6 do
@@ -100,10 +111,9 @@ example "tsedme dmepek pekdme dmetse"
 end
 
 rule 8 do
+no_commission "12%/11%"
 important!
 ticketing_method "downtown"
-agent "12%"
-subagent "11%"
 discount "12.5%"
 comment "Майами/Нью-Йорк прямые из Москвы и сквозные через Москву из RU UA KZ UZ AM — через dtt"
 comment "FIX кривой и не полный чек"
@@ -121,4 +131,3 @@ no_commission
 interline :absent
 example "svocdg/lh cdgmad/lh"
 end
-
