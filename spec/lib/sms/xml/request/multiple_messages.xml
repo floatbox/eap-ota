@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<consumeOutMessageRequest>
+  <header>
+    <auth>
+      <login>elf</login>
+      <password>cookie</password>
+    </auth>
+  </header>
+  <payload>
+    <outMessageCommon/>
+    <outMessageList>
+      <outMessage clientId="3">
+        <address>79998887766</address>
+        <startTime>2013-10-30 18:31:39</startTime>
+        <content>test</content>
+        <comment>ok</comment>
+        <subject>Eviterra</subject>
+        <contentType>text</contentType>
+      </outMessage>
+      <outMessage clientId="4">
+        <address>79998887766</address>
+        <startTime>2013-10-30 18:31:39</startTime>
+        <content>test2</content>
+        <comment>ok</comment>
+        <subject>Eviterra</subject>
+        <contentType>text</contentType>
+      </outMessage>
+    </outMessageList>
+  </payload>
+</consumeOutMessageRequest>

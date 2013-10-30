@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<consumeOutMessageRequest>
+  <header>
+    <auth>
+      <login>elf</login>
+      <password>cookie</password>
+    </auth>
+  </header>
+  <payload>
+    <outMessageCommon>
+      <comment>wow</comment>
+      <subject>Eviterra</subject>
+      <contentType>text</contentType>
+    </outMessageCommon>
+    <outMessageList>
+      <outMessage clientId="4">
+        <address>79998887766</address>
+        <startTime>2013-10-30 18:31:39</startTime>
+        <content>pink fluffy unicorn dancing on rainbow</content>
+        <contentType>text</contentType>
+      </outMessage>
+    </outMessageList>
+  </payload>
+</consumeOutMessageRequest>
