@@ -22,6 +22,20 @@ example "cdgpek/economy pekcdg/economy"
 example "cdgpek/business pekcdg/economy"
 end
 
+rule 2 do
+ticketing_method "aviacenter"
+important!
+agent "0.1%"
+subagent "0.05"
+consolidator "2%"
+agent_comment "0.1% Эконом класса, а также при различной комбинации Бизнес/Эконом"
+subagent_comment "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
+comment "вынес в отдельное на всякий случай"
+subclasses "OQ"
+example "cdgpek/o pekcdg/o"
+example "cdgpek/q pekcdg/o"
+end
+
 rule 3 do
 important!
 ticketing_method "downtown"
