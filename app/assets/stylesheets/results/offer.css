@@ -830,22 +830,42 @@
     display: block;
 }
 .od-comments {
-    padding: 0 20px 16px 200px;
-    background: #F8F8F6;
-    font-size: 12px;
+    background: #EDEDE3;
+    overflow: hidden;
+    font-size: 13px;
     line-height: 14px;
 }
 .od-comment {
-    margin: 0 0 8px;
+    width: 235px;
+    margin: 0 0 -100px 0;
+    border-left: 1px solid #cdcdc7;
+    padding: 12px 0 104px;
+    float: left;
+}
+.odc-first {
+    width: 280px;
+    border-left: none;
+}
+.odc-text {
+    margin: 0 14px 8px
+}
+.odc-aux {
+    color: #777;
 }
 .od-alliance {
     text-decoration: underline;
     cursor: pointer;
 }
-.odc-hl {
-    margin-left: -4px;
-    padding: 2px 4px;
-    background: #e2ea5f;
+.odc-specific {
+    position: relative;
+    clear: left;
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 12px 14px;
+    border-left: none;
+    border-top: 1px solid #cdcdc7;
+    background: #EDEDE3;
 }
 
 /* Debug */

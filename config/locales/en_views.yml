@@ -255,7 +255,8 @@ en:
       alliance: "%{alliance_link} bonus programmes are applied."
       time: "All time displayed is local."
     availability:
-      text: "%{seats} available at this fare. Don't postpone the booking."
+      text: "%{seats} available at this fare."
+      postpone: "Don't postpone the booking."
       one: "%{count} seat"
       other: "%{count} seats"
   prebooking:
