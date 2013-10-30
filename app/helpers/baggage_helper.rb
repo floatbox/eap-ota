@@ -32,11 +32,11 @@ module BaggageHelper
 
   def group_baggage_summaries(baggage_array, flights)
     summaries = baggage_array.map{|bl| baggage_summary_extended(bl) }
+    return if summaries.any?(&:nil?)
     if summaries.uniq.length == 1
       ['Норма провоза багажа — ' + summaries[0]]
     else
       flights.map do |f|
-        #"#{ dict(f.departure.city) } — #{ dict(f.arrival.city) }"
         "#{ f.marketing_carrier_iata }&nbsp;#{ f.flight_number }".html_safe
       end.zip(summaries).group_by do |bl|
         bl[1]
