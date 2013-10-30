@@ -66,7 +66,7 @@ module SMS
 
           }
         }
-      end.to_xml.tap { |x| print "request: #{x}" }
+      end.to_xml
     end
 
     def compose_message(xml, message)
@@ -82,7 +82,6 @@ module SMS
 
     def parse_response(response)
       xml = Nokogiri::XML(response.body)
-      print "response: #{xml}"
 
       code = xml.xpath('/consumeOutMessageResponse/payload/code').text
       fail SMSError, "SMS not sent, error_code received: #{code}" unless code == 'ok'
