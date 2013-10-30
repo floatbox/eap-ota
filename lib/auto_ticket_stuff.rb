@@ -26,14 +26,16 @@ class AutoTicketStuff
     order.payment_type == 'card' or return 'Заказ оплачивается не картой'
     order.ticket_status == 'booked' or return 'заказ не в статусе booked'
     !order.offline_booking or return 'offline заказ'
-    recommendation.country_iatas.uniq.all?{|ci| Country[ci].continent != 'africa'} or return 'есть хотя бы один африканский город'
-    people.all?{|p| ['RU', 'UA', 'BY', 'MD'].include?(p.nationality.alpha2)} or return 'есть пассажиры, не являющиеся гражданами РФ, Украины, Белоруссии или Молдавии'
+    !used_card_with_different_name? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (card)"
+    !looks_like_fraud? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать!"
     SUSPICIOUS_DOMAINS.each do |domain|
       !order.email.downcase[domain]  or return "название почтового ящика содержит #{domain}"
     end
     BAD_DOMAINS.each do |domain|
-      !order.email.downcase[domain]  or return "100% фрод"
+      !order.email.downcase[domain]  or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (email)"
     end
+    recommendation.country_iatas.uniq.all?{|ci| Country[ci].continent != 'africa'} or return 'есть хотя бы один африканский город'
+    people.all?{|p| ['RU', 'UA', 'BY', 'MD'].include?(p.nationality.alpha2)} or return 'есть пассажиры, не являющиеся гражданами РФ, Украины, Белоруссии или Молдавии'
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
     no_dupe_orders? or return "dupe (#{@dupe_summary})"
     !group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
@@ -101,5 +103,17 @@ class AutoTicketStuff
       (([recommendation.validating_carrier_iata] +
         recommendation.marketing_carrier_iatas +
         recommendation.operating_carrier_iatas).uniq & ['KL', 'AF']).present?
+  end
+
+  def used_card_with_different_name?
+    order.payment_type == 'card' && Order.where(pan: order.pan).where("name_in_card != ?", order.name_in_card).present?
+  end
+
+  def looks_like_fraud?
+    (%W(+34 34 +36 36 +44 44 +49 49 +47 47 +42 42) & [order.phone[0..1], order.phone[0..2]]).present? ||
+      (recommendation.airport_iatas & %W(TFS TFN)).present? ||
+      %W(BRU RIX BCN).include?(recommendation.airport_iatas.first) ||
+      (%W(BRU RIX BCN ).include?(recommendation.airport_iatas.last) &&
+        recommendation.country_iatas.first != 'RU')
   end
 end

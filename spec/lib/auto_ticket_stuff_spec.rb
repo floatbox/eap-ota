@@ -35,6 +35,62 @@ describe AutoTicketStuff do
     end
   end
 
+  describe "#used_card_with_different_name?" do
+    before do
+      @old_order = create(:order, :pan => '411111xxxxxx1112', :name_in_card => 'bad passenger')
+    end
+    subject do
+      AutoTicketStuff.new(order: create(:order, :payment_type => 'card', :pan => '411111xxxxxx1112', :name_in_card => 'another bad passenger'))
+    end
+
+    its(:used_card_with_different_name?) {should be_true}
+
+  end
+
+  describe "#looks_like_fraud?" do
+
+    subject do
+      AutoTicketStuff.new(order: create(:order, phone: phone), recommendation: recommendation)
+    end
+    let(:recommendation) do
+      Recommendation.new.tap do |r|
+        r.stub(:country_iatas).and_return(country_iatas)
+        r.stub(:airport_iatas).and_return(city_iatas)
+      end
+    end
+    let(:phone){'+78988787878'}
+    let(:country_iatas){['RU', 'US']}
+    let(:city_iatas){['LED', 'CDG']}
+
+    context 'bad_phone' do
+      let(:phone){'448988787878'}
+      its(:looks_like_fraud?) {should be_true}
+    end
+
+    context 'through TFN' do
+      let(:city_iatas){['LED', 'TFN', 'CDG']}
+      its(:looks_like_fraud?) {should be_true}
+    end
+
+    context 'from RIX' do
+      let(:city_iatas){['RIX', 'CDG']}
+      its(:looks_like_fraud?) {should be_true}
+    end
+
+    context 'from Russia to BCN' do
+      let(:city_iatas){['LED', 'BCN']}
+      let(:country_iatas){['RU', 'ES']}
+      its(:looks_like_fraud?) {should be_false}
+    end
+
+    context 'from Ukrane to BCN' do
+      let(:city_iatas){['KBP', 'BCN']}
+      let(:country_iatas){['UA', 'ES']}
+      its(:looks_like_fraud?) {should be_true}
+    end
+
+  end
+
   describe '#group_booking?' do
 
     before do
