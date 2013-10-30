@@ -26,7 +26,7 @@ class AutoTicketStuff
     order.payment_type == 'card' or return 'Заказ оплачивается не картой'
     order.ticket_status == 'booked' or return 'заказ не в статусе booked'
     !order.offline_booking or return 'offline заказ'
-    !used_card_with_different_name? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (card)"
+    #!used_card_with_different_name? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (card)"
     !looks_like_fraud? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать!"
     SUSPICIOUS_DOMAINS.each do |domain|
       !order.email.downcase[domain]  or return "название почтового ящика содержит #{domain}"
