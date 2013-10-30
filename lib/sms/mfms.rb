@@ -64,7 +64,8 @@ module SMS
 
                 @client_id_hook.call message_stamp if @client_id_hook
 
-                xml.outMessage_(clientId: message_stamp) {
+                # можно передавать id нотификации из базы
+                xml.outMessage_(clientId: message[:client_id]) {
                   compose_message(xml, message)
                 }
               }
