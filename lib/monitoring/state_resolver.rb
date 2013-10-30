@@ -13,7 +13,14 @@ module Monitoring
 state может быть любым, но лучше использовать
 ok/warning/error/critical (по возрастанию важности)
 =end
-    STATES = YAML.load_file Rails.root.join('config', 'monitoring_states.yml')
+    STATES = begin
+      path = Rails.root.join('config', 'monitoring_states', "#{Rails.env}.yml")
+      if File.exists?(path)
+        YAML.load_file(path)
+      else
+        {}
+      end
+    end
 
     def initialize event_hash
       @service = event_hash[:service]
