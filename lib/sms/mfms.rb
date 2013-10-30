@@ -15,8 +15,7 @@ module SMS
     # Принимает либо хеш с параметрами смс,
     # либо Enumerable таких хешей
     # В любом случае отправляет одним запросом.
-    def send_sms(params, &block_client_id)
-      @client_id_hook = block_client_id
+    def send_sms(params)
       case params
         when Hash then send_one(params)
         when Enumerable then send_multiple(params)
@@ -61,8 +60,6 @@ module SMS
             xml.outMessageList_ {
               messages.each_with_index { |message, index|
                 message_stamp = message[:address] + ((message[:start_time] || @common[:start_time]).to_i.to_s)
-
-                @client_id_hook.call message_stamp if @client_id_hook
 
                 # можно передавать id нотификации из базы
                 xml.outMessage_(clientId: message[:client_id]) {
