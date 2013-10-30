@@ -55,8 +55,7 @@ initOffers: function() {
             }
             var offset = offer.details.find('.os-details').eq(segment).offset().top;
             $w.smoothScrollTo(offset - (offer.complex ? 200 : 148));
-
-        } else {
+        } else if (!el.hasClass('os-disabled')) {
             offer.selectSegment(segment, el.attr('data-flights'));
             if (offer === booking.offer) {
                 booking.abort();
