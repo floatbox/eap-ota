@@ -3,8 +3,6 @@
 module SMS
   class MFMS < SMS::Base
 
-    class SMSError < StandardError; end
-
     def initialize(hash = {})
       @login = hash[:login] || 'eviterra0'
       @password = hash[:password] || 'Fk3e8wQa'
@@ -20,8 +18,6 @@ module SMS
         when Hash then send_one(params)
         when Enumerable then send_multiple(params)
       end
-    rescue SMSError => e
-      with_warning(e)
     end
 
     private

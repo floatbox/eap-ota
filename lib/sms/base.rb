@@ -4,7 +4,11 @@ require 'net/http'
 require 'net/https'
 
 module SMS
+  # базовый класс для смс-гейтов
+  # для упрощения кода можно убрать
   class Base
+
+    class SMSError < StandardError; end
 
     def initialize(hash = {})
       @host = hash[:host] || Conf.sms.host
@@ -37,6 +41,11 @@ module SMS
       request = Net::HTTP::Post.new(path)
       request.body = request_body
       parse_response(endpoint.request(request))
+    rescue Timeout::Error, Errno::ECONNRESET, EOFError, SocketError, SMSError => e
+      # ловить все подряд не хочется, а эти эксепешены вполне можно, я думаю
+      with_warning(e)
+      Rails.logger.info "Error occured while sending sms: #{e}"
+      nil
     end
 
   end
