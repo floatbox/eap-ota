@@ -2,50 +2,18 @@ carrier "MU", start_date: "2011-09-15"
 
 rule 1 do
 ticketing_method "aviacenter"
-agent "15%"
-subagent "13%"
-discount "14%"
-agent_comment "MU с на междунар.рейсы Бизнес класса с вылетом из Москвы (15% от тарифа классов C/J/D)"
-subagent_comment "MU вылет из Москвы: междунар. или регион-ные* рейсы Бизнес класса (13% от тарифа классов C/J/D)"
-subclasses "CJD"
-routes "MOW..."
-example "svohkg/c"
-example "svohkg/j hkgmfm/d"
-example "svotsa/c"
-example "svotsa/j tsahkg/d"
-example "svotpe/c"
-end
-
-rule 1 do
-ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
 discount "8%"
-agent_comment "(9% от тарифа классa I);"
-subagent_comment "(7% от тарифа классa I);"
-subclasses "I"
-routes "MOW..."
-example "svohkg/i"
-example "svohkg/i hkgmfm/i"
-example "svotsa/i"
-example "svotsa/i tsahkg/i"
-example "svotpe/i"
-end
-
-rule 1 do
-ticketing_method "aviacenter"
-agent "9%"
-subagent "7%"
-discount "8%"
-agent_comment "MU регион-ные* рейсы Бизнес класс, вылет из Москвы – 9%;"
-subagent_comment ""
-subclasses "I"
+agent_comment "MU междунар или регион-ные* рейсы Бизнес класс, вылет из Москвы – 9%"
+subagent_comment "MU междунар или регион-ные* рейсы Бизнес класс, вылет из Москвы – 7%"
+classes :business
 routes "MOW-TW,HK,MO..."
-example "svohkg/i"
-example "svohkg/i hkgmfm/i"
-example "svotsa/i"
-example "svotsa/i tsahkg/i"
-example "svotpe/i"
+example "svohkg/business"
+example "svohkg/business hkgmfm/business"
+example "svotsa/business"
+example "svotsa/business tsahkg/business"
+example "svotpe/business"
 end
 
 rule 2 do
