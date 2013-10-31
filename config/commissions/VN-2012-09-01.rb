@@ -1,4 +1,4 @@
-carrier "VN", start_date: "2013-12-01"
+carrier "VN", start_date: "2013-09-01"
 
 rule 1 do
 ticketing_method "aviacenter"
