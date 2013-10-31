@@ -31,7 +31,7 @@ module SMS
       raise NotImplementedError
     end
 
-    def invoke_post_request(request_body, host=@host, path=@path, port=@port, use_ssl=@use_ssl)
+    def invoke_send_post_request(request_body, host=@host, path=@path, port=@port, use_ssl=@use_ssl)
       endpoint = Net::HTTP.new(host, port)
       if @use_ssl
         endpoint.use_ssl = @use_ssl

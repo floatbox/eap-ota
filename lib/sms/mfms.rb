@@ -23,28 +23,23 @@ module SMS
     private
 
     def send_one(hash)
-      xml = compose([hash])
-      response = invoke_post_request(xml)
+      xml = compose_send([hash])
+      response = invoke_send_post_request(xml)
     end
 
     def send_multiple(messages)
-      xml = compose(messages)
-      response = invoke_post_request(xml)
+      xml = compose_send(messages)
+      response = invoke_send_post_request(xml)
     end
 
-    def compose(messages)
+    def compose_send(messages)
       Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
         # все теги заканчиваются на _,
         # _ убирается из итоговой xml и используется в Nokogiri чтобы не путать с методами
 
         xml.consumeOutMessageRequest_ {
 
-          xml.header_ {
-            xml.auth_ {
-              xml.login_    @login
-              xml.password_ @password
-            }
-          }
+          compose_auth(xml)
 
           xml.payload_ {
             xml.outMessageCommon_ {
@@ -55,8 +50,6 @@ module SMS
 
             xml.outMessageList_ {
               messages.each_with_index { |message, index|
-                message_stamp = message[:address] + ((message[:start_time] || @common[:start_time]).to_i.to_s)
-
                 # можно передавать id нотификации из базы
                 xml.outMessage_(clientId: message[:client_id]) {
                   compose_message(xml, message)
@@ -67,6 +60,15 @@ module SMS
           }
         }
       end.to_xml
+    end
+
+    def compose_auth(xml)
+      xml.header_ {
+        xml.auth_ {
+          xml.login_    @login
+          xml.password_ @password
+        }
+      }
     end
 
     def compose_message(xml, message)

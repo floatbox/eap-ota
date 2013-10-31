@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+
 describe SMS::MFMS do
   # больше ради примеров протокола, чем настоящего тестирования
 
@@ -47,7 +48,7 @@ describe SMS::MFMS do
 
   end
 
-  describe '#compose' do
+  describe '#compose_send' do
 
     def mfms_request(name)
       Nokogiri::XML(open("spec/lib/sms/xml/request/#{name}.xml", 'r').read).to_xml
@@ -93,19 +94,19 @@ describe SMS::MFMS do
     it 'should correctly compose one message request' do
       request = mfms_request(:one_message)
       messages = [test_message1]
-      Nokogiri::XML(subject.instance_eval { compose(messages) }).to_xml.should == request
+      Nokogiri::XML(subject.instance_eval { compose_send(messages) }).to_xml.should == request
     end
 
     it 'should correctly compose multiple message request' do
       request = mfms_request(:multiple_messages)
       messages = [test_message1, test_message2]
-      Nokogiri::XML(subject.instance_eval { compose(messages) }).to_xml.should == request
+      Nokogiri::XML(subject.instance_eval { compose_send(messages) }).to_xml.should == request
     end
 
     it 'should correctly compose request with common context' do
       request = mfms_request(:common_context)
       messages = [test_message3]
-      Nokogiri::XML(SMS::MFMS.new(login: login, password: password, common: common).instance_eval { compose(messages) }).to_xml.should == request
+      Nokogiri::XML(SMS::MFMS.new(login: login, password: password, common: common).instance_eval { compose_send(messages) }).to_xml.should == request
     end
 
   end
