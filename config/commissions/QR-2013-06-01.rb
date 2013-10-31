@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "4.5%"
+discount "7%"
 agent_comment "от опубл. тарифов, а также от опубл. IT гросс тарифов (искл.групповые тарифы) на собств.рейсы QR: 5% Бизнес класс"
 subagent_comment "3,5% от опубл. тарифов на собственные рейсы QR"
 classes :first, :business
@@ -22,26 +22,26 @@ example "cdgpek/economy pekcdg/economy"
 example "cdgpek/business pekcdg/economy"
 end
 
-rule 2 do
-ticketing_method "aviacenter"
+rule 3 do
 important!
+ticketing_method "aviacenter"
 agent "0.1%"
 subagent "0.05"
 consolidator "2%"
+comment "вынес в отдельное на всякий случай"
 agent_comment "0.1% Эконом класса, а также при различной комбинации Бизнес/Эконом"
 subagent_comment "5 коп. с билета Эконом класса, а также при различной комбинации Бизнес/Эконом;"
-comment "вынес в отдельное на всякий случай"
 subclasses "OQ"
 example "cdgpek/o pekcdg/o"
 example "cdgpek/q pekcdg/o"
 end
 
-rule 3 do
+rule 4 do
 important!
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"
-discount "5.5%"
+discount "6.5%"
 tour_code "USAN002"
 agent_comment "с сегодня на QR если в маршруте есть Россия (OW/RT, origin/destination) - агентская 5%"
 subagent_comment "у нас 3%"
@@ -50,7 +50,7 @@ example "jfksvo"
 example "jfkled ledcdg"
 end
 
-rule 4 do
+rule 5 do
 ticketing_method "aviacenter"
 agent "0.1%"
 subagent "0.05"
@@ -61,7 +61,7 @@ interline :yes
 example "svocdg cdgsvo/ab"
 end
 
-rule 5 do
+rule 6 do
 no_commission
 example "cdgsvo/ab"
 end

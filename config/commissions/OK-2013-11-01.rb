@@ -14,7 +14,6 @@ agent_comment "Пермь - Только транзитные перевозки
 agent_comment "Ростов - Только транзитные перевозки;"
 agent_comment "Самара - Только транзитные перевозки;"
 agent_comment "Уфа - Только транзитные перевозки;"
-subagent_comment ""
 routes "MOW,SVX,GOJ,LED..."
 example "svocdg"
 example "svxcdg cdgsvx"
@@ -38,9 +37,7 @@ agent_comment "Пермь - Только транзитные перевозки
 agent_comment "Ростов - Только транзитные перевозки;"
 agent_comment "Самара - Только транзитные перевозки;"
 agent_comment "Уфа - Только транзитные перевозки;"
-subagent_comment ""
 routes "MOW,SVX,GOJ,LED..."
-interline :no
 check %{ codeshare? }
 example "svocdg/ab:ok"
 example "svxcdg/ab:ok cdgsvx"
@@ -60,3 +57,4 @@ interline :no, :yes
 example "ovbcdg"
 example "cdgovb ovbcdg/ab"
 end
+
