@@ -1,12 +1,12 @@
-carrier "VN", start_date: "2013-09-01"
+carrier "VN", start_date: "2012-09-01"
 
 rule 1 do
 ticketing_method "aviacenter"
-agent "1%"
-subagent "5"
-consolidator "2%"
-agent_comment "С 01.12.13г. 1% (5 руб+сбор АЦ) от опубл. тарифов на междунар.рейсах VN;"
-subagent_comment "С 01.12.13г. 1% (5 руб+сбор АЦ) от опубл. тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
+agent "3%"
+subagent "2%"
+discount "3%"
+agent_comment "C 01.09.12г. 3% от опубл. тарифов на междунар.рейсах VN;"
+subagent_comment "2% от опубл. тарифов на междунар.рейсах VN;"
 international
 example "svohan hansvo"
 end
@@ -14,8 +14,8 @@ end
 rule 2 do
 ticketing_method "aviacenter"
 agent "3%"
-subagent "1%"
-discount "2%"
+subagent "2%"
+discount "3%"
 agent_comment "3% от опубликованных тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
 subagent_comment "2% от опубликованных тарифов VN на всех внутренних рейсах VN во Вьетнаме;"
 domestic
