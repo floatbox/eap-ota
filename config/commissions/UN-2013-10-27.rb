@@ -96,7 +96,7 @@ example "dmesin/UN7062 sindme/UN7062"
 end
 
 rule 7 do
-no_commission "12%/10%"
+no_commission "правила нет, оставил на всякий 12%/10%"
 important!
 ticketing_method "aviacenter"
 discount "4%"
@@ -111,7 +111,7 @@ example "tsedme dmepek pekdme dmetse"
 end
 
 rule 8 do
-no_commission "12%/11%"
+no_commission "правила нет, оставил на всякий 12%/11%"
 important!
 ticketing_method "downtown"
 agent "12%"
