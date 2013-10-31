@@ -6,6 +6,12 @@ describe Monitoring::StateResolver do
   let(:event){{service: 'test', metric: 5}}
   subject {described_class.new(event)}
 
+  context 'for service not present' do
+    let(:event){{metric: 5}}
+
+    its(:state){should == 'ok'}
+  end
+
   context 'for service not present in states file' do
     let(:event){{service: 'missing', metric: 5}}
 

@@ -11,15 +11,16 @@ module Monitoring
       end
     end
 
+    DEFAULT_STATE = 'ok'.freeze
+
     def initialize event_hash
       @service = event_hash[:service]
       @metric  = event_hash[:metric]
     end
 
     def state
-      return 'ok' unless @service.present?
-      return 'ok' unless STATES[@service].present?
-      return 'ok' unless @metric.present?
+      return DEFAULT_STATE unless STATES[@service].present?
+      return DEFAULT_STATE unless @metric.present?
 
       STATES[@service].take_while do |_, threshold|
         threshold < @metric
