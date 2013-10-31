@@ -13,6 +13,7 @@ class Order < ActiveRecord::Base
   scope :MOWR221F9, lambda { by_office_id 'MOWR221F9' }
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
+  scope :looking_like_fraud, where("auto_ticket = ? AND no_auto_ticket_reason LIKE 'С большой вероятностью фрод%'", false)
   scope :for_manual_ticketing, lambda { where("orders.payment_status IN ('blocked', 'charged') AND
     ticket_status = 'booked' AND
     orders.pnr_number != '' AND

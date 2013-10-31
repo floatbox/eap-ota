@@ -5,9 +5,9 @@ ticketing_method "aviacenter"
 agent "20%"
 subagent "18%"
 discount "19%"
+comment "Повышенные комиссии из Москвы в Китай"
 agent_comment "20% от опубл.тарифов по классу С на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent_comment "18% от опубл.тарифов по кл. С на собств.рейсы HU по маршруту MOW-CHINA или MOW-CHINA-MOW"
-comment "Повышенные комиссии из Москвы в Китай"
 subclasses "C"
 routes "MOW-CN/OW,RT"
 example "svopek/c"
@@ -19,9 +19,9 @@ ticketing_method "aviacenter"
 agent "15%"
 subagent "13%"
 discount "14%"
+comment "Повышенные комиссии из Москвы в Китай"
 agent_comment "15% от опубл.тарифов по кл. D,I на собств.рейсы HU по маршруту MOW-CHINA или MOW-CHINA-MOW"
 subagent_comment "13% от опубл.тарифов по кл. D,I на собств.рейсы HU по маршруту MOW-CHINA или MOW-CHINA-MOW"
-comment "Повышенные комиссии из Москвы в Китай"
 subclasses "DI"
 routes "MOW-CN/OW,RT"
 example "svopek/d"
@@ -34,9 +34,9 @@ ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
 discount "8%"
+comment "Повышенные комиссии из Москвы в Китай"
 agent_comment "9% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent_comment "7% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
-comment "Повышенные комиссии из Москвы в Китай"
 subclasses "Z"
 routes "MOW-CN/OW,RT"
 example "svopek/z"
@@ -48,9 +48,9 @@ ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
 discount "8%"
+comment "Повышенные комиссии из Москвы в Китай"
 agent_comment "9% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
 subagent_comment "7% от опубл.тарифов по классам Z, а также на Эконом классы на собств.рейсы HU по маршруту MOW - CHINA или MOW - CHINA - MOW"
-comment "Повышенные комиссии из Москвы в Китай"
 classes :economy
 routes "MOW-CN/OW,RT"
 example "svopek/economy"
@@ -62,9 +62,9 @@ ticketing_method "aviacenter"
 agent "15%"
 subagent "13%"
 discount "14%"
+comment "Повышенные комиссии из Питера в Китай"
 agent_comment "15% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
 subagent_comment "13% от опубл.тарифов по классу С,D на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
-comment "Повышенные комиссии из Питера в Китай"
 subclasses "CD"
 routes "LED-CN/OW,RT"
 example "ledpek/c"
@@ -76,9 +76,9 @@ ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
 discount "8%"
+comment "Повышенные комиссии из Питера в Китай"
 agent_comment "9% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
 subagent_comment "7% от опубл.тарифов по Эконом классам на собств.рейсы HU по маршруту LED-CHINA или LED- CHINA-LED"
-comment "Повышенные комиссии из Питера в Китай"
 subclasses "IZ"
 routes "LED-CN/OW,RT"
 example "ledpek/i"
@@ -90,23 +90,23 @@ ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
 discount "8%"
+comment "Повышенные комиссии из Питера в Китай"
 agent_comment "9% от опубл.тарифов по классам I, Z, а также на Эконом классы на собств.рейсы HU по маршруту LED-CHINA или  LED-CHINA-LED"
 subagent_comment "7% от опубл.тарифов по Эконом классам на собств.рейсы HU по маршруту LED-CHINA или LED- CHINA-LED"
-comment "Повышенные комиссии из Питера в Китай"
 classes :economy
 routes "LED-CN/OW,RT"
 example "ledpek/economy"
 example "ledpek/economy pekled/economy"
 end
 
-rule 7 do
+rule 8 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
 discount "8%"
+comment "Повышенные комиссии из Новосибирска, Иркутска, Красноярска в Китай"
 agent_comment "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Новосибирск-CHINA или  Новосибирск-CHINA-Новосибирск"
 subagent_comment "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Новосибирск-CHINA или Новосибирск-CHINA-Новосибирск"
-comment "Повышенные комиссии из Новосибирска, Иркутска, Красноярска в Китай"
 subclasses "CDIZ"
 routes "OVB,IKT,KJA-CN/OW,RT"
 example "ovbpek/c"
@@ -117,14 +117,14 @@ example "kjapek/c"
 example "kjapek/i pekkja/z"
 end
 
-rule 7 do
+rule 9 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
 discount "8%"
+comment "Повышенные комиссии из Новосибирска, Иркутска, Красноярска в Китай"
 agent_comment "9% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Новосибирск-CHINA или  Новосибирск-CHINA-Новосибирск"
 subagent_comment "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классы на собств.рейсы HU по маршруту Новосибирск-CHINA или Новосибирск-CHINA-Новосибирск"
-comment "Повышенные комиссии из Новосибирска, Иркутска, Красноярска в Китай"
 classes :economy
 routes "OVB,IKT,KJA-CN/OW,RT"
 example "ovbpek/economy"
@@ -135,35 +135,35 @@ example "kjapek/economy"
 example "kjapek/economy pekkja/economy"
 end
 
-rule 8 do
+rule 10 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
 discount "6%"
+comment "Повышенные комиссии из Алматы в Китай"
 agent_comment "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 subagent_comment "5% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
-comment "Повышенные комиссии из Алматы в Китай"
 subclasses "CDIZ"
 routes "ALA-CN/OW,RT"
 example "alapek/d"
 example "alapek/i pekala/z"
 end
 
-rule 9 do
+rule 11 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
 discount "6%"
+comment "Повышенные комиссии из Алматы в Китай"
 agent_comment "7% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
 subagent_comment "5% от опубл.тарифов по классу С,D,I,Z, а также на Эконом классына собств.рейсы HU по маршруту Алма-Ата-CHINA или Алма-Ата-CHINA-Алма-Ата"
-comment "Повышенные комиссии из Алматы в Китай"
 classes :economy
 routes "ALA-CN/OW,RT"
 example "alapek/economy"
 example "alapek/economy pekala/economy"
 end
 
-rule 10 do
+rule 12 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -174,7 +174,7 @@ domestic
 example "xmnweh"
 end
 
-rule 11 do
+rule 13 do
 ticketing_method "aviacenter"
 agent "3%"
 subagent "1%"
@@ -185,7 +185,7 @@ check %{ includes(country_iatas, "CN") and not includes(country_iatas.first, "RU
 example "cdgpek"
 end
 
-rule 12 do
+rule 14 do
 ticketing_method "aviacenter"
 agent "3%"
 subagent "1%"
@@ -197,7 +197,7 @@ example "peksvo"
 example "peksvo svopek"
 end
 
-rule 13 do
+rule 15 do
 important!
 ticketing_method "aviacenter"
 agent "0%"
@@ -209,3 +209,4 @@ routes "BJS..."
 domestic
 example "pekxmn xmnweh"
 end
+

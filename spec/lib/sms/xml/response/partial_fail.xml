@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<consumeOutMessageResponse>
+<header/>
+<payload>
+<code>ok</code>
+<outMessageList>
+<outMessage clientId="3" providerId="14">
+<code>error-out-message-client-id-not-unique</code>
+</outMessage>
+<outMessage clientId="5" providerId="20">
+<code>ok</code>
+</outMessage>
+</outMessageList>
+</payload>
+</consumeOutMessageResponse>

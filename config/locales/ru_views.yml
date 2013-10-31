@@ -267,7 +267,7 @@ ru:
       different_terminals: "Разные терминалы прилёта и вылета"
     comments:
       carrier: "Билет оформляет авиакомпания %{carrier_name}"
-      alliance: "Начисояются бонусные мили альянса %{alliance_link}"
+      alliance: "Начисляются бонусные мили альянса %{alliance_link}"
       time: "Везде указано местное время"
     availability:
       text: "Осталось %{seats} по этому тарифу."

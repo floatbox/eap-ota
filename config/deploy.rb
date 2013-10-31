@@ -2,6 +2,8 @@
 require "rvm/capistrano"
 require "capistrano_colors"
 
+require 'riemann/client'
+
 set :rvm_type, :system
 # закрепил версию, чтобы не прыгала в продакшне
 #set :rvm_ruby_string, 'ruby-1.9.3-p327-falcon'
@@ -158,6 +160,19 @@ namespace :deploy do
     stop_delayed_job
   end
 
+  task :notify_riemann do
+    r = Riemann::Client.new host: '198.199.124.27'
+    event = {
+      service: 'deploy',
+      host: 'all-hosts',
+      tags: ['gauge', fetch(:rails_env, 'production')],
+      metric: 1,
+      time: Time.now.to_i
+    }
+
+    r << event
+  end
+
   after "deploy:finalize_update", "deploy:symlink_shared_configs"
   after "deploy:finalize_update", "deploy:symlink_persistent_cache"
   after "deploy:finalize_update", "deploy:symlink_db_local"
@@ -166,6 +181,7 @@ namespace :deploy do
   after "deploy:rollback", "deploy:restart_services"
 
   after "deploy:update", "newrelic:notice_deployment"
+  after "deploy:update", "deploy:notify_riemann"
 
   task :fix_i18njs, :roles => :web do
     run "cd #{latest_release} && touch tmp/i18n-js.cache"
