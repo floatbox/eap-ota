@@ -11,8 +11,8 @@
         -@order_form.info_hash[:prices].each do |price_title, price_value|
           %price{:name => price_title}= price_value
       %rules
-        -@order_form.info_hash[:rules].each do |rule_header, rule_text|
-          %rule{:carrier => rule_header[0], :fare_base => rule_header[1]}= rule_text
+        -@order_form.info_hash[:rules].each do |rule|
+          %rule{:carrier => rule.carrier, :fare_base => rule.fare_base, :from => rule.from_iata, :to => rule.to_iata}= rule.rule_text
       %booking_classes
         -@order_form.info_hash[:booking_classes].each do |bc|
           %booking_class= bc

@@ -68,29 +68,33 @@ class Mux
   def amadeus_merge_and_cleanup(recommendations)
     benchmark 'Pricer amadeus, merging and cleanup' do
 
-      recommendations.uniq! unless lite
+      benchmark 'merge_and_cleanup_prefilter' do
+        recommendations.uniq! unless lite
 
-      # log amadeus recommendations
-      ActiveSupport::Notifications.instrument 'amadeus_merged.mux',
-        recommendations: recommendations
+        # log amadeus recommendations
+        ActiveSupport::Notifications.instrument 'amadeus_merged.mux',
+          recommendations: recommendations
 
-      recommendations.select!(&:full_information?)
+        recommendations.select!(&:full_information?)
 
-      benchmark 'commission matching' do
-        recommendations.find_commission!
+        benchmark 'commission matching' do
+          recommendations.find_commission!
+        end
       end
 
-      recommendations.select_valid! do |r|
-        r.delete_if(&:ground?)
-        r.delete_if(&:ignored_carriers)
+      benchmark 'merge_and_cleanup_filter' do
+        recommendations.select_valid! do |r|
+          r.delete_if(&:ground?)
+          r.delete_if(&:ignored_carriers)
 
-        # TODO пометить как непродаваемые, для админов?
-        r.select!(&:sellable?) unless admin_user
+          # TODO пометить как непродаваемые, для админов?
+          r.select!(&:sellable?) unless admin_user
 
-        # сортируем и группируем, если ищем для морды
-        recommendations.sort_and_group! unless lite
-        # удаляем рекоммендации на сегодня-завтра
-        recommendations.each(&:clear_variants)
+          # сортируем и группируем, если ищем для морды
+          recommendations.sort_and_group! unless lite
+          # удаляем рекоммендации на сегодня-завтра
+          recommendations.each(&:clear_variants)
+        end
       end
     end
     recommendations
