@@ -2,17 +2,6 @@
 
 module Monitoring
   class StateResolver
-=begin
-Состояния представляют из себя словарь вида
-  metric: {
-    state1: threshold1,
-    state2: threshold2,
-    ...
-  },
-при этом threshold1 < threshold2 < ... < thresholdN.
-state может быть любым, но лучше использовать
-ok/warning/error/critical (по возрастанию важности)
-=end
     STATES = begin
       path = Rails.root.join('config', 'monitoring_states', "#{Rails.env}.yml")
       if File.exists?(path)
