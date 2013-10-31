@@ -1,0 +1,8 @@
+Pricer_async_total:
+  ok: 0
+  warning: 12500
+  error: 25000
+Pricer_amadeus_merging_and_cleanup:
+  ok: 0
+  warning: 1500
+  error: 3000
