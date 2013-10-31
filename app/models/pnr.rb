@@ -9,8 +9,7 @@ class PNR
     pnr.number = number
     if pnr.order && pnr.order.source == 'amadeus'
       Amadeus.booking do |amadeus|
-        pnr_resp = amadeus.pnr_retrieve(:number => number).or_fail!
-        raise Amadeus::Error, 'No flights in PNR' if pnr_resp.flights.blank?
+        pnr_resp = amadeus.pnr_retrieve(:number => number)
         copy_attrs pnr_resp, pnr,
           :flights,
           :booking_classes,
