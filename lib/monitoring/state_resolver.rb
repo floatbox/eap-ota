@@ -19,8 +19,8 @@ module Monitoring
     end
 
     def state
-      return DEFAULT_STATE unless STATES[@service].present?
-      return DEFAULT_STATE unless @metric.present?
+      return DEFAULT_STATE unless STATES[@service]
+      return DEFAULT_STATE unless @metric
 
       STATES[@service].take_while do |_, threshold|
         threshold < @metric
