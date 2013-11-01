@@ -461,7 +461,11 @@ class Order < ActiveRecord::Base
   end
 
   def first_email
-    email.strip.split(/[,; ]+/).first.downcase
+    if email.present?
+      email.strip.split(/[,; ]+/).first.downcase
+    else
+      nil
+    end
   end
 
 
@@ -638,8 +642,8 @@ class Order < ActiveRecord::Base
 
   def set_customer
     if (customer && first_email != customer.email) || (!customer && !first_email.blank?)
-      self.customer = Customer.create_from_order(first_email)
-      save
+      new_customer = Customer.create_from_order(first_email)
+      update_column(:customer_id, new_customer.id)
     end
   end
 
