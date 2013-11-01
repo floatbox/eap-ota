@@ -19,14 +19,12 @@ module Monitoring
     end
 
     def state
-      return DEFAULT_STATE unless STATES[@service]
-      return DEFAULT_STATE unless @metric
+      return DEFAULT_STATE unless STATES[@service].present?
+      return DEFAULT_STATE unless @metric.present?
 
-      STATES[@service].reverse_each do |state, threshold|
-        return state if threshold <= @metric
-      end
-
-      DEFAULT_STATE
+      STATES[@service].take_while do |_, threshold|
+        threshold < @metric
+      end.last.first
     end
   end
 end
