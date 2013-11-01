@@ -178,8 +178,8 @@ a.pht-content:hover .pht-title {
 }
 
 /* User */
-#ph-user {
-    position: relative;
+#user {
+    display: none;
 }
 .phu-control {
     cursor: pointer;
@@ -378,4 +378,7 @@ a.pht-content:hover .pht-title {
 }
 .phul-logout:hover {
     color: #333;
+}
+.pht-selected .phul-logout:hover {
+    color: #A7A8AB;
 }

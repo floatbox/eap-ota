@@ -18,6 +18,7 @@ init: function() {
         this.restoreBooking(this.location.search, this.location.booking);
     } else if (this.location.search === 'login') {
         search.map.resize();
+        User.el.show();
         User.show('authorization');        
         this.loadLocation();
     } else if (this.location.search.indexOf('confirmation_token') == 0) {
@@ -57,6 +58,7 @@ loadLocation: function() {
     });
 },
 showConfirmationForm: function() {
+    User.el.show();
     var token = this.location.search.replace('confirmation_token=', '');
     $.ajax({
         method: 'GET',
@@ -81,6 +83,7 @@ showConfirmationForm: function() {
     search.map.resize();
 },
 showPasswordForm: function() {
+    User.el.show();
     var token = this.location.search.replace('reset_password_token=', '');
     User.password.el.find('.phus-title').css('margin-bottom', '13px');
     User.password.el.find('.phupp-profile').hide();

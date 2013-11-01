@@ -8,7 +8,7 @@
 <% end %>
         <span class="pht-title">Личный кабинет</span>
         <span class="pht-tip phu-email"><%= current_customer.email.downcase %></span>
-        <span class="pht-tip"><span class="phtt-link phul-logout">Выйти</span></span>
+        <span class="pht-tip" style="margin-top: 2px;"><span class="phtt-link phul-logout">Выйти</span></span>
 <% if controller.controller_name == 'profile' %>
     </div>
 <% else %>
@@ -129,4 +129,9 @@
     </div>
 </div>
 <div class="phu-fade"></div>
+<% end %>
+<% if admin_user %>
+<style type="text/css">
+#user {display: block;}
+</style>
 <% end %>
