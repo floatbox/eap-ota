@@ -111,7 +111,7 @@ class Order < ActiveRecord::Base
   end
 
   def make_payable_by_card
-    update_attributes(auto_ticket: true, no_auto_ticket_reason: '') if pnr_number.present? && ['delivery', 'cash'].include?(payment_type)
+    update_attributes(auto_ticket: true, no_auto_ticket_reason: '') if pnr_number.present?
     update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending' && (pnr_number.present? || parent_pnr_number.present?)
   end
 
