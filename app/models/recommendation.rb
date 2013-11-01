@@ -294,12 +294,7 @@ class Recommendation
   end
 
   def self.deserialize(coded)
-    unless coded.split('.')[2] =~ /^\d+$/
-      source, fv, classes, cabins, availabilities, *segment_codes = coded.split('.')
-      declared_price = 0
-    else
-      source, fv, declared_price, classes, cabins, availabilities, *segment_codes = coded.split('.')
-    end
+    source, fv, declared_price, classes, cabins, availabilities, *segment_codes = coded.split('.')
     variant = Variant.new(
       :segments => segment_codes.collect { |segment_code|
         Segment.new( :flights => segment_code.split('-').collect { |flight_code|

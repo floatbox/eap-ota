@@ -5,13 +5,7 @@ describe Recommendation do
 
   describe "#deserialize" do
 
-    context "old recommendation code" do
-      subject { Recommendation.deserialize('amadeus.AZ.OOOO.MMMM.3997.SU:AZ7181SVOVCE120113-AF:AZ7328VCECDG120113.AF:AZ7315CDGBLQ120213-SU:AZ7168BLQSVO120213') }
-      its(:booking_classes){should == ['O', 'O', 'O', 'O']}
-      its('segments.count'){should == 2}
-    end
-
-    context "new recommendation code" do
+    context "recommendation code" do
       subject { Recommendation.deserialize('amadeus.AZ.10772.OOOO.MMMM.3997.SU:AZ7181SVOVCE120113-AF:AZ7328VCECDG120113.AF:AZ7315CDGBLQ120213-SU:AZ7168BLQSVO120213') }
       its(:declared_price){should == 10772}
       its(:booking_classes){should == ['O', 'O', 'O', 'O']}
