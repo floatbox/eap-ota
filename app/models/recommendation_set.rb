@@ -62,9 +62,24 @@ class RecommendationSet
     self
   end
 
-  def select_valid!
+  def process_for_calendar!(opts = {})
     select_full_info!
-    yield(self) if block_given?
+    find_commission!
+    recommendations.select!(&:sellable?) unless opts[:admin_user]
+    recommendations.each(&:clear_variants)
+    postprocess!
+  end
+
+  def process_for_pricer!(opts = {})
+    select_full_info!
+    find_commission!
+    recommendations.delete_if(&:ground?)
+    recommendations.select!(&:sellable?) unless opts[:admin_user]
+
+    # сортируем и группируем, если ищем для морды
+    sort_and_group! unless opts[:lite]
+    # удаляем рекоммендации на сегодня-завтра
+    recommendations.each(&:clear_variants)
     postprocess!
   end
 
