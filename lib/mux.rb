@@ -45,20 +45,13 @@ class Mux
     benchmark 'Pricer amadeus, total' do
       session = Amadeus::Session.book(Amadeus.office(:booking))
       amadeus = Amadeus::Service.new(:session => session, :driver => async_amadeus_driver)
-      request_ws = {:suggested_limit => suggested_limit, :lite => lite}
-      request_ns = {:suggested_limit => suggested_limit, :lite => lite, :nonstop => true}
-      # non threaded variant
-      recommendations_ws = benchmark 'Pricer amadeus, with stops' do
-        amadeus.fare_master_pricer_travel_board_search(avia_search, request_ws).recommendations
+      request = {:suggested_limit => suggested_limit, :lite => lite}
+      recommendations = benchmark 'Pricer amadeus' do
+        amadeus.fare_master_pricer_travel_board_search(avia_search, request).recommendations
       end
-      recommendations_ns = if Conf.amadeus.nonstop_search && !lite
-        benchmark 'Pricer amadeus, without stops' do
-          amadeus.fare_master_pricer_travel_board_search(avia_search, request_ns).recommendations
-        end
-      else [] end
 
       amadeus.release
-      amadeus_merge_and_cleanup(recommendations_ws + recommendations_ns)
+      amadeus_merge_and_cleanup(recommendations)
     end
   rescue => e
     with_warning unless ignore_error?(e)
@@ -69,7 +62,6 @@ class Mux
     benchmark 'Pricer amadeus, merging and cleanup' do
 
       benchmark 'merge_and_cleanup_prefilter' do
-        recommendations.uniq! unless lite
 
         # log amadeus recommendations
         ActiveSupport::Notifications.instrument 'amadeus_merged.mux',
@@ -102,9 +94,8 @@ class Mux
 
   def amadeus_async_pricer(avia_search, &block)
     return [] unless Conf.amadeus.enabled
-    request_ws = {:suggested_limit => suggested_limit, :lite => lite}
-    request_ns = {:suggested_limit => suggested_limit, :lite => lite, :nonstop => true}
-    reqs = (lite || !Conf.amadeus.nonstop_search) ? [request_ws] : [request_ns, request_ws]
+    request = {:suggested_limit => suggested_limit, :lite => lite}
+    reqs = [request]
     amadeus_driver = async_amadeus_driver
     reqs.each do |req|
       session = Amadeus::Session.book(Amadeus.office(:booking))
