@@ -59,6 +59,12 @@ describe Commission, :commissions do
             next
           end
 
+          unless rule.disabled?
+            it "should have ticketing method" do
+              rule.ticketing_method.should_not be_nil
+            end
+          end
+
           if rule.examples.blank?
             specify { pending "no examples" }
             next
