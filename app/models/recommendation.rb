@@ -3,7 +3,7 @@ class Recommendation
 
   include KeyValueInit
 
-  attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :rule_hashes,
+  attr_accessor :variants, :additional_info, :validating_carrier_iata, :cabins, :booking_classes, :source, :subsource, :rule_hashes,
     :suggested_marketing_carrier_iatas, :availabilities, :upts, :last_tkt_date, :declared_price, :baggage_array,
     :fare_bases, :published_fare
 
@@ -289,12 +289,15 @@ class Recommendation
       s.flights.collect(&:flight_code).join('-')
     }
 
-    ( [ source, validating_carrier_iata, price_with_payment_commission.ceil, booking_classes.join(''), cabins.join(''), (availabilities || []).join('') ] +
+    full_source = [source, subsource].compact.join('-')
+
+    ( [ full_source, validating_carrier_iata, price_with_payment_commission.ceil, booking_classes.join, cabins.join, (availabilities || []).join ] +
       segment_codes ).join('.')
   end
 
   def self.deserialize(coded)
     source, fv, declared_price, classes, cabins, availabilities, *segment_codes = coded.split('.')
+    source, subsource = source.split('-')
     variant = Variant.new(
       :segments => segment_codes.collect { |segment_code|
         Segment.new( :flights => segment_code.split('-').collect { |flight_code|
@@ -305,6 +308,7 @@ class Recommendation
 
     new(
       :source => source,
+      :subsource => subsource,
       :validating_carrier_iata => fv,
       :declared_price => declared_price.to_i,
       :booking_classes => classes.split(''),

@@ -10,6 +10,14 @@ describe Recommendation do
       its(:declared_price){should == 10772}
       its(:booking_classes){should == ['O', 'O', 'O', 'O']}
       its('segments.count'){should == 2}
+      its(:subsource) {should be_nil}
+
+    end
+
+    context "with subsource" do
+      subject { Recommendation.deserialize('amadeus-MOWR2233B.AZ.10772.OOOO.MMMM.3997.SU:AZ7181SVOVCE120113-AF:AZ7328VCECDG120113.AF:AZ7315CDGBLQ120213-SU:AZ7168BLQSVO120213') }
+      its(:source) { should == 'amadeus' }
+      its(:subsource) { should == 'MOWR2233B' }
 
     end
   end
