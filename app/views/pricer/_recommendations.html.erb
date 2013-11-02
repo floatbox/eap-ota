@@ -199,7 +199,7 @@
 <% end %>
 </div>
 
-<% duration_scale = 98.0 / @recommendations.collect(&:segments).flatten.collect(&:total_duration).push(600).max %>
+<% duration_scale = 98.0 / @recommendations.recs.flat_map(&:segments).collect(&:total_duration).push(600).max %>
 <% @recommendations.each do |recommendation| %>
 <div class="offer" data-prices='<%= raw recommendation_prices(recommendation) %>'>
     <ul class="o-variants">

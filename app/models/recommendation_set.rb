@@ -2,118 +2,69 @@
 
 class RecommendationSet
 
-  delegate  :empty?,
-            :present?,
-            :blank?,
-            :size,
-            :count,
-            :flights,
-            :first,
-            :last,
-            :map,
-            :map!,
-            :collect,
-            :select,
-            :reject,
-            :select!,
-            :reject!,
-            :delete_if,
-            :uniq!,
-            :flat_map,
-            :flatten,
-            :segments,
-            :variants,
-            :[],
-    to: :recommendations
-
-  def initialize(recommendations=Array.new)
-    @recommendations = recommendations
+  def self.wrap(arg)
+    return arg if arg.is_a? RecommendationSet
+    RecommendationSet.new(arg)
   end
 
-  def recommendations
-    @recommendations
+  def initialize(recs=[])
+    recs.is_a? Array or
+      raise TypeError, "cannot init #{recs.class} with RecommendationSet"
+    @recs = recs
   end
 
-  def to_a
-    @recommendations
-  end
-
-  def each &block
-    @recommendations.each &block
-    self
-  end
+  attr_accessor :recs
+  alias recommendations recs
+  alias to_a recs
+  delegate :each, :to => :recs
 
   def + other
-    RecommendationSet.new(
-      @recommendations + case other
-        when Array then other
-        when RecommendationSet then other.recommendations
-        else raise TypeError, "cannot concatenate #{other.class} with RecommendationSet"
-      end
-    )
-  end
-
-  def to_s
-    "#{super}: #{@recommendations.to_s}"
-  end
-
-  def << other
-    @recommendations << other
-    self
+    RecommendationSet.new( @recs + RecommendationSet.wrap(other).recs )
   end
 
   def process_for_calendar!(opts = {})
     select_full_info!
+    @recs.reject! &:ground?
     find_commission!
-    recommendations.select!(&:sellable?) unless opts[:admin_user]
-    recommendations.each(&:clear_variants)
-    postprocess!
+    @recs.select! &:sellable?  unless opts[:admin_user]
+    clear_variants!
   end
 
   def process_for_pricer!(opts = {})
     select_full_info!
+    @recs.reject! &:ground?
     find_commission!
-    recommendations.delete_if(&:ground?)
-    recommendations.select!(&:sellable?) unless opts[:admin_user]
+    @recs.select! &:sellable?  unless opts[:admin_user]
 
     # сортируем и группируем, если ищем для морды
-    sort_and_group! unless opts[:lite]
-    # удаляем рекоммендации на сегодня-завтра
-    recommendations.each(&:clear_variants)
-    postprocess!
+    sort! unless opts[:lite]
+    group! unless opts[:lite]
+    clear_variants!
   end
 
   def select_full_info!
-    select_by! :full_information?, :valid_interline?
-    reject_by! :ignored_carriers
+    @recs.select! &:full_information?
+    @recs.select! &:valid_interline?
+    @recs.reject! &:ignored_carriers
   end
 
-  def postprocess!
-    select! &:variants?
+  def clear_variants!
+    @recs.each &:clear_variants
+    @recs.select! &:variants?
   end
 
-  def sort_and_group!
-    @recommendations = group_and_correct(@recommendations.sort_by(&:price_total))
-  end
-
-  def sort_by &block
-    RecommendationSet.new(@recommendations.sort_by &block)
-  end
-
-  def filters_data
-    Recommendation.filters_data @recommendations
+  def sort!
+    @recs.sort_by! &:price_total
   end
 
   def find_commission!
-    @recommendations.each(&:find_commission!)
+    @recs.each &:find_commission!
   end
 
-  # бывший Recommendation#corrected - там ему больше не место
-  def group_and_correct recs
-    recs ||= @recommendations
+  # объединяем эквивалентные варианты
+  def group!
     result = []
-    #объединяем эквивалентные варианты
-    @recommendations.each do |r|
+    @recs.each do |r|
       #некрасиво, но просто и работает
       if r.groupable_with? result[-1]
         result[-1].variants += r.variants
@@ -125,19 +76,11 @@ class RecommendationSet
         result << r
       end
     end
-    result
+    @recs = result
   end
 
-  private
-
-  def reject_by! *criterias
-    criterias.each { |criteria| reject!(&criteria) }
-    self
-  end
-
-  def select_by! *criterias
-    criterias.each { |criteria| select!(&criteria) }
-    self
+  def filters_data
+    Recommendation.filters_data @recs
   end
 
 end
