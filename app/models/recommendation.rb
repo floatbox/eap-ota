@@ -230,11 +230,6 @@ class Recommendation
   end
   alias == eql?
 
-  def groupable_with? rec
-    return unless rec
-    [price_fare, price_tax, validating_carrier_iata, booking_classes, marketing_carrier_iatas] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.marketing_carrier_iatas]
-  end
-
   def booking_class_for_flight flight
     variants.each do |v|
       v.flights.zip(booking_classes) do |other_flight, booking_class|

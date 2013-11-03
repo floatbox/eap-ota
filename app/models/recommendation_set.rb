@@ -66,17 +66,31 @@ class RecommendationSet
     result = []
     @recs.each do |r|
       #некрасиво, но просто и работает
-      if r.groupable_with? result[-1]
+      # FIXME очень некрасиво! хорошо что скоро убьем.
+      if groupable? r, result[-1]
         result[-1].variants += r.variants
-      elsif r.groupable_with? result[-2]
+      elsif groupable? r, result[-2]
         result[-2].variants += r.variants
-      elsif r.groupable_with? result[-3]
+      elsif groupable? r, result[-3]
         result[-3].variants += r.variants
       else
         result << r
       end
     end
     @recs = result
+  end
+
+  def groupable? rec1, rec2
+    rec2 or return
+    %W[
+      price_fare
+      price_tax
+      validating_carrier_iata
+      booking_classes
+      marketing_carrier_iatas
+    ].all? do |attr|
+      rec1.send(attr) == rec2.send(attr)
+    end
   end
 
   def filters_data
