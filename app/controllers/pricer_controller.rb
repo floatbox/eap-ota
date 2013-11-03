@@ -116,12 +116,12 @@ class PricerController < ApplicationController
 
       @code = @search.encode_url
       if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
-        @destination.move_average_price @search, @recommendations.first, @code
+        @destination.move_average_price @search, @recommendations.cheapest, @code
       end
 
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
 
-      recommendations_total = @recommendations.count
+      recommendations_total = @recommendations.size
       # измеряем после фильтрации
       meter :api_total_recommendations, recommendations_total
 

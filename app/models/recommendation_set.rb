@@ -16,7 +16,7 @@ class RecommendationSet
   attr_accessor :recs
   alias recommendations recs
   alias to_a recs
-  delegate :each, :to => :recs
+  delegate :each, :size, :empty?, :present?, :to => :recs
 
   def + other
     RecommendationSet.new( @recs + RecommendationSet.wrap(other).recs )
