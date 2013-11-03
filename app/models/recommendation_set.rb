@@ -22,19 +22,11 @@ class RecommendationSet
     RecommendationSet.new( @recs + RecommendationSet.wrap(other).recs )
   end
 
-  def process_for_calendar!(opts = {})
+  def process!(opts = {})
     select_full_info!
-    @recs.reject! &:ground?
+    reject_ground!
     find_commission!
-    @recs.select! &:sellable?  unless opts[:admin_user]
-    clear_variants!
-  end
-
-  def process_for_pricer!(opts = {})
-    select_full_info!
-    @recs.reject! &:ground?
-    find_commission!
-    @recs.select! &:sellable?  unless opts[:admin_user]
+    select_sellable! unless opts[:admin_user]
 
     # сортируем и группируем, если ищем для морды
     sort! unless opts[:lite]
@@ -46,6 +38,14 @@ class RecommendationSet
     @recs.select! &:full_information?
     @recs.select! &:valid_interline?
     @recs.reject! &:ignored_carriers
+  end
+
+  def reject_ground!
+    @recs.reject! &:ground?
+  end
+
+  def select_sellable!
+    @recs.select! &:sellable?
   end
 
   def clear_variants!

@@ -22,7 +22,7 @@ class Mux
       amadeus.fare_master_pricer_calendar(avia_search).recommendations
     amadeus.release
 
-    recommendations.process_for_calendar! admin_user: admin_user
+    recommendations.process! admin_user: admin_user
     recommendations
 
   rescue => e
@@ -45,7 +45,7 @@ class Mux
     ActiveSupport::Notifications.instrument 'amadeus_merged.mux',
       recommendations: recommendations
 
-    recommendations.process_for_pricer! lite: lite, admin_user: admin_user
+    recommendations.process! lite: lite, admin_user: admin_user
     recommendations
   rescue => e
     with_warning unless ignore_error?(e)
@@ -79,7 +79,7 @@ class Mux
     ActiveSupport::Notifications.instrument 'amadeus_merged.mux',
       recommendations: recommendations
 
-    recommendations.process_for_pricer! lite: lite, admin_user: admin_user
+    recommendations.process! lite: lite, admin_user: admin_user
     recommendations
   end
 
