@@ -28,9 +28,11 @@ class RecommendationSet
     find_commission!
     select_sellable! unless opts[:admin_user]
 
-    # сортируем и группируем, если ищем для морды
+    # сортируем если ищем для морды
     sort! unless opts[:lite]
-    group! unless opts[:lite]
+    # Выключил, потому что сейчас всегда один поиск.
+    # Поиски по нескольким офисам надо будет группировать другим способом.
+    # group! unless opts[:lite]
     clear_variants!
   end
 
