@@ -15,11 +15,12 @@ class Mux
   end
 
   def calendar(avia_search)
-    return [] unless Conf.amadeus.enabled && Conf.amadeus.calendar
+    return RecommendationSet.new unless Conf.amadeus.enabled && Conf.amadeus.calendar
 
     amadeus = Amadeus.booking
-    recommendations =
+    recommendations = RecommendationSet.new(
       amadeus.fare_master_pricer_calendar(avia_search).recommendations
+    )
     amadeus.release
 
     recommendations.process! admin_user: admin_user
@@ -32,12 +33,13 @@ class Mux
 
   # TODO exception handling
   def amadeus_pricer(avia_search)
-    return [] unless Conf.amadeus.enabled
+    return RecommendationSet.new unless Conf.amadeus.enabled
     session = Amadeus::Session.book(Amadeus.office(:booking))
     amadeus = Amadeus::Service.new(:session => session, :driver => async_amadeus_driver)
     request = {:suggested_limit => suggested_limit, :lite => lite}
-    recommendations =
+    recommendations = RecommendationSet.new(
       amadeus.fare_master_pricer_travel_board_search(avia_search, request).recommendations
+    )
 
     amadeus.release
 
@@ -53,7 +55,7 @@ class Mux
   end
 
   def amadeus_async_pricer(avia_search, &block)
-    return [] unless Conf.amadeus.enabled
+    return RecommendationSet.new unless Conf.amadeus.enabled
     request = {:suggested_limit => suggested_limit, :lite => lite}
     reqs = [request]
     amadeus_driver = async_amadeus_driver
@@ -68,12 +70,14 @@ class Mux
   end
 
   def async_pricer(avia_search)
-    recommendations = RecommendationSet.new
+    recommendations = []
+
     amadeus_async_pricer(avia_search) do |res|
       recommendations += res.recommendations
     end
-
     async_perform
+
+    recommendations = RecommendationSet.new(recommendations)
 
     # log amadeus recommendations
     ActiveSupport::Notifications.instrument 'amadeus_merged.mux',

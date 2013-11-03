@@ -71,7 +71,7 @@ module Amadeus
             )
           end
         end
-        RecommendationSet.new(recommendations)
+        recommendations
       end
 
       # xpath
