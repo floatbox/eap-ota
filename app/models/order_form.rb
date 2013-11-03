@@ -30,10 +30,15 @@ class OrderForm
   attr_reader :show_vat, :vat_included
 
   delegate :last_tkt_date, :to => :recommendation
-  validates_format_of :email, :with =>
-  /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
-  validates_presence_of :email, :phone
-  validates_format_of :phone, :with => /^[\d \+\-\(\)]+$/
+  validates :email,
+    presence: true,
+    mx_record: true,
+    format:
+      { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: "Некорректный email" }
+  validates :phone,
+    presence: true,
+    format:
+      { with: /^[\d \+\-\(\)]+$/, message: 'Некорректный номер телефона' }
 
   def card
     @card || CreditCard.new
