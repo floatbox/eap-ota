@@ -83,5 +83,10 @@ class RecommendationSet
     Recommendation.filters_data @recs
   end
 
+  # FIXME осторожно! опирается на факт предварительной сортировки!
+  def cheapest
+    recs.first
+  end
+
 end
 
