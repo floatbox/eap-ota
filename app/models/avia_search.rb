@@ -48,7 +48,7 @@ class AviaSearch
   end
 
   def self.simple(args)
-    allowed_parameters = [:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner]
+    allowed_parameters = [:from, :to, :date1, :date2, :adults, :children, :infants, :cabin, :partner]
     wrong_parameters = args.keys.map(&:to_sym) - allowed_parameters
     lack_of_parameters = [:from, :to, :date1] - args.keys.map(&:to_sym)
     unless wrong_parameters.empty?
@@ -66,7 +66,7 @@ class AviaSearch
 
     adults = (args[:adults] || 1).to_i
     children = args[:children].to_i
-    infants = args[:infants].to_i + args[:seated_infants].to_i
+    infants = args[:infants].to_i
     cabin = args[:cabin]
     partner = args[:partner]
 

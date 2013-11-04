@@ -58,7 +58,7 @@ class BookingController < ApplicationController
   end
 
   def api_redirect
-    @search = AviaSearch.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
+    @search = AviaSearch.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :cabin, :partner ))
     # FIXME если partner из @search не берется больше - переделать на before_filter save_partner_cookies
     track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?

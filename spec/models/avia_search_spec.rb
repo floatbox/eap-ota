@@ -89,7 +89,7 @@ describe AviaSearch do
 
     context "when got empty people values" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => "0910#{yy}", :cabin => 'C', :adults => nil, :children => nil, :infants => nil, :seated_infants => nil }
+        { :from => 'MOW', :to => 'LON', :date1 => "0910#{yy}", :cabin => 'C', :adults => nil, :children => nil, :infants => nil }
       end
 
       it { should be_valid }
