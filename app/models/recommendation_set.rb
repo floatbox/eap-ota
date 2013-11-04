@@ -2,6 +2,11 @@
 
 class RecommendationSet
 
+  include ActiveSupport::Benchmarkable
+  cattr_accessor :logger do
+    ForwardLogging.new(Rails.logger, Logger::DEBUG)
+  end
+
   def self.wrap(arg)
     return arg if arg.is_a? RecommendationSet
     RecommendationSet.new(arg)
@@ -23,17 +28,26 @@ class RecommendationSet
   end
 
   def process!(opts = {})
-    select_full_info!
-    reject_ground!
-    find_commission!
-    select_sellable! unless opts[:admin_user]
+    benchmark 'RecommendationSet: process!, total', level: :info do
+      run :select_full_info!
+      run :reject_ground!
+      run :find_commission!
+      run :select_sellable! unless opts[:admin_user]
 
-    # сортируем если ищем для морды
-    sort! unless opts[:lite]
-    # Выключил, потому что сейчас всегда один поиск.
-    # Поиски по нескольким офисам надо будет группировать другим способом.
-    # group! unless opts[:lite]
-    clear_variants!
+      # сортируем если ищем для морды
+      run :sort! unless opts[:lite]
+      # Выключил, потому что сейчас всегда один поиск.
+      # Поиски по нескольким офисам надо будет группировать другим способом.
+      # run :group! unless opts[:lite]
+      run :clear_variants!
+    end
+  end
+
+  # запускает подпроцесс и репортит его время и еще что-нибудь.
+  def run stage
+    benchmark "RecommendationSet: #{stage}", level: :debug do
+      send stage
+    end
   end
 
   def select_full_info!
