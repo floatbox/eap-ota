@@ -10,6 +10,7 @@ class Mux
   include KeyValueInit
   attr_accessor :suggested_limit, :lite, :admin_user
 
+  # сейчас используется только с API
   def pricer(avia_search)
     amadeus_pricer(avia_search)
   end
@@ -69,6 +70,7 @@ class Mux
     end
   end
 
+  # сейчас используется только с морды.
   def async_pricer(avia_search)
     recommendations = []
 
