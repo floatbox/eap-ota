@@ -95,6 +95,49 @@ describe AviaSearch do
       it { should be_valid }
       its(:tariffied) { should == {:children=>0, :adults=>1, :infants=>0} }
     end
+
+    context "when got empty people values" do
+      let :attrs do
+        { :from => 'MOW', :to => 'LON', :date1 => "0910#{yy}", :cabin => 'C', :adults => nil, :children => nil, :infants => nil }
+      end
+
+      it { should be_valid }
+      its(:tariffied) { should == {:children=>0, :adults=>1, :infants=>0} }
+    end
+
+    context "when got multisegment format" do
+      let :attrs do
+        { :from1 => 'MOW', :to1 => 'LON', :date1 => "0910#{yy}",
+          :from2 => 'LON', :to2 => 'PAR', :date2 => "1010#{yy}",
+          :from3 => 'PAR', :to3 => 'LED', :date3 => "1110#{yy}",
+          :from4 => 'LED', :to4 => 'ROV', :date4 => "1210#{yy}",
+          :from5 => 'ROV', :to5 => 'ROM', :date5 => "1210#{yy}",
+          :from6 => 'ROM', :to6 => 'MOW', :date6 => "1210#{yy}",
+          :cabin => 'C', :adults => "1" }
+      end
+
+      it { should be_valid }
+      it { should have(6).segments }
+    end
+
+    context "when got partial multisegment format" do
+      let :attrs do
+        { :from1 => 'MOW',
+          :to1 => 'LON', :date1 => "0910#{yy}",
+          :to2 => 'PAR', :date2 => "1010#{yy}",
+          :to3 => 'LED', :date3 => "1110#{yy}",
+          :to4 => 'ROV', :date4 => "1210#{yy}",
+          :to5 => 'ROM', :date5 => "1310#{yy}",
+          :to6 => 'MOW', :date6 => "1410#{yy}",
+          :cabin => 'C', :adults => "1" }
+      end
+
+      it { should be_valid }
+      it { should have(6).segments }
+      its('segments.last.from') {should == City['ROM']}
+      its('segments.last.to') {should == City['MOW']}
+      its('segments.last.date') {should == Date.new(Date.today.year+1, 10, 14)}
+    end
   end
 
   describe "#simple" do
@@ -133,7 +176,7 @@ describe AviaSearch do
       args = {
               :date1 => "0910#{yy}",
               :cabin => 'C'}
-       expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s)  - "from, to"')
+       expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s)  - "from1, to1"')
     end
   end
 end
