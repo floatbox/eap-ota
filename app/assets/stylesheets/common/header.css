@@ -113,9 +113,9 @@ a.pht-content:hover .pht-title {
     padding: 1px 15px 12px;
     font-size: 13px;
     line-height: 16px;
-    background: #f1b346;
+    background: #EDEDE3;
     color: #333;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
 }
 .pht-popup:before {
     content: '';
@@ -127,7 +127,7 @@ a.pht-content:hover .pht-title {
     margin-left: -10px;
     border: 10px solid transparent;
     border-top: none;
-    border-bottom-color: #f1b346;
+    border-bottom-color: #EDEDE3;
 }
 .phtp-close {
     float: right;
