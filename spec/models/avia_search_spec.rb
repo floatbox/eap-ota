@@ -98,7 +98,7 @@ describe AviaSearch do
   end
 
   describe "#simple" do
-     it "should raise ArgumentError for parameters that do not exist" do
+    it "should raise ArgumentError for parameters that do not exist" do
       args = {
               :from => 'MOW',
               :to => 'LON',
@@ -107,24 +107,25 @@ describe AviaSearch do
               :cabin => 'C'}
 
       expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError, 'Unknown parameter(s) - "childrens"')
-     end
-    it "should raise ArgumentError if from and to are not iatas" do
+    end
+
+    pending "should raise ArgumentError if from and to are not iatas" do
       args = {
               :from => 'Зимбабве',
               :to => 'LON',
               :date1 => "0910#{yy}",
               :cabin => 'C'}
-       expect{ AviaSearch.simple(args) }.to_not raise_error
+       expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError)
     end
 
-    it "should raise ArgumentError if from and/or to are new iatas" do
+    pending "should raise ArgumentError if from and/or to are new iatas" do
       unknown_iata = 'BBQ'
       args = {
               :from => 'LON',
               :to => unknown_iata,
               :date1 => "0910#{yy}",
               :cabin => 'C'}
-       expect{ AviaSearch.simple(args) }.to_not raise_error(CodeStash::NotFound,"Couldn't find Airport with code '#{unknown_iata}'")
+       expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError)
        Airport.lost.where(iata: unknown_iata).should_not == []
     end
 
