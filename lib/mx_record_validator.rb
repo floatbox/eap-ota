@@ -15,7 +15,7 @@ class MxRecordValidator < ActiveModel::EachValidator
     end
 
     if mail_servers.empty?
-      record.errors.add(attribute, "Почтовый адрес располагается на запрещенном домене")
+      record.errors.add(attribute, "Указанный адрес электронной почты не существует!")
     end
   rescue Resolv::ResolvError, Resolv::ResolvTimeout => e
     # если не смогли отрезолвить, лучше пропустить потенциально дефективный ящик
