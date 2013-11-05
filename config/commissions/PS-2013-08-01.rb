@@ -112,7 +112,7 @@ example "cdgiev/ab"
 end
 
 rule 9 do
-important!
+disabled "переключили на бонусный ац"
 ticketing_method "downtown"
 agent "7%"
 subagent "6%"
@@ -122,3 +122,15 @@ example "svocdg"
 example "svocdg cdgsvo"
 end
 
+rule 10 do
+important!
+ticketing_method "aviacenter"
+agent "5%"
+subagent "8%"
+discount "12%"
+agent "надо отключить декабрь, но включить январь-апрель включительно"
+agent "и переключить выписку на АЦ - агентская 5%, субагентская 8% (именно
+такие условия у нас)"
+example "svocdg"
+example "cdgsvo svocdg"
+end

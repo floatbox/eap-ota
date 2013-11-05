@@ -6,7 +6,7 @@ module Amadeus
         xpath('//r:tstList').present?
       end
 
-      def message
+      def error_message
         xpath('//r:errorText/r:errorFreeText').to_s
       end
     end
