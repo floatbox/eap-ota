@@ -48,21 +48,9 @@ describe AviaSearch do
       described_class.simple( attrs )
     end
 
-    context "when filled with AviaSearchSegment classes" do
-      let :attrs do
-        {
-          :people_count => people_attrs,
-          :segments => [
-            ::AviaSearchSegment.new(from: 'MOW', to: 'PAR', date: "2104#{yy}"),
-            ::AviaSearchSegment.new(from: 'PAR', to: 'MOW', date: "2804#{yy}")
-          ]
-        }
-      end
-    end
-
     context "when oneway" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => "0910#{yy}" }
+        { :from => 'MOW', :to => 'LON', :date1 => "20#{yy}-10-09" }
       end
 
       it { should be_valid }
@@ -71,7 +59,7 @@ describe AviaSearch do
 
     context "when twoway" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => "0910#{yy}", :date2 => "0911#{yy}" }
+        { :from => 'MOW', :to => 'LON', :date1 => "20#{yy}-10-09", :date2 => "20#{yy}-11-09" }
       end
 
       it { should be_valid }
@@ -80,7 +68,7 @@ describe AviaSearch do
 
     context "when requested business class" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => "0910#{yy}", :cabin => 'C' }
+        { :from => 'MOW', :to => 'LON', :date1 => "20#{yy}-10-09", :cabin => 'C' }
       end
 
       it { should be_valid }
@@ -89,7 +77,7 @@ describe AviaSearch do
 
     context "when got empty people values" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => "0910#{yy}", :cabin => 'C', :adults => nil, :children => nil, :infants => nil }
+        { :from => 'MOW', :to => 'LON', :date1 => "20#{yy}-10-09", :cabin => 'C', :adults => nil, :children => nil, :infants => nil }
       end
 
       it { should be_valid }
@@ -98,7 +86,7 @@ describe AviaSearch do
 
     context "when got empty people values" do
       let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => "0910#{yy}", :cabin => 'C', :adults => nil, :children => nil, :infants => nil }
+        { :from => 'MOW', :to => 'LON', :date1 => "20#{yy}-10-09", :cabin => 'C', :adults => nil, :children => nil, :infants => nil }
       end
 
       it { should be_valid }
@@ -107,12 +95,12 @@ describe AviaSearch do
 
     context "when got multisegment format" do
       let :attrs do
-        { :from1 => 'MOW', :to1 => 'LON', :date1 => "0910#{yy}",
-          :from2 => 'LON', :to2 => 'PAR', :date2 => "1010#{yy}",
-          :from3 => 'PAR', :to3 => 'LED', :date3 => "1110#{yy}",
-          :from4 => 'LED', :to4 => 'ROV', :date4 => "1210#{yy}",
-          :from5 => 'ROV', :to5 => 'ROM', :date5 => "1210#{yy}",
-          :from6 => 'ROM', :to6 => 'MOW', :date6 => "1210#{yy}",
+        { :from1 => 'MOW', :to1 => 'LON', :date1 => "20#{yy}-10-09",
+          :from2 => 'LON', :to2 => 'PAR', :date2 => "20#{yy}-10-10",
+          :from3 => 'PAR', :to3 => 'LED', :date3 => "20#{yy}-10-11",
+          :from4 => 'LED', :to4 => 'ROV', :date4 => "20#{yy}-10-12",
+          :from5 => 'ROV', :to5 => 'ROM', :date5 => "20#{yy}-10-13",
+          :from6 => 'ROM', :to6 => 'MOW', :date6 => "20#{yy}-10-14",
           :cabin => 'C', :adults => "1" }
       end
 
@@ -123,12 +111,12 @@ describe AviaSearch do
     context "when got partial multisegment format" do
       let :attrs do
         { :from1 => 'MOW',
-          :to1 => 'LON', :date1 => "0910#{yy}",
-          :to2 => 'PAR', :date2 => "1010#{yy}",
-          :to3 => 'LED', :date3 => "1110#{yy}",
-          :to4 => 'ROV', :date4 => "1210#{yy}",
-          :to5 => 'ROM', :date5 => "1310#{yy}",
-          :to6 => 'MOW', :date6 => "1410#{yy}",
+          :to1 => 'LON', :date1 => "20#{yy}-10-09",
+          :to2 => 'PAR', :date2 => "20#{yy}-10-10",
+          :to3 => 'LED', :date3 => "20#{yy}-10-11",
+          :to4 => 'ROV', :date4 => "20#{yy}-10-12",
+          :to5 => 'ROM', :date5 => "20#{yy}-10-13",
+          :to6 => 'MOW', :date6 => "20#{yy}-10-14",
           :cabin => 'C', :adults => "1" }
       end
 
@@ -145,7 +133,7 @@ describe AviaSearch do
       args = {
               :from => 'MOW',
               :to => 'LON',
-              :date1 => "0910#{yy}",
+              :date1 => "20#{yy}-10-09",
               :childrens => 1,
               :cabin => 'C'}
 
@@ -156,7 +144,7 @@ describe AviaSearch do
       args = {
               :from => 'Зимбабве',
               :to => 'LON',
-              :date1 => "0910#{yy}",
+              :date1 => "20#{yy}-10-09",
               :cabin => 'C'}
        expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError)
     end
@@ -166,7 +154,7 @@ describe AviaSearch do
       args = {
               :from => 'LON',
               :to => unknown_iata,
-              :date1 => "0910#{yy}",
+              :date1 => "20#{yy}-10-09",
               :cabin => 'C'}
        expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError)
        Airport.lost.where(iata: unknown_iata).should_not == []
@@ -174,7 +162,7 @@ describe AviaSearch do
 
     it "should raise ArgumentError if from, to or data1 are not there" do
       args = {
-              :date1 => "0910#{yy}",
+              :date1 => "20#{yy}-10-09",
               :cabin => 'C'}
        expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s)  - "from1, to1"')
     end
