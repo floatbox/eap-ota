@@ -161,7 +161,7 @@ processSubscription: function() {
 },
 processCollections: function() {
     var that = this;
-    if (this.all.offers.length || this.matrix.offer.variants.length) {
+    if (this.all.offers.length || this.matrix.offer && this.matrix.offer.variants.length) {
         if (this.all.offers.length) {
             this.content.tabs.show();
             this.matrix.content.find('.rm-notice').hide();
