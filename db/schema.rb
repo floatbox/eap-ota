@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130901140434) do
+ActiveRecord::Schema.define(:version => 20131003132118) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(:version => 20130901140434) do
   end
 
   add_index "cities", ["iata"], :name => "index_cities_on_iata"
+  add_index "cities", ["lat", "lng"], :name => "index_cities_on_lat_and_lng"
   add_index "cities", ["name_en"], :name => "index_cities_on_name_en"
   add_index "cities", ["name_ru"], :name => "index_cities_on_name_ru"
 
@@ -235,6 +236,20 @@ ActiveRecord::Schema.define(:version => 20130901140434) do
     t.integer  "average_time_delta"
     t.integer  "hot_offers_counter", :default => 0
   end
+
+  create_table "fare_rules", :force => true do |t|
+    t.string   "carrier"
+    t.string   "fare_base"
+    t.string   "to_iata"
+    t.string   "from_iata"
+    t.string   "passenger_type"
+    t.text     "rule_text"
+    t.integer  "order_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "fare_rules", ["order_id"], :name => "index_fare_rules_on_order_id"
 
   create_table "flight_groups", :force => true do |t|
     t.text     "code"

@@ -15,7 +15,7 @@ class Commission::Rule
 
   # GDS
   # @note сейчас нигде не используется
-  # @return [Symbol] :amadeus, :sirena
+  # @return [Symbol] :amadeus
   attr_accessor :system
 
   # @!group Тип комиссионного правила.

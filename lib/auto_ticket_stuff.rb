@@ -6,7 +6,8 @@ class AutoTicketStuff
   attr_accessor :recommendation
   attr_accessor :people
   attr_accessor :order
-
+  BAD_DOMAINS = ['superrito.com', 'armyspy.com', 'cuvox.de', 'dayrep.com', 'einrot.com', 'fleckens.hu', 'gustr.com', 'jourrapide.com', 'rhyta.com', 'teleworm.us', 'writeme.com', 'europe.com', 'dropmail.me', 'alumni.com']
+  SUSPICIOUS_DOMAINS = ['hotmail', 'yahoo', 'post.com', 'outlook.com', 'berlin.com']
   def auto_ticket
     if reason = turndown_reason
       Rails.logger.info "No auto ticketing reason: #{reason}"
@@ -25,24 +26,33 @@ class AutoTicketStuff
     order.payment_type == 'card' or return 'Заказ оплачивается не картой'
     order.ticket_status == 'booked' or return 'заказ не в статусе booked'
     !order.offline_booking or return 'offline заказ'
+    #!used_card_with_different_name? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (card)"
+    !looks_like_fraud? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать!"
+    SUSPICIOUS_DOMAINS.each do |domain|
+      !order.email.downcase[domain]  or return "название почтового ящика содержит #{domain}"
+    end
+    BAD_DOMAINS.each do |domain|
+      !order.email.downcase[domain]  or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (email)"
+    end
     recommendation.country_iatas.uniq.all?{|ci| Country[ci].continent != 'africa'} or return 'есть хотя бы один африканский город'
     people.all?{|p| ['RU', 'UA', 'BY', 'MD'].include?(p.nationality.alpha2)} or return 'есть пассажиры, не являющиеся гражданами РФ, Украины, Белоруссии или Молдавии'
-    !order.email['hotmail']  or return 'название почтового ящика содержит hotmail'
-    !order.email['yahoo']  or return 'название почтового ящика содержит yahoo'
     (Order.where(email: order.email, payment_status: 'not blocked').where('created_at > ?', Time.now - 6.hours).count < 3) or return 'пользователь совершил две или больше неуспешных попытки заказа'#текущий заказ уже попадает в count
     no_dupe_orders? or return "dupe (#{@dupe_summary})"
     !group_booking? or return "Скрытая группа (#{@other_order_pnrs.join(', ')})"
     people.map{|p| [p.first_name, p.last_name]}.uniq.count == people.count or return 'есть 2 пассажира с совпадающими именем и фамилией'
     !people.any?(&:too_long_names?) or return 'слишком длинные имена пассажиров'
+    !unaccompanied_child? or return "не сопровождаемый ребенок до 18 лет"
     nil
   end
 
   def create_auto_ticket_job
-    Delayed::Job.enqueue AutoTicketJob.new(order_id: order.id), run_at: 30.minutes.from_now
+    Delayed::Job.enqueue AutoTicketJob.new(order_id: order.id),
+      run_at: 15.minutes.from_now,
+      queue: 'autoticketing'
   end
 
   def job_run_at
-    return 30.minutes.from_now if order.commission_ticketing_method != 'aviacenter' ||
+    return 15.minutes.from_now if order.commission_ticketing_method != 'aviacenter' ||
                                   Date.today.wday != 2 ||
                                   Time.now < Time.parse('20:30')
     tomorrow_rate = CBR.exchange_on(Date.tomorrow).exchange_with('2 USD'.to_money, "RUB").to_f.ceil / 2.0 #Курс амадеуса не завтра
@@ -52,7 +62,7 @@ class AutoTicketStuff
     elsif tomorrow_rate < today_rate
       Date.tomorrow + 1.minute
     else
-      return 30.minutes.from_now
+      return 15.minutes.from_now
     end
   end
 
@@ -86,5 +96,24 @@ class AutoTicketStuff
       @other_order_pnrs = other_orders.every.pnr_number
     end
     return @other_order_pnrs.present?
+  end
+
+  def unaccompanied_child?
+    people.all?{|p| p.birthday > (recommendation.dept_date - 18.years)} &&
+      (([recommendation.validating_carrier_iata] +
+        recommendation.marketing_carrier_iatas +
+        recommendation.operating_carrier_iatas).uniq & ['KL', 'AF']).present?
+  end
+
+  def used_card_with_different_name?
+    order.payment_type == 'card' && Order.where(pan: order.pan).where("name_in_card != ? AND created_at > ?", order.name_in_card, 60.days.ago).present?
+  end
+
+  def looks_like_fraud?
+    (%W(+34 34 +36 36 +44 44 +49 49 +47 47 +42 42) & [order.phone[0..1], order.phone[0..2]]).present? ||
+      (recommendation.airport_iatas & %W(TFS TFN)).present? ||
+      %W(BRU RIX BCN).include?(recommendation.airport_iatas.first) ||
+      (%W(BRU RIX BCN ).include?(recommendation.airport_iatas.last) &&
+        recommendation.country_iatas.first != 'RU')
   end
 end

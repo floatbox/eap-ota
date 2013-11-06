@@ -1,5 +1,7 @@
 # encoding: utf-8
 class SubscriptionMailer < ActionMailer::Base
+  include SendGrid
+  sendgrid_category :subscription
 
   add_template_helper(ApplicationHelper)
 
@@ -30,7 +32,7 @@ class SubscriptionMailer < ActionMailer::Base
   end
 
   def buy_link
-    "https://eviterra.com/##{@notice[:query_key]}"
+    "https://eviterra.com/?partner=email##{@notice[:query_key]}"
   end
 
 end

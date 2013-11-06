@@ -42,11 +42,6 @@ describe Commission, :commissions do
     end
   end
 
-  before do
-    Commission::Rule.stub(:skip_interline_validity_check).and_return(true)
-  end
-
-
   # будет (и должно!) валиться,
   # если в config/commissions.rb - синтаксическая ошибка.
   Commission.reload!
@@ -62,6 +57,12 @@ describe Commission, :commissions do
           if rule.skipped?
             specify { pending "disabled or not implemented, skipping examples" }
             next
+          end
+
+          unless rule.disabled?
+            it "should have ticketing method" do
+              rule.ticketing_method.should_not be_nil
+            end
           end
 
           if rule.examples.blank?

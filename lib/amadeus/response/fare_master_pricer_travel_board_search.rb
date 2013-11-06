@@ -22,6 +22,10 @@ module Amadeus
               rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
             availabilities =
               rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:avlStatus").every.to_s
+            fare_bases =
+              rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareBasis").every.to_s
+            published_fare =
+              rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareType").every.to_s.all?{|ft| ft == 'RP'}
 
             validating_carrier_iata =
               rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails[r:transportStageQualifier='V']/r:company").to_s
@@ -61,7 +65,9 @@ module Amadeus
               :cabins => cabins,
               :booking_classes => booking_classes,
               :availabilities => availabilities,
-              :last_tkt_date => last_tkt_date
+              :last_tkt_date => last_tkt_date,
+              :fare_bases => fare_bases,
+              :published_fare => published_fare
             )
           end
         end

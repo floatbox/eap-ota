@@ -20,6 +20,7 @@ module Monitoring
       # @param [Hash] содержимое ивента
       # @option opts [String] :service полное название метрики с точками или пробелами в качестве разделителя
       # @option opts [Integer] :metric (0) количественная метрика ивента
+      # @option opts [String] :state ("ok") используется в riemann для определения, не сломалось ли чего
       # @option opts [String] :host (hostname машины) хост с которого отправлен ивент, как правило не нужно указывать явно
       # @option opts [Array] :tags ([]) массив с тегами, используется для распознавания типа ивента в riemann
       # отправляет в riemann ивент с тегом, одноименным методу(тег определяет вид графика в graphite)
@@ -30,6 +31,7 @@ module Monitoring
         define_method :"#{type}", ->(event_hash={}) do
           event_hash[:tags] = [*event_hash[:tags]]
           event_hash[:tags] << type
+          event_hash[:state] ||= StateResolver.new(event_hash).state
           send_event event_hash
         end
       end

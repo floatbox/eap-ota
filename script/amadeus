@@ -4,8 +4,11 @@ require File.expand_path('../../config/environment',  __FILE__)
 require 'readline'
 prompt = ''
 
-office = ( ARGV.shift || Amadeus::Session::BOOKING ).dup
-office.upcase!
+if ARGV.size > 0
+  office = Amadeus.office(ARGV.shift)
+else
+  office = Conf.amadeus.default_office
+end
 prompt = "#{Conf.amadeus.env} #{office} > "
 
 Amadeus.session(office) do |amadeus|

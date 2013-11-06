@@ -1,7 +1,9 @@
 # encoding: utf-8
 Eviterra::Application.routes.draw do
 
-  devise_for :deck_users, ActiveAdmin::Devise.config
+  devise_for :deck_users, ActiveAdmin::Devise.config.merge(class_name: 'Deck::User')
+  # оверрайд logout для typus
+  get "deck/logout(.:format)", to: "active_admin/devise/sessions#destroy", as: "destroy_admin_session"
 
   devise_scope :customer do
     get    '#login' => 'profile/sessions#new', :as => :new_customer_session
@@ -41,7 +43,6 @@ Eviterra::Application.routes.draw do
   # какой-то жаваскрипт фигачит посты сюда. убрать потом
   post 'api/booking/edit' => proc { [404, {}, []] }
   match 'api/booking/:query_key(.:format)' => 'booking#api_booking', :via => :get
-  match 'api/rambler_booking(.:format)' => 'booking#api_rambler_booking', :via => :get, :format => :xml, :as => :api_rambler_booking
   match 'api/order_stats' => 'api_order_stats#index'
   match 'api/v1/preliminary_booking' => 'api_booking#preliminary_booking', :as => :api_preliminary_booking
   post 'api/v1/pay' => 'api_booking#pay', :as => :api_booking_pay

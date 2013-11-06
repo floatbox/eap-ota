@@ -1,0 +1,11 @@
+%msgType
+  %messageFunctionDetails
+    %messageFunction 712
+%itemNumber
+  %itemNumberDetails
+    %number= 1
+- if sections.present?
+  %fareRule
+    %tarifFareRule
+      - sections.each do |section|
+        %ruleSectionId= section

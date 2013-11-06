@@ -12,10 +12,10 @@
 # all: everything
 
 admin:
-  Carrier: create, read, update, delete, decode_amadeus, decode_sirena, show_versions
-  Airplane: create, read, update, delete, decode_amadeus, decode_sirena, show_versions
-  Airport: create, read, update, delete, update_completer, decode_amadeus, decode_sirena, show_versions
-  City: create, read, update, delete, update_completer, decode_amadeus, decode_sirena, show_versions
+  Carrier: create, read, update, delete, decode_amadeus, show_versions
+  Airplane: create, read, update, delete, decode_amadeus, show_versions
+  Airport: create, read, update, delete, update_completer, decode_amadeus, show_versions
+  City: create, read, update, delete, update_completer, decode_amadeus, show_versions
   Order: create, read, update, unblock, charge, ticket, reload_tickets, cancel, show_pnr, money_received, no_money_received, bulk_charge, bulk, pnr_raw, void, make_payable_by_card, show_versions, send_invoice, ticket_in_ticketing_office, manual_notice, edit_ticketed, show_commission, cancel_auto_ticketing
   OrderComment: create, read, update, delete
   Notification: create, read, update, show_sent_notice
@@ -30,6 +30,7 @@ admin:
   AirlineAlliance: create, read, update, delete
   FlightGroup: create, read, update, delete
   Commissions: read
+  Amadeus: read, help
   Counters: read
   Partner: create, read, update, delete, show_versions
 
@@ -43,6 +44,7 @@ admin:
   PromoCode: create, update, read
   StoredFlight: create, update, read, update_from_gds
   Version: read
+  FareRule: read
 
 hoteditor:
   #HotOffer: read, delete

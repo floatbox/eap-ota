@@ -1,0 +1,5 @@
+<% if @subject %>
+  <%= cache [:amadeus_help, @subject] do %>
+    <%= linkify_amadeus_text(amadeus_help(@subject)) %>
+  <% end %>
+<% end %>

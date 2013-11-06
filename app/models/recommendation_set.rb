@@ -26,7 +26,6 @@ class RecommendationSet
             :[],
     to: :recommendations
 
-
   def initialize(recommendations=Array.new)
     @recommendations = recommendations
   end
@@ -41,15 +40,17 @@ class RecommendationSet
 
   def each &block
     @recommendations.each &block
+    self
   end
 
   def + other
-    @recommendations += case other
-      when Array then other
-      when RecommendationSet then other.recommendations
-      else raise TypeError, "cannot concatenate #{other.class} with RecommendationSet"
-    end
-    self
+    RecommendationSet.new(
+      @recommendations + case other
+        when Array then other
+        when RecommendationSet then other.recommendations
+        else raise TypeError, "cannot concatenate #{other.class} with RecommendationSet"
+      end
+    )
   end
 
   def to_s
@@ -62,12 +63,18 @@ class RecommendationSet
   end
 
   def select_valid!
+    select_full_info!
+    yield(self) if block_given?
+    postprocess!
+  end
+
+  def select_full_info!
     select_by! :full_information?, :valid_interline?
     reject_by! :ignored_carriers
-    yield(@recommendations) if block_given?
-    # чистка - пока что могут оставаться рекомендации без вариантов
-    @recommendations.select! &:variants?
-    self
+  end
+
+  def postprocess!
+    select! &:variants?
   end
 
   def sort_and_group!
@@ -110,10 +117,12 @@ class RecommendationSet
 
   def reject_by! *criterias
     criterias.each { |criteria| reject!(&criteria) }
+    self
   end
 
   def select_by! *criterias
     criterias.each { |criteria| select!(&criteria) }
+    self
   end
 
 end

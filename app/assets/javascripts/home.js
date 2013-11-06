@@ -1,5 +1,8 @@
 //= require common/hint
 
+//= require handlebars.runtime
+//= require_tree ./templates
+
 //= require home/page.js
 
 //= require search/search.js

@@ -15,7 +15,7 @@ describe OrderForm do
       }
       context 'with passenger from KZ' do
         let(:people){
-          [Person.new(nationality_id: Country['KZ'].id)]
+          [Person.new(nationality_code: 'KAZ')]
         }
         its(:needs_visa_notification) {should be_true}
 
@@ -23,7 +23,7 @@ describe OrderForm do
 
       context 'with one passenger from GB' do
         let(:people){
-          [Person.new(nationality_id: Country['GB'].id)]
+          [Person.new(nationality_code: 'GBR')]
         }
         its(:needs_visa_notification) {should be_false}
       end
@@ -37,14 +37,14 @@ describe OrderForm do
 
       context 'with passenger from UA' do
         let(:people){
-          [Person.new(nationality_id: Country['UA'].id)]
+          [Person.new(nationality_code: 'UKR')]
         }
         its(:needs_visa_notification) {should be_false}
       end
 
       context 'with one passenger from GB' do
         let(:people){
-          [Person.new(nationality_id: Country['GB'].id)]
+          [Person.new(nationality_code: 'GBR')]
         }
         its(:needs_visa_notification) {should be_false}
       end
@@ -190,15 +190,15 @@ describe OrderForm do
       {
         "0" => {
           "document_noexpiration" => "0",
-          "birthday(1i)" => "1984",
-          "birthday(2i)" => "06",
-          "birthday(3i)" => "16",
-          "nationality_id" => "170",
+          "birthday_year" => "1984",
+          "birthday_month" => "06",
+          "birthday_day" => "16",
+          "nationality_code" => "RUS",
           #"bonuscard_type" => "[FILTERED]",
           #"bonuscard_number" => "[FILTERED]",
-          "document_expiration_date(1i)" => "2014",
-          "document_expiration_date(2i)" => "09",
-          "document_expiration_date(3i)" => "08",
+          "document_expiration_year" => "2014",
+          "document_expiration_month" => "09",
+          "document_expiration_day" => "08",
           "sex" => "m",
           "last_name" => "IVASHKIN",
           "bonus_present" => "0",
@@ -207,10 +207,10 @@ describe OrderForm do
         },
         "1" => {
           "document_noexpiration" => "1",
-          "birthday(1i)" => "1985",
-          "birthday(2i)" => "09",
-          "birthday(3i)" => "04",
-          "nationality_id" => "170",
+          "birthday_year" => "1985",
+          "birthday_month" => "09",
+          "birthday_day" => "04",
+          "nationality_code" => "RUS",
           "sex" => "f",
           "last_name" => "IVASHKINA",
           "bonus_present" => "0",

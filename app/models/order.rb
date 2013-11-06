@@ -13,6 +13,7 @@ class Order < ActiveRecord::Base
   scope :MOWR221F9, lambda { by_office_id 'MOWR221F9' }
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
+  scope :looking_like_fraud, where("auto_ticket = ? AND no_auto_ticket_reason LIKE 'С большой вероятностью фрод%'", false)
   scope :for_manual_ticketing, lambda { where("orders.payment_status IN ('blocked', 'charged') AND
     ticket_status = 'booked' AND
     orders.pnr_number != '' AND
@@ -110,7 +111,7 @@ class Order < ActiveRecord::Base
   end
 
   def make_payable_by_card
-    update_attributes(auto_ticket: true, no_auto_ticket_reason: '') if pnr_number.present? && ['delivery', 'cash'].include?(payment_type)
+    update_attributes(auto_ticket: true, no_auto_ticket_reason: '') if pnr_number.present?
     update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending' && (pnr_number.present? || parent_pnr_number.present?)
   end
 
@@ -120,6 +121,7 @@ class Order < ActiveRecord::Base
   has_many :secured_payments, conditions: { status: %W[ blocked charged processing_charge ]}, class_name: 'Payment'
   belongs_to :customer
   has_and_belongs_to_many :stored_flights
+  has_many :fare_rules
 
   # не_рефанды
   def last_payment
@@ -307,7 +309,6 @@ class Order < ActiveRecord::Base
       :phone,
       :pnr_number,
       :full_info,
-      :sirena_lead_pass,
       :last_tkt_date,
       :payment_type,
       :delivery,
@@ -380,9 +381,18 @@ class Order < ActiveRecord::Base
 
       #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
       tickets.reload
+      load_fare_rules
       true
     else
       false
+    end
+  end
+
+  def load_fare_rules
+    strategy.fare_rule_hashes.each do |rule_hash|
+      if fare_rules.where(rule_hash).blank?
+        fare_rules.create(rule_hash)
+      end
     end
   end
 

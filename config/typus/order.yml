@@ -89,7 +89,6 @@ Order:
       - source
       - pnr_number
       - parent_pnr_number
-      - sirena_lead_pass
       - route
       - payment_type
       - section_recalculation
@@ -129,7 +128,6 @@ Order:
       - source
       - pnr_number
       - parent_pnr_number
-      - sirena_lead_pass
       - route
       - payment_type
       - section_recalculation
@@ -209,5 +207,5 @@ Order:
   # actions:
   #   show: cancel, ticket, charge, unblock, show_pnr
   filters:  created_at, source, payment_status, ticket_status, payment_type, has_refunds, partner
-  relationships: payments, tickets, order_comments, notifications
+  relationships: payments, tickets, order_comments, notifications, fare_rules
   application: Orders, 1

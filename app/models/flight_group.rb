@@ -9,7 +9,7 @@ class FlightGroup < ActiveRecord::Base
   end
 
   def self.sources
-    ['amadeus', 'sirena']
+    ['amadeus']
   end
 
 end

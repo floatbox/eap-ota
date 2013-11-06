@@ -22,13 +22,39 @@
 <% end %>
 </div>
 <div class="od-comments">
-    <p class="od-comment"><%= t 'offer.comments.carrier', :carrier_name => recommendation.validating_carrier.name %><% if recommendation.validating_carrier.alliance %> <%= raw t 'offer.comments.alliance', :alliance_link => content_tag('span', nbsp(recommendation.validating_carrier.alliance.name), :class => 'od-alliance', 'data-carriers' => recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence) %><% end %> <%= t 'offer.comments.time' %></p>    
-    <% recommendation_comments(recommendation).each do |comment| %>
-        <p class="od-comment" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></p>
+    <div class="od-comment odc-first">
+        <p class="odc-text">Тариф — <%= t @search.cabin, :scope => 'search.options.cabin' %></p>
+        <% if recommendation_deficit(recommendation) %>
+            <p class="odc-text">
+                <strong><%= t 'offer.availability.text', :seats => t('offer.availability', {count: recommendation.availability}) %></strong><br>
+                <%= t 'offer.availability.postpone' %>
+            </p>
+        <% end %>
+    </div>
+    <div class="od-comment">
+        <p class="odc-text"><%= t 'offer.comments.carrier', :carrier_name => dict(recommendation.validating_carrier) %></p>
+        <% if recommendation.validating_carrier.alliance %>
+            <p class="odc-text odc-aux"><%= raw t 'offer.comments.alliance', :alliance_link => content_tag('span', nbsp(recommendation.validating_carrier.alliance.name), :class => 'od-alliance', 'data-carriers' => recommendation.validating_carrier.available_bonus_programms.map{|bp| bp.name}.to_sentence) %></p>
+        <% end %>
+    </div>
+    <% if recommendation.baggage_array %>
+        <% baggage_groups = group_baggage_summaries(recommendation.baggage_array, recommendation.flights) %>
+        <% if baggage_groups %>
+        <div class="od-comment">
+            <% baggage_groups.each do |baggage_summary| %>
+                <p class="odc-text"><%= raw baggage_summary %></p>
+            <% end %>
+        </div>
+        <% end %>
     <% end %>
-    <% if recommendation_deficit(recommendation) %>
-        <p class="od-comment"><span class="odc-hl"><%= t 'offer.availability.text', :seats => t('offer.availability', {count: recommendation.availability}) %></span></p>
-    <% end %>    
+    <div class="od-comment">
+        <p class="odc-text"><%= t 'offer.comments.time' %></p>
+    </div>
+    <% recommendation_comments(recommendation).each do |comment| %>
+    <% if comment[:content] %>
+        <div class="od-comment odc-specific" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></div>
+    <% end %>
+    <% end %>
 </div>
 </div>
 
@@ -59,11 +85,11 @@
         </div>
         <div class="latent" id="bfh-withseat"><%= raw t 'booking.passengers.with_seat.description' %></div>
         <div class="latent" id="bfh-passport"><%= raw t 'booking.passengers.document.description' %></div>
-        <div class="latent" id="bfh-expiration"><%= raw t 'booking.passengers.expiration.description' %></div>        
+        <div class="latent" id="bfh-expiration"><%= raw t 'booking.passengers.expiration.description' %></div>
     </div>
 
     <%= render 'contacts_form' %>
-    
+
     <div class="bf-section" data-type="payment">
         <div class="bfs-title">
             <h4 class="bfst-text"><%= t @order_form.last_pay_time ? 'card_cash' : 'only_card', :scope => 'booking.payment' %></h4>
@@ -92,7 +118,7 @@
         <%= render 'payment_cash_form' if @order_form.enabled_delayed_payment? %>
         <%= render 'payment_card_form', :f => f %>
     </div>
-    
+
     <% price_fare = @order_form.recommendation.price_fare.round.to_i %>
     <% price_tax_and_markup = @order_form.recommendation.price_tax_and_markup.round.to_i %>
     <% price_discount = -@order_form.recommendation.price_discount.round.to_i %>
@@ -142,7 +168,7 @@
             <div class="bff-required"></div>
         </div>
     </div>
-    
+
 <% end %>
 
 <div class="bf-farerules">
@@ -152,14 +178,6 @@
     <p style="margin: 0 0 12px;"><%= raw t 'booking.farerules.restrictions' %></p>
     <p style="margin: 0 0 12px;"><%= raw t 'booking.farerules.service' %></p>
     <p><%= raw t 'booking.farerules.cancellation' %></p>
-    <% @order_form.recommendation.rules.each do |(airline, fare) ,rule| %>
-    <div class="bff-group">
-        <% if @order_form.recommendation.source != 'sirena' %>
-            <div class="bffg-translate"></div>
-        <% end %>
-        <h5 class="bffg-title"><%= t 'booking.farerules.fare' %> <%= fare %></h5>
-        <pre class="bffg-content"><%= raw(rule) %></pre>
-    </div>
-    <% end %>
+    <%= render :partial => 'rules' %>
 </div>
 </div>

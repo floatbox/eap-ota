@@ -4,21 +4,20 @@ require 'spec_helper'
 describe Recommendation do
 
   describe "#deserialize" do
-    it "should deserialize cyrillics" do
-      expect { Recommendation.deserialize('sirena.ЮТ.ЦС.YY..ЮТ369ВНКПЛК060711.ЮТ370ПЛКВНК270711') }.to_not raise_error
-    end
 
-    context "old recommendation code" do
-      subject { Recommendation.deserialize('amadeus.AZ.OOOO.MMMM.3997.SU:AZ7181SVOVCE120113-AF:AZ7328VCECDG120113.AF:AZ7315CDGBLQ120213-SU:AZ7168BLQSVO120213') }
-      its(:booking_classes){should == ['O', 'O', 'O', 'O']}
-      its('segments.count'){should == 2}
-    end
-
-    context "new recommendation code" do
+    context "recommendation code" do
       subject { Recommendation.deserialize('amadeus.AZ.10772.OOOO.MMMM.3997.SU:AZ7181SVOVCE120113-AF:AZ7328VCECDG120113.AF:AZ7315CDGBLQ120213-SU:AZ7168BLQSVO120213') }
       its(:declared_price){should == 10772}
       its(:booking_classes){should == ['O', 'O', 'O', 'O']}
       its('segments.count'){should == 2}
+      its(:subsource) {should be_nil}
+
+    end
+
+    context "with subsource" do
+      subject { Recommendation.deserialize('amadeus-MOWR2233B.AZ.10772.OOOO.MMMM.3997.SU:AZ7181SVOVCE120113-AF:AZ7328VCECDG120113.AF:AZ7315CDGBLQ120213-SU:AZ7168BLQSVO120213') }
+      its(:source) { should == 'amadeus' }
+      its(:subsource) { should == 'MOWR2233B' }
 
     end
   end

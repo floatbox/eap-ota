@@ -4,7 +4,7 @@ module Amadeus
     class PNRAddMultiElements < PNRRetrieve
 
       def error_text
-        (xpath('//r:messageErrorText/r:text').every.to_s + srfoid_errors).join(', ')
+        (xpath('//r:messageErrorText/r:text').every.to_s + xpath('//r:elementErrorInformation/r:elementErrorText/r:text').every.to_s.uniq + name_errors + srfoid_errors).map(&:strip).join(', ').squeeze(' ')
       end
 
       def error_message
@@ -13,9 +13,19 @@ module Amadeus
       end
 
       def srfoid_errors
-        xpath('//r:dataElementsIndiv[r:elementManagementData/r:status="ERR"][r:serviceRequest/r:ssr/r:type="FOID"]/r:elementErrorInformation/r:elementErrorText/r:text').map do |error_text_element|
-          "SRFOID error: #{validating_carrier_code}: #{error_text_element.to_s.strip}"
-        end.uniq
+        if name_errors.blank?
+          xpath('//r:dataElementsIndiv[r:elementManagementData/r:status="ERR"][r:serviceRequest/r:ssr/r:type="FOID"]/r:elementErrorInformation/r:elementErrorText/r:text').map do |error_text_element|
+            "SRFOID error: #{validating_carrier_code}: #{error_text_element.to_s.strip}"
+          end.uniq
+        else
+          []
+        end
+      end
+
+      def name_errors
+        xpath('//r:travellerInfo/r:nameError/r:nameErrorFreeText/r:text').map do |name_error_element|
+          "Name error: #{name_error_element.to_s.strip}"
+        end
       end
 
       def success?

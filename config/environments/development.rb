@@ -1,5 +1,13 @@
 # encoding: utf-8
 Eviterra::Application.configure do
+
+  config.after_initialize do
+    # тут можно понизить или повысить level у отдельных логгеров
+    Moped.logger = ForwardLogging.new(Rails.logger, Logger::INFO)
+    # ActiveRecord::Base.logger = ForwardLogging.new(Rails.logger, Logger::INFO)
+    # ActionController::Base.logger = ForwardLogging.new(Rails.logger, Logger::WARN)
+  end
+
   # Settings specified here will take precedence over those in config/application.rb
 
   # новая фича в rails 3.2. Возможные варианты - :uuid, :subdomain, :pid, :remote_ip

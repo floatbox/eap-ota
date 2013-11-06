@@ -4,7 +4,7 @@ class Notification < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::TextHelper
   belongs_to :order
-  belongs_to :typus_user, class_name: 'DeckUser'
+  belongs_to :typus_user, class_name: 'Deck::User'
 
   #validates :destination, :presence => true
   #before_validation :set_order_data
@@ -32,11 +32,11 @@ class Notification < ActiveRecord::Base
 
   # создание разных типов нотификаций
   # дефолтный нотис при создании ордера
-  def create_delayed_notice delay=10
+  def create_delayed_notice delay=1
     self.status = 'delayed'
     if save
       order.queued_email!
-      self.delay(queue: 'notification', run_at: delay.minutes.from_now, priority: 2).send_notice
+      self.delay(queue: 'notifications', run_at: delay.minutes.from_now, priority: 2).send_notice
     end
   end
 
@@ -47,12 +47,12 @@ class Notification < ActiveRecord::Base
 
   def delayed_send
     order.queued_email!
-    self.delay(queue: 'notification', run_at: 1.minutes.from_now, priority: 2).send_notice if status.blank?
+    self.delay(queue: 'notifications', run_at: 1.minutes.from_now, priority: 2).send_notice if status.blank?
   end
 
   def retry_later delay=2
     puts "Email pnr #{pnr_number} to #{destination} RETRY after #{delay} minutes"
-    self.delay(queue: 'notification', run_at: delay.minutes.from_now, priority: 2).send_notice
+    self.delay(queue: 'notifications', run_at: delay.minutes.from_now, priority: 2).send_notice
   end
 
   def prepare_notice
@@ -101,7 +101,7 @@ class Notification < ActiveRecord::Base
     self.subject = 'Информация о визе для вашего авиабилета'
     self.format = 'ticket'
     self.comment = CustomTemplate.new.render(:template => "notifications/visa_notice")
-    self.delay(queue: 'notification', run_at: 11.minutes.from_now, priority: 2).send_notice if save
+    self.delay(queue: 'notifications', run_at: 11.minutes.from_now, priority: 2).send_notice if save
   end
 
   def set_order_data

@@ -13,8 +13,9 @@ class LoadTicketsJob
 
   def delay(args={})
     Delayed::Job.enqueue(self, {
-      # queue: 'messaging',
-      # priority: 0,  # самый высокий приоритет, дефолтный
+      # не уверен что для этого следует заводить еще одну очередь
+      queue: 'autoticketing',
+      priority: 0,  # самый высокий приоритет, дефолтный
       run_at: 3.minutes.from_now#, # если надо отложить первый старт
     }.merge(args))
   end

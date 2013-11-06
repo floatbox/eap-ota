@@ -2,12 +2,12 @@ carrier "AB", start_date: "2013-07-01"
 
 rule 1 do
 ticketing_method "downtown"
-agent "8%"
-subagent "6%"
-discount "6%"
+agent "10%"
+subagent "8%"
+discount "12%"
 comment "только собственные рейсы AB и HG"
-agent_comment "8% по всем направлениям через DTT"
-subagent_comment "6% по всем направлениям через DTT"
+agent_comment "10% по всем направлениям через DTT"
+subagent_comment "8% по всем направлениям через DTT"
 check %{ includes_only(operating_carrier_iatas, 'AB HG 4T') }
 example "cdgfra/m fracdg/s"
 end
@@ -16,6 +16,7 @@ rule 2 do
 ticketing_method "direct"
 agent "1"
 subagent "0.05"
+discount "4%"
 consolidator "2%"
 agent_comment "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent_comment "5 коп с билета по опубл. тарифам на рейсы AB"

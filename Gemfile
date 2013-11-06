@@ -9,6 +9,7 @@ group :assets do
   gem 'sass-rails'
   gem 'coffee-script-source', '~> 1.4.0'
   gem 'coffee-rails'
+  gem 'handlebars_assets'
 end
 
 # консолька вместо IRB
@@ -54,9 +55,11 @@ gem 'sax-machine', :git => 'https://github.com/gregwebs/sax-machine.git'
 gem 'yajl-ruby'
 gem 'whenever', :require => false
 gem 'cucumber'
-gem 'handsoap', :git => 'git://github.com/codesnik/handsoap.git', :branch => 'fixing_async_again'
+# заменить на обычный gem handsoap после выхода версии 1.3.0+
+gem 'handsoap', :git => 'git://github.com/dredozubov/handsoap.git'
 gem 'curb'
-gem 'typhoeus'
+# нужен для typhoeus driver у handsoap
+# gem 'typhoeus'
 gem 'crack'
 gem "every"
 gem "memoize"
@@ -76,6 +79,7 @@ gem 'bson_ext'
 gem 'mobile-fu'
 gem "devise", "~> 2.2.6"
 gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
+gem 'sendgrid'
 
 #gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
 #gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
@@ -90,6 +94,11 @@ gem 'draper'
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
+
+# nested exceptions
+# gem 'nesty'
+# возможно, имеет смысл включить вместо nesty, глобально
+# gem 'nested_exceptions', require: 'nested_exceptions/global'
 
 # appservers
 gem 'thin', :require => false

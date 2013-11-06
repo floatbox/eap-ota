@@ -9,6 +9,10 @@ class TechnicalStop
 
   def city
     airport.city
+  rescue CodeStash::NotFound
+    # если нет аэропорта в базе - возвращаем Псевдо-City
+    Rails.logger.info "City with iata: #{location_iata} was not found while rendering technical stops!"
+    City.new(iata: location_iata, name_en: location_iata)
   end
 
 end

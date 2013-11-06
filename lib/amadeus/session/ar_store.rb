@@ -77,7 +77,7 @@ module Amadeus
       end
 
       def stale?
-        updated_at <= ::Amadeus::Session::INACTIVITY_TIMEOUT.seconds.ago
+        updated_at <= Amadeus::Session::INACTIVITY_TIMEOUT.seconds.ago
       end
 
       module BadUID

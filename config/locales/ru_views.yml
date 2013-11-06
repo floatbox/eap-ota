@@ -59,7 +59,7 @@ ru:
       add: "Добавить перелет"
       remove: "Убрать перелет"
     map:
-      link: "Куда дешево улететь %{from} в\_%{dates}?"
+      link: "Карта дешевых перелетов в\_%{dates}"
       title: "Цены от %{min}"
       limit: "до %{max} <span class=\"ruble\">Р</span>"
       expand: "Развернуть карту"
@@ -266,11 +266,12 @@ ru:
       different_airports: "Разные аэропорты прилёта и вылета"
       different_terminals: "Разные терминалы прилёта и вылета"
     comments:
-      carrier: "Билет оформляет авиакомпания %{carrier_name}."
-      alliance: "Применяются бонусные программы альянса %{alliance_link}."
-      time: "Время везде местное."
+      carrier: "Билет оформляет авиакомпания %{carrier_name}"
+      alliance: "Начисляются бонусные мили альянса %{alliance_link}"
+      time: "Везде указано местное время"
     availability:
-      text: "По этому тарифу осталось %{seats}. Не откладывайте покупку."
+      text: "Осталось %{seats} по этому тарифу."
+      postpone: "Не откладывайте покупку."
       one: "%{count} место"
       few: "%{count} места"
       many: "%{count} мест"

@@ -1,0 +1,12 @@
+benchmark.Pricer_async_total:
+  ok: 0
+  warning: 12500
+  error: 25000
+benchmark.Pricer_amadeus_merging_and_cleanup:
+  ok: 0
+  warning: 1500
+  error: 3000
+benchmark.Pricer_total:
+  ok: 0
+  warning: 10000
+  error: 20000

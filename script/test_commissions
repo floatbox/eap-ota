@@ -1,0 +1,56 @@
+#!script/rails runner
+# vim: ft=ruby
+
+# Commission.reload!
+
+book = Commission.default_book
+book.pages.each do |page|
+
+  page.rules.each do |rule|
+
+    puts "#{page.carrier},#{page.ticketing_method} on #{page.start_date || 'beginning of time'} " + rule.inspect
+
+    if rule.skipped?
+      puts "disabled or not implemented, skipping examples"
+      next
+    end
+
+    if rule.examples.blank?
+      puts "no examples"
+      next
+    end
+
+    rule.examples.each do |example|
+
+      begin
+
+        puts example.inspect
+
+        recommendation = example.recommendation
+        proposed = page.find_rule_for_rec(recommendation)
+        if rule.disabled?
+          if proposed.nil? || !proposed.sellable?
+            puts "ok"
+          else
+            puts "not ok"
+            puts "it matched #{proposed.inspect}\n"
+          end
+        else
+          if proposed != rule
+            reason = rule.turndown_reason(recommendation)
+            if proposed
+              puts "it matched #{proposed.inspect} instead\n"
+            else
+              puts "it didn't match anything\n"
+            end
+          end
+          puts "failed to match with reason #{reason.inspect}\n" if reason
+        end
+      rescue
+        puts $!.message
+        puts $!.backtrace
+      end
+
+    end
+  end
+end
