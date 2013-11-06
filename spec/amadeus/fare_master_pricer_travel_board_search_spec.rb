@@ -2,13 +2,19 @@
 require 'spec_helper'
 
 describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
+
   context 'simple case' do
 
     let_once! :response do
       amadeus_response('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_simple_case.xml')
     end
 
+    before do
+      response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+    end
+
     subject { response }
+
     it { should be_success }
     it { should have(19).recommendations }
     specify {response.recommendations.first.last_tkt_date.should == Date.parse("12JUN12")}
@@ -18,6 +24,10 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
 
     let_once! :response do
       amadeus_response('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_NoItineraryFoundError.xml')
+    end
+
+    before do
+      response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
     end
 
     subject { response }
@@ -37,13 +47,22 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
 
     describe "response" do
       subject { response }
+
+      before do
+        response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+      end
+
       it { should be_success }
       its(:error_message) { should be_blank }
       it { should have(3).recommendations }
 
       describe 'first recommendations' do
 
-        let_once!(:recommendation) { response.recommendations.first }
+        let_once!(:recommendation) do
+          response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+          response.recommendations.first
+        end
+
         subject { recommendation }
 
         it { should have(4).flights }
@@ -131,15 +150,25 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
       amadeus_response('spec/amadeus/xml/Fare_MasterPricerTravelBoardSearch_with_stops.xml')
     end
 
+    before do
+      response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+    end
+
     describe "response" do
+
       subject { response }
+
       it { should be_success }
       its(:error_message) { should be_blank }
       it { should have(1).recommendations }
 
       describe 'first recommendations' do
 
-        let_once!(:recommendation) { response.recommendations.first }
+        let_once!(:recommendation) do
+          response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+          response.recommendations.first
+        end
+
         subject { recommendation }
 
         it { should have(1).flight }
@@ -155,7 +184,11 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
         its(:price_tax) { should == 122.0 }
 
         describe 'variant' do
-          let_once!(:variant) { recommendation.variants.first }
+
+          let_once!(:variant) do
+            recommendation.variants.first
+          end
+
           subject { variant }
 
           it { should have(1).segment }
@@ -202,7 +235,12 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
     end
 
     describe "response" do
+
       subject { response }
+
+      before do
+        subject.doc.stub_chain('http_response.primary_part.body').and_return(subject.doc.to_xml)
+      end
 
       specify{subject.recommendations.to_a.any?{|r| !r.published_fare}.should be_true}
     end
