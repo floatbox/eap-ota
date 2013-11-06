@@ -6,7 +6,7 @@ class AutoTicketStuff
   attr_accessor :recommendation
   attr_accessor :people
   attr_accessor :order
-  BAD_DOMAINS = ['superrito.com', 'armyspy.com', 'cuvox.de', 'dayrep.com', 'einrot.com', 'fleckens.hu', 'gustr.com', 'jourrapide.com', 'rhyta.com', 'teleworm.us', 'writeme.com', 'europe.com', 'dropmail.me', 'alumni.com']
+  BAD_DOMAINS = ['superrito.com', 'armyspy.com', 'cuvox.de', 'dayrep.com', 'einrot.com', 'fleckens.hu', 'gustr.com', 'jourrapide.com', 'rhyta.com', 'teleworm.us', 'writeme.com', 'europe.com', 'dropmail.me', 'alumni.com', 'israelmail.com']
   SUSPICIOUS_DOMAINS = ['hotmail', 'yahoo', 'post.com', 'outlook.com', 'berlin.com']
   def auto_ticket
     if reason = turndown_reason
