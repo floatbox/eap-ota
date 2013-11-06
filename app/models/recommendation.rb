@@ -152,7 +152,9 @@ class Recommendation
       f.marketing_carrier_iata == 'PS' && (
         booking_class_for_flight(f) == 'T' ||
         # PS возможно закроется, избавляемся от новогодних возвратов
-        f.dept_date && f.dept_date > Date.new(2013, 12, 1) && f.dept_date < Date.new(2014, 1, 1)
+        f.dept_date &&
+          (f.dept_date > Date.new(2013, 12, 1) && f.dept_date < Date.new(2014, 1, 1) ||
+           f.dept_date > Date.new(2013, 4, 30))
       )
     end
     commission.sellable?
