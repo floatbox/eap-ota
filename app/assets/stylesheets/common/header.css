@@ -178,8 +178,8 @@ a.pht-content:hover .pht-title {
 }
 
 /* User */
-#ph-user {
-    position: relative;
+#user {
+    display: none;
 }
 .phu-control {
     cursor: pointer;
@@ -207,7 +207,7 @@ a.pht-content:hover .pht-title {
     position: absolute;
     top: 100%;
     left: 50%;
-    margin: 5px 0 0 -130px;
+    margin: 5px 0 0 -140px;
     background: #EDEDE3;
     box-shadow: 0 2px 12px rgba(0,0,0,0.35);
     z-index: 11;
@@ -227,14 +227,14 @@ a.pht-content:hover .pht-title {
     border-bottom-color: #EDEDE3;
 }
 .phu-stator {
-    width: 260px;
+    width: 280px;
     overflow: hidden;
     border-bottom: 1px solid #b8b8ad;
     box-shadow: 0 1px 0 rgba(255,255,255,0.75);
 }
 .phu-slider {
     position: relative;
-    width: 520px;
+    width: 560px;
     overflow: hidden;
 }
 .phu-section {
@@ -242,7 +242,7 @@ a.pht-content:hover .pht-title {
 }
 .phu-slider .phu-section {
     float: left;
-    width: 230px;
+    width: 250px;
 }
 .phu-signup,
 .phu-forgot {
@@ -274,7 +274,7 @@ a.pht-content:hover .pht-title {
 }
 .phuf-input {
     margin: 0;
-    width: 210px;
+    width: 230px;
     padding: 5px 9px;
     border: 1px solid #B2B2B2;
 }
@@ -314,7 +314,7 @@ a.pht-content:hover .pht-title {
     position: absolute;
     width: 16px;
     height: 16px;
-    margin: 7px 0 0 10px;
+    margin: 8px 0 0 10px;
     background: url(/images/booking/progress-b.gif) no-repeat;
 }
 .phu-error {
@@ -334,7 +334,7 @@ a.pht-content:hover .pht-title {
 
 .phu-forgot-link,
 .phu-forgot-fields .phu-remember-link {
-    margin-top: 8px;
+    margin-top: 9px;
     float: right;
     color: #777;
     line-height: 15px;
@@ -371,4 +371,14 @@ a.pht-content:hover .pht-title {
 }
 .phu-logout {
     display: none;
+}
+.phul-logout {
+    padding-right: 14px;
+    background: url('/images/common/exit.png') no-repeat 100% 1px;
+}
+.phul-logout:hover {
+    color: #333;
+}
+.pht-selected .phul-logout:hover {
+    color: #A7A8AB;
 }

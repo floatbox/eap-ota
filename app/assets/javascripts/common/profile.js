@@ -82,7 +82,7 @@ init: function() {
         var re = $('#forgot-email');
         re.val(le.val()).trigger('blur');
         that.el.find('.phu-forgot').show();
-        that.slider.animate({left: -260}, 200);
+        that.slider.animate({left: -280}, 200);
     });
     this.el.find('.phu-remember-link').on('click', function(event) {
         event.preventDefault();

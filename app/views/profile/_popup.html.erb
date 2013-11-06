@@ -8,7 +8,7 @@
 <% end %>
         <span class="pht-title">Личный кабинет</span>
         <span class="pht-tip phu-email"><%= current_customer.email.downcase %></span>
-        <span class="pht-tip"><span class="phtt-link phul-logout">Выйти</span></span>
+        <span class="pht-tip" style="margin-top: 2px;"><span class="phtt-link phul-logout">Выйти</span></span>
 <% if controller.controller_name == 'profile' %>
     </div>
 <% else %>
@@ -46,14 +46,14 @@
             <%= form_for("customer", :url => customer_password_path, :html => {:class => 'phu-section phu-forgot', :novalidate => 'novalidate'}) do |f| %>
                 <h6 class="phus-title">Сброс пароля</h6>
                 <div class="phu-forgot-fields">
-                    <p style="margin: 0 0 10px;">Мы пришлём на почту ссылку для получения нового пароля.</p>
+                    <p style="margin: 0 0 10px;">Мы пришлем ссылку, перейдя по&nbsp;которой, вы&nbsp;сможете изменить пароль.</p>
                     <div class="phu-field">
                         <label for="forgot-email" class="phuf-placeholder">электронная почта</label>
                         <%= f.email_field :email, :class => 'phuf-input', :id => 'forgot-email', :placeholder => 'электронная почта' %>
                     </div>            
                     <div class="phu-submit">
                         <span class="link phu-remember-link">Вспомнили?</span>
-                        <%= f.submit "Сбросить пароль", :class => 'phu-button' %>
+                        <%= f.submit "Сбросить пароль", :class => 'phu-button' %><span class="phu-loading"></span>
                     </div>
                     <div class="phu-error"></div>
                 </div>
@@ -129,4 +129,9 @@
     </div>
 </div>
 <div class="phu-fade"></div>
+<% end %>
+<% if admin_user %>
+<style type="text/css">
+#user {display: block;}
+</style>
 <% end %>
