@@ -10,7 +10,7 @@ class PricerController < ApplicationController
     @destination = Destination.get_by_search @search
     @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
     if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
-      @destination.move_average_price @search, @recommendations.first, @code
+      @destination.move_average_price @search, @recommendations.cheapest, @code
     end
     @locations = @search.human_locations
     @average_price = @destination.average_price * @search.people_count[:adults] if @destination && @destination.average_price
@@ -116,12 +116,12 @@ class PricerController < ApplicationController
 
       @code = @search.encode_url
       if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
-        @destination.move_average_price @search, @recommendations.first, @code
+        @destination.move_average_price @search, @recommendations.cheapest, @code
       end
 
       Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
 
-      recommendations_total = @recommendations.count
+      recommendations_total = @recommendations.size
       # измеряем после фильтрации
       meter :api_total_recommendations, recommendations_total
 

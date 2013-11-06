@@ -130,7 +130,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
         published_fare: published_fare
       )
     end
-    RecommendationSet.new(recommendations)
+    recommendations
   end
 
   def variants_sax(recommendation, flight_indexes_cache)

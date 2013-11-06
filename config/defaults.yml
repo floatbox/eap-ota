@@ -32,7 +32,6 @@ api:
 amadeus:
   endpoint: "https://test.webservices.amadeus.com"
   enabled: yes
-  nonstop_search: yes
   calendar: yes
   logging: no
   recommendations_lite: 20
