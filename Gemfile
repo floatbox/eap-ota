@@ -9,6 +9,7 @@ group :assets do
   gem 'sass-rails'
   gem 'coffee-script-source', '~> 1.4.0'
   gem 'coffee-rails'
+  gem 'handlebars_assets'
 end
 
 # консолька вместо IRB
