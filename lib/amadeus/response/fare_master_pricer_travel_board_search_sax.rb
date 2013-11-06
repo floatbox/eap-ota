@@ -222,7 +222,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   end
 
   def parsed
-    xml = benchmark 'to_xml' do doc.to_xml end
-    @parsed ||= XMLResponse.parse(xml)
+    raw_xml = doc.http_response.primary_part.body.force_encoding('utf-8')
+    @parsed ||= XMLResponse.parse(raw_xml)
   end
 end
