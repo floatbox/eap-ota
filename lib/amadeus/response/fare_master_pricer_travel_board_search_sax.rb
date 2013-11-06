@@ -5,7 +5,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   class XMLResponse
     include CompactSAXMachine
 
-    element :error do
+    element :errorMessage do
       element :description
       element :error
     end
@@ -212,12 +212,12 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   end
 
   def error_message_sax
-    parsed.error.description
+    parsed.errorMessage.description
   rescue NoMethodError
   end
 
   def error_code_sax
-    parsed.error.error
+    parsed.errorMessage.error
   rescue NoMethodError
   end
 
