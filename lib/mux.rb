@@ -101,7 +101,7 @@ class Mux
   end
 
   def multi
-    @multi ||= Curl::Multi.new
+    @@multi ||= Curl::Multi.new
   end
 
   def ignore_error?(e)
