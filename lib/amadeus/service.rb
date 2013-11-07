@@ -9,6 +9,9 @@ module Amadeus
 
   Handsoap.http_driver = :net_http
   Handsoap.timeout = 60
+  # сохраняет xml из респонса as is,
+  # без этого sax-парсер работать не будет
+  Handsoap.store_raw_response = true
 
   # handsoap logger
   if Conf.amadeus.logging
