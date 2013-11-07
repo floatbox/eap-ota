@@ -338,7 +338,7 @@ def self.fill_in_morpher_fields(klass, first_id = 0)
 
   # Заполняем базу кастомеров по старым заказам
   def self.fill_customers_for_orders
-    Order.where("customer_id IS NULL").order("created_at DESC").limit(2000).each do |order|
+    Order.where("customer_id IS NULL AND email != ''").order("created_at DESC").limit(2000).each do |order|
       customer = Customer.find_or_initialize_by_email(order.first_email)
       customer.skip_confirmation_notification!
       customer.save unless customer.persisted?
