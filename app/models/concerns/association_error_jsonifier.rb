@@ -16,8 +16,8 @@ module AssociationErrorJsonifier
   #
   # на такое:
   # {
-  #   "person[0].first_name": ["<error message 1>"],
-  #   "person[1].first_name": ["<error message 2>"],
+  #   "person.0.first_name": ["<error message 1>"],
+  #   "person.1.first_name": ["<error message 2>"],
   #   "my_cool_field": ["error message"]
   # }
   #
