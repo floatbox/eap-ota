@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
-discount "4%"
+our_markup "100"
 consolidator "2%"
 agent_comment "1 руб. от всех опубл. тарифов на собств. рейсы CY;"
 agent_comment "1 руб. от всех опубл. тарифов на рейсы Interline строго при условии оформления всего маршрута одним билетом и при наличии хотябы одного собств. сегмента CY."
