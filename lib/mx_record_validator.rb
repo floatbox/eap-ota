@@ -15,7 +15,7 @@ class MxRecordValidator < ActiveModel::EachValidator
     end
 
     if mail_servers.empty?
-      record.errors.add(attribute, "Указанный адрес электронной почты не существует!")
+      record.errors.add(attribute, I18n.t('activerecord.validations.mx_record'))
     end
   rescue Resolv::ResolvError, Resolv::ResolvTimeout => e
     # если не смогли отрезолвить, лучше пропустить потенциально дефективный ящик
