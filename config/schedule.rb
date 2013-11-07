@@ -42,9 +42,9 @@ every :day, :at => '6:00 pm' do
 end
 
 ### FILL CUSTOMERS Table From ORDERS
-every 5.minutes do
-  runner 'DataMigration.fill_customers_for_orders'
-end
+#every 5.minutes do
+#  runner 'DataMigration.fill_customers_for_orders'
+#end
 
 #every 1.day, :at => '18:00' do
 #  command_at_current 'script/cbrusd && touch tmp/restart.txt'
