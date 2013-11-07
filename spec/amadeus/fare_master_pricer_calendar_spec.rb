@@ -9,7 +9,7 @@ describe Amadeus::Response::FareMasterPricerCalendar, :amadeus do
     end
 
     before do
-      response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+      response.doc.stub(:raw_xml).and_return(response.doc.to_xml)
     end
 
     describe "response" do

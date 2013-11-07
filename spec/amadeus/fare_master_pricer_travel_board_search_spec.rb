@@ -10,7 +10,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
     end
 
     before do
-      response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+      response.doc.stub(:raw_xml).and_return(response.doc.to_xml)
     end
 
     subject { response }
@@ -27,7 +27,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
     end
 
     before do
-      response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+      response.doc.stub(:raw_xml).and_return(response.doc.to_xml)
     end
 
     subject { response }
@@ -49,7 +49,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
       subject { response }
 
       before do
-        response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+        response.doc.stub(:raw_xml).and_return(response.doc.to_xml)
       end
 
       it { should be_success }
@@ -59,7 +59,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
       describe 'first recommendations' do
 
         let_once!(:recommendation) do
-          response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+          response.doc.stub(:raw_xml).and_return(response.doc.to_xml)
           response.recommendations.first
         end
 
@@ -151,7 +151,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
     end
 
     before do
-      response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+      response.doc.stub(:raw_xml).and_return(response.doc.to_xml)
     end
 
     describe "response" do
@@ -165,7 +165,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
       describe 'first recommendations' do
 
         let_once!(:recommendation) do
-          response.doc.stub_chain('http_response.primary_part.body').and_return(response.doc.to_xml)
+          response.doc.stub(:raw_xml).and_return(response.doc.to_xml)
           response.recommendations.first
         end
 
@@ -239,7 +239,7 @@ describe Amadeus::Response::FareMasterPricerTravelBoardSearch, :amadeus do
       subject { response }
 
       before do
-        subject.doc.stub_chain('http_response.primary_part.body').and_return(subject.doc.to_xml)
+        subject.doc.stub(:raw_xml).and_return(subject.doc.to_xml)
       end
 
       specify{subject.recommendations.to_a.any?{|r| !r.published_fare}.should be_true}
