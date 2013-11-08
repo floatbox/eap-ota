@@ -163,6 +163,8 @@ ru:
         <<: *PRICING_ATTRIBUTES
       customer:
         password: "Пароль"
+    validations:
+      sms_message: "Сообщение слишком длинное"
 
 
   views:
@@ -244,4 +246,5 @@ ru:
   'Yes': Да
   'no': нет
   'No': Нет
+
 
