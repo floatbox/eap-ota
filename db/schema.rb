@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131003132118) do
+ActiveRecord::Schema.define(:version => 20131108054251) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -203,6 +203,21 @@ ActiveRecord::Schema.define(:version => 20131003132118) do
   add_index "customers", ["confirmation_token"], :name => "index_customers_on_confirmation_token", :unique => true
   add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
   add_index "customers", ["reset_password_token"], :name => "index_customers_on_reset_password_token", :unique => true
+
+  create_table "deck_sms", :force => true do |t|
+    t.string   "message",                             :null => false
+    t.datetime "sent_at"
+    t.datetime "received_at"
+    t.string   "status",      :default => "composed", :null => false
+    t.string   "address",                             :null => false
+    t.integer  "provider_id"
+    t.string   "provider"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
+
+  add_index "deck_sms", ["provider", "provider_id"], :name => "index_deck_sms_on_provider_and_provider_id", :unique => true
+  add_index "deck_sms", ["status"], :name => "index_deck_sms_on_status"
 
   create_table "deck_users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
