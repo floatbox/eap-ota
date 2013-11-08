@@ -222,7 +222,6 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   end
 
   def parsed
-    raw_xml = doc.http_response.primary_part.body.force_encoding('utf-8')
-    @parsed ||= XMLResponse.parse(raw_xml)
+    @parsed ||= XMLResponse.parse(doc.raw_xml)
   end
 end

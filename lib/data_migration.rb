@@ -337,7 +337,7 @@ def self.fill_in_morpher_fields(klass, first_id = 0)
   end
 
   # Заполняем базу кастомеров по старым заказам
-  def self.fill_customers_for_orders
+  def self.fill_customers_for_orders_old
     Order.where("customer_id IS NULL AND email != ''").order("created_at DESC").limit(2000).each do |order|
       customer = Customer.find_or_initialize_by_email(order.first_email)
       customer.skip_confirmation_notification!
@@ -347,6 +347,21 @@ def self.fill_in_morpher_fields(klass, first_id = 0)
     end
   end
 
+  # Заполняем базу кастомеров по старым заказам
+  def self.fill_customers_for_orders
+    counter = 0
+    total = Order.where("customer_id IS NULL AND email != ''").count
+    puts '==========>>> Status:' + total.to_s + ' // ' + Order.count.to_s
+    Order.where("customer_id IS NULL AND email != ''").find_in_batches do |group|
+      group.each do |order|
+        order.set_customer
+        counter += 1
+      end
+      puts '==========>>> ' + counter.to_s + ' // ' + total.to_s
+      sleep 10
+    end
+    puts '==========>>> Left: ' + Order.where("customer_id IS NULL AND email != ''").count.to_s
+  end
 
   def self.migrate_partners
     Conf.api.partners.each do |name|
