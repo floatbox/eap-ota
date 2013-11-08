@@ -19,7 +19,7 @@
 
 <div class="article faq">
     <div class="faq-contents">
-        <div class="fc-fixed">
+        <div class="fc-sticky">
         <ul>
             <li><a href="#service">Работа сайта и наши услуги</a></li>
             <li><a href="#booking">Бронирование и выписка билетов</a></li>
@@ -99,11 +99,21 @@
 </div>
 <%= render 'shared/footer' %>
 <script type="text/javascript">
-$('.fc-fixed li a').click(function(event) {
-    var section = $($(this).attr('href'));
-    if (section) {
-        event.preventDefault();
-        $w.smoothScrollTo(section.find('h2').position().top - 130);
+$(function() {
+    var elem = $('.fc-sticky');
+    elem.find('li a').click(function(event) {
+        var section = $($(this).attr('href'));
+        if (section) {
+            event.preventDefault();
+            $w.smoothScrollTo(section.find('h2').position().top - 130);
+        }
+    });
+    var fixed, top = elem.closest('.article').offset().top - 26;
+    window.onscroll = function() {
+        var pos = window.pageYOffset || document.documentElement.scrollTop;
+        if (pos > top !== fixed) {
+            elem.toggleClass('fc-fixed', fixed = pos > top);
+        }
     }
 });
 </script>
