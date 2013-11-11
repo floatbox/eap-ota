@@ -11,6 +11,7 @@ class CreateDeckSMS < ActiveRecord::Migration
       # можно при нужде мигрировать в отдельную таблицу или дропнуть колонку
       # возможно будет несколько провайдеров
       t.string      :provider
+      t.string      :error_message
 
       t.timestamps
     end
