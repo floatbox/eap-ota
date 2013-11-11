@@ -34,11 +34,11 @@ class OrderForm
     presence: true,
     mx_record: true,
     format:
-      { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, message: "Некорректный email" }
+      { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, message: "Некорректный email" }
   validates :phone,
     presence: true,
     format:
-      { with: /^[\d \+\-\(\)]+$/, message: 'Некорректный номер телефона' }
+      { with: /\A[\d \+\-\(\)]+\z/, message: 'Некорректный номер телефона' }
 
   def card
     @card || CreditCard.new
