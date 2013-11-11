@@ -77,7 +77,7 @@ I18n.locale = '<%= I18n.locale %>';
 <div class="ph-content">
     <div class="ph-bar">
         <div class="ph-logo">
-            <a href="/" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
+            <a href="<%= root_url %>" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
         </div>
         <% if admin_user %>
         <div class="ph-lang">
@@ -95,7 +95,7 @@ I18n.locale = '<%= I18n.locale %>';
             </div>
         <% else %>
         <div class="ph-tab" id="pht-tickets">
-            <a class="pht-content" href="/">
+            <a class="pht-content" href="<%= root_url %>">
                 <span class="pht-title">Авиабилеты</span>
                 <span class="pht-tip">Дешевле, чем у&nbsp;авиакомпаний <span class="phtt-link">Почему?</span></span>
             </a>
