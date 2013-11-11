@@ -16,17 +16,6 @@ end
 # если убрать в группу :development, не грузит больше в rails c
 # возможно, отжирает память и ресурсы
 gem 'pry-rails'
-# включает pry-rescue. Разматываю зависимости сам.
-# gem 'pry-plus'
-# включается даже в продакшне, перехватывает SIGQUIT
-# gem 'pry-rescue', require: false
-# возможно, вызывает проблему `expand_path': non-absolute home (ArgumentError)
-# gem 'pry-doc'
-# gem 'pry-docmore'
-gem 'pry-debugger'
-gem 'pry-stack_explorer'
-gem 'bond'
-gem 'jist'
 
 gem 'commands'
 
@@ -36,8 +25,6 @@ group :deployment do
   gem 'rvm-capistrano'
   gem 'capistrano_colors'
 end
-
-gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
 # логгеры. выберу только один
 gem 'lumberjack'
@@ -80,8 +67,6 @@ gem "devise", "~> 2.2.6"
 gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
 gem 'sendgrid'
 
-#gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
-#gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
 gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rails-instrumentation.git'
 
 gem 'haml'
@@ -94,14 +79,8 @@ gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
 
-# nested exceptions
-# gem 'nesty'
-# возможно, имеет смысл включить вместо nesty, глобально
-# gem 'nested_exceptions', require: 'nested_exceptions/global'
-
 # appservers
 gem 'thin', :require => false
-gem 'passenger', :require => false
 gem 'unicorn', :require => false
 
 group :development do
@@ -133,9 +112,5 @@ group :test do
   gem 'webmock'
   # тестирование завтрашних комиссий
   gem 'timecop'
-end
-
-group :profiling do
-  gem 'ruby-prof'
 end
 
