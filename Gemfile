@@ -67,8 +67,6 @@ gem "devise", "~> 2.2.6"
 gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
 gem 'sendgrid'
 
-#gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
-#gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
 gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rails-instrumentation.git'
 
 gem 'haml'
@@ -80,11 +78,6 @@ gem 'draper'
 gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
-
-# nested exceptions
-# gem 'nesty'
-# возможно, имеет смысл включить вместо nesty, глобально
-# gem 'nested_exceptions', require: 'nested_exceptions/global'
 
 # appservers
 gem 'thin', :require => false
