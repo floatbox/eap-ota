@@ -1,11 +1,11 @@
 class CreateDeckSms < ActiveRecord::Migration
   def up
-    create_table :deck_sms, options: 'DEFAULT CHARSET=utf8' do |t|
-      t.string      :message, null: false
+    create_table :deck_sms do |t|
+      t.string      :message
       t.datetime    :sent_at
       t.datetime    :received_at
-      t.string      :status, default: 'composed', null: false
-      t.string      :address, null: false
+      t.string      :status
+      t.string      :address
 
       t.integer     :provider_id
       # можно при нужде мигрировать в отдельную таблицу или дропнуть колонку
@@ -18,7 +18,9 @@ class CreateDeckSms < ActiveRecord::Migration
     add_index :deck_sms, :status
     add_index :deck_sms, [:provider, :provider_id], unique: true
 
-    execute 'ALTER TABLE deck_sms AUTO_INCREMENT = 1000;'
+    # для справки
+    # изменение значения авто-инкремента будет использовано для clientId
+    execute 'ALTER TABLE deck_sms AUTO_INCREMENT = 10;'
   end
 
   def down
