@@ -252,7 +252,7 @@
             <p class="odc-text"><%= t 'offer.comments.time' %></p>
         </div>
         <% recommendation_comments(recommendation).each do |comment| %>
-        <% if comment[:content] %>
+        <% unless comment[:content].blank? %>
             <div class="od-comment odc-specific" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></div>
         <% end %>
         <% end %>
