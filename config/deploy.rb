@@ -1,7 +1,7 @@
 # Load RVM's capistrano plugin.
 require "rvm/capistrano"
 require "capistrano_colors"
-require "hipchat/capistrano"
+#require "hipchat/capistrano"
 
 require 'riemann/client'
 
