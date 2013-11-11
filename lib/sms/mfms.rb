@@ -13,6 +13,8 @@ module SMS
     # Принимает либо хеш с параметрами смс,
     # либо Enumerable таких хешей
     # В любом случае отправляет одним запросом.
+    #
+    # Возвращает в любом случае хеш для консистентности
     def send_sms(params)
       case params
         when Hash then send_one(params)
