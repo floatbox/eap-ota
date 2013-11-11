@@ -6,9 +6,9 @@ require "hipchat/capistrano"
 require 'riemann/client'
 
 # интеграция с hipchat
-set :hipchat_token, 'W8seZUKBp0hrllppP3CjfqtGAaVe3MWwdIcNVbRK'
-set :hipchat_room_name, "cave"
-set :hipchat_announce, false # notify users?
+#set :hipchat_token, 'W8seZUKBp0hrllppP3CjfqtGAaVe3MWwdIcNVbRK'
+#set :hipchat_room_name, "cave"
+#set :hipchat_announce, false # notify users?
 
 set :rvm_type, :system
 # закрепил версию, чтобы не прыгала в продакшне
