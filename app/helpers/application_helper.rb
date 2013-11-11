@@ -52,5 +52,10 @@ module ApplicationHelper
   def display_rt_arrow rt
     Destination.rts.invert[rt]
   end
+
+  def smart_root_path
+    root_url.include?(Conf.site.host) ? '/' : Conf.site.host
+  end
+
 end
 
