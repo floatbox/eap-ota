@@ -212,8 +212,9 @@ ActiveRecord::Schema.define(:version => 20131108054251) do
     t.string   "address"
     t.integer  "provider_id"
     t.string   "provider"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.string   "error_message"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   add_index "deck_sms", ["provider", "provider_id"], :name => "index_deck_sms_on_provider_and_provider_id", :unique => true
