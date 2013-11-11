@@ -1,4 +1,4 @@
-class CreateDeckSms < ActiveRecord::Migration
+class CreateDeckSMS < ActiveRecord::Migration
   def up
     create_table :deck_sms do |t|
       t.string      :message
