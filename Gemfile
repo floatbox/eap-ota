@@ -66,6 +66,7 @@ gem 'mobile-fu'
 gem "devise", "~> 2.2.6"
 gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
 gem 'sendgrid'
+gem 'hipchat'
 
 gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rails-instrumentation.git'
 
