@@ -38,6 +38,10 @@ Eviterra::Application.routes.draw do
     match '*anything' => redirect('/')
   end
 
+  constraints subdomain: /^insurance(?:\.staging)?$/ do
+    root to: 'insurance#index'
+  end
+
   match 'api/search(.:format)' => 'api_home#gone'
   match 'api/redirection(.:format)' => 'booking#api_redirect'
   # какой-то жаваскрипт фигачит посты сюда. убрать потом
@@ -85,8 +89,8 @@ Eviterra::Application.routes.draw do
   match 'contacts' => 'about#contacts', :as => :about
   match 'about/:action' => 'about', :as => :about
   match 'partners' => 'about#partners', :as => :about
-  
-  match 'insurance' => 'insurance#index', :as => :insurance  
+
+  match 'insurance' => 'insurance#index', :as => :insurance
 
   match "whereami" => 'home#whereami', :as => :whereami
   match 'status' => 'home#status'
