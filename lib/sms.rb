@@ -1,8 +1,9 @@
 # encoding: utf-8
 
-DEFAULT = SMS::MFMS
-
 module SMS
+
+  DEFAULT = SMS::MFMS
+
   def gate(*args)
     # на вход #gate можно давать common аттрибуты
     # для всех отсылаемых через него смс
