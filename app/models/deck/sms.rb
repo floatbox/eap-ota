@@ -32,7 +32,7 @@ class Deck::SMS < ActiveRecord::Base
     # или бросать исключение, пока не понял
     if persisted?
       params = merge_params(params)
-      if info = gate.send_sms(params)[id.to_s]
+      if info = gate.deliver_sms(params)[id.to_s]
         update_with_info(info)
         info
       end
@@ -44,12 +44,32 @@ class Deck::SMS < ActiveRecord::Base
     nil
   end
 
+  def update_delivery_status!
+    if persisted?
+      info = gate.check_delivery(id)[id.to_s]
+      attrs = {}
+      if info[:code] == 'ok'
+        update_attributes(status: 'confirmed')
+      else
+        update_attributes(status: 'unconfirmed', error_message: "#{info[:code]}: #{info[:error]}")
+      end
+    end
+    nil
+  rescue ::SMS::Base::SMSError => e
+    # сфейлился весь запрос, а не одиночные сообщения
+    # ставим все в статус failure
+    with_warning(e)
+    update_attributes(status: 'unconfirmed', error_message: "can't confirm")
+    nil
+  end
+
+
   # доставляет пачку сообщений, одним запросом к провайдеру смс
   def self.mass_deliver(messages, common = {})
     # Array of Deck::SMS
     messages = messages.map { |m| m.merge_params(common: common) }
 
-    gate.send_sms(messages).map do |sms_id, info|
+    gate.deliver_sms(messages).map do |sms_id, info|
       sms = Deck::SMS.find(sms_id)
       sms.update_with_info(info)
       info
