@@ -2,17 +2,25 @@
 
 class Deck::SMS < ActiveRecord::Base
   set_table_name :deck_sms
-  attr_accessible :status, :message, :address, :provider_id, :error_message
+
+  attr_accessible :status, :message, :address, :error_message, :provider
+
+  attr_default :status, 'composed' # см #sent?
 
   validate :status, presence: true
   validate :address, presence: true
   validate :message, presence: true, allow_blank: false, sms: true
 
-  def initialize *args
-    # всегда проставляем статус 'composed' для новых сообщений
-    # статус означает что сообщение составлено, т.к. message обязателен
-    @status = 'composed'
-    super
+  def sent?
+    # сообщение проходит следующие статусы:
+    # composed - составленно, может быть отправлено
+    # sent - отправлено провайдеру на отправку
+    # confirmed - отправка подтверждена провайдером
+    # failure - ошибка по какой-нибудь причине, подробности в error_message
+    #
+    # FIXME переименовать статус sent,
+    # чтобы не было путаницы
+    status == 'confirmed'
   end
 
   def send_to_provider(params = {})

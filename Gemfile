@@ -67,6 +67,7 @@ gem "devise", "~> 2.2.6"
 gem 'virtus'
 gem 'sendgrid'
 gem 'hipchat'
+gem 'attribute-defaults'
 
 gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rails-instrumentation.git'
 
