@@ -3,7 +3,7 @@
 class Deck::SMS < ActiveRecord::Base
   set_table_name :deck_sms
 
-  attr_accessible :status, :message, :address, :error_message, :provider
+  attr_accessible :status, :message, :address, :error_message, :provider, :provider_id
 
   attr_default :status, 'composed' # см #sent?
 
