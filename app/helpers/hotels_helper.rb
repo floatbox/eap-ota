@@ -2,7 +2,7 @@
 module HotelsHelper
 
   def ostrovok_uri uri_params
-    "http://ostrovok.ru/hotels/?utm_campaign=deeplink&utm_medium=partners&utm_source=eviterracom&partner_slug=eviterracom&#{uri_params.to_query}"
+    "http://hotels.eviterra.com/hotels/?utm_campaign=deeplink&utm_medium=partners&utm_source=eviterracom&partner_slug=eviterracom&#{uri_params.to_query}"
   end
 
   def ostrovok_link order_form
