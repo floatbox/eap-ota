@@ -2,7 +2,7 @@
 
 require 'active_model'
 
-class SmsValidator < ActiveModel::EachValidator
+class SMSValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     # длина смс с кириллицей - 70 символов
     # без - 160 символов
