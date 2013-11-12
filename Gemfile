@@ -64,7 +64,7 @@ gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
 gem "devise", "~> 2.2.6"
-gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
+gem 'virtus'
 gem 'sendgrid'
 gem 'hipchat'
 
