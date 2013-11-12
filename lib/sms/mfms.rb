@@ -16,23 +16,16 @@ module SMS
     #
     # Возвращает в любом случае хеш для консистентности
     def send_sms(params)
-      case params
-        when Hash then send_one(params)
-        when Enumerable then send_multiple(params)
+      xml = case params
+        when Hash then compose_send([params])
+        when Enumerable then compose_send(params)
       end
+      invoke_send_post_request(xml)
     end
 
     private
 
-    def send_one(hash)
-      xml = compose_send([hash])
-      invoke_send_post_request(xml)
-    end
-
-    def send_multiple(messages)
-      xml = compose_send(messages)
-      invoke_send_post_request(xml)
-    end
+    # запросы
 
     def compose_send(messages)
       Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
@@ -52,7 +45,6 @@ module SMS
 
             xml.outMessageList_ {
               messages.each_with_index { |message, index|
-                p "message: #{message.inspect}"
                 # можно передавать id нотификации из базы
                 xml.outMessage_(clientId: message[:client_id]) {
                   compose_message(xml, message)
@@ -64,6 +56,11 @@ module SMS
         }
       end.to_xml
     end
+
+    # /запросы
+
+
+    # составные части
 
     def compose_auth(xml)
       xml.header_ {
@@ -85,6 +82,8 @@ module SMS
       xml.contentType_           'text'
     end
 
+    # /составные части
+
     def parse_response(response)
       xml = Nokogiri::XML(response.body)
 
@@ -101,10 +100,8 @@ module SMS
       end
 
       parsed_response
-
     end
 
-    # TODO убрать, если не юзается во время проверки статуса доставки
     def convert_date(date)
       date.strftime('%Y-%m-%d %H:%M:%S')
     end
