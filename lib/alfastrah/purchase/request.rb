@@ -1,0 +1,78 @@
+module Alfastrah
+  module Purchase
+    class Request
+      include Virtus.model
+
+      attribute :pnr, String
+      attribute :passengers, Array[Alfastrah::Passenger]
+      attribute :segments, Array[Alfastrah::Segment]
+      attribute :payment_type, String
+
+      def endpoint
+        'createPolicy'
+      end
+
+      def build_xml
+        x = Builder::XmlMarkup.new
+        x.soapenv :Envelope, 'xmlns:soapenv' => 'http://schemas.xmlsoap.org/soap/envelope/', 'xmlns:trav' => 'http://vtsft.ru/travelExtService/' do
+          x.soapenv :Header
+          x.soapenv :Body do
+            x.trav :createPolicyRequest do
+              x.trav :operator do
+                x.trav :code, 'eviterra'
+              end
+              x.trav :product do
+                x.trav :code, 'EVITERRA-FLIGHT'
+              end
+              x.trav :policyParameters do
+                x.trav :PNR, pnr
+
+                build_passengers_xml x
+
+                x.trav :flightSegmentsCount, segments.count
+
+                build_segments_xml x
+
+                x.trav :paymentType, payment_type
+              end
+            end
+          end
+        end
+      end
+
+      def build_passengers_xml x
+        passengers.each_with_index do |passenger, idx|
+          x.trav :insuredFirstName,      {seqNo: idx}, passenger.first_name
+          x.trav :insuredLastName,       {seqNo: idx}, passenger.last_name
+          x.trav :insuredBirthDate,      {seqNo: idx}, passenger.birth_date
+          x.trav :insuredTicketNumber,   {seqNo: idx}, passenger.ticket_number
+          x.trav :insuredDocumentType,   {seqNo: idx}, passenger.document_type
+          x.trav :insuredDocumentNumber, {seqNo: idx}, passenger.document_number
+        end
+      end
+
+      def build_segments_xml x
+        segments.each_with_index do |segment, idx|
+          x.trav :flightSegmentTransportOperatorCode, {seqNo: idx} do
+            x.trav :value, segment.carrier_code
+          end
+          x.trav :flightSegmentFlightNumber,          {seqNo: idx} do
+            x.trav :value, segment.flight_number
+          end
+          x.trav :flightSegmentDepartureDate,         {seqNo: idx} do
+            x.trav :value, segment.depart_date
+          end
+          x.trav :flightSegmentDepartureAirport,      {seqNo: idx} do
+            x.trav :value, segment.origin_iata
+          end
+          x.trav :flightSegmentArrivalDate,           {seqNo: idx} do
+            x.trav :value, segment.arrival_date
+          end
+          x.trav :flightSegmentArrivalAirport,        {seqNo: idx} do
+            x.trav :value, segment.destination_iata
+          end
+        end
+      end
+    end
+  end
+end
