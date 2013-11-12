@@ -23,7 +23,7 @@ class Deck::SMS < ActiveRecord::Base
     status == 'confirmed'
   end
 
-  def send_to_provider(params = {})
+  def deliver(params = {})
     # возможно следует убрать проверку на persisted? отсюда
     # или бросать исключение, пока не понял
     if persisted?
@@ -40,7 +40,7 @@ class Deck::SMS < ActiveRecord::Base
     nil
   end
 
-  def self.send_bulk_to_provider(messages, common = {})
+  def self.mass_deliver(messages, common = {})
     # Array of Deck::SMS
     messages = messages.map { |m| m.merge_params(common: common) }
 
