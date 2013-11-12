@@ -207,7 +207,6 @@ ActiveRecord::Schema.define(:version => 20131108054251) do
   create_table "deck_sms", :force => true do |t|
     t.string   "message"
     t.datetime "sent_at"
-    t.datetime "received_at"
     t.string   "status"
     t.string   "address"
     t.integer  "provider_id"

@@ -3,7 +3,6 @@ class CreateDeckSMS < ActiveRecord::Migration
     create_table :deck_sms do |t|
       t.string      :message
       t.datetime    :sent_at
-      t.datetime    :received_at
       t.string      :status
       t.string      :address
 
