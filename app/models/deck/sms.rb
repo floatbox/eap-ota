@@ -11,6 +11,9 @@ class Deck::SMS < ActiveRecord::Base
   validate :address, presence: true
   validate :message, presence: true, allow_blank: false, sms: true
 
+  # добавляет интерфейс к гейту
+  include ::SMS
+
   def sent?
     # сообщение проходит следующие статусы:
     # composed - составленно, может быть отправлено
@@ -23,12 +26,13 @@ class Deck::SMS < ActiveRecord::Base
     status == 'confirmed'
   end
 
+  # доставляет текущее сообщение
   def deliver(params = {})
     # возможно следует убрать проверку на persisted? отсюда
     # или бросать исключение, пока не понял
     if persisted?
       params = merge_params(params)
-      if info = ::SMS::MFMS.new.send_sms(params)[id.to_s]
+      if info = gate.send_sms(params)[id.to_s]
         update_with_info(info)
         info
       end
@@ -40,12 +44,12 @@ class Deck::SMS < ActiveRecord::Base
     nil
   end
 
+  # доставляет пачку сообщений, одним запросом к провайдеру смс
   def self.mass_deliver(messages, common = {})
     # Array of Deck::SMS
     messages = messages.map { |m| m.merge_params(common: common) }
 
-    # TODO: добавить в мессаги common
-    ::SMS::MFMS.new.send_sms(messages).map do |sms_id, info|
+    gate.send_sms(messages).map do |sms_id, info|
       sms = Deck::SMS.find(sms_id)
       sms.update_with_info(info)
       info
@@ -60,16 +64,17 @@ class Deck::SMS < ActiveRecord::Base
   end
 
   def merge_params(params)
+    provider = gate.class.to_s.split('::').last.downcase
+
     ActiveSupport::HashWithIndifferentAccess.new(
       {
         client_id: id,
         address: address,
         content: message,
         start_time: Time.now,
-        # WARN захардкожен провайдер
         # можно оставлять тут, пока не появится другого провайдера
         # а не пригодится - можно будет колонку просто выпилить
-        provider: 'mfms',
+        provider: provider,
       }.merge(params)
     )
   end
