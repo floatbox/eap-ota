@@ -6,7 +6,7 @@ require 'search/coercers/date'
 # non-persistent model
 # используется для валидации поисковых сегментов
 class AviaSearchSegment
-  include Virtus
+  include Virtus.model
   include ActiveModel::Validations
 
   attribute :from, Search::Coercers::Location
