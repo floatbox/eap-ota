@@ -26,12 +26,12 @@ module SMS
 
     def send_one(hash)
       xml = compose_send([hash])
-      response = invoke_send_post_request(xml)
+      invoke_send_post_request(xml)
     end
 
     def send_multiple(messages)
       xml = compose_send(messages)
-      response = invoke_send_post_request(xml)
+      invoke_send_post_request(xml)
     end
 
     def compose_send(messages)
@@ -52,6 +52,7 @@ module SMS
 
             xml.outMessageList_ {
               messages.each_with_index { |message, index|
+                p "message: #{message.inspect}"
                 # можно передавать id нотификации из базы
                 xml.outMessage_(clientId: message[:client_id]) {
                   compose_message(xml, message)
@@ -103,6 +104,7 @@ module SMS
 
     end
 
+    # TODO убрать, если не юзается во время проверки статуса доставки
     def convert_date(date)
       date.strftime('%Y-%m-%d %H:%M:%S')
     end
