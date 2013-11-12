@@ -130,7 +130,7 @@
 </div>
 <div class="phu-fade"></div>
 <% end %>
-<% if admin_user %>
+<% if admin_user || customer_signed_in? %>
 <style type="text/css">
 #user {display: block;}
 </style>

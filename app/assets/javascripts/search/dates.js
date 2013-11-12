@@ -454,11 +454,13 @@ showPreview: function() {
         item.el = $('<div class="sdt-day"></div>').html(date).appendTo(context),
         item.width = item.el.outerWidth();
         var mindex = this.days.eq(index).closest('.sdc-month').data('index');
-        item.minleft = this.tabs[mindex].single.left;
-        item.maxleft = item.minleft + this.tabs[mindex].single.width - item.width;
-        item.left = item.minleft + Math.round((Number(date) - 1) / (this.monthes[mindex].length - 1) * (item.maxleft - item.minleft));
-        items.push(item);
-        item.el.addClass('sdt-segment' + (i + 1));
+        if (mindex !== undefined) {
+            item.minleft = this.tabs[mindex].single.left;
+            item.maxleft = item.minleft + this.tabs[mindex].single.width - item.width;
+            item.left = item.minleft + Math.round((Number(date) - 1) / (this.monthes[mindex].length - 1) * (item.maxleft - item.minleft));
+            items.push(item);
+            item.el.addClass('sdt-segment' + (i + 1));
+        }
     }
     if (items.length > 1) {
         var im = items.length, counter = 0;

@@ -1,8 +1,14 @@
 # Load RVM's capistrano plugin.
 require "rvm/capistrano"
 require "capistrano_colors"
+require "hipchat/capistrano"
 
 require 'riemann/client'
+
+# интеграция с hipchat
+set :hipchat_token, 'de492e09eba5f6cc6cf340f480734d'
+set :hipchat_room_name, "cave"
+#set :hipchat_announce, false # notify users?
 
 set :rvm_type, :system
 # закрепил версию, чтобы не прыгала в продакшне

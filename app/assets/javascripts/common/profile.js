@@ -19,6 +19,11 @@ init: function() {
     } else {
         this.show = $.noop;
     }
+    window.addEventListener('load', function() {
+        if (window.history.state && window.history.state.authorized && !logout.length) {
+            window.location.reload();
+        }
+    }, false)
     this.init = $.noop;
 },
 initPopup: function() {
@@ -139,6 +144,7 @@ initForms: function() {
         if (full) {
             if (!value) return 'Введите адрес электронной почты.';
             if (!/^\S+@\S+\.\w+$/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
+            if (/@.*@/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
         } 
         if (value) {
             if (/[а-яА-Я]/.test(value)) return 'Адрес электронной почты может содержать только латинские символы.';
@@ -155,6 +161,9 @@ initForms: function() {
         if (full && !value) return 'Введите пароль.';
     });
     signIn.process = function(result) {
+        if (window.history.replaceState) {
+            window.history.replaceState({authorized: true}, document.title, window.location.href.replace('#login', ''));
+        }
         window.location = result.location;
     };
     signIn.messages['not_confirmed'] = notConfirmed;
