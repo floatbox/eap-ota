@@ -3,7 +3,7 @@
 class Deck::SMS < ActiveRecord::Base
   set_table_name :deck_sms
 
-  attr_accessible :status, :message, :address, :error_message, :provider, :provider_id
+  attr_accessible :status, :message, :address, :error_message, :provider, :provider_id, :sent_at
 
   attr_default :status, 'composed' # см #sent?
 
@@ -14,26 +14,24 @@ class Deck::SMS < ActiveRecord::Base
   # добавляет интерфейс к гейту
   include ::SMS
 
-  def sent?
+  def delivery_confirmed?
     # сообщение проходит следующие статусы:
     # composed - составленно, может быть отправлено
     # sent - отправлено провайдеру на отправку
     # confirmed - отправка подтверждена провайдером
     # failure - ошибка по какой-нибудь причине, подробности в error_message
-    #
-    # FIXME переименовать статус sent,
-    # чтобы не было путаницы
     status == 'confirmed'
   end
 
   # доставляет текущее сообщение
+  # отправлять можно только сохраненные в базе сообщения
   def deliver(params = {})
     # возможно следует убрать проверку на persisted? отсюда
     # или бросать исключение, пока не понял
     if persisted?
       params = merge_params(params)
       if info = gate.deliver_sms(params)[id.to_s]
-        update_with_info(info)
+        update_with_info(info, params)
         info
       end
     end
@@ -71,7 +69,7 @@ class Deck::SMS < ActiveRecord::Base
 
     gate.deliver_sms(messages).map do |sms_id, info|
       sms = Deck::SMS.find(sms_id)
-      sms.update_with_info(info)
+      sms.update_with_info(info, params)
       info
     end
     nil
@@ -94,18 +92,20 @@ class Deck::SMS < ActiveRecord::Base
         start_time: Time.now,
         # можно оставлять тут, пока не появится другого провайдера
         # а не пригодится - можно будет колонку просто выпилить
-        provider: provider,
+        provider: provider
       }.merge(params)
     )
   end
 
-  def update_with_info(info)
+  def update_with_info(info, params)
     code = info[:code]
     status = code == 'ok' ? 'sent' : 'failure'
     update_attributes(
       provider_id: info[:provider_id],
       error_message: code,
-      status: status
+      status: status,
+      sent_at: params[:start_time],
+      provider: params[:provider],
     )
   end
 

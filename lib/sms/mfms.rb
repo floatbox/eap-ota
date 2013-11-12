@@ -132,7 +132,7 @@ module SMS
     end
 
     def parse_check_response(response)
-      xml = Nokogiri::XML(response.body).tap {|x| print x.to_xml}
+      xml = Nokogiri::XML(response.body)
 
       code = xml.xpath('/provideOutMessageDlvStatusResponse/payload/code').text
       fail SMSError, "SMS not sent, error_code received: #{code}" unless code == 'ok'
@@ -148,7 +148,7 @@ module SMS
         parsed_response[provider_id] = { code: code, status: status, error: error }
       end
 
-      parsed_response.tap{|r| p r}
+      parsed_response
     end
 
     # /парсеры ответов
