@@ -61,7 +61,8 @@
     color: #333;
     cursor: default;
 }
-.pt-amount {
+#pt-amount {
+    display: none;
     margin-left: 5px;
     padding: 5px 10px;
     background: #FFF;
@@ -87,15 +88,23 @@
 }
 
 /* No orders */
-.orders-empty {
+.orders-empty,
+.orders-loading {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 600px;
-    margin: -20px 0 0 -300px;
     font-size: 20px;
     line-height: 22px;
     text-align: center;
+}
+.orders-empty {
+    width: 600px;
+    margin: -20px 0 0 -300px;
+}
+.orders-loading {
+    width: 200px;
+    margin: -20px 0 0 -100px;
+    background: url("/images/results/progress.gif") 50% 0 no-repeat;
 }
 
 /* Order */
