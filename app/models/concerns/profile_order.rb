@@ -79,7 +79,11 @@ module ProfileOrder
   end
 
   def profile_flights
-    sold_tickets.present? ? sold_tickets.first.flights : []
+    if stored_flights.present?
+      stored_flights
+    else
+      sold_tickets.present? ? sold_tickets.first.flights : []
+    end
   end
 
   def profile_booking_classes
