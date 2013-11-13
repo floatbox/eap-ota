@@ -21,6 +21,8 @@ en:
         # price_tax: "Tax"
         # price_total: "Ticket price total"
         # price_with_payment_commission: "TOTAL CLIENT PRICE"
+    validations:
+      sms_message: "Message is too long"
 
   views:
     pagination:
