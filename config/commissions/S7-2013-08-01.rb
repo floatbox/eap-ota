@@ -14,7 +14,7 @@ end
 rule 2 do
 ticketing_method "aviacenter"
 agent "0.1%"
-subagent "0.1%"
+subagent "0.05"
 discount "3.6%"
 consolidator "2%"
 agent_comment "При продаже перевозок между г. Москва и г. Горно-Алтайск,г. Горно-Алтайск и"
