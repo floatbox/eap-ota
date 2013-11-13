@@ -5,7 +5,7 @@ class Deck::SMS < ActiveRecord::Base
 
   attr_accessible :status, :message, :address, :error_message, :provider, :provider_id, :sent_at
 
-  attr_default :status, 'composed' # см #sent?
+  attr_default :status, 'composed' # см #delivery_confirmed?
 
   validate :status, presence: true
   validate :address, presence: true
