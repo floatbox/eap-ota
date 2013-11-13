@@ -31,3 +31,8 @@ en:
       previous: "&lsaquo; Prev"
       next: "Next &rsaquo;"
       truncate: "..."
+
+  # первый шаг к переносу локализации на серверсайд
+  activerecord:
+    validations:
+      mx_record: "Email address doesn't exist"

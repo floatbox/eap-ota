@@ -174,18 +174,20 @@ showErrors: function(errors) {
     for (var id in errors) {
         if (id.search('birthday') !== -1) {
             var n = Number(id.charAt(7));
-            wrong.push('<span class="bffr-link" data-field="bfp' + (n + 1) + '-byear">Пассажиру</span> ' + errors[id] + '.');
+            wrong.push('<span class="bffr-link" data-field="bfp' + (n + 1) + '-byear">Пассажиру</span> ' + errors[id][0] + '.');
         } else if (id.search('passport') !== -1) {
             var n = Number(id.charAt(7));
             wrong.push('<span class="bffr-link" data-field="bfp' + (n + 1) + '-passport">Номер документа</span> введен неправильно.');
         } else if (id.search('card') !== -1 && !cardused) {
             wrong.push('<span class="bffr-link" data-field="bfcn-part4">Номер банковской карты</span> введён неправильно.');
             cardused = true;
+        } else if (id == 'order[email]') {
+            wrong.push(validator.processMessage(errors[id][0], 'bfc-email'));
         } else {
             wrong.push(errors[id]);
         }
     }
-    this.required.html(wrong.join(' ')).show();
+    this.required.html('<p class="bffr-wrong">' + wrong.join(' ') + '</p>').show();
     this.button.removeClass('bfb-disabled');
     this.footer.find('.bff-progress').hide();
     this.footer.find('.bff-disclaimer').show();
