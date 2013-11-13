@@ -13,7 +13,7 @@ example "cdgfra/m fracdg/s"
 end
 
 rule 2 do
-ticketing_method "direct"
+ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
 discount "3.5%"
