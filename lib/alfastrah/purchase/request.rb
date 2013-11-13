@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   module Purchase
     class Request < Alfastrah::Base::Request
       attribute :pnr, String

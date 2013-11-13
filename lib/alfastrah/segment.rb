@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   class Segment
     include Virtus.value_object
 

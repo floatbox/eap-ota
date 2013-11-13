@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   module Calculation
     class Request < Alfastrah::Base::Request
       attribute :pnr, String

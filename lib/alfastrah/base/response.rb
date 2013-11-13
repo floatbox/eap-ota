@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   module Base
     class Response
       def initialize response_xml

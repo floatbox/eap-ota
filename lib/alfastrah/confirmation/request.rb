@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   module Confirmation
     class Request < Alfastrah::Base::Request
       attribute :policy_id, Fixnum

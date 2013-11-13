@@ -173,6 +173,9 @@ riemann:
     request_performance: yes
     stat_counters: yes
     meter: yes
+alfastrah:
+  host: uat2.vtsft.ru
+  base_url: /travel-ext-services/TravelExtService
 performance:
   # очищать ли CodeStash между запросами?
   # поведение для "no" не тестировано, возможны проблемы с ActiveRecord::IdentityMap

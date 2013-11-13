@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   module Confirmation
     class Response < Alfastrah::Base::Response
       def series

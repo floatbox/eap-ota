@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   module Purchase
     class Response < Alfastrah::Base::Response
       def policy_id

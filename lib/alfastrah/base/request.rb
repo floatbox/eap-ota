@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   module Base
     class Request
       include Virtus.model

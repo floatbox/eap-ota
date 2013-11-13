@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   class Passenger
     include Virtus.value_object
 

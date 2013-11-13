@@ -1,4 +1,4 @@
-module Alfastrah
+class Alfastrah
   module Calculation
     class Response < Alfastrah::Base::Response
       def price
