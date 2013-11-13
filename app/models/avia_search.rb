@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class AviaSearch
-  include Virtus
+  include Virtus.model
   include Search::Defaults
   include Search::Humanize::Presenter
   include ActiveModel::Validations
@@ -161,7 +161,7 @@ class AviaSearch
 
   def map_segments
     result = segments.map{|s|
-      { 
+      {
         :dpt => map_point(s.from),
         :arv => map_point(s.to)
       }
