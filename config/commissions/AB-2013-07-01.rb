@@ -8,7 +8,7 @@ discount "11.5%"
 comment "только собственные рейсы AB и HG"
 agent_comment "10% по всем направлениям через DTT"
 subagent_comment "8% по всем направлениям через DTT"
-check %{ includes_only(operating_carrier_iatas, 'AB HG 4T') }
+check %{ includes_only(operating_carrier_iatas, 'AB HG 4T') and flights.last.dept_date < Date.new(2014, 3, 31) }
 example "cdgfra/m fracdg/s"
 end
 
