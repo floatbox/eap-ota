@@ -28,7 +28,9 @@
     <td>
         <h5 class="ors-route"><%= order.profile_route_smart %></h5>
         <% if order.profile_departure_date %>
-            <p class="ors-departure">Вылет <%= l(order.profile_departure_date, :format => :human_year) %></p>
+            <p class="ors-departure">Вылет <%= l(order.profile_departure_date, :format => :human_year) %>
+              <% if order.profile_return_date %>, обратно <%= l(order.profile_return_date, :format => :human_year) %> <% end %>
+            </p>
         <% end %>
         <ul class="ors-passengers">
         <% order.profile_people.each do |person| %>

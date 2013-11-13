@@ -132,6 +132,12 @@ module ProfileOrder
     profile_departure_date && profile_departure_date > DateTime.now
   end
 
+  def profile_return_date
+    if profile_flights.present?
+      profile_flights.last.dept_date if Airport[profile_flights.first.departure_iata].city_id == Airport[profile_flights.last.arrival_iata].city_id
+    end
+  end
+
   def profile_arrival_date
     profile_flights.last.arrv_date if profile_flights.present?
   end
