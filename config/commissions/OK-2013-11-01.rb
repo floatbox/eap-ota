@@ -37,7 +37,7 @@ example "gojcdg/ab:ok"
 example "ledcdg/ab:ok"
 end
 
-rule 1 do
+rule 3 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -54,7 +54,7 @@ example "kufsvo svocdg"
 example "ufadme dmecdg"
 end
 
-rule 2 do
+rule 4 do
 important!
 ticketing_method "aviacenter"
 agent "5%"
@@ -73,7 +73,7 @@ example "kufsvo/ab:ok svocdg"
 example "ufadme dmecdg/ab:ok"
 end
 
-rule 3 do
+rule 5 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
