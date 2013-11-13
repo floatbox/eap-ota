@@ -1,20 +1,22 @@
 module Alfastrah
   module Confirmation
-    class Response
-      def initialize response_xml
-        @data = ActiveSupport::XmlMini.parse response_xml
-      end
-
+    class Response < Alfastrah::Base::Response
       def series
-        @data['Envelope']['Body']['confirmPolicyResult']['series']['__content__']
+        base_path['series']['__content__']
       end
 
       def number
-        @data['Envelope']['Body']['confirmPolicyResult']['fullNumber']['__content__']
+        base_path['fullNumber']['__content__']
       end
 
       def url
-        @data['Envelope']['Body']['confirmPolicyResult']['policyDocument']['url']['__content__']
+        base_path['policyDocument']['url']['__content__']
+      end
+
+      private
+
+      def base_path
+        @data['Envelope']['Body']['confirmPolicyResult']
       end
     end
   end

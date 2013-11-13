@@ -1,19 +1,21 @@
 module Alfastrah
   module Calculation
-    class Response
-      def initialize response_xml
-        @data = ActiveSupport::XmlMini.parse response_xml
-      end
-
+    class Response < Alfastrah::Base::Response
       def price
         @price ||= begin
-          price = @data['Envelope']['Body']['calculatePolicyResult']['calculationResult']['premium']['__content__']
+          price = base_path['calculationResult']['premium']['__content__']
           price.to_f
         end
       end
 
       def currency
-        @data['Envelope']['Body']['calculatePolicyResult']['calculationResult']['currency']['__content__']
+        base_path['calculationResult']['currency']['__content__']
+      end
+
+      private
+
+      def base_path
+        @data['Envelope']['Body']['calculatePolicyResult']
       end
     end
   end

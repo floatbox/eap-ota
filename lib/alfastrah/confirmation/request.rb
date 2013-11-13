@@ -1,9 +1,8 @@
 module Alfastrah
   module Confirmation
-    class Request
-      include Virtus.model
-
+    class Request < Alfastrah::Base::Request
       attribute :policy_id, Fixnum
+      validates :policy_id, presence: true, allow_blank: false
 
       def endpoint
         'confirmPolicy'

@@ -1,11 +1,11 @@
 module Alfastrah
   module Calculation
-    class Request
-      include Virtus.model
-
+    class Request < Alfastrah::Base::Request
       attribute :pnr, String
       attribute :passengers, Array[Alfastrah::Passenger]
       attribute :segments, Array[Alfastrah::Segment]
+
+      validates :pnr, :passengers, :segments, presence: true, allow_blank: false
 
       def endpoint
         'calculatePolicy'
@@ -26,29 +26,15 @@ module Alfastrah
               x.trav :policyParameters do
                 x.trav :PNR, pnr
 
-                build_passengers_xml x
+                build_passengers_xml x, passengers
 
                 x.trav :flightSegmentsCount, segments.count
 
-                build_segments_xml x
+                build_segments_xml x, segments
               end
             end
           end
         end
-      end
-
-      def build_passengers_xml x
-        passengers.each_with_index do |passenger, idx|
-          x.trav :insuredFirstName,      {seqNo: idx}, passenger.first_name
-          x.trav :insuredLastName,       {seqNo: idx}, passenger.last_name
-          x.trav :insuredBirthDate,      {seqNo: idx}, passenger.birth_date
-          x.trav :insuredDocumentType,   {seqNo: idx}, passenger.document_type
-          x.trav :insuredDocumentNumber, {seqNo: idx}, passenger.document_number
-        end
-      end
-
-      def build_segments_xml x
-
       end
     end
   end
