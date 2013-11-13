@@ -107,6 +107,12 @@
     background: url("/images/results/progress.gif") 50% 0 no-repeat;
 }
 
+/* Accomplished */
+.orders-accomplished {
+    margin: 28px 0 18px;
+    font-size: 18px;
+}
+
 /* Order */
 .order {
     margin: 0 -14px 25px;

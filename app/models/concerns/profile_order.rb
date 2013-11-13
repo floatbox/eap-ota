@@ -124,6 +124,10 @@ module ProfileOrder
       profile_flights.present? ? profile_flights.first.dept_date : departure_date
   end
 
+  def profile_departure_in_future?
+    profile_departure_date && profile_departure_date > DateTime.now
+  end
+
   def profile_arrival_date
     profile_flights.last.arrv_date if profile_flights.present?
   end

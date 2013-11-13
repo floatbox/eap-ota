@@ -1,9 +1,11 @@
 <% if @orders.empty? %>
     <p class="orders-empty">Вы еще ничего не заказывали. Хотите <a href="/">купить билет</a>?</p>
 <% else %>
+
 <% @orders.each do |order| %>
 <% if order.profile_active? || order.profile_all_tickets_returned? || admin_user %>
-<div class="order"
+
+<div class="order<%= ' order-ahead' if order.profile_departure_in_future? || order.profile_arrival_in_future? %>"
   <% if order.profile_all_tickets_returned? %> style="background-color: #ddd;"
   <% elsif !order.profile_active? %> style="background-color: transparent; border: 1px dotted #454752"
   <% end %>>
@@ -25,7 +27,7 @@
     </td>
     <td>
         <h5 class="ors-route"><%= order.profile_route_smart %></h5>
-        <% if order.departure_date %>
+        <% if order.profile_departure_date %>
             <p class="ors-departure">Вылет <%= l(order.profile_departure_date, :format => :human_year) %></p>
         <% end %>
         <ul class="ors-passengers">
@@ -153,4 +155,5 @@
 </div>
 <% end %>
 <% end %>
+
 <% end %>

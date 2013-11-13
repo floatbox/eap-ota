@@ -24,6 +24,10 @@ $(function() {
         var orders = elem.find('.order');
         if (orders.length) {
             $('#pt-amount').html(orders.length).show();
+            var ahead = orders.filter('.order-ahead');
+            if (ahead.length) {
+                ahead.last().after('<h5 class="orders-accomplished">В прошлом</h5>');
+            }
         }
     });
 
