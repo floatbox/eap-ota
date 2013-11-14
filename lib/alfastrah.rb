@@ -6,12 +6,9 @@ class Alfastrah
     travel: 'EVITERRA-TRAVEL'
   }
 
-  def host
-    @host ||= Conf.alfastrah.host
-  end
-
-  def base_url
-    @base_url ||= Conf.alfastrah.base_url
+  def initialize options = {}
+    @host     = options.fetch :host,     Conf.alfastrah.host
+    @base_url = options.fetch :base_url, Conf.alfastrah.base_url
   end
 
   def calculate *args
