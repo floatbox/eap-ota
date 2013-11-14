@@ -111,6 +111,7 @@ Eviterra::Application.routes.draw do
   match 'profile/spyglass/:id' => 'profile#spyglass', :as => :profile_spyglass
   match 'profile/itinerary/:id/ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :profile_itinerary_for_ticket
   match 'profile/orders' => 'profile#orders', :as => :profile_orders
+  match 'profile/orders(/:current_customer_id)' => 'profile#orders', :as => :profile_orders_customer
 
   root :to => 'home#index'
 
