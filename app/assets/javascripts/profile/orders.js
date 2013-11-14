@@ -19,7 +19,9 @@ $(function() {
         hideDetails($(this).closest('.order'));
     });
     
-    $.get('/profile/orders', function(content) {
+    $.get('/profile/orders', {
+        current_customer_id: elem.attr('data-customer')
+    }, function(content) {
         elem.html(content);
         var orders = elem.find('.order');
         if (orders.length) {
@@ -29,6 +31,8 @@ $(function() {
                 ahead.last().after('<h5 class="orders-accomplished">В прошлом</h5>');
             }
         }
+    }).fail(function() {
+        elem.html('<div class="orders-empty" style="color: #777;">Не удалось загрузить заказы</div>');
     });
 
 });
