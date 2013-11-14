@@ -20,7 +20,7 @@ booking.restore = function() {
 booking.prebook = function(query_key, hash, partner, marker) {
     var that = this;
     this.request = $.ajax({
-        url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker + '&variant_id=1',
+        url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker,
         success: function(result) {
             if (result && result.success) {
                 if (result.partner_logo_url) {

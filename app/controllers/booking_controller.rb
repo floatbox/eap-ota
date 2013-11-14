@@ -13,7 +13,6 @@ class BookingController < ApplicationController
   #   "recommendation"=>"amadeus.SU.V.M.4.SU2074SVOLCA040512",
   #   "partner"=>"yandex",
   #   "marker"=>"",
-  #   "variant_id"=>"1"
   def preliminary_booking
     @coded_search = params[:query_key]
     @partner = Partner[params[:partner]]

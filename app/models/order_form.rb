@@ -24,7 +24,6 @@ class OrderForm
   attr_accessor :marker
   attr_accessor :number
   attr_accessor :order # то, что сохраняется в базу
-  attr_accessor :variant_id #нужен при восстановлении формы по урлу
   # Снимает ограничения на бронирование. Параметр не сохраняется в кэш.
   attr_accessor :admin_user
   attr_reader :show_vat, :vat_included
@@ -183,14 +182,14 @@ class OrderForm
 
   def save_to_cache
     cache = OrderFormCache.new
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+    copy_attrs self, cache, :recommendation, :people_count, :query_key, :partner, :marker, :price_with_payment_commission
     cache.with(safe: true).save
     self.number = cache.id.to_s
   end
 
   def update_in_cache
     cache = OrderFormCache.find(number) or raise(NotFound, "#{number} not found")
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+    copy_attrs self, cache, :recommendation, :people_count, :query_key, :partner, :marker, :price_with_payment_commission
     cache.with(safe: true).save
   end
 
@@ -199,7 +198,7 @@ class OrderForm
     def load_from_cache(cache_number)
       cache = OrderFormCache.find(cache_number) or raise(NotFound, "#{cache_number} not found")
       order = new
-      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+      copy_attrs cache, order, :recommendation, :people_count, :query_key, :partner, :marker, :price_with_payment_commission
       order.number = cache.id.to_s
       order
     end

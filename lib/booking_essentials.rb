@@ -24,7 +24,6 @@ module BookingEssentials
       @order_form = OrderForm.new(
         :recommendation => @recommendation,
         :people_count => @search.tariffied,
-        :variant_id => params[:variant_id],
         :query_key => @coded_search,
         :partner => partner,
         :marker => marker

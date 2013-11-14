@@ -123,7 +123,6 @@ describe OrderForm do
       OrderForm.new(
         :recommendation => recommendation,
         :people_count => {:adults => 1, :children => 0, :infants => 0},
-        :variant_id => "2",
         :query_key => 'abcde',
         :price_with_payment_commission => 1000,
         :partner => 'sample_partner'
@@ -144,7 +143,6 @@ describe OrderForm do
       it {should be}
       its(:recommendation) {should == recommendation}
       its(:people_count) {should == {:adults => 1, :children => 0, :infants => 0}}
-      its(:variant_id) {should == "2"}
       its(:query_key) {should == 'abcde'}
       its(:partner) {should == 'sample_partner'}
       its(:price_with_payment_commission) {should == 1000}
