@@ -30,8 +30,10 @@ abort: function() {
     }
     if (this.offer) {
         results.content.el.find('.rc-overlay').hide();
-        this.offer.book.removeClass('ob-disabled ob-fade').show();
-        this.offer.updateBook();
+        if (!this.offer.book.hasClass('ob-failed')) {
+            this.offer.book.removeClass('ob-disabled ob-fade').show();
+            this.offer.updateBook();
+        }
     }
     delete this.variant;
     delete this.offer;

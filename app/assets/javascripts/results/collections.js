@@ -189,6 +189,7 @@ upgradeOffer: function() {
             offer.updateDetails();
             offer.updateBook();
         }, 20);
+        offer.book.removeClass('ob-disabled ob-failed ob-fade');
         offer.book.removeClass('ob-disabled');
         booking.abort();
     };
