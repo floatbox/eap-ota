@@ -1,6 +1,8 @@
 class Alfastrah
   module Confirmation
     class Response < Alfastrah::Base::Response
+      attr_accessor :policy_id
+
       def series
         base_path['series']['__content__']
       end

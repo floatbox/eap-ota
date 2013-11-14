@@ -19,7 +19,9 @@ class Alfastrah
     purchase_response = get_response Alfastrah::Purchase, params
     return unless purchase_response
 
-    get_response Alfastrah::Confirmation, policy_id: purchase_response.policy_id
+    confirm_response = get_response Alfastrah::Confirmation, policy_id: purchase_response.policy_id
+    confirm_response.policy_id = purchase_response.policy_id
+    confirm_response
   end
 
   private
