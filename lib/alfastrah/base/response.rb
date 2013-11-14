@@ -5,12 +5,12 @@ class Alfastrah
         @data = ActiveSupport::XmlMini.parse response_xml
       end
 
-      def ok?
+      def success?
         base_path['returnCode']['code']['__content__'] == 'OK'
       end
 
       def errors
-        base_path['returnCode']['errorMessage']['__content__'] unless ok?
+        base_path['returnCode']['errorMessage']['__content__'] unless success?
       end
 
       private
