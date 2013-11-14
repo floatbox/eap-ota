@@ -24,6 +24,10 @@ class Alfastrah
     confirm_response
   end
 
+  def info params
+    get_response Alfastrah::Info, params
+  end
+
   private
 
   def get_response action, params
