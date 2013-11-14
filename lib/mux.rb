@@ -108,7 +108,7 @@ class Mux
     case e
     when RuntimeError
       e.message['select(): Interrupted system call']
-    when Amadeus::SoapSyntaxError, Amadeus::SoapUnknownError
+    when Amadeus::SoapUnknownError
       true
     else
       false
