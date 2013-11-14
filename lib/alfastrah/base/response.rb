@@ -13,6 +13,17 @@ class Alfastrah
         base_path['returnCode']['errorMessage']['__content__'] unless success?
       end
 
+      def as_json options = {}
+        json_fields.inject({}) do |hsh, field|
+          hsh[field] = send field
+          hsh
+        end
+      end
+
+      def json_fields
+        self.class.const_get 'JSON_FIELDS'
+      end
+
       private
 
       def base_path

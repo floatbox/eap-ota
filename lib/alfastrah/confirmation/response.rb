@@ -1,6 +1,7 @@
 class Alfastrah
   module Confirmation
     class Response < Alfastrah::Base::Response
+      JSON_FIELDS = %w[policy_id series number url]
       attr_accessor :policy_id
 
       def series

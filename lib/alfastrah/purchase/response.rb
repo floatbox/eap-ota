@@ -1,6 +1,7 @@
 class Alfastrah
   module Purchase
     class Response < Alfastrah::Base::Response
+      JSON_FIELDS = %w[policy_id price currency]
       def policy_id
         base_path['policyId']['__content__']
       end

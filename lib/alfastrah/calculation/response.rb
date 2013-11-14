@@ -1,6 +1,8 @@
 class Alfastrah
   module Calculation
     class Response < Alfastrah::Base::Response
+      JSON_FIELDS = %w[price currency]
+
       def price
         @price ||= begin
           price = base_path['calculationResult']['premium']['__content__']

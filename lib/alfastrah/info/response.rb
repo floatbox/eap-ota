@@ -1,6 +1,8 @@
 class Alfastrah
   module Info
     class Response < Alfastrah::Base::Response
+      JSON_FIELDS = %w[status rate]
+
       def status
         price = base_path['policyInformation']['policyStatus']['__content__']
       end
