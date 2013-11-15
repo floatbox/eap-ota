@@ -228,8 +228,9 @@ describe OrderForm do
     end
 
     it "should have valid passengers" do
-      order.people.first.should be_valid
-      order.people.second.should be_valid
+      persons = order.people
+      persons.first.should be_valid
+      persons.second.should be_valid
     end
   end
 

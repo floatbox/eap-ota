@@ -122,8 +122,12 @@ class OrderForm
 
   def people_attributes= attrs
     @people ||= []
-    attrs.each do |k, person_attrs|
-      @people[k.to_i] = Person.new(person_attrs)
+    attrs.each do |k, pa|
+      # пусть только OrderForm знает тонкости формата данных с морды,
+      # Person об этом знать не нужно
+      birthday_tuple = [pa['birthday_day'], pa['birthday_month'], pa['birthday_year']]
+      pa['birthday'] = birthday_tuple.join '-'
+      @people[k.to_i] = Person.new(pa)
     end
   end
 

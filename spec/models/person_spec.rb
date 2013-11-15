@@ -4,15 +4,21 @@ require 'spec_helper'
 describe Person do
   let(:adult_attributes) do
     {"document_noexpiration"=>"0",
-     "birthday_year"=>"1984",
-     "birthday_month"=>"06",
-     "birthday_day"=>"16",
+     # TODO после успешного перехода можно удалить
+     # не юзаем после рефактора Person
+     # для справки пока оставил
+     #
+     #"document_expiration_year"=>"2014",
+     #"document_expiration_month"=>"09",
+     #"document_expiration_day"=>"08",
+     #"birthday_year"=>"1984",
+     #"birthday_month"=>"06",
+     #"birthday_day"=>"16",
+     "document_expiration" => "08Sep2014",
+     "birthday"=>'16Jun1984',
      "nationality_code"=>"RUS",
      #"bonuscard_type"=>"[FILTERED]",
      #"bonuscard_number"=>"[FILTERED]",
-     "document_expiration_year"=>"2014",
-     "document_expiration_month"=>"09",
-     "document_expiration_day"=>"08",
      "sex"=>"m",
      "last_name"=>"IVASHKIN",
      "bonus_present"=>"0",
