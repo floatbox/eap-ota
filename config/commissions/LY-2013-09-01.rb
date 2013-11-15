@@ -4,7 +4,6 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "7%"
 agent_comment "5% от опубл. тарифов Эконом класса на рейсы LY"
 subagent_comment "3,5% от опубл. тарифов Эконом класса на рейсы LY"
 classes :economy
@@ -16,7 +15,6 @@ important!
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "7%"
 agent_comment "5% от опубл. тарифов Бизнес класса J на рейсы LY"
 subagent_comment "3,5% от опубл. тарифов Бизнес класса J на рейсы LY"
 subclasses "JZA"
@@ -28,7 +26,6 @@ important!
 ticketing_method "aviacenter"
 agent "9.7%"
 subagent "6.7%"
-discount "10.2%"
 agent_comment "9,7% от опубл. тарифов Бизнес класса на рейсы LY"
 subagent_comment "6,7% от опубл. тарифов Бизнес класса на рейсы LY"
 subclasses "FCID"
