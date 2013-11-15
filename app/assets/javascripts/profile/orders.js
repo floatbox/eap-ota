@@ -26,9 +26,9 @@ $(function() {
         var orders = elem.find('.order');
         if (orders.length) {
             $('#pt-amount').html(orders.length).show();
-            var ahead = orders.filter('.order-ahead');
-            if (ahead.length) {
-                ahead.last().after('<h5 class="orders-accomplished">В прошлом</h5>');
+            var past = orders.filter('.order-ahead').last().next('.order');
+            if (past.length) {
+                past.before('<h5 class="orders-accomplished">В прошлом</h5>');
             }
         }
     }).fail(function() {
