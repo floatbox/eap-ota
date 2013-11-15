@@ -43,7 +43,7 @@ important!
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"
-discount "6.5%"
+discount "2.1%"
 tour_code "USAN002"
 agent_comment "с сегодня на QR если в маршруте есть Россия (OW/RT, origin/destination) - агентская 5%"
 subagent_comment "у нас 3%"
