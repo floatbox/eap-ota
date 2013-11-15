@@ -53,7 +53,7 @@ class Order < ActiveRecord::Base
   # error_ticket - билеты были отправлены на выписку, но не были выписаны до таймаута
   # ticketed - билеты были выписаны
   def self.ticket_statuses
-    [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket']
+    [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket', 'fraud']
   end
 
   def self.fee_schemes
