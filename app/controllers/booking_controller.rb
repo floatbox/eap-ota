@@ -87,8 +87,6 @@ class BookingController < ApplicationController
 
     if params[:iphone]
       render :partial => 'iphone'
-    elsif corporate_mode?
-      render :partial => 'corporate'
     else
       render :partial => 'embedded'  
     end

@@ -9,7 +9,7 @@ class PricerController < ApplicationController
   def pricer
     @destination = Destination.get_by_search @search
     @recommendations = Mux.new(:admin_user => admin_user).async_pricer(@search)
-    if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
+    if (@destination && @recommendations.present? && !admin_user)
       @destination.move_average_price @search, @recommendations.cheapest, @code
     end
     @locations = @search.human_locations
@@ -115,7 +115,7 @@ class PricerController < ApplicationController
       meter :api_total_unfiltered_recommendations, @recommendations.size
 
       @code = @search.encode_url
-      if (@destination && @recommendations.present? && !admin_user && !corporate_mode?)
+      if (@destination && @recommendations.present? && !admin_user)
         @destination.move_average_price @search, @recommendations.cheapest, @code
       end
 

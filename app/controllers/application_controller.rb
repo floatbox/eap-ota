@@ -18,11 +18,6 @@ class ApplicationController < ActionController::Base
   # показывает данные текущего пользователя тайпус в админке
   alias_method :current_member, :admin_user
 
-  def corporate_mode?
-    session[:corporate_mode]
-  end
-  helper_method :corporate_mode?
-
   def set_locale
     I18n.locale = cookies[:language].presence || :ru
   end

@@ -71,9 +71,6 @@ Eviterra::Application.routes.draw do
   match '/pay/:code(/:gateway)' => 'payments#edit', :via => :get, :as => :edit_payment
   match '/pay/:code(/:gateway)' => 'payments#update', :via => :post, :as => :edit_payment
 
-  match '/corporate/start' => 'corporate#start', :as => :start_corporate
-  match '/corporate/stop' => 'corporate#stop', :as => :stop_corporate
-  match '/corporate' => 'corporate#index', :as => :corporate
   match '/flight_groups/:id' => 'flight_groups#show', :as => :show_flight_group
   match '/seat_map/:flight(/:booking_class)' => 'seat_map#show', :as => :show_seat_map
 
