@@ -88,6 +88,7 @@ gem 'unicorn', :require => false
 group :development do
   gem 'yard'
   gem 'yard-activerecord'
+  gem 'zeus'
 end
 
 group :test do

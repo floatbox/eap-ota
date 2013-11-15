@@ -396,6 +396,8 @@ GEM
     yard (0.8.3)
     yard-activerecord (0.0.9)
       yard (>= 0.8.3)
+    zeus (0.13.3)
+      method_source (>= 0.6.7)
     zip (2.0.2)
 
 PLATFORMS
@@ -478,4 +480,5 @@ DEPENDENCIES
   yajl-ruby
   yard
   yard-activerecord
+  zeus
   zip
