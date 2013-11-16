@@ -80,16 +80,6 @@ class Person
     Russian.translit(passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, ''))
   end
 
-  def passport_sirena
-    if doccode_sirena == "СР"
-      passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '')
-    elsif ["ПС", "ПСП"].include? doccode_sirena
-      passport.mb_chars.gsub(/[^\d]+/, '')
-    elsif doccode_sirena.present?
-      passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '')
-    end
-  end
-
   def doccode_sirena
     if nationality == "RUS"
       return "СР" if passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '').match(/^[\dA-Za-z]{1,5}[а-яА-Яa-zA-Z]{2}\d{6}$/) && (Date.today - 14.years <= birthday)
