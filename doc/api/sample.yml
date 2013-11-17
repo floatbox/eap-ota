@@ -1,0 +1,77 @@
+# POST orders.json
+request:
+  # recommendation: suxx - itinerary?
+  itinerary: 'amadeus.MM.EE.SVOVKO...'
+
+  adults: 1
+  children: 0
+  infants: 0
+  partner: 'yourtoken'
+
+  # могут понадобиться
+  # locale: 'ru'
+  # currency': 'RUB'
+  total: '23423.32 RUB'
+
+successful_response:
+
+  id: '234234234234'
+  links:
+    -
+      rel: 'self'
+      href: 'https://api.eviterra.com/v2/orders/234234234234'
+    -
+      # для редиректа пользователя
+      rel: 'web'
+      url: 'https://eviterra.com/api/booking#234234234234&partner=yourtoken'
+  # бронирование
+  itinerary:
+    # id: 'amadeus....'
+    flights:
+    - from: 'SVO'
+      to: 'PAR'
+      date: 'YYYY-MM-DD'
+      cabin: 'Y'
+      booking_class: 'D'
+  #
+  # recommendation_valid_till: ~
+
+  # fare_rules: {}
+  # payment_options:
+  #   card: 
+  total: 'RUB 23423.32'
+
+# POST https://api.eviterra.com/v2/orders/234234234234.json
+request:
+
+  phone: '+7123456789'
+  email: 'mail@example.com'
+  # нужен некоторым платежным системам.
+  # ip:
+
+  persons:
+    - first_name: "ALEKSEY"
+      last_name: "IVASHKIN"
+      sex: "m"
+      birthday: '1984-06-16'
+      nationality_code: 'RU'
+      passport: '123456789'
+      document_expiration: 'YYYY-MM-DD'
+      bonuscard_type: "какие бывают?"
+      bonuscard_number: "1234234"
+      # заменить на желаемый тариф? "adult", "child", "infant" и апгрейдить?
+      with_seat: '1'
+
+  # delivery:
+  #  address:
+
+  payment:
+    # type: 'card'
+    # card:
+    #  number: '4111111111111112'
+    #  name: 'MR CARDHOLDER'
+    #  month: 12
+    #  year: 2015
+    #  verification_value: 123
+    type: 'invoice'
+  total: '23423.32 RUB'
