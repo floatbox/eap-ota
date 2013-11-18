@@ -240,6 +240,7 @@ class Order < ActiveRecord::Base
   scope :sent_manual, where(:email_status => 'manual')
   scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("orders.pnr_number != ''")
   scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != '' AND orders.payment_status = 'blocked'")
+  scope :fraud, where("ticket_status = 'fraud'")
 
 
   scope :stale, lambda {
