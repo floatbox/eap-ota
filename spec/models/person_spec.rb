@@ -14,7 +14,7 @@ describe Person do
      #"birthday_year"=>"1984",
      #"birthday_month"=>"06",
      #"birthday_day"=>"16",
-     "document_expiration" => "08Sep2014",
+     "document_expiration" => "2014-09-08",
      "birthday"=>'16Jun1984',
      "nationality_code"=>"RUS",
      #"bonuscard_type"=>"[FILTERED]",
