@@ -42,16 +42,8 @@ class ApplicationController < ActionController::Base
 
   def enforce_timeout
     # around_filter :enforce_timeout, only: [:pricer, :api]
-    begin
-      app_thread = Thread.current
-      timeout_thread = Thread.new do
-        sleep 30
-        app_thread.raise TimeoutError.new('Execution expired (> 30 seconds)')
-      end
+    Timeout.timeout(30, TimeoutError) do
       yield
-    ensure
-      timeout_thread.kill
-      timeout_thread.join
     end
   end
 
