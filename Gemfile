@@ -98,12 +98,8 @@ group :test do
   gem 'factory_girl_rails'
 
   gem 'guard'
-  gem 'rb-inotify', :require => false
-  gem 'rb-fsevent', :require => false
-  gem 'rb-fchange', :require => false
-  # gem 'growl' # for OSX
-  # for linux
-  gem 'libnotify', :require => false
+  gem 'terminal-notifier-guard', require: false
+  gem 'libnotify', require: false
   gem 'guard-spork'
   gem 'guard-rspec'
   # gem 'guard-rails-assets'
