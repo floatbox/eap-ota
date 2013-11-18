@@ -3,6 +3,7 @@ class PricerController < ApplicationController
   layout false
 
   before_filter :parse_and_validate_url, :only => [:pricer, :calendar]
+  around_filter :enforce_timeout, only: [:pricer, :api]
 
   include Monitoring::Benchmarkable
 
