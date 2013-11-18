@@ -40,9 +40,23 @@ class ApplicationController < ActionController::Base
     root_path
   end
 
+  def enforce_timeout
+    # around_filter :enforce_timeout, only: [:pricer, :api]
+    begin
+      app_thread = Thread.current
+      timeout_thread = Thread.new do
+        sleep 30
+        app_thread.raise TimeoutError.new('Execution expired (> 30 seconds)')
+      end
+      yield
+    ensure
+      timeout_thread.kill
+      timeout_thread.join
+    end
+  end
+
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
   end
-
 end
 
