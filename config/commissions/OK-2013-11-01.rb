@@ -3,7 +3,7 @@ carrier "OK", start_date: "2013-11-01"
 rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
-subagent "3%"
+subagent "4.5%"
 discount "0.9%"
 agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
 agent_comment "Москва  -  все перевозки;"
@@ -21,7 +21,7 @@ rule 2 do
 important!
 ticketing_method "aviacenter"
 agent "5%"
-subagent "3%"
+subagent "4.5%"
 discount "0.9%"
 comment "Копия для ловли код-шера"
 agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
@@ -40,7 +40,7 @@ end
 rule 3 do
 ticketing_method "aviacenter"
 agent "5%"
-subagent "3%"
+subagent "4.5%"
 discount "0.9%"
 agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
 agent_comment "Пермь - Только транзитные перевозки;"
@@ -58,7 +58,7 @@ rule 4 do
 important!
 ticketing_method "aviacenter"
 agent "5%"
-subagent "3%"
+subagent "4.5%"
 discount "0.9%"
 comment "Копия для ловли код-шера"
 agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
