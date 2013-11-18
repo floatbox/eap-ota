@@ -24,12 +24,16 @@ class Person
   attr_accessor :passenger_ref, :tickets, :associated_infant
   attr_accessor :infant, :child
 
-  validates_presence_of :first_name, :last_name, :sex, :nationality, :birthday, :passport
-  validates_presence_of :document_expiration, :unless => :document_noexpiration
+  validates_presence_of :sex, :nationality_code, :birthday
   # FIXME WRONG! фамилии через дефис? два имени? сокращения?
-  validates_format_of :first_name, :with => /^[a-zA-Z-]*$/, :message => "Некорректное имя"
-  validates_format_of :last_name,  :with => /^[a-zA-Z-]*$/, :message => "Некорректная фамилия"
-  validate :check_passport
+  validates :first_name,
+    presence: true,
+    format: { with: /^[a-zA-Z-]*$/, message: "Некорректное имя" }
+  validates :last_name,
+    presence: true,
+    format: { with: /^[a-zA-Z-]*$/, message: "Некорректная фамилия" }
+  validates :passport, presence: true, with: :check_passport
+  validates :document_expiration, presence: true, unless: :document_noexpiration
 
   before_validation :clear_first_name_and_last_name
 
