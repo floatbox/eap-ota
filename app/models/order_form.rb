@@ -122,11 +122,25 @@ class OrderForm
 
   def people_attributes= attrs
     @people ||= []
+    p attrs
     attrs.each do |k, pa|
       # пусть только OrderForm знает тонкости формата данных с морды,
       # Person об этом знать не нужно
-      birthday_tuple = [pa['birthday_day'], pa['birthday_month'], pa['birthday_year']]
-      pa['birthday'] = birthday_tuple.join '-'
+      pa['birthday'] = {
+        day: pa.delete('birthday_day'),
+        month: pa.delete('birthday_month'),
+        year: pa.delete('birthday_year')
+      }
+      # если не делать эту проверку, то коерсер virtus-а разорвет от
+      # {day: nil, month: nil, year: nil}
+      if pa['document_noexpiration'] == '0'
+        pa['document_expiration'] = {
+          day: pa.delete('document_expiration_day'),
+          month: pa.delete('document_expiration_month'),
+          year: pa.delete('document_expiration_year')
+        }
+      end
+
       @people[k.to_i] = Person.new(pa)
     end
   end
@@ -342,5 +356,6 @@ class OrderForm
     stem_length = [max_length - LONGEST_ENDING, SHORTEST_STEM].max
     first_name[0, stem_length] == second_name[0, stem_length]
   end
+
 end
 
