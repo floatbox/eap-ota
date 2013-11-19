@@ -29,7 +29,9 @@ class RecommendationSet
 
   def process!(opts = {})
     benchmark 'RecommendationSet: process!, total', level: :info do
-      run :select_full_info!
+      run :select_full_information!
+      run :select_valid_interline!
+      run :reject_ignored_carriers!
       run :reject_ground!
       run :find_commission!
       run :select_sellable! unless opts[:admin_user]
@@ -50,10 +52,16 @@ class RecommendationSet
     end
   end
 
-  def select_full_info!
+  def select_full_information!
     @recs.select! &:full_information?
+  end
+
+  def select_valid_interline!
     @recs.select! &:valid_interline?
-    @recs.reject! &:ignored_carriers
+  end
+
+  def reject_ignored_carriers!
+    @recs.reject! &:ignored_carriers?
   end
 
   def reject_ground!

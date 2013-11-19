@@ -160,7 +160,7 @@ class Recommendation
     commission.sellable?
   end
 
-  def ignored_carriers
+  def ignored_carriers?
     ((marketing_carrier_iatas + operating_carrier_iatas) & Conf.amadeus.ignored_carriers).present?
   end
 
