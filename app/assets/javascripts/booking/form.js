@@ -45,6 +45,9 @@ init: function() {
     this.footer.find('.bffc-link').click(function() {
         booking.cancel();
     });
+    this.footer.find('.bfflt-search').click(function() {
+        booking.newSearch(true);
+    });
     this.button = this.footer.find('.bf-button');
     var btitle = this.button.find('.bfb-title').click(function() {
         that.el.submit();
