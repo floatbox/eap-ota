@@ -8,7 +8,7 @@ class Mux
   include Monitoring::Benchmarkable
 
   include KeyValueInit
-  attr_accessor :suggested_limit, :lite, :admin_user
+  attr_accessor :context
 
   # сейчас используется только с API
   def pricer(avia_search)
@@ -24,7 +24,7 @@ class Mux
     )
     amadeus.release
 
-    recommendations.process! admin_user: admin_user
+    recommendations.process! context: context
     recommendations
 
   rescue => e
@@ -37,7 +37,7 @@ class Mux
     return RecommendationSet.new unless Conf.amadeus.enabled
     session = Amadeus::Session.book(Amadeus.office(:booking))
     amadeus = Amadeus::Service.new(:session => session, :driver => async_amadeus_driver)
-    request = {:suggested_limit => suggested_limit, :lite => lite}
+    request = {:suggested_limit => context.pricer_suggested_limit, :search_around => context.pricer_search_around?}
     recommendations = RecommendationSet.new(
       amadeus.fare_master_pricer_travel_board_search(avia_search, request).recommendations
     )
@@ -48,7 +48,7 @@ class Mux
     ActiveSupport::Notifications.instrument 'amadeus_merged.mux',
       recommendations: recommendations
 
-    recommendations.process! lite: lite, admin_user: admin_user
+    recommendations.process! context: context
     recommendations
   rescue => e
     with_warning unless ignore_error?(e)
@@ -57,7 +57,7 @@ class Mux
 
   def amadeus_async_pricer(avia_search, &block)
     return RecommendationSet.new unless Conf.amadeus.enabled
-    request = {:suggested_limit => suggested_limit, :lite => lite}
+    request = {:suggested_limit => context.pricer_suggested_limit, :search_around => context.pricer_search_around?}
     reqs = [request]
     amadeus_driver = async_amadeus_driver
     reqs.each do |req|
@@ -85,7 +85,7 @@ class Mux
     ActiveSupport::Notifications.instrument 'amadeus_merged.mux',
       recommendations: recommendations
 
-    recommendations.process! lite: lite, admin_user: admin_user
+    recommendations.process! context: context
     recommendations
   end
 
