@@ -5,7 +5,7 @@ module ProfileOrder
   extend ActiveSupport::Concern
 
   included do
-    scope :profile_orders, where(:source => 'amadeus').where("pnr_number != ''").where(:ticket_status => ['booked', 'ticketed']).order("created_at DESC")
+    scope :profile_orders, where(:source => 'amadeus').where("pnr_number != ''").where(:ticket_status => ['booked', 'ticketed']).order("departure_date DESC")
   end
 
   def can_use? current_customer
@@ -79,7 +79,11 @@ module ProfileOrder
   end
 
   def profile_flights
-    sold_tickets.present? ? sold_tickets.first.flights : []
+    if stored_flights.present?
+      stored_flights
+    else
+      sold_tickets.present? ? sold_tickets.first.flights : []
+    end
   end
 
   def profile_booking_classes
@@ -122,6 +126,16 @@ module ProfileOrder
 
   def profile_departure_date
       profile_flights.present? ? profile_flights.first.dept_date : departure_date
+  end
+
+  def profile_departure_in_future?
+    profile_departure_date && profile_departure_date > DateTime.now
+  end
+
+  def profile_return_date
+    if profile_flights.present?
+      profile_flights.last.dept_date if Airport[profile_flights.first.departure_iata].city_id == Airport[profile_flights.last.arrival_iata].city_id
+    end
   end
 
   def profile_arrival_date
