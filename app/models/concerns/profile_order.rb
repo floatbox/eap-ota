@@ -80,7 +80,7 @@ module ProfileOrder
 
   def profile_flights
     if stored_flights.present?
-      stored_flights
+      flights
     else
       sold_tickets.present? ? sold_tickets.first.flights : []
     end

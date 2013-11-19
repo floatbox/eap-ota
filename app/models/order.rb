@@ -72,6 +72,10 @@ class Order < ActiveRecord::Base
     self.stored_flights = flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights if flights.all? &:dept_date #костыль, для билетов с открытой датой
   end
 
+  def flights
+    stored_flights.map(&:to_flight).sort_by(&:departure_datetime_utc)
+  end
+
   def show_vat
     has_data_in_tickets? && sold_tickets.all?(&:show_vat)
   end
