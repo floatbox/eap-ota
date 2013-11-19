@@ -1,37 +1,41 @@
 # encoding: utf-8
+
 class Person
-  include Mongoid::Document
-  field :first_name, :type => String
-  field :last_name, :type => String
-  field :sex, :type => String
-  # FIXME убрать где-нибудь в ноябре
-  field :nationality_id, :type => Integer
-  field :nationality_code, :type => String
-  field :birthday, :type => Date
-  field :document_expiration, :type => Date
-  field :passport, :type => String
-  field :document_noexpiration, :type => Boolean, :default => false
-  field :bonus_present, :type => Boolean, :default => false
-  field :bonuscard_type, :type => String
-  field :bonuscard_number, :type => String
-  field :number_in_amadeus, :type => Integer
-  field :with_seat, :type => Boolean, :default => false
 
+  include Virtus.model
+  include ActiveModel::Validations
+  include ActiveModel::Validations::Callbacks
+
+  attribute :first_name,            String
+  attribute :last_name,             String
+  attribute :sex,                   String
+  attribute :nationality_code,      String
+  attribute :birthday,              Date
+  attribute :document_expiration,   Date
+  attribute :passport,              String
+  attribute :document_noexpiration, Boolean, default: false
+  attribute :bonus_present,         Boolean, default: false
+  attribute :bonuscard_type,        String
+  attribute :bonuscard_number,      String
+  attribute :number_in_amadeus,     Integer
+  attribute :with_seat,             Boolean, default: false
+
+  # можно тоже превратить в аттрибуты virtus при желании
   attr_accessor :passenger_ref, :tickets, :associated_infant
-
-  validates_presence_of :first_name, :last_name, :sex, :nationality, :birthday, :passport
-  validates_presence_of :document_expiration, :unless => :document_noexpiration
-  # FIXME WRONG! фамилии через дефис? два имени? сокращения?
-  validates_format_of :first_name, :with => /^[a-zA-Z-]*$/, :message => "Некорректное имя"
-  validates_format_of :last_name,  :with => /^[a-zA-Z-]*$/, :message => "Некорректная фамилия"
-  validate :check_passport
   attr_accessor :infant, :child
 
-  # совместимость с "активрекордным" стилем
-  before_validation :set_birthday
-  before_validation :set_document_expiration, :unless => :document_noexpiration
-  before_validation :clear_first_name_and_last_name
+  validates_presence_of :sex, :nationality_code, :birthday
+  # FIXME WRONG! фамилии через дефис? два имени? сокращения?
+  validates :first_name,
+    presence: true,
+    format: { with: /^[a-zA-Z-]*$/, message: "Некорректное имя" }
+  validates :last_name,
+    presence: true,
+    format: { with: /^[a-zA-Z-]*$/, message: "Некорректная фамилия" }
+  validates :passport, presence: true, with: :check_passport
+  validates :document_expiration, presence: true, unless: :document_noexpiration
 
+  before_validation :clear_first_name_and_last_name
 
   def too_long_names?
     if associated_infant
@@ -63,24 +67,6 @@ class Person
     last_name.gsub!(/[^\w]+/, '')
   end
 
-  # FIXME (1i) стиль параметров - временный. убрать позже
-  def set_birthday
-    self.birthday =
-      attributes["birthday"] ||
-      attributes["birthday(1i)"] && (1..3).collect { |n| attributes["birthday(#{n}i)"] }.join('-') ||
-      attributes["birthday_year"] && %W(year month day).collect { |n| attributes["birthday_#{n}"] }.join('-')
-  end
-
-  # FIXME (1i) стиль параметров - временный. убрать позже
-  def set_document_expiration
-    # TODO можно будет убрать, если этот хук не дергать в OrderForm#validate_people
-    return if document_noexpiration
-    self.document_expiration =
-      attributes["document_expiration"] ||
-      attributes["document_expiration_date(1i)"] && (1..3).collect { |n| attributes["document_expiration_date(#{n}i)"] }.join('-') ||
-      attributes["document_expiration_year"] && %W(year month day).collect { |n| attributes["document_expiration_#{n}"] }.join('-')
-  end
-
   def smart_document_expiration_date
     document_noexpiration ? (Date.today + 18.months) : document_expiration
   end
@@ -98,18 +84,8 @@ class Person
     Russian.translit(passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, ''))
   end
 
-  def passport_sirena
-    if doccode_sirena == "СР"
-      passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '')
-    elsif ["ПС", "ПСП"].include? doccode_sirena
-      passport.mb_chars.gsub(/[^\d]+/, '')
-    elsif doccode_sirena.present?
-      passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '')
-    end
-  end
-
   def doccode_sirena
-    if nationality && nationality.alpha2 == "RU"
+    if nationality == "RUS"
       return "СР" if passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '').match(/^[\dA-Za-z]{1,5}[а-яА-Яa-zA-Z]{2}\d{6}$/) && (Date.today - 14.years <= birthday)
       return "ПС" if passport.mb_chars.gsub(/[^\d]+/, '').match(/^\d{10}$/) && (Date.today - 14.years >= birthday)
       return "ПСП" if passport.mb_chars.gsub(/[^\d]+/, '').match(/^\d{9}$/) && !document_noexpiration
@@ -132,11 +108,8 @@ class Person
   end
 
   def nationality
-    if nationality_id
-      Country.find_by_id(nationality_id)
-    elsif nationality_code
-      Country.find_by_alpha3(nationality_code)
-    end
+    # [].first => nil, так что find_by* - совместимо
+    Country.where(alpha3: nationality_code).first
   end
 end
 

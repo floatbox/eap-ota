@@ -3,6 +3,37 @@ require 'spec_helper'
 
 describe OrderForm do
 
+  extend RSpec::Matchers::DSL
+
+  # order_form.should have_associated( parent_last_name, infant_last_name)
+
+  matcher :have_associated do |parent_last_name, infant_last_name|
+    match do |order_form|
+      parent = order_form.adults.find{|a| a.last_name == parent_last_name}
+      parent.associated_infant && (parent.associated_infant.last_name == infant_last_name)
+    end
+  end
+
+  matcher :have_no_infants_associated do |parent_last_name|
+    match do |order_form|
+      parent = order_form.adults.find{|a| a.last_name == parent_last_name}
+      !parent.associated_infant
+    end
+  end
+
+  matcher :have_only_one_mommy do |infant_last_name|
+    match do |order_form|
+      parents = order_form.adults.select{|a| a.associated_infant.try(&:last_name) == infant_last_name}
+      parents.size == 1
+    end
+  end
+
+  matcher :have_no_infants_associated_to_infants do
+    match do |order_form|
+      order_form.infants.none?(&:associated_infant)
+    end
+  end
+
   describe '#needs_visa_notification' do
 
     subject {
@@ -228,44 +259,13 @@ describe OrderForm do
     end
 
     it "should have valid passengers" do
-      order.people.first.should be_valid
-      order.people.second.should be_valid
+      persons = order.people
+      persons.first.should be_valid
+      persons.second.should be_valid
     end
   end
 
   describe '#associate_infants' do
-
-    # FIXME extend нужен для синтаксиса matcher.. вынести повыше?
-    extend RSpec::Matchers::DSL
-
-    # order_form.should have_associated( parent_last_name, infant_last_name)
-
-    matcher :have_associated do |parent_last_name, infant_last_name|
-      match do |order_form|
-        parent = order_form.adults.find{|a| a.last_name == parent_last_name}
-        parent.associated_infant && (parent.associated_infant.last_name == infant_last_name)
-      end
-    end
-
-    matcher :have_no_infants_associated do |parent_last_name|
-      match do |order_form|
-        parent = order_form.adults.find{|a| a.last_name == parent_last_name}
-        !parent.associated_infant
-      end
-    end
-
-    matcher :have_only_one_mommy do |infant_last_name|
-      match do |order_form|
-        parents = order_form.adults.select{|a| a.associated_infant.try(&:last_name) == infant_last_name}
-        parents.size == 1
-      end
-    end
-
-    matcher :have_no_infants_associated_to_infants do
-      match do |order_form|
-        order_form.infants.none?(&:associated_infant)
-      end
-    end
 
     subject do
       o = OrderForm.new(

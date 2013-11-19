@@ -122,8 +122,21 @@ class OrderForm
 
   def people_attributes= attrs
     @people ||= []
-    attrs.each do |k, person_attrs|
-      @people[k.to_i] = Person.new(person_attrs)
+    attrs.each do |k, pa|
+      pa['birthday'] = {
+        day: pa.delete('birthday_day'),
+        month: pa.delete('birthday_month'),
+        year: pa.delete('birthday_year')
+      } if pa['birthday_day']
+
+      pa['document_expiration'] = {
+        day: pa.delete('document_expiration_day'),
+        month: pa.delete('document_expiration_month'),
+        year: pa.delete('document_expiration_year')
+      } if pa['document_expiration_day'] && pa['document_noexpiration'] == '0'
+      end
+
+      @people[k.to_i] = Person.new(pa)
     end
   end
 
@@ -338,5 +351,6 @@ class OrderForm
     stem_length = [max_length - LONGEST_ENDING, SHORTEST_STEM].max
     first_name[0, stem_length] == second_name[0, stem_length]
   end
+
 end
 
