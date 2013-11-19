@@ -16,7 +16,7 @@ class Context
 
   # Partner, ассоциированный с текущим клиентом
   def partner
-    @partner
+    @partner || Partner.anonymous
   end
 
   # @param Код партнера или уже готовый партнер
@@ -25,14 +25,14 @@ class Context
     when Partner
       @partner = partner_or_code
     else
-      # FIXME я не помню, что делает Partner[] для несуществующих кодов
+      # Partner[] для несуществующих кодов возвращает Partner.anonymous
       @partner = Partner[partner_or_code]
     end
   end
 
   # @returns 'anonymous' для пустого партнера
   def partner_code
-    partner ? partner.token : 'anonymous'
+    partner.to_param
   end
 
   # @group Настройки и разрешения.
