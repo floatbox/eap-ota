@@ -261,8 +261,6 @@ class OrderForm
 
   # FIXME убрать внутрь Person
   def validate_people
-    people.each(&:set_birthday)
-    people.each(&:set_document_expiration)
     associate_infants
     set_childen_and_infants
     unless people.all?(&:valid?)
