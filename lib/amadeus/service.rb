@@ -69,6 +69,8 @@ module Amadeus
       debug "unixtime: #{Time.now.to_i}"
       begin
         super
+      rescue Curl::Err::CurlError, EOFError, Errno::ECONNRESET, SocketError
+        raise Amadeus::NetworkError
       rescue Handsoap::Fault => e
         # TODO проверить бэктрейс и оригинальное сообщение об ошибке
         raise Amadeus::SoapError.wrap(e)

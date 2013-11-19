@@ -2,7 +2,11 @@ module Amadeus
   class Error < StandardError
   end
 
-  class SoapError < StandardError
+  class NetworkError < Error
+    include ::Errors::Nested
+  end
+
+  class SoapError < Error
     include ::Errors::Nested
 
     def self.wrap(handsoap_error)
