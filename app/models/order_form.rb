@@ -134,7 +134,6 @@ class OrderForm
         month: pa.delete('document_expiration_month'),
         year: pa.delete('document_expiration_year')
       } if pa['document_expiration_day'] && pa['document_noexpiration'] == '0'
-      end
 
       @people[k.to_i] = Person.new(pa)
     end
