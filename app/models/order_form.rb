@@ -123,6 +123,7 @@ class OrderForm
   def people_attributes= attrs
     @people ||= []
     attrs.each do |k, pa|
+      # TODO убить, как только в логе пропадут birthday_day
       pa['birthday'] = {
         day: pa.delete('birthday_day'),
         month: pa.delete('birthday_month'),
