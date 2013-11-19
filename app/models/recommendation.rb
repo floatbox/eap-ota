@@ -146,9 +146,19 @@ class Recommendation
     segments.any?(&:layovers?)
   end
 
+  # Общая обертка для повторных проверок на этапе бронирования.
+  def allowed_booking?
+    !ignored_flights? && !ignored_carriers? && sellable?
+  end
+
   def sellable?
+    commission.sellable?
+  end
+
+  # TODO вынести в отдельный класс. Эти проверки должны вноситься из админки каким-то способом.
+  def ignored_flights?
     #FIXME Временный костыль, приходят рейсы выполняемые аэросвитом
-    return if flights.any? do |f|
+    flights.any? do |f|
       f.marketing_carrier_iata == 'PS' && (
         booking_class_for_flight(f) == 'T' ||
         # PS возможно закроется, избавляемся от новогодних возвратов
@@ -157,7 +167,6 @@ class Recommendation
            f.dept_date > Date.new(2014, 4, 30))
       )
     end
-    commission.sellable?
   end
 
   def ignored_carriers?

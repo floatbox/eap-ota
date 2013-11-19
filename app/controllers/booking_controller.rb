@@ -99,7 +99,7 @@ class BookingController < ApplicationController
     @order_form.recommendation.find_commission!
     @order_form.admin_user = admin_user
     @order_form.valid?
-    if @order_form.recommendation.sellable? && @order_form.update_price_and_counts
+    if @order_form.recommendation.allowed_booking? && @order_form.update_price_and_counts
       render :partial => 'newprice'
     else
       render :partial => 'failed_booking'

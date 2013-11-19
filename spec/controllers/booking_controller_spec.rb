@@ -29,7 +29,7 @@ describe BookingController do
         # stubbing preliminary_booking internal methods
         recommendation = Recommendation.new(:booking_classes => ['Y'])
         recommendation.stub(:find_commission!)
-        recommendation.stub(:sellable?).and_return(true)
+        recommendation.stub(:allowed_booking?).and_return(true)
         Recommendation.stub(:deserialize).and_return(recommendation)
         strategy = mock('Strategy', check_price_and_availability: nil).as_null_object
         Strategy.stub(:select).and_return(strategy)

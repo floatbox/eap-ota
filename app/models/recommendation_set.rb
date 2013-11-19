@@ -32,6 +32,7 @@ class RecommendationSet
       run :select_full_information!
       run :select_valid_interline!
       run :reject_ignored_carriers!
+      run :reject_ignored_flights!
       run :reject_ground!
       run :find_commission!
       run :select_sellable! unless opts[:admin_user]
@@ -62,6 +63,10 @@ class RecommendationSet
 
   def reject_ignored_carriers!
     @recs.reject! &:ignored_carriers?
+  end
+
+  def reject_ignored_flights!
+    @recs.reject! &:ignored_flights?
   end
 
   def reject_ground!

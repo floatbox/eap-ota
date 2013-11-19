@@ -6,7 +6,7 @@ module BookingEssentials
     @recommendation.find_commission!
 
     return unless recover_avia_search
-    return unless @recommendation.sellable?
+    return unless @recommendation.allowed_booking?
 
     track_partner(params[:partner], params[:marker])
     strategy = Strategy.select( :rec => @recommendation, :search => @search )
@@ -66,7 +66,7 @@ module BookingEssentials
     @order_form.people_attributes = params[:person_attributes]
     # Среагировать на изменение цены
     @order_form.recommendation.find_commission!
-    return :failed_booking unless @order_form.recommendation.sellable?
+    return :failed_booking unless @order_form.recommendation.allowed_booking?
     @order_form.admin_user = admin_user
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'

@@ -306,7 +306,7 @@ module PricerHelper
     # concat %( <a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe if recommendation.source == 'amadeus'
     concat 'Наземный участок ' if recommendation.ground?
     concat recommendation.validating_carrier_iata + ', '
-    if recommendation.sellable?
+    if recommendation.allowed_booking?
       concat %( тариф #{recommendation.price_fare.to_i})
       concat ", #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
       concat %( (FM #{recommendation.commission.agent}) #{recommendation.commission.subagent})
@@ -331,7 +331,7 @@ module PricerHelper
       concat 'Не можем продать '
       concat link_to(reason, check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
     else
-      concat 'не можем продать, дополнительные критерии в #sellable?'
+      concat 'не можем продать, дополнительные критерии в #allowed_booking?'
     end
     # concat ' (' + recommendation.booking_classes.join(',') + ')'
     concat " Мест: #{recommendation.availability}"
