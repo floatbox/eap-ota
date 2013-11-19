@@ -1,4 +1,3 @@
-<%# cache [:calendar, @query_key] do %>
 <% if @recommendations.present? %>
 
 <div class="rm-source" data-dates="<%= @search.segments.map{|fs| fs.date_for_render }.join(' ') %>">
@@ -60,4 +59,3 @@
 <% end %>
 
 <% end %>
-<%# end %>

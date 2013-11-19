@@ -104,9 +104,6 @@ update: function(data) {
 load: function() {
     var that = this;
     var data = {query_key: this.data.query_key};
-    if (this.data.fragment_exist) {
-        data.restore_results = true;
-    }
     this.getPriceTemplate();
     this.all.load('/pricer/', data, 150000);
     this.matrix.load('/calendar/', data, 75000);

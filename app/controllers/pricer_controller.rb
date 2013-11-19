@@ -65,9 +65,6 @@ class PricerController < ApplicationController
       unless @search && @search.valid?
         result[:errors] = ['parsing error']
       end
-      fragment_exist = fragment_exist?([:pricer, @query_key]) && fragment_exist?([:calendar, @query_key])
-      result[:fragment_exist] = fragment_exist
-      StatCounters.inc %W[validate.cached] if fragment_exist
     else
       @search = AviaSearch.from_js(params[:search])
       unless @search.valid?
