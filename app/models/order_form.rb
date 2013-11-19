@@ -122,7 +122,6 @@ class OrderForm
 
   def people_attributes= attrs
     @people ||= []
-    p attrs
     attrs.each do |k, pa|
       # пусть только OrderForm знает тонкости формата данных с морды,
       # Person об этом знать не нужно
