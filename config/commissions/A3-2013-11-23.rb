@@ -1,4 +1,30 @@
-carrier "A3"
+carrier "A3", start_date: "2013-11-23"
+
+rule 2 do
+ticketing_method "aviacenter"
+agent "15%"
+subagent "13%"
+agent_comment "На период с 23.11.13 по 31.12.13г. от всех опубл. тарифов (кроме тарифов по классу P, конфиде тарифов и тарифов, опубл. на момент действия распродаж) на собственные рейсы A3 между Россией и Грецией"
+agent_comment "15% для тарифов Бизнес класса"
+subagent_comment "13% для тарифов Бизнес класса"
+classes :business
+routes "RU-GR/ALL"
+example "svoath/business"
+example "svoath/business athsvo/business"
+end
+
+rule 1 do
+ticketing_method "aviacenter"
+agent "9%"
+subagent "7%"
+discount "10.5%"
+agent_comment "На период с 23.11.13 по 31.12.13г. от всех опубл. тарифов (кроме тарифов по классу P, конфиде тарифов и тарифов, опубл. на момент действия распродаж) на собственные рейсы A3 между Россией и Грецией"
+agent_comment "9% для тарифов Эконом класс"
+subagent_comment "(7%) для тарифов Эконом класс"
+routes "RU-GR/ALL"
+example "svoath"
+example "svoath athsvo"
+end
 
 rule 2 do
 ticketing_method "aviacenter"
