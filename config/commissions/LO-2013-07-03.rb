@@ -17,7 +17,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "1.5%"
+discount "8.5%"
 agent_comment "7%(5%)(5%) с вылетом из России только на дальне-магистральные маршруты Бизнес класса (Z/C/D) и Премиум эконом (A/P) (собств. рейсы LO  и совм. рейсы с а/к  SU); "
 subagent_comment "5%"
 interline :no, :yes
