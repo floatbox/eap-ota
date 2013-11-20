@@ -11,9 +11,7 @@ module Amadeus
   end
 
   cattr_accessor :pool do
-    Amadeus::Session::RedisStore
-    #Amadeus::Session::MongoStore
-    #Amadeus::Session::ARStore
+    Amadeus::Session::MongoStore
   end
 
   cattr_accessor :default_office do
