@@ -5,7 +5,6 @@
 # А о том, админ это, апи ли это и прочее - спрашивать только для логов и дебага.
 # FIXME подумать о взаимосвязи с Ability. может быть, это одно и то же.
 class Context
-
   include KeyValueInit
 
   # Текущий залогиненный в админку юзер
@@ -39,12 +38,12 @@ class Context
 
   # Сортировать рекомендации по цене.
   def pricer_sort?
-    ! robot
+    !robot
   end
 
   # Убирать неудобные, непродаваемые и т.п. рекомендации из выдачи.
   def pricer_filter?
-    ! deck_user
+    !deck_user
   end
 
   # FIXME Conf читать отсюда?
@@ -66,7 +65,6 @@ class Context
 
   # Искать рейсы в города в радиусе 200км от точек назначения.
   def pricer_search_around?
-    ! robot
+    !robot
   end
-
 end
