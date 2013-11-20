@@ -37,6 +37,7 @@ class RecommendationSet
       run :reject_ground! if context.pricer_filter?
       run :find_commission!
       run :select_sellable! if context.pricer_filter?
+      run :find_discount!
 
       # сортируем если ищем для морды
       run :sort! if context.pricer_sort?
@@ -94,6 +95,10 @@ class RecommendationSet
   # сейчас вызывается дополнительным проходом, вне mux
   def remove_unprofitable!(income_at_least)
     @recs.reject! {|r| r.income < income_at_least} if income_at_least
+  end
+
+  def find_discount!
+    @recs.each &:find_discount!
   end
 
   # объединяем эквивалентные варианты

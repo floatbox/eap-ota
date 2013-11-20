@@ -1,12 +1,23 @@
 module Pricing
   module Recommendation
 
+    include IncomeSuppliers
+
     attr_accessor :price_fare, :price_tax, :blank_count
 
-    delegate :subagent, :agent, :consolidator, :blanks, :discount, :our_markup, :ticketing_method, 
+    attr_accessor :discount_rule
+
+    delegate :subagent, :agent, :consolidator, :blanks, :ticketing_method, 
       :to => :commission, :prefix => :commission
 
-    include IncomeSuppliers
+    # временно делаю выставляемыми и в Commission::Rule и в Discount::Rule
+    def commission_discount
+      discount_rule.try(:discount) || commission.discount
+    end
+
+    def commission_our_markup
+      discount_rule.try(:our_markup) || commission.our_markup
+    end
 
     # FIXME работает для текущей схемы, считает что мы эквайринг не берем себе в общем случае
     def income
@@ -137,9 +148,14 @@ module Pricing
       Commission::Finder.new.cheap!(self, opts)
     end
 
+    def find_discount!(opts={})
+      Discount::Finder.new.find!(self, opts)
+    end
+
     # пытаемся избежать сохранения формул в order_forms_cache
     def reset_commission!
       @commission = nil
+      @discount_rule = nil
     end
 
   end
