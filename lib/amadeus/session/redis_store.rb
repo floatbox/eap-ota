@@ -30,6 +30,9 @@ module Amadeus
         RedisStore.push_free(token, seq, office)
       end
 
+      # затычка
+      def destroy
+      end
     end
 
     class RedisStore
@@ -46,6 +49,7 @@ module Amadeus
         :booked?, :booked=, :book,
         :session_id, :session_id=,
         :free?, :stale,
+        :destroy,
         to: :session
 
       def initialize(args = {})
@@ -142,10 +146,6 @@ module Amadeus
       # для тестов
       def save!
         RedisStore.push_free(token, seq, office)
-      end
-
-      # нужен только для housekeep => не нужен для RedisStore вообще
-      def destroy
       end
 
     end
