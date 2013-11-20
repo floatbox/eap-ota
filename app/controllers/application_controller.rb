@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
 
   def enforce_timeout
     # around_filter :enforce_timeout, only: [:pricer, :api]
-    Timeout.timeout(30, TimeoutError) do
+    Timeout.timeout(30) do
       yield
     end
   end
