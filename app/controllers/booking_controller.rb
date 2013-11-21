@@ -14,9 +14,9 @@ class BookingController < ApplicationController
   #   "partner"=>"yandex",
   #   "marker"=>"",
   def preliminary_booking
+    @context = Context.new(partner: params[:partner])
     @coded_search = params[:query_key]
-    @partner = Partner[params[:partner]]
-    logo_url = @partner.logo_exist? ? @partner.logo_url : ''
+    logo_url = @context.partner.logo_exist? ? @context.partner.logo_url : ''
     if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       render :json => {
         :success => true,
@@ -33,10 +33,10 @@ class BookingController < ApplicationController
   # Parameters:
   #   "query_key"=>"ki1kri"
   def api_booking
+    @context = Context.new(partner: params[:partner])
     @query_key = params[:query_key]
     # оставил в таком виде, чтобы не ломалось при рендере
     # если переделаем урлы и тут - заработает
-    @partner = Partner[params[:partner]]
     @search = AviaSearch.from_code(params[:query_key])
     unless @search && @search.valid?
       # необходимо очистить anchor вручную
@@ -88,7 +88,7 @@ class BookingController < ApplicationController
     if params[:iphone]
       render :partial => 'iphone'
     else
-      render :partial => 'embedded'  
+      render :partial => 'embedded'
     end
 
   end
