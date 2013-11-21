@@ -9,6 +9,7 @@ agent_comment "15% для тарифов Бизнес класса"
 subagent_comment "13% для тарифов Бизнес класса"
 classes :business
 routes "RU-GR/ALL"
+check %{ flights.first.dept_date > Date.new(2013, 11, 23) and flights.last.dept_date < Date.new(2014, 1, 1) and not includes(booking_classes, "P") }
 example "svoath/business"
 example "svoath/business athsvo/business"
 end
@@ -22,6 +23,7 @@ agent_comment "На период с 23.11.13 по 31.12.13г. от всех оп
 agent_comment "9% для тарифов Эконом класс"
 subagent_comment "(7%) для тарифов Эконом класс"
 routes "RU-GR/ALL"
+check %{ flights.first.dept_date > Date.new(2013, 11, 23) and flights.last.dept_date < Date.new(2014, 1, 1) and not includes(booking_classes, "P")}
 example "svoath"
 example "svoath athsvo"
 end
