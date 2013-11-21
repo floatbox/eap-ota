@@ -1,5 +1,17 @@
 carrier "TK", start_date: "2014-03-17"
 
+rule 2 do
+ticketing_method "aviacenter"
+agent "12%"
+subagent "10%"
+discount "13.5%"
+agent_comment "12% от тарифа Бизнес класса на рейсы TK с вылетом из РФ"
+subagent_comment "10% от тарифа Бизнес класса на рейсы TK"
+classes :business
+routes "RU..."
+example "svoist/business"
+end
+
 rule 1 do
 ticketing_method "aviacenter"
 agent "7%"
