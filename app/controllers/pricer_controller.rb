@@ -57,7 +57,7 @@ class PricerController < ApplicationController
   ensure
     StatCounters.inc %W[search.calendar.total]
   end
-  
+
   #FIXME сделать презентер
   include TranslationHelper
   def validate
@@ -96,7 +96,7 @@ class PricerController < ApplicationController
     end
     avia_search_hash = params.dup.delete_if {|key, value| %W[controller action format].include?(key)}
     @search = AviaSearch.simple(avia_search_hash)
-    
+
     StatCounters.inc %W[search.api.total search.api.#{@context.partner_code}.total]
 
     if @search.valid?
@@ -111,7 +111,7 @@ class PricerController < ApplicationController
         @destination.move_average_price @search, @recommendations.cheapest, @code
       end
 
-      Recommendation.remove_unprofitable!(@recommendations, Partner[partner].try(:income_at_least))
+      Recommendation.remove_unprofitable!(@recommendations, @context.partner.income_at_least)
 
       recommendations_total = @recommendations.size
       # измеряем после фильтрации
