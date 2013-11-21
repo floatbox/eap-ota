@@ -13,25 +13,25 @@ describe Context do
       build(:context).pricer_sort?.should == true
     end
     it do
-      build(:context, :admin_user).pricer_sort?.should == true
+      build(:context, :deck_user).pricer_sort?.should == true
     end
     it do
-      build(:context, :partner, :admin_user).pricer_sort?.should == true
+      build(:context, :partner, :deck_user).pricer_sort?.should == true
     end
     it do
-      build(:context, :robot, :admin_user).pricer_sort?.should == false
+      build(:context, :robot, :deck_user).pricer_sort?.should == false
     end
     it do
       build(:context, :robot).pricer_sort?.should == false
     end
     it do
-      build(:context, :robot, :partner, :admin_user).pricer_sort?.should == false
+      build(:context, :robot, :partner, :deck_user).pricer_sort?.should == false
     end
     it do
       build(:context, :robot, :partner).pricer_sort?.should == false
     end
     it do
-      build(:context, :robot, :admin_user, :disabled_partner).pricer_sort?.should == false
+      build(:context, :robot, :deck_user, :disabled_partner).pricer_sort?.should == false
     end
     it do
       build(:context, :robot, :disabled_partner).pricer_sort?.should == false
@@ -43,22 +43,22 @@ describe Context do
       build(:context).pricer_filter?.should == true
     end
     it do
-      build(:context, :admin_user).pricer_filter?.should == false
+      build(:context, :deck_user).pricer_filter?.should == false
     end
     it do
       build(:context, :partner).pricer_filter?.should == true
     end
     it do
-      build(:context, :admin_user, :partner).pricer_filter?.should == false
+      build(:context, :deck_user, :partner).pricer_filter?.should == false
     end
     it do
-      build(:context, :robot, :admin_user).pricer_filter?.should == false
+      build(:context, :robot, :deck_user).pricer_filter?.should == false
     end
     it do
       build(:context, :robot).pricer_filter?.should == true
     end
     it do
-      build(:context, :robot, :partner, :admin_user).pricer_filter?.should == false
+      build(:context, :robot, :partner, :deck_user).pricer_filter?.should == false
     end
     it do
       build(:context, :robot, :partner).pricer_filter?.should == true
@@ -78,7 +78,7 @@ describe Context do
         build(:context).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
       end
       it do
-        build(:context, :admin_user).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
+        build(:context, :deck_user).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
       end
       it do
         build(:context, :partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
@@ -87,13 +87,13 @@ describe Context do
         build(:context, :limited_partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
       end
       it do
-        build(:context, :admin_user, :partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
+        build(:context, :deck_user, :partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
       end
       it do
         build(:context, :robot).pricer_suggested_limit.should == Partner.anonymous.suggested_limit
       end
       it do
-        build(:context, :robot, :admin_user).pricer_suggested_limit.should == Partner.anonymous.suggested_limit
+        build(:context, :robot, :deck_user).pricer_suggested_limit.should == Partner.anonymous.suggested_limit
       end
       it do
         build(:context, :robot, :partner).pricer_suggested_limit.should == Partner.anonymous.suggested_limit
@@ -102,10 +102,10 @@ describe Context do
         build(:context, :robot, :limited_partner).pricer_suggested_limit.should == 20
       end
       it do
-        build(:context, :robot, :admin_user, :partner).pricer_suggested_limit.should == Partner.anonymous.suggested_limit
+        build(:context, :robot, :deck_user, :partner).pricer_suggested_limit.should == Partner.anonymous.suggested_limit
       end
       it do
-        build(:context, :robot, :admin_user, :limited_partner).pricer_suggested_limit.should == 20
+        build(:context, :robot, :deck_user, :limited_partner).pricer_suggested_limit.should == 20
       end
     end
 
@@ -118,7 +118,7 @@ describe Context do
         build(:context).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
       end
       it do
-        build(:context, :admin_user).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
+        build(:context, :deck_user).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
       end
       it do
         build(:context, :partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
@@ -127,13 +127,13 @@ describe Context do
         build(:context, :limited_partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
       end
       it do
-        build(:context, :admin_user, :partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
+        build(:context, :deck_user, :partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_full
       end
       it do
         build(:context, :robot).pricer_suggested_limit.should == Conf.amadeus.recommendations_lite
       end
       it do
-        build(:context, :robot, :admin_user).pricer_suggested_limit.should == Conf.amadeus.recommendations_lite
+        build(:context, :robot, :deck_user).pricer_suggested_limit.should == Conf.amadeus.recommendations_lite
       end
       it do
         build(:context, :robot, :partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_lite
@@ -142,10 +142,10 @@ describe Context do
         build(:context, :robot, :limited_partner).pricer_suggested_limit.should == 20
       end
       it do
-        build(:context, :robot, :admin_user, :partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_lite
+        build(:context, :robot, :deck_user, :partner).pricer_suggested_limit.should == Conf.amadeus.recommendations_lite
       end
       it do
-        build(:context, :robot, :admin_user, :limited_partner).pricer_suggested_limit.should == 20
+        build(:context, :robot, :deck_user, :limited_partner).pricer_suggested_limit.should == 20
       end
     end
   end

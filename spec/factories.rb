@@ -176,7 +176,7 @@ FactoryGirl.define do
     robot false
     partner FactoryGirl.build(:partner, :anonymous)
 
-    trait :admin_user do
+    trait :deck_user do
       deck_user Deck::User.new
     end
 
