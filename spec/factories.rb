@@ -172,12 +172,12 @@ FactoryGirl.define do
   end
 
   factory :context do
-    deck_user Deck::User.new
+    deck_user nil
     robot false
     partner FactoryGirl.build(:partner, :anonymous)
 
-    trait :no_user do
-      deck_user nil
+    trait :admin_user do
+      deck_user Deck::User.new
     end
 
     trait :robot do
