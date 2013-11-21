@@ -10,7 +10,6 @@ agent_comment "17% от тарифа Бизнес класса на рейсы T
 subagent_comment "15% от тарифа Бизнес класса на рейсы TK"
 classes :business
 routes "RU..."
-check %{ flights.first.dept_date > Date.new(2013, 11, 24) and flights.last.dept_date < Date.new(2014, 03, 16) }
 example "svoist/business"
 end
 
@@ -25,7 +24,7 @@ agent_comment "10% (8%) от тарифа Эконом класса (кроме 
 subagent_comment "8% от полного опубл. тарифа IATA (кроме классов G,W) на рейсы TK"
 subagent_comment "8% от тарифа Эконом класса (кроме классов G,W) на рейсы TK"
 routes "RU..."
-check %{ flights.first.dept_date > Date.new(2013, 11, 24) and flights.last.dept_date < Date.new(2014, 03, 16) and not includes(booking_classes, "G W") }
+check %{ not includes(booking_classes, "G W") }
 example "svoist istsvo"
 end
 
