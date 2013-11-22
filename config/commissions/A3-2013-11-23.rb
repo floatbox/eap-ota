@@ -1,6 +1,6 @@
 carrier "A3", start_date: "2013-11-23"
 
-rule 2 do
+rule 1 do
 ticketing_method "aviacenter"
 agent "15%"
 subagent "13%"
@@ -14,7 +14,7 @@ example "svoath/business"
 example "svoath/business athsvo/business"
 end
 
-rule 1 do
+rule 2 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -28,7 +28,7 @@ example "svoath"
 example "svoath athsvo"
 end
 
-rule 2 do
+rule 3 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -40,7 +40,7 @@ international
 example "svocdg/business cdgsvo/business"
 end
 
-rule 1 do
+rule 4 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -51,7 +51,7 @@ international
 example "scocdg cdgsvo"
 end
 
-rule 3 do
+rule 5 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
@@ -64,7 +64,7 @@ domestic
 example "skgath athskg/business"
 end
 
-rule 4 do
+rule 6 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0"
@@ -75,3 +75,4 @@ subagent_comment "Билеты по интерлайн соглашению мо
 interline :yes
 example "svocdg cdgsvo/ab"
 end
+

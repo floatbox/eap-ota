@@ -1,6 +1,6 @@
 carrier "TK", start_date: "2014-03-17"
 
-rule 2 do
+rule 1 do
 ticketing_method "aviacenter"
 agent "12%"
 subagent "10%"
@@ -12,7 +12,7 @@ routes "RU..."
 example "svoist/business"
 end
 
-rule 1 do
+rule 2 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"

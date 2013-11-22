@@ -1,6 +1,6 @@
 carrier "TK", start_date: "2013-11-25"
 
-rule 2 do
+rule 1 do
 ticketing_method "aviacenter"
 agent "17%"
 subagent "15%"
@@ -13,7 +13,7 @@ routes "RU..."
 example "svoist/business"
 end
 
-rule 1 do
+rule 2 do
 ticketing_method "aviacenter"
 agent "10%"
 subagent "8%"
@@ -28,7 +28,7 @@ check %{ not includes(booking_classes, "G W") }
 example "svoist istsvo"
 end
 
-rule 1 do
+rule 3 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -40,7 +40,7 @@ subagent_comment "5% от тарифа экономического класса
 example "istsvo svoist"
 end
 
-rule 3 do
+rule 4 do
 important!
 ticketing_method "aviacenter"
 agent "7%"
@@ -54,7 +54,7 @@ check %{ not includes(country_iatas.first, 'RU') and not includes_only(country_i
 example "miaist/business"
 end
 
-rule 4 do
+rule 5 do
 important!
 ticketing_method "aviacenter"
 agent "5%"
@@ -69,7 +69,7 @@ example "istank"
 example "istank/business"
 end
 
-rule 5 do
+rule 6 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"

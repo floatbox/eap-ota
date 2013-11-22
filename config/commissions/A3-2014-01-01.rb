@@ -1,6 +1,6 @@
 carrier "A3", start_date: "2014-01-01"
 
-rule 2 do
+rule 1 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -12,7 +12,7 @@ international
 example "svocdg/business cdgsvo/business"
 end
 
-rule 1 do
+rule 2 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -47,3 +47,4 @@ subagent_comment "Билеты по интерлайн соглашению мо
 interline :yes
 example "svocdg cdgsvo/ab"
 end
+
