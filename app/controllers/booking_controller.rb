@@ -151,8 +151,7 @@ class BookingController < ApplicationController
         logger.info "Pay: problem confirming 3ds"
         @error_message = :payment
       else
-        strategy = Strategy.select(:order => @order)
-        strategy.lax = @context.lax?
+        strategy = Strategy.select(order: @order, context: @context)
 
         if !strategy.delayed_ticketing?
           logger.info "Pay: ticketing"

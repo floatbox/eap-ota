@@ -99,7 +99,7 @@ module Amadeus::Strategy::Booking
           return :price_changed
         end
 
-        if !lax && !TimeChecker.ok_to_sell(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
+        if !context.lax? && !TimeChecker.ok_to_sell(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
           logger.error "Amadeus::Strategy: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
           dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
           amadeus.pnr_cancel_itinerary.or_fail!
