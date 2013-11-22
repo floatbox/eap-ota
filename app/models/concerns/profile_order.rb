@@ -5,7 +5,7 @@ module ProfileOrder
   extend ActiveSupport::Concern
 
   included do
-    scope :profile_orders, where(:source => 'amadeus').where("pnr_number != ''").where(:ticket_status => ['booked', 'ticketed']).order("departure_date DESC")
+    scope :profile_orders, where(:source => 'amadeus').where("pnr_number != ''").where(:ticket_status => ['booked', 'ticketed']).includes(:tickets, :payments).order("departure_date DESC")
   end
 
   def can_use? current_customer
@@ -82,12 +82,12 @@ module ProfileOrder
     if stored_flights.present?
       flights
     else
-      sold_tickets.present? ? sold_tickets.first.flights : []
+      profile_sold_tickets.present? ? profile_sold_tickets.first.flights : []
     end
   end
 
   def profile_booking_classes
-    sold_tickets.first.booking_classes
+    profile_sold_tickets.first.booking_classes
   end
 
   def profile_ticketed?
@@ -95,7 +95,7 @@ module ProfileOrder
   end
 
   def profile_sold_tickets_count
-    sold_tickets.count
+    profile_sold_tickets.count
   end
 
   def profile_stored?
@@ -107,12 +107,16 @@ module ProfileOrder
     if parents
       tickets.where(:kind=>'ticket').where('status <> "exchanged" OR id NOT IN ' + parents)
     else
-     tickets.where(:kind=>'ticket')
+      tickets.select{|t| t.kind == 'ticket'}
     end
   end
 
+  def profile_sold_tickets
+    tickets.select{|t| t.status == 'ticketed'}
+  end
+
   def profile_exchanged_tickets
-    tickets.where(:kind=>'ticket', :status =>'exchanged')
+    tickets.select{|t| t.kind == 'ticket' &&  t.status == 'exchanged'}
   end
 
   def profile_exchanged_tickets_numbers
