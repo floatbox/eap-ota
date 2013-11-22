@@ -14,7 +14,7 @@ class BookingController < ApplicationController
   #   "partner"=>"yandex",
   #   "marker"=>"",
   def preliminary_booking
-    @context = Context.new(partner: params[:partner])
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @coded_search = params[:query_key]
     logo_url = @context.partner.logo_exist? ? @context.partner.logo_url : ''
     if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
@@ -33,7 +33,7 @@ class BookingController < ApplicationController
   # Parameters:
   #   "query_key"=>"ki1kri"
   def api_booking
-    @context = Context.new(partner: params[:partner])
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @query_key = params[:query_key]
     # оставил в таком виде, чтобы не ломалось при рендере
     # если переделаем урлы и тут - заработает
@@ -133,6 +133,7 @@ class BookingController < ApplicationController
   # неподписанный респонс Payu
   def confirm_3ds
     @payment = Payment.find_3ds_by_backref!(params)
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
 
     @order = @payment.order
     if @order.ticket_status == 'canceled'
@@ -149,9 +150,9 @@ class BookingController < ApplicationController
         @error_message = :payment
       else
         strategy = Strategy.select(:order => @order)
-        strategy.lax = !!admin_user
+        strategy.lax = @context.lax?
 
-        if  !strategy.delayed_ticketing?
+        if !strategy.delayed_ticketing?
           logger.info "Pay: ticketing"
 
           unless strategy.ticket
