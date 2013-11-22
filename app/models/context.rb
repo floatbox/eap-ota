@@ -46,6 +46,11 @@ class Context
     !deck_user
   end
 
+  # Убирает временны'е ограничения при покупке билета
+  def lax?
+    !!deck_user
+  end
+
   # FIXME Conf читать отсюда?
   # Разрешить запрос рекомендаций из GDS
   def pricer_enabled?

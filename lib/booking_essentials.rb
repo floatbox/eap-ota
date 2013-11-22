@@ -5,12 +5,13 @@ module BookingEssentials
     @recommendation = Recommendation.deserialize(params[:recommendation])
     @recommendation.find_commission!
 
-    return unless recover_avia_search
+    @search = recover_avia_search
+    return unless @search
     return unless @recommendation.allowed_booking?
 
-    track_partner(params[:partner], params[:marker])
+    track_partner(@context.partner.token, params[:marker])
     strategy = Strategy.select( :rec => @recommendation, :search => @search )
-    strategy.lax = !!admin_user
+    strategy.lax = @context.lax?
 
     StatCounters.inc %W[enter.preliminary_booking.total]
     StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
@@ -40,21 +41,21 @@ module BookingEssentials
 
   def recover_avia_search
     if params[:query_key]
-      @search = AviaSearch.from_code(params[:query_key])
+      AviaSearch.from_code(params[:query_key])
     else
-      @search = AviaSearch.new
-      @search.adults = params[:adults] if params[:adults]
-      @search.children = params[:children] if params[:children]
-      @search.infants = params[:infants] if params[:infants]
-      @search.segments = @recommendation.segments.map do |s|
+      search = AviaSearch.new
+      search.adults = params[:adults] if params[:adults]
+      search.children = params[:children] if params[:children]
+      search.infants = params[:infants] if params[:infants]
+      search.segments = @recommendation.segments.map do |s|
         AviaSearchSegment.new(
           from: s.departure.city.iata,
           to: s.arrival.city.iata,
           date: s.departure_date
         )
       end
+      search
     end
-
   end
 
   def pay_result
@@ -93,7 +94,7 @@ module BookingEssentials
     end
 
     strategy = Strategy.select( :rec => @order_form.recommendation, :order_form => @order_form )
-    strategy.lax = !!admin_user
+    strategy.lax = @context.lax?
     booking_status = strategy.create_booking
 
     if booking_status == :failed

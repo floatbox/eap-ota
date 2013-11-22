@@ -68,6 +68,36 @@ describe Context do
     end
   end
 
+  describe "#lax?" do
+    it do
+      build(:context).lax?.should == false
+    end
+    it do
+      build(:context, :deck_user).lax?.should == true
+    end
+    it do
+      build(:context, :partner).lax?.should == false
+    end
+    it do
+      build(:context, :deck_user, :partner).lax?.should == true
+    end
+    it do
+      build(:context, :robot, :deck_user).lax?.should == true
+    end
+    it do
+      build(:context, :robot).lax?.should == false
+    end
+    it do
+      build(:context, :robot, :partner, :deck_user).lax?.should == true
+    end
+    it do
+      build(:context, :robot, :partner).lax?.should == false
+    end
+    it do
+      build(:context, :robot, :disabled_partner).lax?.should == false
+    end
+  end
+
   describe "#pricer_suggested_limit" do
     before do
       Partner.anonymous.update_attribute :suggested_limit, 77
