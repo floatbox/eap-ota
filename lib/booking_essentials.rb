@@ -68,7 +68,7 @@ module BookingEssentials
     # Среагировать на изменение цены
     @order_form.recommendation.find_commission!
     return :failed_booking unless @order_form.recommendation.allowed_booking?
-    @order_form.admin_user = admin_user
+    @order_form.context = @context
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
 

@@ -358,8 +358,5 @@ describe OrderForm do
     end
 
     its(:calculated_people_count) {should == {:adults => 2, :children => 2, :infants => 2}}
-
   end
-
-
 end

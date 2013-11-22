@@ -78,11 +78,12 @@ class BookingController < ApplicationController
   end
 
   def index
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @order_form = OrderForm.load_from_cache(params[:number])
     # Среагировать на изменение продаваемости/цены
     @order_form.recommendation.find_commission!
     @order_form.init_people
-    @order_form.admin_user = admin_user
+    @order_form.context = @context
     @search = AviaSearch.from_code(@order_form.query_key)
 
     if params[:iphone]
@@ -94,10 +95,11 @@ class BookingController < ApplicationController
   end
 
   def recalculate_price
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @order_form = OrderForm.load_from_cache(params[:order][:number])
     @order_form.people_attributes = params[:person_attributes]
     @order_form.recommendation.find_commission!
-    @order_form.admin_user = admin_user
+    @order_form.context = @context
     @order_form.valid?
     if @order_form.recommendation.allowed_booking? && @order_form.update_price_and_counts
       render :partial => 'newprice'
@@ -107,7 +109,7 @@ class BookingController < ApplicationController
   end
 
   def pay
-
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     case pay_result
     when :forbidden_sale
       render :partial => 'forbidden_sale'

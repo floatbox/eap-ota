@@ -13,6 +13,9 @@ class Context
   # Запрос из API?
   attr_accessor :robot
 
+  # Текущая конфигурация
+  attr_accessor :config
+
   # Partner, ассоциированный с текущим клиентом
   def partner
     @partner || Partner.anonymous
@@ -32,6 +35,10 @@ class Context
   # @returns 'anonymous' для пустого партнера
   def partner_code
     partner.to_param
+  end
+
+  def config
+    @config ||= Conf
   end
 
   # @group Настройки и разрешения.
@@ -71,5 +78,20 @@ class Context
   # Искать рейсы в города в радиусе 200км от точек назначения.
   def pricer_search_around?
     !robot
+  end
+
+  def enabled_delayed_payment?
+    return true if deck_user
+    enabled_delivery? || enabled_cash?
+  end
+
+  def enabled_delivery?
+    return true if deck_user
+    !config.site.forbidden_delivery
+  end
+
+  def enabled_cash?
+    return true if deck_user
+    !config.site.forbidden_cash
   end
 end
