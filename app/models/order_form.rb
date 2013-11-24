@@ -123,19 +123,6 @@ class OrderForm
   def people_attributes= attrs
     @people ||= []
     attrs.each do |k, pa|
-      # TODO убить, как только в логе пропадут birthday_day
-      pa['birthday'] = {
-        day: pa.delete('birthday_day'),
-        month: pa.delete('birthday_month'),
-        year: pa.delete('birthday_year')
-      } if pa['birthday_day']
-
-      pa['document_expiration'] = {
-        day: pa.delete('document_expiration_day'),
-        month: pa.delete('document_expiration_month'),
-        year: pa.delete('document_expiration_year')
-      } if pa['document_expiration_day'] && pa['document_noexpiration'] == '0'
-
       @people[k.to_i] = Person.new(pa)
     end
   end
