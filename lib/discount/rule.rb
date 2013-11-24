@@ -3,8 +3,9 @@
 # скидочное правило.
 class Discount::Rule
 
-  include KeyValueInit
   extend Commission::Attrs
+  include KeyValueInit
+  include Commission::Fx
 
   # формула для расчета нашей надбавки к стоимости
   # @return [Commission::Formula]
@@ -13,5 +14,22 @@ class Discount::Rule
   # формула для расчета скидки, считается на основе тарифа
   # @return [Commission::Formula]
   has_commission_attrs :discount
+
+  def initialize(*)
+    @discount = Fx(0)
+    @our_markup = Fx(0)
+    super
+  end
+
+  # учитывая, что у нас обычно ЛИБО скидка, ЛИБО надбавка, делаю шорткат
+  def total= commission
+    if commission < Fx(0)
+      @discount = -commission
+      @our_markup = Fx(0)
+    else
+      @discount = Fx(0)
+      @our_markup = commission
+    end
+  end
 
 end
