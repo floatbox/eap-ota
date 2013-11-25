@@ -3,6 +3,7 @@ class PricerController < ApplicationController
   layout false
 
   before_filter :parse_and_validate_url, :only => [:pricer, :calendar]
+  around_filter :enforce_timeout, only: [:pricer, :api]
 
   include Monitoring::Benchmarkable
 
@@ -136,6 +137,8 @@ class PricerController < ApplicationController
     render 'api/error', :status => 404, :locals => {:message => iata_error.message}
   rescue ArgumentError => argument_error
     render 'api/error', :status => 400, :locals => {:message => argument_error.message}
+  rescue Timeout::Error, ActiveRecord::StatementInvalid => e
+    render 'api/error', :status => 500, :locals => {:message => 'Execution expired'}
   end
 
   protected

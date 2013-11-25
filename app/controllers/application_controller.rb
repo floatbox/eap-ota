@@ -40,9 +40,15 @@ class ApplicationController < ActionController::Base
     root_path
   end
 
+  def enforce_timeout
+    # around_filter :enforce_timeout, only: [:pricer, :api]
+    Timeout.timeout(30) do
+      yield
+    end
+  end
+
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
   end
-
 end
 
