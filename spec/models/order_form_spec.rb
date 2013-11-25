@@ -219,15 +219,19 @@ describe OrderForm do
       {
         "0" => {
           "document_noexpiration" => "0",
-          "birthday_year" => "1984",
-          "birthday_month" => "06",
-          "birthday_day" => "16",
+          "birthday" => {
+            "year" => "1984",
+            "month" => "06",
+            "day" => "16"
+          },
           "nationality_code" => "RUS",
           #"bonuscard_type" => "[FILTERED]",
           #"bonuscard_number" => "[FILTERED]",
-          "document_expiration_year" => "2014",
-          "document_expiration_month" => "09",
-          "document_expiration_day" => "08",
+          "document_expiration" => {
+            "year" => "2014",
+            "month" => "09",
+            "day" => "08"
+          },
           "sex" => "m",
           "last_name" => "IVASHKIN",
           "bonus_present" => "0",
@@ -236,9 +240,11 @@ describe OrderForm do
         },
         "1" => {
           "document_noexpiration" => "1",
-          "birthday_year" => "1985",
-          "birthday_month" => "09",
-          "birthday_day" => "04",
+          "birthday" => {
+            "year" => "1985",
+            "month" => "09",
+            "day" => "04"
+          },
           "nationality_code" => "RUS",
           "sex" => "f",
           "last_name" => "IVASHKINA",
