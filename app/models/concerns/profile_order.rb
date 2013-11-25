@@ -60,8 +60,9 @@ module ProfileOrder
   end
 
   def profile_payment_price
-    if payments.charges.secured.first
-      payments.charges.secured.first.price.round.to_i
+    payments_first = payments.charges.secured.first
+    if payments_first
+      payments_first.price.round.to_i
     else
       price_with_payment_commission.round.to_i
     end
@@ -79,10 +80,11 @@ module ProfileOrder
   end
 
   def profile_flights
+    return @profile_flights if @profile_flights.present?
     if stored_flights.present?
-      flights
+      @profile_flights = flights
     else
-      profile_sold_tickets.present? ? profile_sold_tickets.first.flights : []
+      @profile_flights = profile_sold_tickets.present? ? profile_sold_tickets.first.flights : []
     end
   end
 
@@ -112,11 +114,11 @@ module ProfileOrder
   end
 
   def profile_sold_tickets
-    tickets.select{|t| t.status == 'ticketed'}
+    @profile_sold_tickets ||= tickets.select{|t| t.status == 'ticketed'}
   end
 
   def profile_exchanged_tickets
-    tickets.select{|t| t.kind == 'ticket' &&  t.status == 'exchanged'}
+    @profile_exchanged_tickets ||= tickets.select{|t| t.kind == 'ticket' &&  t.status == 'exchanged'}
   end
 
   def profile_exchanged_tickets_numbers
@@ -124,8 +126,8 @@ module ProfileOrder
   end
 
   def profile_ticket_parents
-    ids = tickets.pluck(:parent_id).compact
-    !ids.empty? ? '(' + ids.compact.join(',') + ')' : nil
+    ids = tickets.collect{|t| t.parent_id}.compact
+    !ids.empty? ? '(' + ids.join(',') + ')' : nil
   end
 
   def profile_departure_date
