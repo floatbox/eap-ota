@@ -91,7 +91,9 @@ module Commission::Rule::Matching
   def applicable_routes? recommendation
     return true unless routes
     route = recommendation.route
-    compiled_routes.any? {|routex| routex === route }
+    ( compiled_positive_routes.empty? ||
+      compiled_positive_routes.any? {|routex| routex === route }
+    ) && compiled_negative_routes.none? {|routex| routex === route }
   end
 
 end
