@@ -256,7 +256,7 @@ describe OrderForm do
 
     let(:order) do
       order = OrderForm.new
-      order.people_attributes = person_attributes
+      order.persons = person_attributes
       order
     end
 

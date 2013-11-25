@@ -120,7 +120,7 @@ class OrderForm
     potential_infants - associated_infants
   end
 
-  def people_attributes= attrs
+  def persons= attrs
     @people ||= []
     attrs.each do |k, pa|
       @people[k.to_i] = Person.new(pa)
