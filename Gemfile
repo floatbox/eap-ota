@@ -77,7 +77,7 @@ gem 'newrelic_rpm'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
-gem "devise", "~> 2.2.6"
+gem "devise", "~> 2.2.8"
 gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
 gem 'sendgrid'
 
