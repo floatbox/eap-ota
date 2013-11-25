@@ -154,6 +154,13 @@
                 <input type="checkbox" id="bffa-check" checked="checked">
                 <%= raw t 'booking.buy.agree' %>
             </div>
+            <% if @search.rt && long_trip(recommendation.variants.first) %>
+            <div class="bff-longtrip">
+                <p><%= raw t 'booking.longtrip.attention', :days => content_tag(:strong, trip_duration(recommendation.variants.first)), :date1 => human_date(recommendation.variants.first.segments.first.departure_date), :date2 => human_date(recommendation.variants.first.segments.last.departure_date) %></p>
+                <p><%= t 'booking.longtrip.right' %></p>
+                <p><%= raw t 'booking.longtrip.wrong', :new_search => content_tag(:span, t('booking.longtrip.new_search'), :class => 'bfflt-search') %></p>                
+            </div>
+            <% end %>
             <div class="bff-submit">
                 <div class="bf-button">
                     <div class="bfb-title"><%= t 'booking.buy.button' %></div>
