@@ -97,7 +97,8 @@ class BookingController < ApplicationController
   def recalculate_price
     @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @order_form = OrderForm.load_from_cache(params[:order][:number])
-    @order_form.people_attributes = params[:person_attributes]
+    # FIXME убрать person_attributes, когда перестанут передавать
+    @order_form.persons = params[:persons] || params[:person_attributes]
     @order_form.recommendation.find_commission!
     @order_form.context = @context
     @order_form.valid?
