@@ -38,6 +38,13 @@ Eviterra::Application.routes.draw do
     # предложения по неймспейсу?
     post 'v1/orders' => 'api_booking#create'
     post 'v1/orders/:id' => 'api_booking#update'
+
+    # FIXME попробовать resources? но как научить принимать post на update?
+    get 'v2/orders(.:format)' => 'api_orders#index'
+    post 'v2/orders(.:format)' => 'api_orders#create'
+    get 'v2/orders/:id(.:format)' => 'api_orders#show'
+    match 'v2/orders/:id(.:format)' => 'api_orders#update', via: [:post, :patch]
+
     match '*anything' => redirect('/')
   end
 
