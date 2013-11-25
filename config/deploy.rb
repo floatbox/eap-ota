@@ -56,6 +56,15 @@ ssh_options[:forward_agent] = true
 
 set :application, "eviterra"
 
+task :demo do
+load 'lib/recipes/unicorn'
+  set :rails_env, 'demo'
+  role :app, 'vm12.eviterra.com'
+  role :web, 'vm12.eviterra.com'
+  role :db, 'vm12.eviterra.com', :primary => true
+  role :daemons, 'vm12.eviterra.com'
+end
+
 task :staging do
 load 'lib/recipes/unicorn'
   set :rails_env, 'staging'
