@@ -251,7 +251,7 @@ class OrderForm
   def update_price_and_counts
     search = AviaSearch.from_code(query_key)
     search.people_count = calculated_people_count
-    strategy = Strategy.select( :rec => recommendation, :search => search )
+    strategy = Strategy.select( :rec => recommendation, :search => search, :context => context )
     if strategy.check_price_and_availability
       self.people_count = search.people_count
       self.price_with_payment_commission = recommendation.price_with_payment_commission
