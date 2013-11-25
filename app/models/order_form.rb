@@ -56,7 +56,7 @@ class OrderForm
   # разрешает сделать бронирование с оплатой потом.
   def allowed_delayed_payment?
     return false unless context.enabled_delayed_payment?
-    !!last_pay_time
+    context.lax? || !!last_pay_time
   end
   delegate :enabled_delivery?, :enabled_cash?, to: :context
 
