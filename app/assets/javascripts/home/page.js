@@ -19,7 +19,8 @@ init: function() {
     } else if (this.location.search === 'login') {
         search.map.resize();
         User.el.show();
-        User.show('authorization');        
+        User.show('authorization');
+        User.resetOnHide = true;
         this.loadLocation();
     } else if (this.location.search.indexOf('confirmation_token') == 0) {
         this.showConfirmationForm();
@@ -59,6 +60,7 @@ loadLocation: function() {
 },
 showConfirmationForm: function() {
     User.el.show();
+    User.resetOnHide = true;
     var token = this.location.search.replace('confirmation_token=', '');
     $.ajax({
         method: 'GET',
@@ -84,6 +86,7 @@ showConfirmationForm: function() {
 },
 showPasswordForm: function() {
     User.el.show();
+    User.resetOnHide = true;
     var token = this.location.search.replace('reset_password_token=', '');
     User.password.el.find('.phus-title').css('margin-bottom', '13px');
     User.password.el.find('.phupp-profile').hide();
@@ -122,7 +125,7 @@ reset: function() {
     setTimeout(function() {
         search.waitRequests();
     }, 350);
-    search.mode.values.show();
+    //search.mode.values.show();
     search.locations.focusEmpty();
 },
 showData: function(data) {

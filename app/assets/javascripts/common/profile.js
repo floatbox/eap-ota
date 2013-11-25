@@ -68,6 +68,10 @@ hide: function() {
     this.fade.hide();    
     $w.off('click keydown', this._hide);
     search.overlayed = false;
+    if (this.resetOnHide) {
+        this.resetOnHide = false;
+        page.reset();
+    }
 },
 };
 
