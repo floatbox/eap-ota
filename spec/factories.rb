@@ -154,4 +154,46 @@ FactoryGirl.define do
     end
   end
 
+  factory :partner do
+    enabled true
+    token '1234'
+
+    trait :disabled do
+      enabled false
+    end
+
+    trait :anonymous do
+      token ''
+    end
+
+    trait :limit_20 do
+      suggested_limit 20
+    end
+  end
+
+  factory :context do
+    deck_user nil
+    robot false
+    partner FactoryGirl.build(:partner, :anonymous)
+
+    trait :deck_user do
+      deck_user Deck::User.new
+    end
+
+    trait :robot do
+      robot true
+    end
+
+    trait :partner do
+      partner FactoryGirl.build(:partner)
+    end
+
+    trait :disabled_partner do
+      partner FactoryGirl.build(:partner, :disabled)
+    end
+
+    trait :limited_partner do
+      partner FactoryGirl.build(:partner, :limit_20)
+    end
+  end
 end

@@ -28,20 +28,21 @@ class RecommendationSet
   end
 
   def process!(opts = {})
+    context = opts[:context] or raise ArgumentError, "needs context"
     benchmark 'RecommendationSet: process!, total', level: :info do
       run :select_full_information!
       run :select_valid_interline!
-      run :reject_ignored_carriers!
-      run :reject_ignored_flights!
-      run :reject_ground!
+      run :reject_ignored_carriers! if context.pricer_filter?
+      run :reject_ignored_flights! if context.pricer_filter?
+      run :reject_ground! if context.pricer_filter?
       run :find_commission!
-      run :select_sellable! unless opts[:admin_user]
+      run :select_sellable! if context.pricer_filter?
 
       # сортируем если ищем для морды
-      run :sort! unless opts[:lite]
+      run :sort! if context.pricer_sort?
       # Выключил, потому что сейчас всегда один поиск.
       # Поиски по нескольким офисам надо будет группировать другим способом.
-      # run :group! unless opts[:lite]
+      # run :group! if context.pricer_sort?
       run :clear_variants!
     end
   end

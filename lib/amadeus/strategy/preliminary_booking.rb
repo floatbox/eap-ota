@@ -3,7 +3,7 @@ module Amadeus::Strategy::PreliminaryBooking
   CABINS_MAPPING = {'M' => 'E', 'W' => 'E', 'Y' => 'E', 'C' => 'B', 'F' => 'F'}
 
   def check_price_and_availability(forbid_class_changing = Conf.amadeus.forbid_class_changing)
-    if !lax && !TimeChecker.ok_to_book(@rec.dept_date + 1.day)
+    if !context.lax? && !TimeChecker.ok_to_book(@rec.dept_date + 1.day)
       logger.error 'Amadeus::Strategy::Check: time criteria missed'
       return
     end
@@ -22,7 +22,7 @@ module Amadeus::Strategy::PreliminaryBooking
       # amadeus.pnr_ignore
 
     end
-    if !lax && !TimeChecker.ok_to_book(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
+    if !context.lax? && !TimeChecker.ok_to_book(@rec.journey.departure_datetime_utc, @rec.last_tkt_date)
       logger.error "Amadeus::Strategy::Check: time criteria for last tkt date missed: #{@rec.last_tkt_date}"
       dropped_recommendations_logger.info "recommendation: #{@rec.serialize} price_total: #{@rec.price_total} #{Time.now.strftime("%H:%M %d.%m.%Y")}"
       return

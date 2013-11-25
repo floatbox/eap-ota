@@ -25,7 +25,7 @@ class OrderForm
   attr_accessor :number
   attr_accessor :order # то, что сохраняется в базу
   # Снимает ограничения на бронирование. Параметр не сохраняется в кэш.
-  attr_accessor :admin_user
+  attr_accessor :context
   attr_reader :show_vat, :vat_included
 
   delegate :last_tkt_date, :to => :recommendation
@@ -54,21 +54,11 @@ class OrderForm
   end
 
   # разрешает сделать бронирование с оплатой потом.
-  def enabled_delayed_payment?
-    admin_user ||
-      (enabled_delivery? || enabled_cash?) && last_pay_time
+  def allowed_delayed_payment?
+    return false unless context.enabled_delayed_payment?
+    !!last_pay_time
   end
-
-  # возможна доставка
-  def enabled_delivery?
-    ! Conf.site.forbidden_delivery
-  end
-
-  # возможна оплата наличными
-  def enabled_cash?
-    admin_user ||
-      ! Conf.site.forbidden_cash
-  end
+  delegate :enabled_delivery?, :enabled_cash?, to: :context
 
   def tk_xl
     dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.journey.departure_datetime_utc) - 1.hour
@@ -99,7 +89,7 @@ class OrderForm
   end
 
   #дети до 2-х лет, без явно указанного места
-  def  potential_infants
+  def potential_infants
     people.find_all{|p| p.potential_infant?(last_flight_date) }
   end
 
@@ -231,19 +221,21 @@ class OrderForm
     people_count[:adults] + people_count[:children]
   end
 
-  validate :validate_card, :validate_dept_date, :validate_people
+  validate :validate_card, if: ->{payment_type == 'card'}
+  validate :validate_dept_date, if: ->{!context.lax? && recommendation.source == 'amadeus'}
+  validate :validate_people
 
   def validate_dept_date
-    return if admin_user
-    if recommendation.source == 'amadeus'
-      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.journey.departure_datetime_utc, recommendation.last_tkt_date)
+    if !TimeChecker.ok_to_sell(recommendation.journey.departure_datetime_utc, recommendation.last_tkt_date)
+      errors.add :recommendation, 'Первый вылет слишком рано'
     end
   end
 
   def validate_card
-    if payment_type == 'card'
-      errors.add :card, 'Отсутствуют данные карты' unless card
-      errors.add :card, 'Некорректные данные карты' if card && !card.valid?
+    if card
+      errors.add :card, 'Некорректные данные карты' unless card.valid?
+    else
+      errors.add :card, 'Отсутствуют данные карты'
     end
   end
 
@@ -297,7 +289,6 @@ class OrderForm
   def validating_carrier
     recommendation.validating_carrier.iata
   end
-
 
   def full_info
     res = ''
