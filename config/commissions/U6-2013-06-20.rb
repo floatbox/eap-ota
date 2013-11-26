@@ -93,8 +93,10 @@ subagent "3%"
 discount "7%"
 agent_comment "Самара-Душанбе-Самара повысили вознаграждение до 5% (3%) (т.е. исключили из Группы  А)."
 subagent_comment "Самара-Душанбе-Самара повысили вознаграждение до 5% (3%) (т.е. исключили из Группы  А)."
-routes "KUF-DYU/OW,RT"
+routes "KUF,UFA-DYU/OW,RT", "UFA,KUF-LBD/OW,RT"
 example "kufdyu"
+example "ufalbd lbdufa"
+example "kuflbd"
 end
 
 rule 9 do
@@ -109,10 +111,9 @@ agent_comment "в размере 0,1%:"
 agent_comment "*от суммы тарифов (опубликованных в АСБ) по маршрутам:"
 agent_comment "*за каждый взятый с пассажира штраф при оформлении возврата или обмена авиабилетов с взиманием штрафных санкций;"
 subagent_comment "c 01.04.2013 г. 50 коп с билета по маршрутам:"
-routes "MOW-KGD,KZN,UFA,LED,KUF,GOJ,KRR,AER,AAQ,GBB,BAK,GDZ,KVD,LLK,SIP,MRV/ALL", "SVX-AER,KZN,SIP,KUF,YKS,HTA,AAQ,UFA,GDZ,EVN,KHV,VVO,KRR,KJZ,PKC,BAK,TBS/ALL", "LED-LWN,LLK,VVO,IKT,KHV,YKS/ALL", "KUF-AAQ/ALL", "KUF-AER/ALL", "KUF-LBD/ALL", "CEK-GOJ,TAS/ALL", "UFA-LBD,DYU/ALL", "KJA-IKT,MRV/ALL", "MRV-AER/ALL", "SIP-GOJ/ALL", "EVN-GOJ/ALL", "KRR-VVO,OVB/ALL", "GOJ-TAS,SIP,NMA/ALL", "IKT-PKC/ALL"
+routes "MOW-KGD,KZN,UFA,LED,KUF,GOJ,KRR,AER,AAQ,GBB,BAK,GDZ,KVD,LLK,SIP,MRV/ALL", "SVX-AER,KZN,SIP,KUF,YKS,HTA,AAQ,UFA,GDZ,EVN,KHV,VVO,KRR,KJZ,PKC,BAK,TBS/ALL", "LED-LWN,LLK,VVO,IKT,KHV,YKS/ALL", "KUF-AAQ/ALL", "KUF-AER/ALL", "CEK-GOJ,TAS/ALL", "KJA-IKT,MRV/ALL", "MRV-AER/ALL", "SIP-GOJ/ALL", "EVN-GOJ/ALL", "KRR-VVO,OVB/ALL", "GOJ-TAS,SIP,NMA/ALL", "IKT-PKC/ALL"
 example "ledllk"
 example "svokzn"
-example "kuflbd"
 example "krrovb"
 end
 
