@@ -28,7 +28,7 @@ Eviterra::Application.routes.draw do
   match 'pricer/pricer_benchmark' => 'pricer#pricer_benchmark', :as => :pricer_pricer_benchmark
 
   # in development: use 'api.lvh.me:3000' or modify your /etc/hosts
-  constraints subdomain: /^api(?:\.staging)?$/ do
+  constraints subdomain: /^#{Conf.api.constraint}$/ do
     root to: 'api_home#index'
     match 'status' => 'home#status'
     match 'avia/form' => 'booking#api_form'
