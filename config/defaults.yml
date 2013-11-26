@@ -4,6 +4,7 @@ site:
   forbidden_sale: no
   forbidden_cash: no
   forbidden_delivery: no
+  enforce_timeout: no
   store_flights: no
   host: 'localhost:3000'
   ssl: no
@@ -11,9 +12,11 @@ site:
   production:
     host: 'eviterra.com'
     ssl: yes
+    enforce_timeout: yes
   staging:
     host: 'staging.eviterra.com'
     ssl: yes
+    enforce_timeout: yes
   test:
     host: 'localhost:3000'
   auto_ticketing:
