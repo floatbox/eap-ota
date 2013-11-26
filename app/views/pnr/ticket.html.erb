@@ -39,6 +39,7 @@
 <tr>
     <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
 </tr>
+<% unless @lang %>
 <tr>
     <td colspan="3">Проверяйте необходимость наличия у&nbsp;пассажиров виз и&nbsp;иных документов, требующихся согласно законодательству страны пункта назначения и&nbsp;пунктов пересадки.</td>
     <td><br></td>
@@ -47,6 +48,7 @@
 <tr>
     <td colspan="7" style="font-size: 10px; line-height: 10px;"><br></td>
 </tr>
+<% end %>
 <tr>
     <td colspan="3">Please make sure that passengers possess all necessary travel documents and visas needed to&nbsp;enter the&nbsp;destination country or to&nbsp;complete connections during the&nbsp;flight.</td>
     <td><br></td>
@@ -100,13 +102,15 @@
 </tr>
 <tr valign="bottom">
     <td style="font-weight: bold; font-size: 16px; line-height: 20px; color: #F90A6F;">
-        Желаем приятного полета с <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a><br>
+        <% unless @lang %>Желаем приятного полета с <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a><br><% end %>
         Have a nice flight with <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a>
     </td>
 </tr>
 </table>
 <%= render :partial => 'pnr/rules' %><br>
+<% unless @lang %>
 <div style="width: 916px; font-size: 13px; line-height: 15px; font-family: Arial, sans-serif; color: #777777;">
 Согласно письму Министерства финансов России № 03–03–06/1/717 от 11.10.2007 данная маршрутная квитанция и посадочный талон
 являются достаточными документами для предоставления отчетности в бухгалтерию по месту работы, если это требуется.
 </div>
+<% end %>
