@@ -57,10 +57,19 @@ module Amadeus
 
       def shift_date(departure_date, departure_time, arrival_time, date_variation, stops)
         # по каким-то странным причинам сдвиг назад по дате передается без знака. эвристика против мистики!
-        if date_variation == 1 && stops == 0 && (departure_time < arrival_time)
-          date_variation = -date_variation
+        if date_variation == 1 && stops == 0
+          time_delta = parse_time(arrival_time) - parse_time(departure_time)
+          if time_delta > 2.hours
+            date_variation = -date_variation
+          elsif 0 < time_delta && time_delta < 2.hours
+            date_variation = 0
+          end
         end
         (DateTime.strptime( departure_date, '%d%m%y' ) + date_variation.days).strftime('%d%m%y')
+      end
+
+      def parse_time time
+        Time.strptime time, '%H%M'
       end
 
     end

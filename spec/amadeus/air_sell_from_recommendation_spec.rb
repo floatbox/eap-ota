@@ -16,6 +16,9 @@ describe Amadeus::Response::AirSellFromRecommendation, :amadeus do
     it "should treat long flight without stops as backward date shift (TYO-HNL)" do
               subject.send( :shift_date, '140312', '0030', '1240', 1, 0).should == '130312'
     end
+    it "should treat long flights without stops and with small time delta as same day (LAX—MOW)" do
+              subject.send( :shift_date, '150214', '1545', '1605', 1, 0).should == '150214'
+    end
   end
 
   describe 'when arrival is "before" departure because of timezones' do
