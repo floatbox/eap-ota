@@ -27,7 +27,7 @@ api:
   url_base: 'https://eviterra.com'
   passwords: {}
   demo:
-    constraint: ''
+    constraint: 'api-demo'
   production:
     constraint: 'api'
   development:
