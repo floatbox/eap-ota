@@ -1,5 +1,4 @@
 # копипаста из Nesty::NestedError,
-# с поправкой на парсер airbrake-а
 module Errors
   module Nested
     attr_reader :nested, :raw_backtrace

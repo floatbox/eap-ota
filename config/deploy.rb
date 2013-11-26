@@ -221,7 +221,7 @@ task :config do
 end
 
 
-# airbrake stuff
 require './config/boot'
-require 'airbrake/capistrano'
+require 'rollbar/capistrano'
+set :rollbar_token, 'b810757b1a234503a1611a223d097ad4'
 require 'new_relic/recipes'
