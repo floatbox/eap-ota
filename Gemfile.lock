@@ -143,7 +143,7 @@ GEM
       delayed_job (~> 3.0)
       mongoid (~> 3.0)
     descendants_tracker (0.0.3)
-    devise (2.2.7)
+    devise (2.2.8)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (~> 3.1)
@@ -432,7 +432,7 @@ DEPENDENCIES
   daemons
   database_cleaner
   delayed_job_mongoid
-  devise (~> 2.2.6)
+  devise (~> 2.2.8)
   draper
   every
   factory_girl_rails
