@@ -157,15 +157,20 @@ class Recommendation
 
   # TODO вынести в отдельный класс. Эти проверки должны вноситься из админки каким-то способом.
   def ignored_flights?
-    #FIXME Временный костыль, приходят рейсы выполняемые аэросвитом
     flights.any? do |f|
-      f.marketing_carrier_iata == 'PS' && (
+      # Nov, 2013: VY врет про наличие бизнескласса
+      (f.marketing_carrier_iata == 'IB' &&
+       f.operating_carrier_iata == 'VY' &&
+       cabin_for_flight(f) == 'C'
+      ) ||
+      #FIXME Временный костыль, приходят рейсы выполняемые аэросвитом
+      (f.marketing_carrier_iata == 'PS' && (
         booking_class_for_flight(f) == 'T' ||
         # PS возможно закроется, избавляемся от новогодних возвратов
         f.dept_date &&
           (f.dept_date > Date.new(2013, 12, 1) && f.dept_date < Date.new(2014, 1, 1) ||
            f.dept_date > Date.new(2014, 4, 30))
-      )
+      ))
     end
   end
 
