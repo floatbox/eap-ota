@@ -112,7 +112,7 @@ class PricerController < ApplicationController
         @destination.move_average_price @search, @recommendations.cheapest, @code
       end
 
-      Recommendation.remove_unprofitable!(@recommendations, @context.partner.income_at_least)
+      @recommendations.remove_unprofitable!(@context.partner.income_at_least)
 
       recommendations_total = @recommendations.size
       # измеряем после фильтрации
