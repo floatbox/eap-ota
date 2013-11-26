@@ -17,7 +17,7 @@ describe Amadeus::Response::AirSellFromRecommendation, :amadeus do
               subject.send( :shift_date, '140312', '0030', '1240', 1, 0).should == '130312'
     end
     it "should treat long flights without stops and with small time delta as same day (LAX—MOW)" do
-              subject.send( :shift_date, '150214', '1545', '1605', 1, 0).should == '150214'
+              subject.send( :shift_date, '150214', '1545', '1605', 1, 0).should == '160214'
     end
   end
 
@@ -174,7 +174,7 @@ describe Amadeus::Response::AirSellFromRecommendation, :amadeus do
 
         its(:departure_time) {should == '1545'}
         its(:arrival_time) {should == '1605'}
-        its(:arrival_date) {should == '150214'} # Date.new(2014, 2, 15)
+        its(:arrival_date) {should == '160214'} # Date.new(2014, 2, 15)
         its(:equipment_type_iata) {should == '332'}
         its(:departure_term) {should == 'B'}
         its(:arrival_term) {should == 'D'}

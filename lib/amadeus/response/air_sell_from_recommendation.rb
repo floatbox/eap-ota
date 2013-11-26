@@ -61,8 +61,6 @@ module Amadeus
           time_delta = parse_time(arrival_time) - parse_time(departure_time)
           if time_delta > 2.hours
             date_variation = -date_variation
-          elsif 0 < time_delta && time_delta < 2.hours
-            date_variation = 0
           end
         end
         (DateTime.strptime( departure_date, '%d%m%y' ) + date_variation.days).strftime('%d%m%y')
