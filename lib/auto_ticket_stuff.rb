@@ -28,6 +28,7 @@ class AutoTicketStuff
     !order.offline_booking or return 'offline заказ'
     #!used_card_with_different_name? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (card)"
     !looks_like_fraud? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать!"
+    people.all?{|p| ['LV'].exclude?(p.nationality.alpha2)} or return 'С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (LVA)'
     SUSPICIOUS_DOMAINS.each do |domain|
       !order.email.downcase[domain]  or return "название почтового ящика содержит #{domain}"
     end
