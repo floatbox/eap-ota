@@ -21,6 +21,24 @@ class Discount::Rule
     super
   end
 
+  def self.netto(commission, discount)
+    new(
+      discount: (commission.subagent.extract('%') + Commission::Formula.new(discount)).round(2),
+      our_markup: '0'
+    )
+  end
+
+  def self.scaled(commission, multiplier)
+    new(
+      discount: (commission.subagent.extract('%') * multiplier).round(2),
+      our_markup: '0'
+    )
+  end
+
+  def self.zero
+    new # инициализатор делает пустое правило by default
+  end
+
   # учитывая, что у нас обычно ЛИБО скидка, ЛИБО надбавка, делаю шорткат
   def total= commission
     if commission < Fx(0)

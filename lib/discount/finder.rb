@@ -19,9 +19,9 @@ class Discount::Finder
         # для комиссионных правил АЦ скидка=30%
         case commission.ticketing_method
         when 'downtown'
-          netto_discount(commission, '3.5%')
+          Discount::Rule.netto(commission, '3.5%')
         when 'aviacenter', 'direct'
-          scaled_discount(commission, 0.3)
+          Discount::Rule.scaled(commission, 0.3)
         end
 
       when Time.new(2013, 11, 16,  0, 0).past?
@@ -31,7 +31,7 @@ class Discount::Finder
         # для АЦ комиссионных - тоже убираем
         # для некомиссионных - надбавка 100 р. с билета.
         if no_commission?(commission)
-          Discount::Rule.new(discount: Fx('0'), our_markup: Fx('100'))
+          Discount::Rule.new(our_markup: Fx('100'))
         else
           zero
         end
@@ -41,7 +41,7 @@ class Discount::Finder
         # Женя: для правил ДТТ скидка=70% комиссии
         case commission.ticketing_method
         when 'downtown'
-          scaled_commission(commission, 0.7)
+          Discount::Rule.scaled(commission, 0.7)
         else
           zero
         end
@@ -49,34 +49,13 @@ class Discount::Finder
       when Time.new(2013, 11, 11,  19, 30).past?
 
         # Коля: надо сделать 3.5%
-        netto_discount(commission, '3.5%')
+        Discount::Rule.netto(commission, '3.5%')
       end
 
     rec.discount_rule = rule
   end
 
   private
-
-  def netto_discount(commission, discount)
-    Discount::Rule.new(
-      discount: (commission.subagent.extract('%') + Fx(discount)).round(2),
-      our_markup: Fx('0')
-    )
-  end
-
-  def scaled_discount(commission, multiplier)
-    Discount::Rule.new(
-      discount: (commission.subagent.extract('%') * multiplier).round(2),
-      our_markup: Fx('0')
-    )
-  end
-
-  def zero
-    Discount::Rule.new(
-      discount: Fx('0'),
-      our_markup: Fx('0')
-    )
-  end
 
   def no_commission?(commission)
     commission.subagent.extract("%") == Fx('0')
