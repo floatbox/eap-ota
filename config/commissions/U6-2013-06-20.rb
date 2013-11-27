@@ -93,9 +93,8 @@ subagent "3%"
 discount "7%"
 agent_comment "Самара-Душанбе-Самара повысили вознаграждение до 5% (3%) (т.е. исключили из Группы  А)."
 subagent_comment "Самара-Душанбе-Самара повысили вознаграждение до 5% (3%) (т.е. исключили из Группы  А)."
-routes "KUF,UFA-DYU/OW,RT", "UFA,KUF-LBD/OW,RT"
+routes "UFA,KUF-LBD,DYU/OW"
 example "kufdyu"
-example "ufalbd lbdufa"
 example "kuflbd"
 end
 
