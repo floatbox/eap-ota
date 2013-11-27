@@ -71,8 +71,10 @@ restore: function() {
 prebook: function(query_key, hash, partner, marker) {
     var that = this;
     this.request = $.ajax({
+        type: 'POST',
         dataType: 'json',
-        url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker,
+        url: '/booking',
+        data: { query_key: query_key, recommendation: hash, partner: partner, marker: marker },
         success: function(result) {
             if (result && result.success) {
                 that.load(result.number, result.changed_booking_classes);
@@ -89,9 +91,8 @@ prebook: function(query_key, hash, partner, marker) {
 load: function(number, price_changed) {
     var that = this;
     this.request = $.ajax({
-        url: '/booking/',
+        url: '/booking/' + number,
         data: {
-            number: number,
             iphone: true
         },
         success: function(content) {

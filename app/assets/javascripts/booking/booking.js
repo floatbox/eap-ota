@@ -56,7 +56,9 @@ prebook: function(offer) {
 prebookRequest: function(params, retry) {
     var that = this;
     this.request = $.ajax({
-        url: '/booking/preliminary_booking?' + $.param(params),
+        type: 'POST',
+        url: '/booking',
+        data: params,
         success: function(data) {
             that.process(data);
         },
@@ -101,7 +103,7 @@ failed: function() {
 },
 load: function() {
     var that = this;
-    this.request = $.get('/booking/?number=' + this.key, function(content) {
+    this.request = $.get('/booking/' + this.key, function(content) {
         page.location.set('booking', that.key);
         if (results.data) {
             page.title.set(I18n.t('page.booking.few', {title: results.data.titles.window}));
