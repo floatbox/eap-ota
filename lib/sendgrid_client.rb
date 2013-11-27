@@ -1,4 +1,4 @@
-class Sendgrid
+class SendgridClient
   AUTH_BODY = {
     api_user: Conf.sendgrid.username,
     api_key: Conf.sendgrid.password
