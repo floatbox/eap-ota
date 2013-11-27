@@ -50,11 +50,11 @@ class Admin::PaymentsController < Admin::EviterraResourceController
 
   def whereabouts
     get_object
-    location = GeoIp.geolocation(@item.ip).select do |k, _|
-      [:country_name, :country_code, :region_name, :city].include?(k)
-    end.reduce('') do |s, l|
-      key, value = l
-      s += "#{key}: #{value}\n"
+    begin
+      location_info = GeoIp.geolocation(@item.ip).slice(:country_name, :country_code, :region_name, :city)
+      location = location_info.map {|(k, v)| "#{k}: #{v}\n"}.join('')
+    rescue RuntimeError
+      location = 'ip address malformed or not found'
     end
     render text: location
   end
