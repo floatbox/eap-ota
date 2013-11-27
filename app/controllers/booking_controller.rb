@@ -1,7 +1,8 @@
 # encoding: utf-8
 class BookingController < ApplicationController
   include BookingEssentials
-  protect_from_forgery :except => :confirm_3ds
+  # FIXME надо научить аякс слать authenticity_token на :create
+  protect_from_forgery :except => [:confirm_3ds, :create]
   before_filter :log_referrer, :only => [:api_redirect, :api_booking]
   before_filter :log_user_agent
 
@@ -13,8 +14,9 @@ class BookingController < ApplicationController
   #   "recommendation"=>"amadeus.SU.V.M.4.SU2074SVOLCA040512",
   #   "partner"=>"yandex",
   #   "marker"=>"",
-  def preliminary_booking
+  def create
     @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    # FIXME используется еще?
     @coded_search = params[:query_key]
     logo_url = @context.partner.logo_exist? ? @context.partner.logo_url : ''
     if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
@@ -77,9 +79,9 @@ class BookingController < ApplicationController
     render 'api/form'
   end
 
-  def index
+  def show
     @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
-    @order_form = OrderForm.load_from_cache(params[:number])
+    @order_form = OrderForm.load_from_cache(params[:id] || params[:number])
     # Среагировать на изменение продаваемости/цены
     @order_form.recommendation.find_commission!
     @order_form.init_people
@@ -94,9 +96,10 @@ class BookingController < ApplicationController
 
   end
 
+  # TODO переделать роутинг, чтобы :id стал частью урла.
   def recalculate_price
     @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
-    @order_form = OrderForm.load_from_cache(params[:order][:number])
+    @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
     @order_form.persons = params[:persons]
     @order_form.recommendation.find_commission!
     @order_form.context = @context
@@ -108,7 +111,8 @@ class BookingController < ApplicationController
     end
   end
 
-  def pay
+  # бронирование и платеж
+  def update
     @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     case pay_result
     when :forbidden_sale

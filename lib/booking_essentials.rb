@@ -62,7 +62,7 @@ module BookingEssentials
       StatCounters.inc %W[pay.errors.forbidden]
       return :forbidden_sale
     end
-    @order_form = OrderForm.load_from_cache(params[:order][:number])
+    @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
     @order_form.persons = params[:persons]
     # Среагировать на изменение цены
     @order_form.recommendation.find_commission!

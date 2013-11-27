@@ -51,14 +51,16 @@ Eviterra::Application.routes.draw do
   match 'api/v1/preliminary_booking' => 'api_booking#preliminary_booking', :as => :api_preliminary_booking
   post 'api/v1/pay' => 'api_booking#pay', :as => :api_booking_pay
 
-  match 'booking' => 'booking#index', :as => :booking
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
   match 'price_map' => 'pricer#price_map', :as => :price_map
-  match 'booking/form' => 'booking#form', :as => :booking_form
+  # TODO прокинуть :id и сюда тоже
   post 'booking/recalculate_price' => 'booking#recalculate_price', :as => :booking_recalculate_price
-  post 'booking/pay' => 'booking#pay', :as => :booking_pay
-  # FIXME сделать POST однажды
-  match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
+  post 'booking/pay' => 'booking#update' # FIXME удалить
+  post 'booking/:id' => 'booking#update', :as => :booking_pay
+  get 'booking/preliminary_booking' => 'booking#create' # FIXME удалить
+  post 'booking' => 'booking#create', :as => :preliminary_booking
+  get 'booking' => 'booking#show' # FIXME удалить
+  get 'booking/:id' => 'booking#show', :as => :booking
   post 'confirm_3ds' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
   match 'notice/:id' => 'PNR#show_notice', :as => :show_notice
