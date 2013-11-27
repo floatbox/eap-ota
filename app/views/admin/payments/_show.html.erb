@@ -21,4 +21,10 @@
   <%= @item.control_links %>
 </div>
 </td>
+
 </tr></table>
+
+<br>
+<div id="whereabouts">GeoIp:
+  <pre data-replace-with="<%= url_for :action => :whereabouts, :id => @item.id %>"></pre>
+</div>

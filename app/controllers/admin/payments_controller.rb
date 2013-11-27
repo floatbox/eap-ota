@@ -48,6 +48,17 @@ class Admin::PaymentsController < Admin::EviterraResourceController
     redirect_to :back
   end
 
+  def whereabouts
+    get_object
+    location = GeoIp.geolocation(@item.ip).select do |k, _|
+      [:country_name, :country_code, :region_name, :city].include?(k)
+    end.reduce('') do |s, l|
+      key, value = l
+      s += "#{key}: #{value}\n"
+    end
+    render text: location
+  end
+
   rescue_from ArgumentError do |e|
     flash[:alert] = e.message
     redirect_to :back
