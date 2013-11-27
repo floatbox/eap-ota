@@ -150,12 +150,9 @@ Ticket:
       - original_price_fare_as_string
       - original_price_tax_as_string
       - original_price_penalty_as_string
-      - price_consolidator
       - price_discount
       - price_our_markup
-      - price_extra_penalty
       - price_operational_fee
-      - price_acquiring_compensation
       - route
       - comment
     confirm_refund: ticketed_date, status

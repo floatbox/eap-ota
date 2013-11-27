@@ -40,12 +40,15 @@ class Admin::TicketsController < Admin::EviterraResourceController
     @item = @resource.new(params[:resource])
     @item.route = @item.parent.route
     # callback же пересчитает цену?
-    @item.price_discount = @item.parent.price_discount
+    if @item.parent.fee < 0
+      @item.price_discount = -@item.parent.fee
+    else
+      @item.price_our_markup = -@item.parent.fee
+    end
+
     # с указанной даты начинаем проставлять сбор за возврат
     # FIXME не очень контроллеровая логика.
     @item.price_operational_fee = Ticket.default_refund_fee(@item.parent.order.created_at)
-    @item.price_acquiring_compensation = @item.parent.refund_payment_commission.round(2)
-    @item.price_consolidator = -@item.parent.price_consolidator.round(2)
     render :action => :new
   end
 
