@@ -15,6 +15,7 @@ class Customer < ActiveRecord::Base
   has_paper_trail
 
   has_many :orders
+  has_many :customer_instructions
 
   scope :without_orders, lambda {
       where("id IN (#{select('customers.id').joins('LEFT JOIN orders ON orders.customer_id = customers.id').where('orders.id IS NULL').to_sql})")
