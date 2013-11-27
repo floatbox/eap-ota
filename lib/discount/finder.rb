@@ -12,7 +12,14 @@ class Discount::Finder
     # писать от будущего в прошлое
     commission = rec.commission
     rule = case
-      when Time.new(2013, 11, 18,  0, 0).past?
+      when Time.new(2013, 11, 22, 0, 0).past?
+        # скидки netto + 4%, но не больше 12%
+        rule = Discount::Rule.netto(commission, '4%')
+        if rule.discount > Fx('12%')
+          rule = Discount::Rule.new(discount: Fx('12%'))
+        end
+        rule
+      when Time.new(2013, 11, 18, 0, 0).past?
 
         # Женя:
         # для правил ДТТ увеличиваем скидку = 100% комиссии+3,5%
@@ -31,7 +38,7 @@ class Discount::Finder
         # для АЦ комиссионных - тоже убираем
         # для некомиссионных - надбавка 100 р. с билета.
         if no_commission?(commission)
-          Discount::Rule.new(our_markup: Fx('100'))
+          Discount::Rule.new(our_markup: '100')
         else
           zero
         end

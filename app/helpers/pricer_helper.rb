@@ -37,8 +37,8 @@ module PricerHelper
       human_minutes =t('time.min', :m => minutes)
     end
     [human_hours, human_minutes].compact.join(' ').html_safe
-  end  
-  
+  end
+
   def airport_and_term location, term
     if term
       "#{ location.name } (#{ term })"
@@ -46,7 +46,7 @@ module PricerHelper
       location.name
     end
   end
-  
+
   def full_airport_and_term location, term
     result = [dict(location)]
     if term
@@ -54,7 +54,7 @@ module PricerHelper
     end
     result.join(', ').html_safe
   end
-  
+
   def recommendation_prices r
     prices = {
       :RUR => r.price_with_payment_commission.round.to_i,
@@ -63,7 +63,7 @@ module PricerHelper
     }
     prices.to_json
   end
-  
+
   def recommendation_comments r
     comments = []
     r.variants.every.flights.flatten.every.operating_carrier.uniq.each do |carrier|
@@ -76,12 +76,12 @@ module PricerHelper
     end
     comments
   end
-  
+
   def recommendation_deficit r
-    availability = r.availability  
+    availability = r.availability
     availability && availability > 0 && availability < 9
   end
-  
+
   # классы, отличающиеся от выбранного
   def different_cabins r, except
     except = 'Y' if except.nil?
@@ -95,8 +95,8 @@ module PricerHelper
       counter += s.flights.length
       sc.uniq.length == 1 ? sc.uniq : sc
     }
-  end  
-  
+  end
+
   # группируем сегменты из нескольких вариантов в массивы для каждой "ноги" отдельно
   # может сломаться, если одинаковые сегменты пришли из двух разных запросов.
   # тогда придется uniq_by, чоуж.
@@ -124,12 +124,12 @@ module PricerHelper
     end
     features += v.segments.map{|segment|
       'carrier' + segment.main_marketing_carrier.iata
-    }    
+    }
     features += v.flights.map{|flight|
       'opcarr' + flight.operating_carrier.iata
     }
     features += v.flights.every.equipment_type.map{|plane|
-      'plane' + plane.iata 
+      'plane' + plane.iata
     }
     v.segments.each_with_index do |s, i|
       features << "dpt#{ i + 1 }t#{ s.departure_day_part }"
@@ -139,17 +139,17 @@ module PricerHelper
       features << "arv#{ i + 1 }#{ s.arrival.city.iata }"
       features << "arv#{ i + 1 }#{ s.arrival.iata }"
       if s.flights.size > 1
-        features += s.flights[1..-1].map{|f| 
+        features += s.flights[1..-1].map{|f|
           'lcity' + f.departure.city.iata
         }
-      end 
+      end
     end
     features.uniq.join(' ')
   end
-  
+
   # максимальная длительность пересадки
   def longest_layover v
-      durations = v.segments.collect(&:layover_durations).flatten.compact  
+      durations = v.segments.collect(&:layover_durations).flatten.compact
       durations.max unless durations.empty?
   end
 
@@ -157,7 +157,7 @@ module PricerHelper
   def primary_carrier segment
     segment.flights.group_by(&:operating_carrier_name).max_by{|carrier, flights| flights.sum(&:duration) }[1].first.operating_carrier
   end
-  
+
   # FIXME сломается, если делать мерж двух прайсеров с одинаковыми рекомендациями
   # пофиксить мерж?
   def segment_id segment
@@ -183,7 +183,7 @@ module PricerHelper
       end
     end
     parts
-  end  
+  end
 
   def human_layovers_large segment
     segment.layovers.zip( segment.layover_durations ).map do |layover, duration|
@@ -225,18 +225,18 @@ module PricerHelper
   def fmt_duration duration
     "(%d:%02d)" % duration.divmod(60)
   end
-  
+
   def rubles sum
     Russian.pluralize(sum, 'рубль', 'рубля', 'рублей')
   end
 
   def short_price price
     t('currencies.RUR.sign', :value => price.round.to_i).html_safe
-  end  
+  end
 
   def human_price price
     t('currencies.RUR', :count => price.round.to_i).html_safe
-  end  
+  end
 
   def decorate_price price, before = '', after = ''
     price.gsub(/(\d+)/){|sum| before + sum.gsub(/(\d+)(\d{3})/, '\1<span class="thousand">\2</span>') + after }.html_safe
@@ -255,18 +255,18 @@ module PricerHelper
     days = t('date.pre_day_names')
     l(date, :format => :human) + ', ' + days[date.wday]
   end
-  
+
   def long_trip variant
     date1 = Date.strptime(variant.segments.first.departure_date, '%d%m%y')
     date2 = Date.strptime(variant.segments.last.departure_date, '%d%m%y')
     date1.month != date2.month && date2.day > date1.day
   end
-  
+
   def trip_duration variant
     date1 = Date.strptime(variant.segments.first.departure_date, '%d%m%y')
     date2 = Date.strptime(variant.segments.last.departure_date, '%d%m%y')
     t('date.days', :count => (date2 - date1).to_i).html_safe
-  end  
+  end
 
   def human_layovers_count count
     numbers = ['одной', 'двумя', 'тремя', 'четыремя', 'пятью']
@@ -312,7 +312,7 @@ module PricerHelper
     end
     result
   end
-  
+
   def variant_debug_info(recommendation, variant)
     # concat recommendation.source
     # concat %( <a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe if recommendation.source == 'amadeus'
@@ -323,10 +323,10 @@ module PricerHelper
       concat ", #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
       concat %( (FM #{recommendation.commission.agent}) #{recommendation.commission.subagent})
       unless recommendation.commission.our_markup.zero?
-        concat %( + #{recommendation.commission.our_markup})
+        concat %( + #{recommendation.commission_our_markup})
       end
       unless recommendation.commission.discount.zero?
-        concat %( - #{recommendation.commission.discount})
+        concat %( - #{recommendation.commission_discount})
       end
       concat ' '
       concat %( = #{recommendation.income.round(2) } р. прибыли) unless recommendation.income.zero?
