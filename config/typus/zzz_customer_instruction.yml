@@ -1,0 +1,16 @@
+# так называется, чтобы быть в меню после заказов
+CustomerInstruction:
+  fields:
+    default: subject, message, created_at, status
+    options:
+      date_formats:
+        created_at: long
+        updated_at: long
+  options:
+    action_after_save: show
+    default_action_on_item: show
+  order_by: -created_at
+  search: ^customer_id, email
+  filters: created_at, status
+  relationships: customer
+  application: Misc, 2

@@ -12,4 +12,5 @@ Customer:
   order_by: -created_at
   filters: created_at
   search: email
+  relationships: customer_instructions, orders
   application: Orders, 1
