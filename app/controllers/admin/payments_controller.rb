@@ -50,11 +50,16 @@ class Admin::PaymentsController < Admin::EviterraResourceController
 
   def whereabouts
     get_object
-    begin
-      location_info = GeoIp.geolocation(@item.ip).slice(:country_name, :country_code, :region_name, :city)
-      location = location_info.map {|(k, v)| "#{k}: #{v}\n"}.join('')
-    rescue RuntimeError
-      location = 'ip address malformed or not found'
+    location = begin
+      if @item.ip
+        # проверяем на наличие ip - в старых заказах его может не быть
+        location_info = GeoIp.geolocation(@item.ip).slice(:country_name, :country_code, :region_name, :city)
+        location_info.map{|(k, v)| "#{k}: #{v}\n"}.join('')
+      else
+        'ip-адрес не был сохранен по этому платежу'
+      end
+    rescue RestClient::BadGateway
+      'Невозможно получить данные, попробуйте обновить страницу'
     end
     render text: location
   end
