@@ -104,6 +104,7 @@ class BookingController < ApplicationController
     @order_form.persons = params[:persons] if params[:persons]
     @order_form.recommendation.find_commission!
     @order_form.context = @context
+    @order_form.update_attributes(params[:order])
     @order_form.valid?
     if @order_form.recommendation.allowed_booking? && @order_form.update_price_and_counts
       render :partial => 'newprice'
