@@ -23,7 +23,7 @@ describe BookingController do
     end
     let(:pricer){AviaSearch.simple(:from => 'MOW', :to => 'PAR', :date1 => DateTime.tomorrow.strftime("%d.%m.%Y"))}
 
-    describe '#preliminary_booking' do
+    describe '#create' do
 
       before do
         # stubbing preliminary_booking internal methods
@@ -39,7 +39,7 @@ describe BookingController do
       it 'saves both partner and marker if they present' do
         Partner.create(:token => 'yandex', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
-        get :preliminary_booking, partner_and_marker_present
+        post :create, partner_and_marker_present
         response.cookies['partner'].should == 'yandex'
         response.cookies['marker'].should == 'ffdghg'
       end
@@ -47,7 +47,7 @@ describe BookingController do
       it 'saves partner if it is present' do
         Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
-        get :preliminary_booking, partner_present
+        post :create, partner_present
         response.cookies['partner'].should == 'momondo'
         response.cookies['marker'].should == nil
       end
@@ -55,7 +55,7 @@ describe BookingController do
       it "doesn't touch cookie if there's no partner"  do
         Partner.stub(:find_by_token)
 
-        get :preliminary_booking, marker_present
+        post :create, marker_present
         response.cookies['partner'].should == nil
         response.cookies['marker'].should == nil
       end
