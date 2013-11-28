@@ -5,8 +5,8 @@ class RapidaController < ApplicationController
     get_params!
     rapida = Rapida.new
     response = case @command
-    when 'check' then rapida.check(@txn_id, @account, @sum)
-    when 'pay' then rapida.pay(@txn_id, @account, @sum, @phone)
+    when 'check' then rapida.check *@requisites
+    when 'pay' then rapida.pay *@requisites
     else return render :status => :not_acceptable, :text => 'command not allowed'
     end
     render text: response
@@ -16,10 +16,11 @@ class RapidaController < ApplicationController
 
   def get_params!
     @command = params[:command]
-    @txn_id = params[:txn_id]
-    @account = params[:account]
-    @sum = params[:sum]
-    @phone = params[:phone]
+    txn_id = params[:txn_id]
+    account = params[:account]
+    sum = params[:sum]
+    phone = params[:phone]
+    @requisites = [txn_id, account, sum, phone]
   end
 
 end

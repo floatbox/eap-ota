@@ -3,7 +3,7 @@
 class Rapida
   # класс для работы с RapidaCharge и всем-всем-всем
 
-  def check(txn_id, account, sum)
+  def check(txn_id, account, sum, phone)
     # заглушка
     'check'
   end
