@@ -39,34 +39,34 @@ url для запроса: https://api.eviterra.com/v1/orders/<number>
 ### Пример параметров: (application/x-www-form-urlencoded)
 
 ```
-order[persons][0][last_name]:ADULT
-order[persons][0][first_name]:ALEX
-order[persons][0][sex]:m
-order[persons][0][birthday]:1980-12-20
-order[persons][0][nationality_code]:RUS
-order[persons][0][passport]:1232323232
-order[persons][0][bonus_present]:1
-order[persons][0][document_noexpiration]:1
-order[persons][0][bonuscard_type]:AF
-order[persons][0][bonuscard_number]:54543445
-order[persons][1][last_name]:INFANT
-order[persons][1][first_name]:IVAN
-order[persons][1][sex]:m
-order[persons][1][birthday]:2011-01-13
-order[persons][1][nationality_code]:RUS
-order[persons][1][passport]:343434556
-order[persons][1][document_expiration]:2019-12-01
-order[persons][1][bonuscard_type]:AF
-order[persons][1][bonuscard_number]:
-order[email]:test@example.com
-order[phone]:+79998887766
-order[payment_type]:card
-order[delivery]:
-card[number]:4111  1111  1111  1112
-card[name]:MR CARDHOLDER
-card[month]:12
-card[year_short]:15
-card[verification_value]:123
+order[persons][0][last_name]=ADULT
+order[persons][0][first_name]=ALEX
+order[persons][0][sex]=m
+order[persons][0][birthday]=1980-12-20
+order[persons][0][nationality_code]=RUS
+order[persons][0][passport]=1232323232
+order[persons][0][bonus_present]=1
+order[persons][0][document_noexpiration]=1
+order[persons][0][bonuscard_type]=AF
+order[persons][0][bonuscard_number]=54543445
+order[persons][1][last_name]=INFANT
+order[persons][1][first_name]=IVAN
+order[persons][1][sex]=m
+order[persons][1][birthday]=2011-01-13
+order[persons][1][nationality_code]=RUS
+order[persons][1][passport]=343434556
+order[persons][1][document_expiration]=2019-12-01
+order[persons][1][bonuscard_type]=AF
+order[persons][1][bonuscard_number]=
+order[email]=test@example.com
+order[phone]=+79998887766
+order[payment_type]=card
+order[delivery]=
+card[number]=4111111111111112
+card[name]=MR CARDHOLDER
+card[month]=12
+card[year_short]=15
+card[verification_value]=123
 ```
 
 ### Ответ содержит следующие поля:
