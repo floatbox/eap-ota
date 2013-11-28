@@ -45,6 +45,7 @@ Eviterra::Application.routes.draw do
     get 'v2/orders/:id(.:format)' => 'api_orders#show'
     match 'v2/orders/:id(.:format)' => 'api_orders#update', via: [:post, :patch]
 
+    get 'rapida' => 'rapida#payment', :as => :rapida_payment
     match '*anything' => redirect('/')
   end
 
