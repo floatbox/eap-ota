@@ -43,6 +43,48 @@ describe AviaSearch do
     end
   end
 
+  context "people count" do
+    subject do
+      described_class.simple attrs
+    end
+
+    let :base_attrs do
+      { :from => 'MOW', :to => 'LON', :date1 => "20#{yy}-10-09" }
+    end
+
+    context "1 adult only" do
+      let :attrs do
+        base_attrs.dup.merge adults: 1, children: 0, infants: 0
+      end
+
+      it {should be_valid}
+    end
+
+    context "no passengers" do
+      let :attrs do
+        base_attrs.dup.merge adults: 0, children: 0, infants: 0
+      end
+
+      it {should_not be_valid}
+    end
+
+    context "7 adults — just one too many" do
+      let :attrs do
+        base_attrs.dup.merge adults: 7, children: 0, infants: 0
+      end
+
+      it {should_not be_valid}
+    end
+
+    context "unaccompanied infant" do
+      let :attrs do
+        base_attrs.dup.merge adults: 1, children: 0, infants: 2
+      end
+
+      xit {should_not be_valid}
+    end
+  end
+
   context "filled via api" do
     subject do
       described_class.simple( attrs )
@@ -73,15 +115,6 @@ describe AviaSearch do
 
       it { should be_valid }
       its(:cabin) { should == 'C' }
-    end
-
-    context "when got empty people values" do
-      let :attrs do
-        { :from => 'MOW', :to => 'LON', :date1 => "20#{yy}-10-09", :cabin => 'C', :adults => nil, :children => nil, :infants => nil }
-      end
-
-      it { should be_valid }
-      its(:tariffied) { should == {:children=>0, :adults=>1, :infants=>0} }
     end
 
     context "when got empty people values" do

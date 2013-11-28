@@ -15,8 +15,9 @@ class AviaSearch
   delegate :to, :from, :from_iata, :to_iata, :date, :to => 'segments.first'
 
   validates_presence_of :segments
-  validates_numericality_of :adults, :children, in: 1..6
-  validates_numericality_of :infants, in: 1..4
+  validates_numericality_of :adults,   only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 6
+  validates_numericality_of :children, only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 6
+  validates_numericality_of :infants,  only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 4
   validates_numericality_of :people_total, less_than_or_equal_to: 8
   validate :segments_validity
 
