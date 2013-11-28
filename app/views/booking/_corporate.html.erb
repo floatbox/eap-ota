@@ -1,4 +1,4 @@
-<div class="booking-corporate" data-variant="<%= @order_form.variant_id %>">
+<div class="booking-corporate" data-variant="1">
     <% availability = @order_form.recommendation.availability %>
     <% if availability && availability > 0 && availability < 9 %>
         По этому тарифу осталось <strong><%= availability %>&nbsp;<%= Russian.pluralize(availability, 'место', 'места', 'мест') %></strong>.

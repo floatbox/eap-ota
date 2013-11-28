@@ -31,7 +31,7 @@ module SMS
       raise NotImplementedError
     end
 
-    def invoke_send_post_request(request_body, host=@host, path=@path, port=@port, use_ssl=@use_ssl)
+    def invoke_post_request(request_body, parsed, host=@host, path=@path, port=@port, use_ssl=@use_ssl)
       endpoint = Net::HTTP.new(host, port)
       if @use_ssl
         endpoint.use_ssl = @use_ssl
@@ -40,11 +40,11 @@ module SMS
       end
       request = Net::HTTP::Post.new(path)
       request.body = request_body
-      parse_response(endpoint.request(request))
+      send(:"parse_#{parsed}_response", endpoint.request(request))
     rescue Timeout::Error, Errno::ECONNRESET, EOFError, SocketError, SMSError => e
       # ловить все подряд не хочется, а эти эксепешены вполне можно, я думаю
       with_warning(e)
-      Rails.logger.info "Error occured while sending sms: #{e}"
+      Rails.logger.info "Error occured while performing sms #{parsed}: #{e}"
       nil
     end
 

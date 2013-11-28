@@ -4,6 +4,8 @@ class ApiBookingController < ApplicationController
   protect_from_forgery :except => :pay
 
   def preliminary_booking
+    # FIXME тут должно быть robot: true, но повременю
+    @context = Context.new(partner: params[:partner])
     if preliminary_booking_result(false)
       respond_to do |format|
         format.json {render :json => {
@@ -22,7 +24,8 @@ class ApiBookingController < ApplicationController
   end
 
   def pay
-
+    # FIXME тут должно быть robot: true, но повременю
+    @context = Context.new(partner: params[:partner])
     case pay_result
     when :forbidden_sale, :failed_booking
       render :json => {success: false, reason: 'unable_to_sell'}

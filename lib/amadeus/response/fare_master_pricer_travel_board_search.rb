@@ -9,7 +9,7 @@ module Amadeus
       def recommendations
         recommendations = benchmark 'search recommendations' do
 
-          return(recommendations_sax) if Conf.amadeus.search_sax
+          return recommendations_sax if Conf.amadeus.search_sax
 
           xpath("//r:recommendation").map do |rec|
             price_total, price_tax =
@@ -71,18 +71,18 @@ module Amadeus
             )
           end
         end
-        RecommendationSet.new(recommendations)
+        recommendations
       end
 
       # xpath
       def error_message
-        error_message_sax if Conf.amadeus.search_sax
+        return error_message_sax if Conf.amadeus.search_sax
 
         xpath('//r:errorMessage/r:errorMessageText/r:description').to_s
       end
 
       def error_code
-        error_code_sax if Conf.amadeus.search_sax
+        return error_code_sax if Conf.amadeus.search_sax
 
         xpath('//r:errorMessage/r:applicationError/r:applicationErrorDetail/r:error').to_s
       end

@@ -53,7 +53,7 @@ class Order < ActiveRecord::Base
   # error_ticket - билеты были отправлены на выписку, но не были выписаны до таймаута
   # ticketed - билеты были выписаны
   def self.ticket_statuses
-    [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket']
+    [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket', 'fraud']
   end
 
   def self.fee_schemes
@@ -244,6 +244,7 @@ class Order < ActiveRecord::Base
   scope :sent_manual, where(:email_status => 'manual')
   scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("orders.pnr_number != ''")
   scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != '' AND orders.payment_status = 'blocked'")
+  scope :fraud, where("ticket_status = 'fraud'")
 
 
   scope :stale, lambda {

@@ -6,7 +6,7 @@ class AutoTicketStuff
   attr_accessor :recommendation
   attr_accessor :people
   attr_accessor :order
-  BAD_DOMAINS = ['superrito.com', 'armyspy.com', 'cuvox.de', 'dayrep.com', 'einrot.com', 'fleckens.hu', 'gustr.com', 'jourrapide.com', 'rhyta.com', 'teleworm.us', 'writeme.com', 'europe.com', 'dropmail.me', 'alumni.com']
+  BAD_DOMAINS = ['superrito.com', 'armyspy.com', 'cuvox.de', 'dayrep.com', 'einrot.com', 'fleckens.hu', 'gustr.com', 'jourrapide.com', 'rhyta.com', 'teleworm.us', 'writeme.com', 'europe.com', 'dropmail.me', 'alumni.com', 'israelmail.com']
   SUSPICIOUS_DOMAINS = ['hotmail', 'yahoo', 'post.com', 'outlook.com', 'berlin.com']
   def auto_ticket
     if reason = turndown_reason
@@ -28,6 +28,7 @@ class AutoTicketStuff
     !order.offline_booking or return 'offline заказ'
     #!used_card_with_different_name? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (card)"
     !looks_like_fraud? or return "С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать!"
+    people.all?{|p| ['LV'].exclude?(p.nationality.alpha2)} or return 'С большой вероятностью фрод. Выписка только после сравнения кода авторизации. Без кода категорически не выписывать! (LVA)'
     SUSPICIOUS_DOMAINS.each do |domain|
       !order.email.downcase[domain]  or return "название почтового ящика содержит #{domain}"
     end

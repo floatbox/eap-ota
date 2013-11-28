@@ -9,6 +9,7 @@ class Commission::Rule::RoutexCompiler
     @source = source.upcase.strip
     raise ArgumentError, "#{@source.inspect} contains spaces" if @source[' ']
     @body, flags_string = @source.split('/')
+    @negative = !! @body.sub!(/^\^/, '')
     @flags = flags_string ? flags_string.split(',') : ['OW']
     @flags = %W[OW RT WO TR] if flags_string == 'ALL'
     @tokens = @body.split(/(-|\.\.\.)/).reject(&:empty?)
@@ -26,6 +27,15 @@ class Commission::Rule::RoutexCompiler
   # иначе достаточно простого текстового сравнения
   def regex_needed?
     @body[','] || @body['...'] || @body =~ /\b\w{2}\b/
+  end
+
+  # странная конструкция, для обеспечения работы '^...' роутов
+  def compiled_positive
+    @negative ? [] : compiled
+  end
+
+  def compiled_negative
+    @negative ? compiled : []
   end
 
   def compiled

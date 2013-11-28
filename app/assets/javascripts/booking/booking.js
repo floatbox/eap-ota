@@ -30,8 +30,10 @@ abort: function() {
     }
     if (this.offer) {
         results.content.el.find('.rc-overlay').hide();
-        this.offer.book.removeClass('ob-disabled ob-fade').show();
-        this.offer.updateBook();
+        if (!this.offer.book.hasClass('ob-failed')) {
+            this.offer.book.removeClass('ob-disabled ob-fade').show();
+            this.offer.updateBook();
+        }
     }
     delete this.variant;
     delete this.offer;
@@ -204,25 +206,29 @@ hide: function() {
     _yam.hit(page.location.track());
     delete this.offer;
 },
-newSearch: function() {
+newSearch: function(saveCities) {
     this.el.hide().removeClass('b-processing');
     this.content.html('');
 
+    results.header.select.hide();
     results.header.el.find('.rh-newsearch').remove();
     results.header.buttonEnabled.hide();
     results.header.button.show();
     results.header.el.removeClass('rh-fixed');
 
-    search.locations.toggleSegments(1);
-    var segment = search.locations.segments[0];
-    if (search.mode.selected === 'ow') {
-        var dpt = segment.arv.selected || segment.arv.value;
-        var arv = segment.dpt.selected || segment.dpt.value;
-        segment.dpt.set(dpt);
-        segment.arv.set(arv);
-    } else {
-        segment.arv.set('');
+    if (!saveCities) {
+        search.locations.toggleSegments(1);
+        var segment = search.locations.segments[0];
+        if (search.mode.selected === 'ow') {
+            var dpt = segment.arv.selected || segment.arv.value;
+            var arv = segment.dpt.selected || segment.dpt.value;
+            segment.dpt.set(dpt);
+            segment.arv.set(arv);
+        } else {
+            segment.arv.set('');
+        }
     }
+    
     search.dates.setSelected([]);
     search.el.show();
     search.map.resize();

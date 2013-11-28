@@ -39,6 +39,7 @@ ALL_TABLES = %W(
   currency_rates
   customers
   destinations
+  fare_rules
   flight_groups
   geo_taggings
   geo_tags
@@ -78,6 +79,7 @@ TRASH_TABLES = %W(
 
   subscriptions
   notifications
+  fare_rules
   hot_offers
   destinations
   imports

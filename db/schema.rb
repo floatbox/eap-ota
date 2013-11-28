@@ -218,6 +218,21 @@ ActiveRecord::Schema.define(:version => 20131126160754) do
   add_index "customers", ["email"], :name => "index_customers_on_email", :unique => true
   add_index "customers", ["reset_password_token"], :name => "index_customers_on_reset_password_token", :unique => true
 
+  create_table "deck_sms", :force => true do |t|
+    t.string   "message"
+    t.datetime "sent_at"
+    t.string   "status"
+    t.string   "address"
+    t.integer  "provider_id"
+    t.string   "provider"
+    t.string   "error_message"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "deck_sms", ["provider", "provider_id"], :name => "index_deck_sms_on_provider_and_provider_id", :unique => true
+  add_index "deck_sms", ["status"], :name => "index_deck_sms_on_status"
+
   create_table "deck_users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
     t.string   "encrypted_password",     :default => "", :null => false
@@ -524,6 +539,7 @@ ActiveRecord::Schema.define(:version => 20131126160754) do
     t.string   "error_code"
     t.text     "error_message"
     t.string   "endpoint_name",                                       :default => ""
+    t.string   "ip"
   end
 
   add_index "payments", ["order_id"], :name => "index_payments_on_order_id"

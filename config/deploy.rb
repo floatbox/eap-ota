@@ -1,8 +1,14 @@
 # Load RVM's capistrano plugin.
 require "rvm/capistrano"
 require "capistrano_colors"
+require "hipchat/capistrano"
 
 require 'riemann/client'
+
+# интеграция с hipchat
+set :hipchat_token, 'de492e09eba5f6cc6cf340f480734d'
+set :hipchat_room_name, "cave"
+#set :hipchat_announce, false # notify users?
 
 set :rvm_type, :system
 # закрепил версию, чтобы не прыгала в продакшне
@@ -49,6 +55,15 @@ set :normalize_asset_timestamps, false
 ssh_options[:forward_agent] = true
 
 set :application, "eviterra"
+
+task :demo do
+load 'lib/recipes/unicorn'
+  set :rails_env, 'demo'
+  role :app, 'vm12.eviterra.com'
+  role :web, 'vm12.eviterra.com'
+  role :db, 'vm12.eviterra.com', :primary => true
+  role :daemons, 'vm12.eviterra.com'
+end
 
 task :staging do
 load 'lib/recipes/unicorn'
@@ -206,7 +221,7 @@ task :config do
 end
 
 
-# airbrake stuff
 require './config/boot'
-require 'airbrake/capistrano'
+require 'rollbar/capistrano'
+set :rollbar_token, 'b810757b1a234503a1611a223d097ad4'
 require 'new_relic/recipes'

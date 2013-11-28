@@ -39,7 +39,9 @@ class PaytureCharge < Payment
     raise ArgumentError, 'ref is not set yet' unless ref
     raise ArgumentError, 'price is 0' unless price && !price.zero?
     raise ArgumentError, 'specify card data, please' unless @card
-    update_attributes :status => 'processing_block'
+    # TODO при появлении возможностей обмена/возврата в личном кабинете
+    # перенести сохранение ip в Payment
+    update_attributes status: 'processing_block', ip: custom_fields.ip
     response = gateway.block(price, @card, :our_ref => ref, :custom_fields => custom_fields)
     if response.threeds?
       update_attributes :status => 'threeds', :threeds_key => response.threeds_key

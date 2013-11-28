@@ -347,7 +347,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def vat_selector
-    ['0', '18%', 'unknown'].map do |vat_st|
+    ['0', '18%', '18%_old', 'unknown'].map do |vat_st|
       if vat_status == vat_st
         "<span class='selected_vat'> #{vat_status} </span>"
       else

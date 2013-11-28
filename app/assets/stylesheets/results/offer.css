@@ -108,7 +108,6 @@
     margin-left: 0;
 }
 .ob-shadow {
-    display: none;
     position: absolute;
     top: -12px;
     left: 0;
@@ -123,9 +122,6 @@
     width: 960px;
     margin-left: -494px;
     z-index: 1;
-}
-.ob-fixed .ob-shadow {
-    display: block;
 }
 
 /* Details control */
@@ -836,14 +832,13 @@
     line-height: 14px;
 }
 .od-comment {
-    width: 235px;
+    width: 246px;
     margin: 0 0 -100px 0;
     border-left: 1px solid #cdcdc7;
     padding: 12px 0 104px;
     float: left;
 }
 .odc-first {
-    width: 280px;
     border-left: none;
 }
 .odc-text {

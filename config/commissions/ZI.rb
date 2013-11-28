@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "11%"
 subagent "9%"
-discount "13%"
+discount "12%"
 agent_comment "11% от тарифа на собств. рейсы ZI по классам бронирования I/D/J/C;"
 subagent_comment "9% от тарифа на собств. рейсы ZI по классам бронирования I/D/J/C;"
 subclasses "IDJC"

@@ -13,7 +13,6 @@ module Amadeus
           from = fd.xpath('r:odiGrp/r:originDestination/r:origin').to_s
           to = fd.xpath('r:odiGrp/r:originDestination/r:destination').to_s
           passenger_type = fd.xpath('r:qualificationFareDetails/r:fareDetails/r:qualifier').to_s
-          rule_section_id = fd.xpath('r:travellerGrp/r:fareRulesDetails/r:ruleSectionId').to_s
           rule_text = fd.xpath('r:travellerGrp/r:fareRulesDetails/r:ruleSectionId').map do |rule_section_id|
             xpath("//r:tariffInfo[r:fareRuleInfo/r:ruleSectionLocalId='#{rule_section_id}']/r:fareRuleText/r:freeText").map{|t| t.to_s.to_s}.join("\n")
           end.join("\n")

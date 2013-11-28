@@ -5,7 +5,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   class XMLResponse
     include CompactSAXMachine
 
-    element :error do
+    element :errorMessage do
       element :description
       element :error
     end
@@ -130,7 +130,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
         published_fare: published_fare
       )
     end
-    RecommendationSet.new(recommendations)
+    recommendations
   end
 
   def variants_sax(recommendation, flight_indexes_cache)
@@ -212,17 +212,16 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   end
 
   def error_message_sax
-    parsed.error.description
+    parsed.errorMessage.description
   rescue NoMethodError
   end
 
   def error_code_sax
-    parsed.error.error
+    parsed.errorMessage.error
   rescue NoMethodError
   end
 
   def parsed
-    xml = benchmark 'to_xml' do doc.to_xml end
-    @parsed ||= XMLResponse.parse(xml)
+    @parsed ||= XMLResponse.parse(doc.raw_xml)
   end
 end

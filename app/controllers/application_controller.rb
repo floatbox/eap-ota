@@ -18,11 +18,6 @@ class ApplicationController < ActionController::Base
   # показывает данные текущего пользователя тайпус в админке
   alias_method :current_member, :admin_user
 
-  def corporate_mode?
-    session[:corporate_mode]
-  end
-  helper_method :corporate_mode?
-
   def set_locale
     I18n.locale = cookies[:language].presence || :ru
   end
@@ -45,9 +40,19 @@ class ApplicationController < ActionController::Base
     root_path
   end
 
+  def enforce_timeout
+    # around_filter :enforce_timeout, only: [:pricer, :api]
+    if Conf.site.enforce_timeout
+      Timeout.timeout(30) do
+        yield
+      end
+    else
+      yield
+    end
+  end
+
   ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
   end
-
 end
 

@@ -146,21 +146,35 @@ class Recommendation
     segments.any?(&:layovers?)
   end
 
+  # Общая обертка для повторных проверок на этапе бронирования.
+  def allowed_booking?
+    !ignored_flights? && !ignored_carriers? && sellable?
+  end
+
   def sellable?
-    #FIXME Временный костыль, приходят рейсы выполняемые аэросвитом
-    return if flights.any? do |f|
-      f.marketing_carrier_iata == 'PS' && (
+    commission.sellable?
+  end
+
+  # TODO вынести в отдельный класс. Эти проверки должны вноситься из админки каким-то способом.
+  def ignored_flights?
+    flights.any? do |f|
+      # Nov, 2013: VY врет про наличие бизнескласса
+      (f.marketing_carrier_iata == 'IB' &&
+       f.operating_carrier_iata == 'VY' &&
+       cabin_for_flight(f) == 'C'
+      ) ||
+      #FIXME Временный костыль, приходят рейсы выполняемые аэросвитом
+      (f.marketing_carrier_iata == 'PS' && (
         booking_class_for_flight(f) == 'T' ||
         # PS возможно закроется, избавляемся от новогодних возвратов
         f.dept_date &&
           (f.dept_date > Date.new(2013, 12, 1) && f.dept_date < Date.new(2014, 1, 1) ||
-           f.dept_date > Date.new(2013, 4, 30))
-      )
+           f.dept_date > Date.new(2014, 4, 30))
+      ))
     end
-    commission.sellable?
   end
 
-  def ignored_carriers
+  def ignored_carriers?
     ((marketing_carrier_iatas + operating_carrier_iatas) & Conf.amadeus.ignored_carriers).present?
   end
 
@@ -186,11 +200,6 @@ class Recommendation
 
   def self.merge left, right
     left | right
-  end
-
-  def self.remove_unprofitable!(recommendations, income_at_least)
-    recommendations.reject! {|r| r.income < income_at_least} if income_at_least
-    recommendations
   end
 
   def variants_by_duration
@@ -231,11 +240,6 @@ class Recommendation
     signature.eql?(b.signature)
   end
   alias == eql?
-
-  def groupable_with? rec
-    return unless rec
-    [price_fare, price_tax, validating_carrier_iata, booking_classes, marketing_carrier_iatas] == [rec.price_fare, rec.price_tax, rec.validating_carrier_iata,  rec.booking_classes, rec.marketing_carrier_iatas]
-  end
 
   def booking_class_for_flight flight
     variants.each do |v|

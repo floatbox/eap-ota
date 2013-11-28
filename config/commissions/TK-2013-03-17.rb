@@ -16,7 +16,7 @@ important!
 ticketing_method "aviacenter"
 agent "12%"
 subagent "10%"
-discount "14%"
+discount "12%"
 agent_comment "12% от тарифа Бизнес класса на рейсы TK с вылетом из РФ"
 subagent_comment "нет? ставлю 10%"
 classes :business

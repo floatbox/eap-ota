@@ -13,11 +13,10 @@ class BookingController < ApplicationController
   #   "recommendation"=>"amadeus.SU.V.M.4.SU2074SVOLCA040512",
   #   "partner"=>"yandex",
   #   "marker"=>"",
-  #   "variant_id"=>"1"
   def preliminary_booking
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @coded_search = params[:query_key]
-    @partner = Partner[params[:partner]]
-    logo_url = @partner.logo_exist? ? @partner.logo_url : ''
+    logo_url = @context.partner.logo_exist? ? @context.partner.logo_url : ''
     if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       render :json => {
         :success => true,
@@ -34,10 +33,10 @@ class BookingController < ApplicationController
   # Parameters:
   #   "query_key"=>"ki1kri"
   def api_booking
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @query_key = params[:query_key]
     # оставил в таком виде, чтобы не ломалось при рендере
     # если переделаем урлы и тут - заработает
-    @partner = Partner[params[:partner]]
     @search = AviaSearch.from_code(params[:query_key])
     unless @search && @search.valid?
       # необходимо очистить anchor вручную
@@ -79,30 +78,30 @@ class BookingController < ApplicationController
   end
 
   def index
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @order_form = OrderForm.load_from_cache(params[:number])
     # Среагировать на изменение продаваемости/цены
     @order_form.recommendation.find_commission!
     @order_form.init_people
-    @order_form.admin_user = admin_user
+    @order_form.context = @context
     @search = AviaSearch.from_code(@order_form.query_key)
 
     if params[:iphone]
       render :partial => 'iphone'
-    elsif corporate_mode?
-      render :partial => 'corporate'
     else
-      render :partial => 'embedded'  
+      render :partial => 'embedded'
     end
 
   end
 
   def recalculate_price
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @order_form = OrderForm.load_from_cache(params[:order][:number])
-    @order_form.people_attributes = params[:person_attributes]
+    @order_form.persons = params[:persons]
     @order_form.recommendation.find_commission!
-    @order_form.admin_user = admin_user
+    @order_form.context = @context
     @order_form.valid?
-    if @order_form.recommendation.sellable? && @order_form.update_price_and_counts
+    if @order_form.recommendation.allowed_booking? && @order_form.update_price_and_counts
       render :partial => 'newprice'
     else
       render :partial => 'failed_booking'
@@ -110,7 +109,7 @@ class BookingController < ApplicationController
   end
 
   def pay
-
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     case pay_result
     when :forbidden_sale
       render :partial => 'forbidden_sale'
@@ -136,6 +135,7 @@ class BookingController < ApplicationController
   # неподписанный респонс Payu
   def confirm_3ds
     @payment = Payment.find_3ds_by_backref!(params)
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
 
     @order = @payment.order
     if @order.ticket_status == 'canceled'
@@ -151,10 +151,9 @@ class BookingController < ApplicationController
         logger.info "Pay: problem confirming 3ds"
         @error_message = :payment
       else
-        strategy = Strategy.select(:order => @order)
-        strategy.lax = !!admin_user
+        strategy = Strategy.select(order: @order, context: @context)
 
-        if  !strategy.delayed_ticketing?
+        if !strategy.delayed_ticketing?
           logger.info "Pay: ticketing"
 
           unless strategy.ticket

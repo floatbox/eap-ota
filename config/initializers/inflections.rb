@@ -6,7 +6,9 @@
 ActiveSupport::Inflector.inflections do |inflect|
 # TODO попробовать включить, должно повлиять на классы типа PNRMailer
     inflect.acronym 'PNR'
+    inflect.acronym 'SMS'
 #
+    inflect.plural /^sms$/, 'sms'
 #   inflect.plural /^(ox)$/i, '\1en'
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'

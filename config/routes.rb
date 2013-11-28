@@ -14,7 +14,7 @@ Eviterra::Application.routes.draw do
 
   devise_for :customers,
     :path => 'profile',
-    :controllers => { 
+    :controllers => {
       :confirmations => 'profile/confirmations',
       :registrations => 'profile/registrations',
       :passwords => 'profile/passwords'
@@ -36,6 +36,10 @@ Eviterra::Application.routes.draw do
     match 'avia/v1/searches' => 'booking#api_redirect'
     match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
     match '*anything' => redirect('/')
+  end
+
+  constraints subdomain: /^insurance(?:\.staging)?$/ do
+    root to: 'insurance#index'
   end
 
   match 'api/search(.:format)' => 'api_home#gone'
@@ -67,9 +71,6 @@ Eviterra::Application.routes.draw do
   match '/pay/:code(/:gateway)' => 'payments#edit', :via => :get, :as => :edit_payment
   match '/pay/:code(/:gateway)' => 'payments#update', :via => :post, :as => :edit_payment
 
-  match '/corporate/start' => 'corporate#start', :as => :start_corporate
-  match '/corporate/stop' => 'corporate#stop', :as => :stop_corporate
-  match '/corporate' => 'corporate#index', :as => :corporate
   match '/flight_groups/:id' => 'flight_groups#show', :as => :show_flight_group
   match '/seat_map/:flight(/:booking_class)' => 'seat_map#show', :as => :show_seat_map
 
@@ -85,8 +86,8 @@ Eviterra::Application.routes.draw do
   match 'contacts' => 'about#contacts', :as => :about
   match 'about/:action' => 'about', :as => :about
   match 'partners' => 'about#partners', :as => :about
-  
-  match 'insurance' => 'insurance#index', :as => :insurance  
+
+  match 'insurance' => 'insurance#index', :as => :insurance
 
   match "whereami" => 'home#whereami', :as => :whereami
   match 'status' => 'home#status'
@@ -115,62 +116,4 @@ Eviterra::Application.routes.draw do
   root :to => 'home#index'
 
   ActiveAdmin.routes(self)
-
-  # The priority is based upon order of creation:
-  # first created -> highest priority.
-
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  # root :to => "welcome#index"
-
-  # See how all your routes lay out with "rake routes"
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
 end
-

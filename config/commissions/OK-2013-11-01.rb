@@ -3,17 +3,13 @@ carrier "OK", start_date: "2013-11-01"
 rule 1 do
 ticketing_method "aviacenter"
 agent "5%"
-subagent "3%"
-discount "7%"
+subagent "4.5%"
+discount "8.5%"
 agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
 agent_comment "Москва  -  все перевозки;"
 agent_comment "Екатеринбург - все перевозки;"
 agent_comment "Нижний Новгорода - все перевозки;"
 agent_comment "Санкт Петербург - Все перевозки;"
-agent_comment "Пермь - Только транзитные перевозки;"
-agent_comment "Ростов - Только транзитные перевозки;"
-agent_comment "Самара - Только транзитные перевозки;"
-agent_comment "Уфа - Только транзитные перевозки;"
 routes "MOW,SVX,GOJ,LED..."
 example "svocdg"
 example "svxcdg cdgsvx"
@@ -25,18 +21,14 @@ rule 2 do
 important!
 ticketing_method "aviacenter"
 agent "5%"
-subagent "3%"
-discount "7%"
+subagent "4.5%"
+discount "8.5%"
 comment "Копия для ловли код-шера"
 agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
 agent_comment "Москва  -  все перевозки;"
 agent_comment "Екатеринбург - все перевозки;"
 agent_comment "Нижний Новгорода - все перевозки;"
 agent_comment "Санкт Петербург - Все перевозки;"
-agent_comment "Пермь - Только транзитные перевозки;"
-agent_comment "Ростов - Только транзитные перевозки;"
-agent_comment "Самара - Только транзитные перевозки;"
-agent_comment "Уфа - Только транзитные перевозки;"
 routes "MOW,SVX,GOJ,LED..."
 check %{ codeshare? }
 example "svocdg/ab:ok"
@@ -46,6 +38,42 @@ example "ledcdg/ab:ok"
 end
 
 rule 3 do
+ticketing_method "aviacenter"
+agent "5%"
+subagent "4.5%"
+discount "8.5%"
+agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
+agent_comment "Пермь - Только транзитные перевозки;"
+agent_comment "Ростов - Только транзитные перевозки;"
+agent_comment "Самара - Только транзитные перевозки;"
+agent_comment "Уфа - Только транзитные перевозки;"
+check %{ includes(city_iatas.first, "PEE ROV KUF UFA") and city_iatas.count > 2}
+example "peesvo svocdg"
+example "rovled ledcdg"
+example "kufsvo svocdg"
+example "ufadme dmecdg"
+end
+
+rule 4 do
+important!
+ticketing_method "aviacenter"
+agent "5%"
+subagent "4.5%"
+discount "8.5%"
+comment "Копия для ловли код-шера"
+agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
+agent_comment "Пермь - Только транзитные перевозки;"
+agent_comment "Ростов - Только транзитные перевозки;"
+agent_comment "Самара - Только транзитные перевозки;"
+agent_comment "Уфа - Только транзитные перевозки;"
+check %{ codeshare? and includes(city_iatas.first, "PEE ROV KUF UFA") and city_iatas.count > 2}
+example "peesvo/ab:ok svocdg"
+example "rovled/ab:ok ledcdg"
+example "kufsvo/ab:ok svocdg"
+example "ufadme dmecdg/ab:ok"
+end
+
+rule 5 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"

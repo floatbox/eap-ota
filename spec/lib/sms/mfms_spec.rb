@@ -4,7 +4,7 @@ require 'spec_helper'
 describe SMS::MFMS do
   # больше ради примеров протокола, чем настоящего тестирования
 
-  describe '#parse_response' do
+  describe '#parse_delivery_response' do
 
     def mfms_response(name)
       OpenStruct.new body: open("spec/lib/sms/xml/response/#{name}.xml", 'r').read
@@ -13,7 +13,7 @@ describe SMS::MFMS do
     it 'should parse one message response' do
 
       response = mfms_response(:one_ok)
-      result = subject.instance_eval { parse_response(response) }
+      result = subject.instance_eval { parse_delivery_response(response) }
 
       result.should == { "2" => { provider_id: "12", code: "ok" } }
 
@@ -22,7 +22,7 @@ describe SMS::MFMS do
     it 'should parse multiple message response' do
 
       response = mfms_response(:multiple_ok)
-      result = subject.instance_eval { parse_response(response) }
+      result = subject.instance_eval { parse_delivery_response(response) }
 
       result.should == {
         "3"=>{:provider_id=>"14", :code=>"ok"},
@@ -33,12 +33,12 @@ describe SMS::MFMS do
 
     it 'should raise with non-ok response' do
       response = mfms_response(:general_fail)
-      expect { SMS::MFMS.new.instance_eval { parse_response(response) } }.to raise_error(SMS::MFMS::SMSError)
+      expect { SMS::MFMS.new.instance_eval { parse_delivery_response(response) } }.to raise_error(SMS::MFMS::SMSError)
     end
 
     it 'should parse return partially sent package' do
       response = mfms_response(:partial_fail)
-      result = subject.instance_eval { parse_response(response) }
+      result = subject.instance_eval { parse_delivery_response(response) }
 
       result.should == {
         "3"=>{:provider_id=>"14", :code=>"error-out-message-client-id-not-unique"},
@@ -48,7 +48,7 @@ describe SMS::MFMS do
 
   end
 
-  describe '#compose_send' do
+  describe '#compose_deliver' do
 
     def mfms_request(name)
       Nokogiri::XML(open("spec/lib/sms/xml/request/#{name}.xml", 'r').read).to_xml
@@ -94,19 +94,19 @@ describe SMS::MFMS do
     it 'should correctly compose one message request' do
       request = mfms_request(:one_message)
       messages = [test_message1]
-      Nokogiri::XML(subject.instance_eval { compose_send(messages) }).to_xml.should == request
+      Nokogiri::XML(subject.instance_eval { compose_deliver(messages) }).to_xml.should == request
     end
 
     it 'should correctly compose multiple message request' do
       request = mfms_request(:multiple_messages)
       messages = [test_message1, test_message2]
-      Nokogiri::XML(subject.instance_eval { compose_send(messages) }).to_xml.should == request
+      Nokogiri::XML(subject.instance_eval { compose_deliver(messages) }).to_xml.should == request
     end
 
     it 'should correctly compose request with common context' do
       request = mfms_request(:common_context)
       messages = [test_message3]
-      Nokogiri::XML(SMS::MFMS.new(login: login, password: password, common: common).instance_eval { compose_send(messages) }).to_xml.should == request
+      Nokogiri::XML(SMS::MFMS.new(login: login, password: password, common: common).instance_eval { compose_deliver(messages) }).to_xml.should == request
     end
 
   end

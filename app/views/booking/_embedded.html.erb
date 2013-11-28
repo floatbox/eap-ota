@@ -51,7 +51,7 @@
         <p class="odc-text"><%= t 'offer.comments.time' %></p>
     </div>
     <% recommendation_comments(recommendation).each do |comment| %>
-    <% if comment[:content] %>
+    <% unless comment[:content].blank? %>
         <div class="od-comment odc-specific" data-carrier="<%= comment[:carrier] %>"><%= raw comment[:content] %></div>
     <% end %>
     <% end %>
@@ -96,7 +96,7 @@
             <div class="bfst-tip"><%= raw t 'booking.payment.PCI_DSS' %></div>
             <div class="bfst-line"></div>
         </div>
-        <% if @order_form.enabled_delayed_payment? %>
+        <% if @order_form.allowed_delayed_payment? %>
         <div class="bfp-type clearfix">
             <div class="bfpt-item bfpt-selected">
                 <h5 class="bfpt-title"><label for="bfpt-card" class="bfpt-label"><%= t 'booking.payment.by_card.label' %></label></h5>
@@ -105,7 +105,13 @@
             </div>
             <div class="bfpt-item">
                 <h5 class="bfpt-title"><label for="bfpt-cash" class="bfpt-label"><%= t 'booking.payment.by_cash.label' %></label></h5>
-                <p class="bfpt-tip"><label for="bfpt-cash"><% if !@order_form.enabled_delivery? %><%= raw t 'booking.payment.by_cash.office' %><% else %><%= raw t @order_form.enabled_cash? ? 'both' : 'delivery', :scope => 'booking.payment.by_cash', :sum => human_price(Conf.payment.price_delivery) %><% end %></label></p>
+                <p class="bfpt-tip"><label for="bfpt-cash">
+                    <% if @order_form.enabled_cash? %>
+                        <%= raw t 'booking.payment.by_cash.office' %>
+                    <% else %>
+                        <%= raw t @order_form.enabled_delivery? ? 'delivery' : 'both', :scope => 'booking.payment.by_cash', :sum => human_price(Conf.payment.price_delivery) %>
+                    <% end %>
+                </label></p>
                 <input type="radio" name="order[payment_type]" class="bfpt-radio" id="bfpt-cash" value="cash">
             </div>
         </div>
@@ -115,7 +121,7 @@
             <input type="hidden" name="order[payment_type]" value="card">
         </div>
         <% end %>
-        <%= render 'payment_cash_form' if @order_form.enabled_delayed_payment? %>
+        <%= render 'payment_cash_form' if @order_form.allowed_delayed_payment? %>
         <%= render 'payment_card_form', :f => f %>
     </div>
 
@@ -154,6 +160,13 @@
                 <input type="checkbox" id="bffa-check" checked="checked">
                 <%= raw t 'booking.buy.agree' %>
             </div>
+            <% if @search.rt && long_trip(recommendation.variants.first) %>
+            <div class="bff-longtrip">
+                <p><%= raw t 'booking.longtrip.attention', :days => content_tag(:strong, trip_duration(recommendation.variants.first)), :date1 => human_date(recommendation.variants.first.segments.first.departure_date), :date2 => human_date(recommendation.variants.first.segments.last.departure_date) %></p>
+                <p><%= t 'booking.longtrip.right' %></p>
+                <p><%= raw t 'booking.longtrip.wrong', :new_search => content_tag(:span, t('booking.longtrip.new_search'), :class => 'bfflt-search') %></p>                
+            </div>
+            <% end %>
             <div class="bff-submit">
                 <div class="bf-button">
                     <div class="bfb-title"><%= t 'booking.buy.button' %></div>

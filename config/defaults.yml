@@ -4,6 +4,7 @@ site:
   forbidden_sale: no
   forbidden_cash: no
   forbidden_delivery: no
+  enforce_timeout: no
   store_flights: no
   host: 'localhost:3000'
   ssl: no
@@ -11,9 +12,11 @@ site:
   production:
     host: 'eviterra.com'
     ssl: yes
+    enforce_timeout: yes
   staging:
     host: 'staging.eviterra.com'
     ssl: yes
+    enforce_timeout: yes
   test:
     host: 'localhost:3000'
   auto_ticketing:
@@ -32,7 +35,6 @@ api:
 amadeus:
   endpoint: "https://test.webservices.amadeus.com"
   enabled: yes
-  nonstop_search: yes
   calendar: yes
   logging: no
   recommendations_lite: 20
@@ -174,6 +176,18 @@ riemann:
     request_performance: yes
     stat_counters: yes
     meter: yes
+alfastrah:
+  host: uat2.vtsft.ru
+  base_url: /travel-ext-services/TravelExtService
+sendgrid:
+  enabled: no
+  username: eviterra
+  password: flywithme
+  api:
+    host: api.sendgrid.com
+    base_url: /api
+  production:
+    enabled: yes
 performance:
   # очищать ли CodeStash между запросами?
   # поведение для "no" не тестировано, возможны проблемы с ActiveRecord::IdentityMap

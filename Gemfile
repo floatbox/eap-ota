@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 gem 'rails', '3.2.12'
 
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 2.0.2'
 gem 'i18n-js', :git => 'https://github.com/fnando/i18n-js.git'
 group :assets do
   #gem 'therubyracer'
@@ -16,17 +16,6 @@ end
 # если убрать в группу :development, не грузит больше в rails c
 # возможно, отжирает память и ресурсы
 gem 'pry-rails'
-# включает pry-rescue. Разматываю зависимости сам.
-# gem 'pry-plus'
-# включается даже в продакшне, перехватывает SIGQUIT
-# gem 'pry-rescue', require: false
-# возможно, вызывает проблему `expand_path': non-absolute home (ArgumentError)
-# gem 'pry-doc'
-# gem 'pry-docmore'
-gem 'pry-debugger'
-gem 'pry-stack_explorer'
-gem 'bond'
-gem 'jist'
 
 gem 'commands'
 
@@ -36,8 +25,6 @@ group :deployment do
   gem 'rvm-capistrano'
   gem 'capistrano_colors'
 end
-
-gem 'evergreen', :require => 'evergreen/rails', :group => :development
 
 # логгеры. выберу только один
 gem 'lumberjack'
@@ -55,8 +42,7 @@ gem 'sax-machine', :git => 'https://github.com/gregwebs/sax-machine.git'
 gem 'yajl-ruby'
 gem 'whenever', :require => false
 gem 'cucumber'
-# заменить на обычный gem handsoap после выхода версии 1.3.0+
-gem 'handsoap', :git => 'git://github.com/dredozubov/handsoap.git'
+gem 'handsoap'
 gem 'curb'
 # нужен для typhoeus driver у handsoap
 # gem 'typhoeus'
@@ -69,20 +55,18 @@ gem 'russian'
 gem 'mysql2'
 gem 'paper_trail'
 gem 'geo_ip'
-gem 'airbrake'
-# поддержка асинхронных нотификаций в airbrake, пока выключил
-# gem 'girl_friday'
+gem 'rollbar'
 gem 'newrelic_rpm'
 # gem 'rpm_contrib'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
 gem "devise", "~> 2.2.8"
-gem 'virtus', :git => 'https://github.com/solnic/virtus.git'
+gem 'virtus'
 gem 'sendgrid'
+gem 'hipchat'
+gem 'attribute-defaults'
 
-#gem 'eviterra-instrumentation', :path => '../eviterra-instrumentation'
-#gem 'eviterra-instrumentation', :git => 'git://github.com/codesnik/eviterra-instrumentation.git'
 gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rails-instrumentation.git'
 
 gem 'haml'
@@ -95,19 +79,14 @@ gem 'typus', :git => 'https://github.com/Eviterra/typus.git'
 gem "flot-rails"
 gem 'delayed_job_mongoid'
 
-# nested exceptions
-# gem 'nesty'
-# возможно, имеет смысл включить вместо nesty, глобально
-# gem 'nested_exceptions', require: 'nested_exceptions/global'
-
 # appservers
 gem 'thin', :require => false
-gem 'passenger', :require => false
 gem 'unicorn', :require => false
 
 group :development do
   gem 'yard'
   gem 'yard-activerecord'
+  gem 'zeus'
 end
 
 group :test do
@@ -117,12 +96,8 @@ group :test do
   gem 'factory_girl_rails'
 
   gem 'guard'
-  gem 'rb-inotify', :require => false
-  gem 'rb-fsevent', :require => false
-  gem 'rb-fchange', :require => false
-  # gem 'growl' # for OSX
-  # for linux
-  gem 'libnotify', :require => false
+  gem 'terminal-notifier-guard', require: false
+  gem 'libnotify', require: false
   gem 'guard-spork'
   gem 'guard-rspec'
   # gem 'guard-rails-assets'
@@ -134,9 +109,5 @@ group :test do
   gem 'webmock'
   # тестирование завтрашних комиссий
   gem 'timecop'
-end
-
-group :profiling do
-  gem 'ruby-prof'
 end
 

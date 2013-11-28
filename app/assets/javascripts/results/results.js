@@ -104,9 +104,6 @@ update: function(data) {
 load: function() {
     var that = this;
     var data = {query_key: this.data.query_key};
-    if (this.data.fragment_exist) {
-        data.restore_results = true;
-    }
     this.getPriceTemplate();
     this.all.load('/pricer/', data, 150000);
     this.matrix.load('/calendar/', data, 75000);
@@ -384,8 +381,14 @@ update: function() {
     this.update = $.noop;
 },
 toggle: function(mode) {
-    this.loading.toggle(mode === 'loading');
     this.empty.toggle(mode === 'empty');
+    if (mode === 'loading') {
+        var items = this.loading.find('.rmia-item').hide();
+        items.eq(Math.min(Math.floor(Math.random() * items.length), items.length - 1)).show();
+        this.loading.show();
+    } else {
+        this.loading.hide();
+    }
 },
 show: function() {
     this.el.show();

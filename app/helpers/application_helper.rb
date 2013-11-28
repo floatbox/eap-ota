@@ -52,5 +52,11 @@ module ApplicationHelper
   def display_rt_arrow rt
     Destination.rts.invert[rt]
   end
+
+  def smart_root_path
+    site_url = (Conf.site.ssl ? 'https://' : 'http://') + "#{Conf.site.host}/"
+    root_url.eql?(site_url) ? '/' : site_url
+  end
+
 end
 
