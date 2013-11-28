@@ -65,8 +65,6 @@ module BookingEssentials
       return :forbidden_sale
     end
     @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
-    # FIXME compatibility
-    @order_form.persons = params[:persons] if params[:persons]
     # Среагировать на изменение цены
     @order_form.recommendation.find_commission!
     return :failed_booking unless @order_form.recommendation.allowed_booking?

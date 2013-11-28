@@ -100,8 +100,6 @@ class BookingController < ApplicationController
   def recalculate_price
     @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
-    # FIXME compatibility
-    @order_form.persons = params[:persons] if params[:persons]
     @order_form.recommendation.find_commission!
     @order_form.context = @context
     @order_form.update_attributes(params[:order])
