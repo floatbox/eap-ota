@@ -29,6 +29,14 @@ api:
   enabled: yes
   url_base: 'https://eviterra.com'
   passwords: {}
+  demo:
+    constraint: 'api-demo'
+  production:
+    constraint: 'api'
+  development:
+    constraint: 'api'
+  staging:
+    constraint: 'api.staging'
   test:
     passwords:
       testpartner: testpass
