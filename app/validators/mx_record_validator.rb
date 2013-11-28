@@ -7,7 +7,7 @@ class MxRecordValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
 
-    return true unless value
+    return true unless value.present?
 
     domain = value.split('@').last
     mail_servers = Resolv::DNS.open do |dns|

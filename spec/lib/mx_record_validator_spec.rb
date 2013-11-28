@@ -3,14 +3,13 @@ require 'active_model'
 #require 'lib/mx_record_validator'
 
 
-class Validatable
-  include ActiveModel::Validations
-  validates :email, mx_record: true
-  attr_accessor  :email
-end
-
-
 describe MxRecordValidator, network: true do
+
+  class Validatable
+    include ActiveModel::Validations
+    validates :email, mx_record: true
+    attr_accessor  :email
+  end
 
   subject { Validatable.new }
 
@@ -19,6 +18,14 @@ describe MxRecordValidator, network: true do
       expect(subject).to be_valid
     end
   end
+
+  context 'with blank email' do
+    it 'is not valid' do
+      subject.email = ''
+      expect(subject).to_not be_valid
+    end
+  end
+
 
   context 'with mx-containing domain' do
     it 'is not valid' do
