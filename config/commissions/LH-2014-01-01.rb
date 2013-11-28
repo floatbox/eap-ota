@@ -1,4 +1,4 @@
-carrier "LH", start_date: "2014-1-1"
+carrier "LH", start_date: "2014-01-01"
 
 rule 1 do
 ticketing_method "downtown"
@@ -93,3 +93,4 @@ rule 7 do
 no_commission
 example "svocdg/ab"
 end
+

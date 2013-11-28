@@ -91,7 +91,7 @@ example "svoaap/UN7061 aapsvo/UN7061"
 example "dmesin/UN7062 sindme/UN7062"
 end
 
-rule 10 do
+rule 8 do
 no_commission
 interline :absent
 example "svocdg/lh cdgmad/lh"
