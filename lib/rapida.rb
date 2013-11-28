@@ -13,6 +13,12 @@ class Rapida
     'pay'
   end
 
+  private
+
+  def order?(account)
+    @order = Order.where(code: account).first ? true : false
+  end
+
   def error
   end
 
