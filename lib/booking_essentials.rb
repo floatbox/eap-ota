@@ -1,5 +1,7 @@
 module BookingEssentials
 
+  protected
+
   def preliminary_booking_result(forbid_class_changing)
     return if Conf.site.forbidden_booking
     @recommendation = Recommendation.deserialize(params[:recommendation])
