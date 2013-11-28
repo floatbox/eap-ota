@@ -1,29 +1,24 @@
 # encoding: utf-8
 class ApiBookingController < ApplicationController
   include BookingEssentials
-  protect_from_forgery :except => :pay
 
-  def preliminary_booking
+  skip_before_filter :verify_authenticity_token
+
+  def create
     # FIXME тут должно быть robot: true, но повременю
     @context = Context.new(partner: params[:partner])
     if preliminary_booking_result(false)
-      respond_to do |format|
-        format.json {render :json => {
+      render :json => {
         :success => true,
         :number => @order_form.number,
         :info => @order_form.info_hash
-        }}
-        format.xml {render 'api/preliminary_booking'}
-      end
+      }
     else
-      respond_to do |format|
-        format.json {render :json => {:success => false}}
-        format.xml {render 'api/preliminary_booking'}
-      end
+      render :json => {:success => false}
     end
   end
 
-  def pay
+  def update
     # FIXME тут должно быть robot: true, но повременю
     @context = Context.new(partner: params[:partner])
     case pay_result

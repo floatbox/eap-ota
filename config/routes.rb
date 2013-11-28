@@ -35,6 +35,9 @@ Eviterra::Application.routes.draw do
     match 'avia/v1/variants(.:format)' => 'pricer#api', :format => :xml
     match 'avia/v1/searches' => 'booking#api_redirect'
     match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
+    # предложения по неймспейсу?
+    post 'v1/orders' => 'api_booking#create'
+    post 'v1/orders/:id' => 'api_booking#update'
     match '*anything' => redirect('/')
   end
 
@@ -48,8 +51,9 @@ Eviterra::Application.routes.draw do
   post 'api/booking/edit' => proc { [404, {}, []] }
   match 'api/booking/:query_key(.:format)' => 'booking#api_booking', :via => :get
   match 'api/order_stats' => 'api_order_stats#index'
-  match 'api/v1/preliminary_booking' => 'api_booking#preliminary_booking', :as => :api_preliminary_booking
-  post 'api/v1/pay' => 'api_booking#pay', :as => :api_booking_pay
+  # FIXME грохнуть оба, как только piece of summer перейдет
+  match 'api/v1/preliminary_booking' => 'api_booking#create', :as => :api_preliminary_booking
+  post 'api/v1/pay' => 'api_booking#update', :as => :api_booking_pay
 
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
   match 'price_map' => 'pricer#price_map', :as => :price_map
