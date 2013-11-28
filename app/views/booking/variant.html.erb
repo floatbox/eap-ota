@@ -35,42 +35,30 @@
 </div>
 
 <div id="booking-disclaimer" class="b-disclaimer wrap">
-<div style="background: #fff; -moz-border-radius: 12px; border-radius: 12px; display: none;" class="bd-column">
-    <h5 class="bd-title" style="color: #777; font-weight: 500; font-size: 15px; text-align: center; padding-top: 10px;">Совместно с</h5>
-    <p align="center" id="parther-logo"><% if @context.partner.logo_exist? %><img src="<%= @context.partner.logo_url %>" alt="<%= @context.partner.token %>" title="<%= @context.partner.token %>"><% end %></p>
+<div class="bd-partner">
+    <h6 class="bdp-eviterra">eviterra <span class="bdp-plus">+</span></h6>
+    <p id="parther-logo"><% if @context.partner.logo_exist? %><img src="<%= @context.partner.logo_url %>" alt="<%= @context.partner.token %>" title="<%= @context.partner.token %>"><% end %></p>
+</div>
+<div class="bd-column">
+    <h5 class="bd-title">Почему покупают у нас</h5>
+    <p class="bd-item">Билеты на 500 авиакомпаний</p>
+    <p class="bd-item">Низкие цены и большие скидки</p>
+    <p class="bd-item">Современно и технологично</p>
+    <p class="bd-item">Безопасные платежи</p>
+    <p class="bd-item">Моментальное оформление</p>
 </div>
 <div class="bd-column">
     <h5 class="bd-title">Всегда честные цены</h5>
     <p>В отличие от&nbsp;других сайтов мы&nbsp;показываем окончательную цену со&nbsp;всеми сборами и&nbsp;не&nbsp;взимаем никаких скрытых комиссий.</p>
 </div>
-<div class="bd-column">
-    <div class="bd-border"></div>
-    <h5 class="bd-title">Почему покупают у нас</h5>
-    <p>&mdash;&nbsp;&nbsp;Билеты на 500 авиакомпаний</p>
-    <p>&mdash;&nbsp;&nbsp;Низкие цены и большие скидки</p>
-    <p>&mdash;&nbsp;&nbsp;Современно и технологично</p>
-    <p>&mdash;&nbsp;&nbsp;Безопасные платежи</p>
-    <p>&mdash;&nbsp;&nbsp;Моментальное оформление</p>
-</div>
 <div class="bd-column" id="booking-appstore">
-    <div class="bd-border"></div>
-<h5 class="bd-title"><a target="_blank" style="position: relative; text-decoration: none; color: #333;" href="https://itunes.apple.com/ru/app/eviterra/id569307779">&nbsp;<img style="position: absolute; top: 0; left: 0px;" src="/images/booking/appstore.png" alt="Доступно в App Store"></a></h5><br>
-    <p>&mdash;&nbsp;&nbsp;Удобный интерфейс</p>
-    <p>&mdash;&nbsp;&nbsp;Быстрый поиск</p>
-    <p>&mdash;&nbsp;&nbsp;Ничего лишнего</p>
-    <p>&mdash;&nbsp;&nbsp;Покупка за три минуты</p>
+    <h5 class="bd-title"><a target="_blank" style="text-decoration: none; color: #333;" href="https://itunes.apple.com/ru/app/eviterra/id569307779">Приложение для Айфона</a></h5>
+    <a target="_blank" class="bd-iphone" href="https://itunes.apple.com/ru/app/eviterra/id569307779"><img src="/images/booking/iphone.png" alt="Купить в AppStore"></a>
+    <p class="bd-item">Удобный интерфейс</p>
+    <p class="bd-item">Быстрый поиск</p>
+    <p class="bd-item">Ничего лишнего</p>
+    <p class="bd-item">Покупка за три минуты</p>
 </div>
-<% if false && @destination.present? %>
-<div class="bd-column" id="booking-subscription">
-    <div class="bd-border"></div>
-    <h5 class="bd-title">Подпишитесь на направление</h5>
-    <p>Если вы хотите быть в&nbsp;курсе появления выгодных тарифов по&nbsp;направлению <%= @destination.from.name %>&nbsp;— <%= @destination.to.name %>, введите ваш электронный адрес:</p>
-    <form class="rs-form" action="/subscribe/" data-destination="<%= @destination.id %>" data-from-iata="<%= @destination.from.iata %>" data-to-iata="<%= @destination.to.iata %>" data-rt="<%= @destination.rt %>">
-        <div><label class="rsf-label" for="rsf-email">Ваш адрес</label><input name="email" class="rsf-field" id="rsf-email" maxlength="50">&nbsp;<input class="rsf-submit" type="submit" value="Хочу"></div>
-        <p class="rsf-error"></p>
-    </form>
-</div>
-<% end %>
 </div>
 
 <div id="booking" class="b-processing">
