@@ -1,20 +1,27 @@
-## Версия v1.2
+## Версия v1.3
 
 ## Проверка мест
 
 ### Запрос
+
 В поиске у каждого варианта есть параметр - recommendation.
 
-Его нужно передавать в качестве GET параметра в /api/v1/preliminary_booking
+Его нужно передавать в качестве POST параметра в https://api.eviterra.com/v1/orders
 
 Необязательные параметры: adults, children и infants (по умолчанию равны 1,0,0)
 
-Пример url для запроса:
+### Пример параметров: (application/x-www-form-urlencoded)
 
-* чтобы получить в ответ xml: https://eviterra.com/api/preliminary_booking.xml?recommendation=amadeus.LO.SS.MM.88.LO678SVOWAW151212-LO335WAWCDG161212&adults=2&children=1&infants=1
-* json: https://eviterra.com/api/preliminary_booking.json?recommendation=amadeus.LO.SS.MM.88.LO678SVOWAW151212-LO335WAWCDG161212&adults=2&children=1&infants=1
+```
+recommendation=amadeus.LO.SS.MM.88.LO678SVOWAW151212-LO335WAWCDG161212
+adults=2
+children=1
+infants=1
+```
 
 ### Ответ
+
+json:
 number -  нужен будет при создании бронирования
 
 info.prices - цены, соответствуют ценам в обычной форме покупки билета
@@ -23,85 +30,46 @@ info.rules - правила тарифа
 
 info.booking_classes - новые классы бронирования
 
-## Покупка билета
-url для запроса: https://eviterra.com/api/v1/pay
+## Бронирование и оплата
+
+url для запроса: https://api.eviterra.com/v1/orders/<number>
 
 Необходимо отправлять POST запрос со такими же параметрами, как и при обычтом запросе через web.
 
-### Пример параметров:
- 
-person_attributes[0][last_name]:ADULT
+### Пример параметров: (application/x-www-form-urlencoded)
 
-person_attributes[0][first_name]:ALEX
-
-person_attributes[0][sex]:m
-
-person_attributes[0][birthday_day]:12
-
-person_attributes[0][birthday_month]:12
-
-person_attributes[0][birthday_year]:1980
-
-person_attributes[0][nationality_code]:RUS
-
-person_attributes[0][passport]:1232323232
-
-person_attributes[0][bonus_present]:1
-
-person_attributes[0][document_noexpiration]:1
-
-person_attributes[0][bonuscard_type]:AF
-
-person_attributes[0][bonuscard_number]:54543445
-
-person_attributes[1][last_name]:INFANT
-
-person_attributes[1][first_name]:IVAN
-
-person_attributes[1][sex]:m
-
-person_attributes[1][birthday_day]:12
-
-person_attributes[1][birthday_month]:12
-
-person_attributes[1][birthday_year]:2011
-
-person_attributes[1][nationality_code]:RUS
-
-person_attributes[1][passport]:343434556
-
-person_attributes[1][document_expiration_day]:12
-
-person_attributes[1][document_expiration_month]:12
-
-person_attributes[1][document_expiration_year]:2019
-
-person_attributes[1][bonuscard_type]:AF
-
-person_attributes[1][bonuscard_number]:
-
-order[number]:50cf3614cbe7f96d79000019
-
+```
+order[persons][0][last_name]:ADULT
+order[persons][0][first_name]:ALEX
+order[persons][0][sex]:m
+order[persons][0][birthday]:1980-12-20
+order[persons][0][nationality_code]:RUS
+order[persons][0][passport]:1232323232
+order[persons][0][bonus_present]:1
+order[persons][0][document_noexpiration]:1
+order[persons][0][bonuscard_type]:AF
+order[persons][0][bonuscard_number]:54543445
+order[persons][1][last_name]:INFANT
+order[persons][1][first_name]:IVAN
+order[persons][1][sex]:m
+order[persons][1][birthday]:2011-01-13
+order[persons][1][nationality_code]:RUS
+order[persons][1][passport]:343434556
+order[persons][1][document_expiration]:2019-12-01
+order[persons][1][bonuscard_type]:AF
+order[persons][1][bonuscard_number]:
 order[email]:test@example.com
-
 order[phone]:+79998887766
-
 order[payment_type]:card
-
 order[delivery]:
-
 card[number]:4111  1111  1111  1112
-
 card[name]:MR CARDHOLDER
-
 card[month]:12
-
 card[year_short]:15
-
 card[verification_value]:123
+```
 
-
-Ответ содержит следующие поля:
+### Ответ содержит следующие поля:
 
 success:
 * true - бронирование созданно успешно
