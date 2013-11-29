@@ -9,6 +9,13 @@ class Customer < ActiveRecord::Base
           :confirmable,
           :recoverable, :rememberable, :trackable
 
+  def devise_mailer
+    CustomerMailer
+  end
+
+  self.password_length = 6..128
+  self.reset_password_within = 48.hours
+
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
 
