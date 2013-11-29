@@ -9,7 +9,7 @@ class RapidaController < ApplicationController
     when :pay   then rapida.pay
     else rapida.unknown_command
     end
-    render text: response
+    render xml: response
   end
 
   private
