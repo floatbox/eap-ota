@@ -275,6 +275,21 @@ describe Amadeus::Response::PNRRetrieve, :amadeus do
 
   end
 
+  describe '#emd_tickets' do
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_emd.xml')
+    end
+
+    subject {response.emd_tickets.first}
+
+    specify{response.emd_tickets.count.should == 2}
+    its( [:number]) {should == "1816657851"}
+    its([:code]) {should == "075"}
+    its([:price_total_raw]) {should == "RUB675"}
+    its([:status]) {should == "ticketed"}
+    its([:ticketed_date]) {should == Date.parse("2013-11-27")}
+  end
+
   describe "#agent_commission" do
     context "percents" do
       subject {amadeus_response('spec/amadeus/xml/PNR_Retrieve_with_ticket.xml')}

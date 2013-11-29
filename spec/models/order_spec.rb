@@ -282,6 +282,7 @@ describe Order do
         pnr_resp.stub(:flights).and_return(nil)
         pnr_resp.stub(:exchanged_tickets).and_return({})
         pnr_resp.stub(:additional_pnr_numbers).and_return({})
+        pnr_resp.stub(:emd_tickets).and_return([])
         tst_resp = stub('Amadeus::Response::TicketDisplayTST')
         tst_resp.stub(:money_with_refs).and_return({})
         tst_resp.stub(:baggage_with_refs).and_return({})

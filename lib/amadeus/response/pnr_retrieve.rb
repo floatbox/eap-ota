@@ -112,7 +112,7 @@ module Amadeus
           %r{
             (?<inf>PAX|INF)\ (?<code> \d+ )-(?<number> [\d-]+ )
             / [DEV] (?<status> [TRV] ) (?<validating_carrier> \w{2} )
-            /? [^/]*
+            /? (?<price_raw> [^/]+)?
             / (?<ticketed_date> \w+ )
             / (?<office_id> \w+ )
             / (?<validator> \d+ )
@@ -122,6 +122,7 @@ module Amadeus
           return({
             :number => m[:number],
             :code => m[:code],
+            :price_total_raw => m[:price_raw],
             :status => {'T' => 'ticketed', 'V' => 'voided', 'R' => 'returned'}[m[:status]],
             :ticketed_date => Date.strptime(m[:ticketed_date], '%d%h%y'),
             :validating_carrier => m[:validating_carrier],
@@ -162,9 +163,11 @@ module Amadeus
         end
       end
 
-      def tickets
-        @tickets ||= xpath( "//r:dataElementsIndiv[r:referenceForDataElement/r:reference[r:qualifier='PT']]/r:otherDataFreetext[r:freetextDetail/r:type='P06']/r:longFreetext"
-        ).inject({}) do |res, fa|
+      def parse_tickets
+        @tickets = {}
+        @emd_tickets = []
+        xpath( "//r:dataElementsIndiv[r:referenceForDataElement/r:reference[r:qualifier='PT']]/r:otherDataFreetext[r:freetextDetail/r:type='P06']/r:longFreetext"
+        ).each do |fa|
           passenger_ref = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='PT']/r:number").to_i
           segments_refs = fa.xpath("../../r:referenceForDataElement/r:reference[r:qualifier='ST']/r:number").every.to_i.sort
           passenger_elem = xpath("//r:travellerInfo[r:elementManagementPassenger/r:reference[r:qualifier='PT'][r:number=#{passenger_ref}]]")
@@ -182,13 +185,34 @@ module Amadeus
             Flight.new(flights_hash[sr]) if flights_hash[sr]
           end.compact.sort_by(&:departure_datetime_utc)
           ticket_key = [[passenger_ref, infant_flag], segments_refs]
-          res.merge({ticket_key => ticket_hash.merge({
+          if flights_array.present?
+            ticket_hash.delete(:price_total_raw) #Нужно только в EMD
+            @tickets.merge!({ticket_key => ticket_hash.merge({
               :first_name => passenger_first_name,
               :passport => passport(passenger_ref, infant_flag == 'i'),
               :last_name => passenger_last_name,
               :flights => flights_array
             })})
+          else
+            @emd_tickets.push(ticket_hash.merge({
+              :first_name => passenger_first_name,
+              :passport => passport(passenger_ref, infant_flag == 'i'),
+              :last_name => passenger_last_name,
+              :flights => flights_array
+            }))
+          end
         end
+
+      end
+
+      def tickets
+        parse_tickets unless @tickets
+        @tickets
+      end
+
+      def emd_tickets
+        parse_tickets unless @emd_tickets
+        @emd_tickets
       end
 
       def exchanged_tickets

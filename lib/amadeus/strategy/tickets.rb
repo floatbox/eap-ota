@@ -38,6 +38,13 @@ module Amadeus::Strategy::Tickets
         })
       end
     end
+    pnr_resp.emd_tickets.each do |ticket_hash|
+      tickets << ticket_hash.merge({
+        :source => 'amadeus',
+        :pnr_number => @order.pnr_number,
+        :additional_pnr_number => add_number
+      })
+    end
 
     tickets
   end

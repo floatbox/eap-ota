@@ -33,6 +33,12 @@ module Pricing
       status == 'voided' ? 0 : super
     end
 
+    # Цена, полученная из строки билета в бронировании
+    # Пока используется только в EMD
+    def price_total_raw= price_raw
+      self.original_price_penalty = price_raw.to_money
+    end
+
     def price_markup
       price_consolidator + price_our_markup + price_blanks + price_discount + price_operational_fee
     end
