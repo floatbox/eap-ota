@@ -39,6 +39,9 @@ url для запроса: https://api.eviterra.com/v1/orders/<number>
 ### Пример параметров: (application/x-www-form-urlencoded)
 
 ```
+order[email]=test@example.com
+order[phone]=+79998887766
+order[payment_type]=cash
 order[persons][0][last_name]=ADULT
 order[persons][0][first_name]=ALEX
 order[persons][0][sex]=m
@@ -58,15 +61,6 @@ order[persons][1][passport]=343434556
 order[persons][1][document_expiration]=2019-12-01
 order[persons][1][bonuscard_type]=AF
 order[persons][1][bonuscard_number]=
-order[email]=test@example.com
-order[phone]=+79998887766
-order[payment_type]=card
-order[delivery]=
-card[number]=4111111111111112
-card[name]=MR CARDHOLDER
-card[month]=12
-card[year_short]=15
-card[verification_value]=123
 ```
 
 ### Ответ содержит следующие поля:
@@ -74,7 +68,7 @@ card[verification_value]=123
 success:
 * true - бронирование созданно успешно
 * false - бронирование не созданно
-* threeds - требуется 3ds авторизация
+* threeds - требуется 3ds авторизация (для карт)
 
 reason - причина того, что бронирование не было создано:
 * unable_to_sell - забронировать не возможно по внешним (не связанным с данными запроса) причинам.
