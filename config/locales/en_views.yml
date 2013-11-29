@@ -398,9 +398,6 @@ en:
       new_search: "новый поиск"
     farerules:
       title: "Fare application rules"
-      restrictions: "Attention! In case of passenger sickness, visa refusal or other circumstances, refund/exchange is impossible without penalties. Refund/exchange fees are calculated according to airline fare rules. When the ticket combines different fare classes, the most strict limitations are applied to the entire itinerary."
-      service: "In case of ticket refund a cancellation charge of 600 rubles per passenger is applied in addition to possible airline refund penalty based on fare rules."
-      cancellation: "Tickets are non-transferable. In case of no-show, the airline may cancel all subsequent segments of the itinerary."
       fare: "Fare"
     validation:
       empty:

@@ -301,9 +301,7 @@
     <div class="bff-close"></div>
     <div class="bff-content">
         <h3 class="bff-title"><%= t 'booking.farerules.title' %></h3>
-        <p class="bff-text"><%= raw t 'booking.farerules.restrictions' %></p>
-        <p class="bff-text"><%= raw t 'booking.farerules.service' %></p>
-        <p class="bff-text"><%= raw t 'booking.farerules.cancellation' %></p>
+        <%= render :partial => 'rules_summary' %>
     </div>
     <%= render :partial => 'rules' %>
 </div>

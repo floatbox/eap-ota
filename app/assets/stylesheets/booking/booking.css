@@ -477,6 +477,10 @@
     line-height: 22px;
     letter-spacing: -0.03em;
 }
+.bff-text {
+    line-height: 17px;
+    margin: 0 0 10px;
+}
 .bff-group {
     margin: 20px 0 0;
 }
