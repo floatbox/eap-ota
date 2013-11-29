@@ -13,21 +13,14 @@ class Rapida
   # основные обработчики
 
   def check
-    params = if checkable?
-      # создает платеж со статусом pending
-      #create_pending_charge!
-      {
-        result: error_code(:ok),
-        txn_id: @txn_id,
-        account: @account,
-      }
-    else
-      params = {}
-    end
-    builder = Builder.new params
+    # создает платеж со статусом pending
+    create_pending_charge! if checkable?
+
+    builder = Builder.new result: error_code(error),
+                          txn_id: @txn_id,
+                          account: @account,
+                          info: @comment
     builder.check_response
-    # заглушка
-    'check'
   end
 
   def pay
@@ -104,6 +97,10 @@ class Rapida
 
   # ошибки, статус коды
 
+  def error
+    @error || :ok
+  end
+
   def error_code(error_type)
     case error_type
       # справа описания из документации рапиды
@@ -165,11 +162,12 @@ class Rapida
         xml.response_ {
           xml.rapida_txn_id  @txn_id              # id рапиды
           xml.result_        @result              # 0 - ок, 1 - не ок
-          # FIXME
+          # FIXME ?
           # prv_txn:
           # > Уникальный номер операции пополнения баланса Потребителя.
           # > Этот элемент должен возвращаться после запроса на пополнение баланса.
-          # > При запросе на проверку возможности осуществления Платежа, его возвращать не обязательно - он все равно не обрабатывается. 
+          # > При запросе на проверку возможности осуществления Платежа,
+          # > его возвращать не обязательно - он все равно не обрабатывается.
           xml.prv_txn_       @pay_id  if @pay_id  # наш id судя по всему
           xml.comment_       @comment if @comment # кандидат на убиение
           xml.trip_          @extra   if @extra   # экстра инфо, пока просто для галочки
