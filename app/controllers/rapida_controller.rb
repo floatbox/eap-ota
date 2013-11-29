@@ -3,12 +3,11 @@
 class RapidaController < ApplicationController
   def payment
     get_params!
-    rapida = Rapida.new
+    rapida = Rapida.new *@requisites
     response = case @command
-    when :check then rapida.check *@requisites
-    when :pay   then rapida.pay   *@requisites
-    # TODO сделать через Rapida - возвращать валидный рапидовый статус
-    else return render :status => :not_acceptable, :text => 'command not allowed'
+    when :check then rapida.check
+    when :pay   then rapida.pay
+    else rapida.unknown_command
     end
     render text: response
   end
@@ -17,11 +16,7 @@ class RapidaController < ApplicationController
 
   def get_params!
     @command = params[:command].to_sym
-    txn_id = params[:txn_id]
-    account = params[:account]
-    sum = params[:sum]
-    phone = params[:phone]
-    @requisites = [txn_id, account, sum, phone]
+    @requisites = [params[:txn_id], params[:account], params[:sum], params[:phone] ]
   end
 
 end

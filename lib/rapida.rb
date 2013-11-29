@@ -3,19 +3,25 @@
 class Rapida
   # класс для работы с RapidaCharge и всем-всем-всем
 
-  def check(txn_id, account, price, phone)
-    # TODO кастим параметры здесь, а не в контроллере
-    #price = BigDecimal.new(price)
-    # etc
-    params = if checkable?(account, price)
-      # заполнение параметров без ошибки
-      # TODO обработка параметров
+  def initialize(txn_id, account, price, phone)
+    @txn_id = txn_id
+    @account = account
+    @price = (price && BigDecimal.new(price))
+    @phone = phone
+  end
+
+  # основные обработчики
+
+  def check
+    params = if checkable?
+      # создает платеж со статусом pending
+      #create_pending_charge!
       {
-        result: error_code(:ok)
+        result: error_code(:ok),
+        txn_id: @txn_id,
+        account: @account,
       }
     else
-      # заполнение параметров с ошибкой
-      # TODO fill error params
       params = {}
     end
     builder = Builder.new params
@@ -24,29 +30,79 @@ class Rapida
     'check'
   end
 
-  def pay(txn_id, account, sum, phone)
+  def pay
     # заглушка
     'pay'
   end
 
+  def unknown_command
+
+  end
+
+  # /основные обработчики
+
   private
 
-  # проверяет, можно ли вернуть check без ошибки
-  def checkable?(account, price)
-    order?(account) && @order.pending? && adequate_price?(price)
+  # операции с платежами
+
+  def create_pending_payment!
+    @order.payment << RapidaCharge.create(status: 'pending', their_ref: @txn_id)
   end
 
-  def adequate_price?(price)
-    @order.price_with_payment_commission == price
+  # /операции с платежами
+
+
+  # проверки состояния платежа и заказа
+
+  # проставлять @error и @comment можно как внутри valid?, так и внутри @checkable? и @payable?
+
+  def checkable?
+    # проверяет, можно ли вернуть check без ошибки
+    order? && @order.pending? && valid?
   end
 
-  def payable?(account)
+  def payable?
   end
 
-  # обязательно вызывать перед любой операцией с ордером
-  def order?(account)
-    @order = Order.where(code: account).first ? true : false
+  def order?
+    @order ||= Order.where(code: @account).first ? true : false
   end
+
+  # общие проверки для check и pay
+  def valid?
+    !!(
+      insufficient_params? ||
+      inadequate_price?
+    )
+  end
+
+  def insufficient_params?
+    [:txn_id, :account, :price, :phone].each do |attr|
+      # есть небольшая проблема с несоответствием названия sum/price,
+      # но не думаю что это очень важно и требует переименования
+      unless instance_variable_get(:"@#{attr}")
+        @error = :denied_technically
+        @comment = "отсутствует атрибут #{attr}"
+        return true
+      end
+    end
+    false
+  end
+
+  def inadequate_price?
+    cmp = price <=> @order.price_with_payment_commission
+    if cmp == 0
+      false
+    else
+      @error = cmp > 0 ? :price_gt_needed : :price_lt_needed
+      true
+    end
+  end
+
+  # /проверки состояния платежа и заказа
+
+
+  # ошибки, статус коды
 
   def error_code(error_type)
     case error_type
@@ -79,6 +135,8 @@ class Rapida
     false
   end
 
+  # / ошибки, статус коды
+
   class Builder
     # Отвечает исключительно за генерацию xml-ответов.
     # Все проверки должен делать класс Rapida.
@@ -92,7 +150,6 @@ class Rapida
           xml.rapida_txn_id  @txn_id              # id рапиды
           xml.result_        @result              # 0 - ок, 1 - не ок
           xml.account_       @account if @account # идентификатор, переданный рапидой, равен Order#code
-          # TODO переспросить насчет названия и этого тега
           xml.passangers_    @persons if @persons # пассажиры.to_s
           xml.trip_          @extra   if @extra   # экстра инфо, пока просто для галочки
           xml.shortinfo_     @info    if @info    # любые заметки
@@ -104,7 +161,6 @@ class Rapida
 
     def pay_response
       Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
-        # TODO переспросить насчет названия, в доке написано respone - hopefully опечатка
         xml.response_ {
           xml.rapida_txn_id  @txn_id              # id рапиды
           xml.result_        @result              # 0 - ок, 1 - не ок
