@@ -143,6 +143,7 @@ class Rapida
     # FIXME возможно вынести отдельно надо будет, посмотрим насколько разрастется
 
     include KeyValueInit
+    attr_accessor :txn_id, :result, :account, :persons, :info, :extra, :price, :debt, :comment, :pay_id, :receipt
 
     def check_response
       Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
