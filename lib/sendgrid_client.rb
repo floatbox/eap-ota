@@ -7,16 +7,28 @@ class SendgridClient
   attr_accessor :host, :base_url
 
   def initialize options = {}
-    @host     = options.fetch :host,     Conf.sendgrid.host
-    @base_url = options.fetch :base_url, Conf.sendgrid.base_url
+    @host     = options.fetch :host,     Conf.sendgrid.api['host']
+    @base_url = options.fetch :base_url, Conf.sendgrid.api['base_url']
   end
 
   def bounces options = {}
     body = options.slice(:email, :date_start, :date_end)
-
     response = request('bounces.get.json', body).body
     response = MultiJson.load response
+    response
+  end
 
+  def blocks options = {}
+    body = options.slice(:email, :date_start, :date_end)
+    response = request('blocks.get.json', body).body
+    response = MultiJson.load response
+    response
+  end
+
+  def invalidemails options = {}
+    body = options.slice(:email, :date_start, :date_end)
+    response = request('invalidemails.get.json', body).body
+    response = MultiJson.load response
     response
   end
 

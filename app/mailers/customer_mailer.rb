@@ -50,6 +50,7 @@ class CustomerMailer < Devise::Mailer
         :message => message.body.raw_source
         )
         instruction.save
+        instruction.delay(queue: 'subscriptions', run_at: 5.minutes.from_now, priority: 2).load_sendgrid_status
     end
   end
 

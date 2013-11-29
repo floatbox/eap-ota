@@ -1,7 +1,7 @@
 # так называется, чтобы быть в меню после заказов
 CustomerInstruction:
   fields:
-    default: subject, message, created_at, sent_status
+    default: subject, message, created_at, sent_status, error_reason
     options:
       date_formats:
         created_at: long

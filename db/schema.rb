@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131126160754) do
+ActiveRecord::Schema.define(:version => 20131129162928) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -189,6 +189,7 @@ ActiveRecord::Schema.define(:version => 20131126160754) do
     t.integer  "customer_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.text     "reason"
   end
 
   add_index "customer_instructions", ["customer_id"], :name => "index_customer_instructions_on_customer_id"
