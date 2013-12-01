@@ -18,6 +18,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
+discount "3% + 0.05"
 consolidator "2%"
 agent_comment "1 руб с билета по опубл. тарифам на рейсы AB (В договоре Interline не прописан.)"
 subagent_comment "5 коп с билета по опубл. тарифам на рейсы AB"

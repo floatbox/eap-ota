@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
-discount "2.5%"
+discount "8%"
 agent_comment "7% от тарифа на международные перелеты на рейсы NZ;"
 subagent_comment "5% от тарифа на международные перелеты на рейсы NZ;"
 international
@@ -15,7 +15,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
-discount "1.75%"
+discount "6.5%"
 agent_comment "5% от тарифа на внутренние перелеты на рейсы NZ."
 subagent_comment "3,5% от тарифа на внутренние перелеты на рейсы NZ."
 domestic
