@@ -161,8 +161,7 @@ class OrderForm
         :discount => recommendation.price_discount.round(2),
         :fee => recommendation.fee.round(2)
       },
-      :rules => recommendation.rules,
-      :booking_classes => recommendation.booking_classes
+      :rules => recommendation.rules
     }
   end
 
