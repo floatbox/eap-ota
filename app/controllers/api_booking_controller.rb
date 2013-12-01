@@ -21,6 +21,10 @@ class ApiBookingController < ApplicationController
   def update
     # FIXME тут должно быть robot: true, но повременю
     @context = Context.new(partner: params[:partner])
+    @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
+    @order_form.context = @context
+    @order_form.update_attributes(params[:order])
+    @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
     case pay_result
     when :forbidden_sale, :failed_booking
       render :json => {success: false, reason: 'unable_to_sell'}

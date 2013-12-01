@@ -64,14 +64,9 @@ module BookingEssentials
       StatCounters.inc %W[pay.errors.forbidden]
       return :forbidden_sale
     end
-    @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
     # Среагировать на изменение цены
     @order_form.recommendation.find_commission!
     return :failed_booking unless @order_form.recommendation.allowed_booking?
-    @order_form.context = @context
-    @order_form.update_attributes(params[:order])
-    @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
-
 
     if @order_form.counts_contradiction
       StatCounters.inc %W[pay.errors.counts_contradiction]
