@@ -161,6 +161,7 @@ ru:
         created_at: "Создан"
         external_gateway_link: "Детальная история"
         auth_code: "Код авторизации"
+        had_3ds: "Был 3DS"
         <<: *PRICING_ATTRIBUTES
       customer:
         password: "Пароль"

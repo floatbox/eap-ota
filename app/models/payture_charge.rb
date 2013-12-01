@@ -26,6 +26,10 @@ class PaytureCharge < Payment
     self.name_in_card = card.name
   end
 
+  def had_3ds
+    !! threeds_key
+  end
+
   def can_block?; pending? end
   def can_confirm_3ds?; threeds? end
   def can_cancel?; blocked? end
