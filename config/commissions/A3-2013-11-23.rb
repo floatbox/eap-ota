@@ -56,7 +56,7 @@ rule 5 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
-discount "3% + 5"
+discount "3%"
 consolidator "2%"
 agent_comment "Внутренние перелеты: 1% для тарифов Экономического и Бизнес классов"
 subagent_comment "5 руб. с билета для тарифов Эконом и Бизнес классов"
