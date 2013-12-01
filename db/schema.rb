@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131121131118) do
+ActiveRecord::Schema.define(:version => 20131130235415) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -508,6 +508,7 @@ ActiveRecord::Schema.define(:version => 20131121131118) do
     t.text     "error_message"
     t.string   "endpoint_name",                                       :default => ""
     t.string   "ip"
+    t.string   "auth_code"
   end
 
   add_index "payments", ["order_id"], :name => "index_payments_on_order_id"

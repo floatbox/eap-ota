@@ -160,6 +160,7 @@ ru:
         control_links: "Управление"
         created_at: "Создан"
         external_gateway_link: "Детальная история"
+        auth_code: "Код авторизации"
         <<: *PRICING_ATTRIBUTES
       customer:
         password: "Пароль"

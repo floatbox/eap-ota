@@ -46,7 +46,7 @@ class PaytureCharge < Payment
     if response.threeds?
       update_attributes :status => 'threeds', :threeds_key => response.threeds_key
     elsif response.success?
-      update_attributes :status => 'blocked'
+      update_attributes :status => 'blocked', :auth_code => response.auth_code
     elsif response.error?
       update_attributes :status => 'rejected', :error_code => response.err_code
     else
