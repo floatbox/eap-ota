@@ -10,8 +10,11 @@ class ApiBookingController < ApplicationController
     if preliminary_booking_result(false)
       render :json => {
         :success => true,
-        :number => @order_form.number,
-        :info => @order_form.info_hash
+        :order => {
+          :id => @order_form.number,
+          :link => api_v1_order_url(@order_form.number),
+          :info => @order_form.info_hash
+        }
       }
     else
       render :json => {:success => false}

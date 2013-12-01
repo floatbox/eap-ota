@@ -37,7 +37,7 @@ Eviterra::Application.routes.draw do
     match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
     # предложения по неймспейсу?
     post 'v1/orders' => 'api_booking#create'
-    post 'v1/orders/:id' => 'api_booking#update'
+    post 'v1/orders/:id' => 'api_booking#update', :as => :api_v1_order
 
     # FIXME попробовать resources? но как научить принимать post на update?
     get 'v2/orders(.:format)' => 'api_orders#index'

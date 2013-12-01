@@ -1,5 +1,11 @@
 ## Версия v1.3
 
+## URL
+
+https://api.eviterra.com/v1/orders - продакшн доступ
+
+https://api-demo.eviterra.com/v1/orders - тестовый доступ
+
 ## Проверка мест
 
 ### Запрос
@@ -22,17 +28,22 @@ infants=1
 ### Ответ
 
 json:
-number -  нужен будет при создании бронирования
 
-info.prices - цены, соответствуют ценам в обычной форме покупки билета
+success - true / false
 
-info.rules - правила тарифа
+order.id -  идентификатор заказа
 
-info.booking_classes - новые классы бронирования
+order.link - URL для отправки запроса на бронирование и оплату.
+
+order.info.prices - цены, соответствуют ценам в обычной форме покупки билета
+
+order.info.rules - правила тарифа
+
+order.info.booking_classes - новые классы бронирования
 
 ## Бронирование и оплата
 
-url для запроса: https://api.eviterra.com/v1/orders/<number>
+url для запроса: order.link из предыдущего ответа.
 
 Необходимо отправлять POST запрос со такими же параметрами, как и при обычтом запросе через web.
 
