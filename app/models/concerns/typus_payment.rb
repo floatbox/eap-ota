@@ -49,4 +49,10 @@ module TypusPayment
     "<a href='/admin/payments?search=#{pan}'>#{pan}</a>".html_safe
   end
 
+  def fraud_info
+    [ ('3DS' if had_3ds),
+      ("код: #{auth_code}" if auth_code)
+    ].compact.join(' ')
+  end
+
 end
