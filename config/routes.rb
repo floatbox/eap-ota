@@ -66,11 +66,9 @@ Eviterra::Application.routes.draw do
   match 'price_map' => 'pricer#price_map', :as => :price_map
   # TODO прокинуть :id и сюда тоже
   post 'booking/recalculate_price' => 'booking#recalculate_price', :as => :booking_recalculate_price
-  post 'booking/pay' => 'booking#update' # FIXME удалить
   post 'booking/:id' => 'booking#update', :as => :booking_pay
-  get 'booking/preliminary_booking' => 'booking#create' # FIXME удалить
   post 'booking' => 'booking#create', :as => :preliminary_booking
-  get 'booking' => 'booking#show' # FIXME удалить
+  get 'booking' => 'booking#show' # FIXME удалить WTF оно еще приходит с iphone
   get 'booking/:id' => 'booking#show', :as => :booking
   post 'confirm_3ds' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
