@@ -217,7 +217,7 @@ describe OrderForm do
     # или перенести в контроллер-спек, а здесь работать только с конкретными хэшами
     let(:person_attributes) do
       {
-        "0" => {
+        "1" => {
           "document_noexpiration" => "0",
           "birthday" => {
             "year" => "1984",
@@ -238,7 +238,7 @@ describe OrderForm do
           "passport" => "123456789",
           "first_name" => "ALEKSEY"
         },
-        "1" => {
+        "0" => {
           "document_noexpiration" => "1",
           "birthday" => {
             "year" => "1985",
@@ -254,20 +254,46 @@ describe OrderForm do
         }
       end
 
-    let(:order) do
-      order = OrderForm.new
-      order.persons = person_attributes
-      order
+    context "www-url-encoded style (hash of '0' => ...)" do
+      let(:order) do
+        order = OrderForm.new persons: person_attributes
+        order
+      end
+
+      it "should have two passengers" do
+        order.people.size.should == 2
+      end
+
+      it "should have passengers in correct order" do
+        order.people.first.first_name.should == 'MARIA'
+      end
+
+      it "should have valid passengers" do
+        persons = order.people
+        persons.first.should be_valid
+        persons.second.should be_valid
+      end
     end
 
-    it "should have two passengers" do
-      order.people.size.should == 2
-    end
+    context "proper json style (array)" do
+      let(:order) do
+        order = OrderForm.new persons: person_attributes.values
+        order
+      end
 
-    it "should have valid passengers" do
-      persons = order.people
-      persons.first.should be_valid
-      persons.second.should be_valid
+      it "should have two passengers" do
+        order.people.size.should == 2
+      end
+
+      it 'should have passengers in correct order' do
+        order.people.first.first_name.should == 'ALEKSEY'
+      end
+
+      it "should have valid passengers" do
+        persons = order.people
+        persons.first.should be_valid
+        persons.second.should be_valid
+      end
     end
   end
 

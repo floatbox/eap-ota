@@ -111,10 +111,8 @@ class OrderForm
   end
 
   def persons= attrs
-    @people ||= []
-    attrs.each do |k, pa|
-      @people[k.to_i] = Person.new(pa)
-    end
+    attrs = url_encoded_array_to_proper attrs
+    @people = attrs.map {|person| Person.new person}
   end
 
   def errors_hash
@@ -325,6 +323,18 @@ class OrderForm
     max_length = [first_name.length, second_name.length].max
     stem_length = [max_length - LONGEST_ENDING, SHORTEST_STEM].max
     first_name[0, stem_length] == second_name[0, stem_length]
+  end
+
+  def url_encoded_array_to_proper struct
+    return struct if struct.is_a?(Array)
+    raise ArgumentError unless url_encoded_array?(struct)
+    struct.sort_by {|k, v| k}.map(&:last)
+  end
+
+  def url_encoded_array? struct
+    return false unless struct.is_a?(Hash)
+    return false unless struct.keys.map(&:to_i).sort.first == 0
+    true
   end
 
 end
