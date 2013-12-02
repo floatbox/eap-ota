@@ -30,8 +30,8 @@ class Context
 
   def inspect
     attrs = {
-      deck_user: deck_user.attributes.slice("id", "roles"),
-      partner: partner.attributes.slice("id", "token", "enabled", "suggested_limit"),
+      deck_user: deck_user_attributes,
+      partner: partner_attributes,
       robot: robot,
       config: config
     }.map do |k, v|
@@ -92,5 +92,16 @@ class Context
   def enabled_cash?
     return true if deck_user
     !config.site.forbidden_cash
+  end
+
+  private
+
+  def deck_user_attributes
+    return nil unless deck_user
+    deck_user.attributes.slice("id", "roles")
+  end
+
+  def partner_attributes
+    partner.attributes.slice("id", "token", "enabled", "suggested_limit")
   end
 end
