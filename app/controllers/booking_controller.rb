@@ -1,6 +1,6 @@
 # encoding: utf-8
 class BookingController < ApplicationController
-  include BookingEssentials
+
   include ContextMethods
   helper_method :context #FIXME
   # FIXME надо научить аякс слать authenticity_token на :create
@@ -19,10 +19,16 @@ class BookingController < ApplicationController
   #   "partner"=>"yandex",
   #   "marker"=>"",
   def create
-    # FIXME используется еще?
-    @coded_search = params[:query_key]
     logo_url = context.partner.logo_exist? ? context.partner.logo_url : ''
-    if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
+    @recommendation = Recommendation.deserialize(params[:recommendation])
+    @recommendation.find_commission!
+    @search = AviaSearch.from_code(params[:query_key])
+
+    order_flow = OrderFlow.new(search: @search,
+                               recommendation: @recommendation,
+                               context: context)
+    if order_flow.preliminary_booking_result(Conf.amadeus.forbid_class_changing)
+      @order_form = order_flow.order_form
       render :json => {
         :success => true,
         :number => @order_form.number,
@@ -115,7 +121,10 @@ class BookingController < ApplicationController
     @order_form.context = context
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
-    case pay_result
+
+    order_flow = OrderFlow.new(order_form: @order_form, context: context, remote_ip: request.remote_ip)
+
+    case order_flow.pay_result
     when :forbidden_sale
       render :partial => 'forbidden_sale'
     when :new_price
@@ -127,7 +136,8 @@ class BookingController < ApplicationController
     when :ok
       render :partial => 'success', :locals => {:pnr_path => show_notice_path(:id => @order_form.pnr_number), :pnr_number => @order_form.pnr_number}
     when :threeds
-      render :partial => 'threeds', :locals => {:payment => @payment_response}
+      payment_response = order_flow.payment_response
+      render :partial => 'threeds', :locals => {:payment => payment_response}
     when :failed_payment
       render :partial => 'failed_payment'
     end

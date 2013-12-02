@@ -1,60 +1,45 @@
-module BookingEssentials
+class OrderFlow
 
-  protected
+  include KeyValueInit
+  attr_accessor :context, :marker, :recommendation, :search
+  attr_accessor :order_form
+  attr_accessor :remote_ip
+
+  def logger
+    Rails.logger
+  end
 
   def preliminary_booking_result(forbid_class_changing)
     return if Conf.site.forbidden_booking
-    @recommendation = Recommendation.deserialize(params[:recommendation])
-    @recommendation.find_commission!
 
-    @search = recover_avia_search
-    return unless @search
-    return unless @recommendation.allowed_booking?
+    return unless search
+    return unless recommendation.allowed_booking?
 
-    strategy = Strategy.select(rec: @recommendation, search: @search, context: context)
+    strategy = Strategy.select(rec: recommendation, search: search, context: context)
 
     StatCounters.inc %W[enter.preliminary_booking.total]
-    StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
-    StatCounters.inc %W[enter.preliminary_booking_by_airline.#{@recommendation.validating_carrier_iata}.total]
+    StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.total]
+    StatCounters.inc %W[enter.preliminary_booking_by_airline.#{recommendation.validating_carrier_iata}.total]
 
-    @destination = get_destination
-    StatCounters.d_inc @destination, %W[enter.api.total] if @destination
-    StatCounters.d_inc @destination, %W[enter.api.#{partner}.total] if @destination && partner
+    destination = Destination.get_by_search search
+    StatCounters.d_inc destination, %W[enter.api.total] if destination
+    StatCounters.d_inc destination, %W[enter.api.#{context.partner_code}.total] if destination
 
     if strategy.check_price_and_availability(forbid_class_changing)
       @order_form = OrderForm.new(
-        :recommendation => @recommendation,
-        :people_count => @search.tariffied,
-        :query_key => @coded_search,
-        :partner => partner,
+        :recommendation => recommendation,
+        :people_count => search.tariffied,
+        :query_key => search.query_key,
+        :partner => context.partner,
         :marker => marker
       )
       @order_form.save_to_cache
       StatCounters.inc %W[enter.preliminary_booking.success]
-      StatCounters.inc %W[enter.preliminary_booking.#{partner}.success] if partner
-      StatCounters.inc %W[enter.preliminary_booking_by_airline.#{@recommendation.validating_carrier_iata}.success]
+      StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.success]
+      StatCounters.inc %W[enter.preliminary_booking_by_airline.#{recommendation.validating_carrier_iata}.success]
       return true
     else
       return
-    end
-  end
-
-  def recover_avia_search
-    if params[:query_key]
-      AviaSearch.from_code(params[:query_key])
-    else
-      search = AviaSearch.new
-      search.adults = params[:adults] if params[:adults]
-      search.children = params[:children] if params[:children]
-      search.infants = params[:infants] if params[:infants]
-      search.segments = @recommendation.segments.map do |s|
-        AviaSearchSegment.new(
-          from: s.departure.city.iata,
-          to: s.arrival.city.iata,
-          date: s.departure_date
-        )
-      end
-      search
     end
   end
 
@@ -108,7 +93,7 @@ module BookingEssentials
     end
 
     custom_fields = PaymentCustomFields.new(
-      ip: request.remote_ip,
+      ip: remote_ip,
       order: @order_form.order,
       order_form: @order_form
     )
@@ -116,16 +101,6 @@ module BookingEssentials
 
     if @payment_response.success?
       logger.info "Pay: payment and booking successful"
-
-      unless strategy.delayed_ticketing?
-        logger.info "Pay: ticketing"
-        unless strategy.ticket
-          StatCounters.inc %W[pay.errors.ticketing]
-          logger.info "Pay: ticketing failed"
-          @order_form.order.unblock!
-          return :failed_booking
-        end
-      end
       StatCounters.inc %W[pay.success.total pay.success.card]
       return :ok
     elsif @payment_response.threeds?
@@ -143,21 +118,4 @@ module BookingEssentials
     StatCounters.inc %W[pay.total]
   end
 
-  def get_destination
-    return if !@search.segments
-    segment = @search.segments[0]
-    return if ([segment.to.class, segment.from.class] - [City, Airport]).present? || @search.complex_route?
-    to = segment.to.class == Airport ? segment.to.city : segment.to
-    from = segment.from.class == Airport ? segment.from.city : segment.from
-    Destination.find_or_create_by(:from_iata => from.iata, :to_iata => to.iata , :rt => @search.rt)
-  end
-
-  def log_referrer
-    if request.referrer && (URI(request.referrer).host != request.host)
-      logger.info "Referrer: #{URI(request.referrer).host}"
-    end
-  # приходят черти откуда.
-  rescue # URI::InvalidURIError
-    logger.info "Referrer not parsed: #{request.referrer}"
-  end
 end
