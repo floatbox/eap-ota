@@ -9,6 +9,10 @@ class PricerController < ApplicationController
   before_filter :set_context_robot, :set_context_partner_api, only: [:api]
   around_filter :enforce_timeout, only: [:pricer, :api]
 
+  rescue_from Timeout::Error, ActiveRecord::StatementInvalid do |e|
+    render 'api/error', locals: {message: 'Request timeout'}, status: :request_timeout
+  end
+
   include Monitoring::Benchmarkable
 
   def pricer
