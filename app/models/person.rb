@@ -16,10 +16,14 @@ class Person
   # FIXME убрать, как только жаваскрипт перестанет их слать
   attribute :document_noexpiration, Boolean, default: false
   attribute :bonus_present,         Boolean, default: false
-  attribute :bonuscard_type,        String
-  attribute :bonuscard_number,      String
+  attribute :bonus_type,            String
+  attribute :bonus_number,          String
   attribute :number_in_amadeus,     Integer
   attribute :with_seat,             Boolean, default: false
+
+  # FIXME убрать, как только жаваскрипт перестанет их слать
+  alias bonuscard_type= bonus_type=
+  alias bonuscard_number= bonus_number=
 
   # можно тоже превратить в аттрибуты virtus при желании
   attr_accessor :passenger_ref, :tickets, :associated_infant
@@ -74,7 +78,7 @@ class Person
   def coded
     res = "#{first_name}/#{last_name}/#{sex}/#{nationality.alpha3}/#{birthday.strftime('%d%b%y').upcase}/#{passport}/"
     res += "expires:#{document_expiration.strftime('%d%b%y').upcase}/" if document_expiration
-    res += "bonus: #{bonuscard_type}#{bonuscard_number}/" if bonuscard_number.present?
+    res += "bonus: #{bonus_type}#{bonus_number}/" if bonus_number.present?
     res += "child" if child
     res += "infant" if infant
     res
