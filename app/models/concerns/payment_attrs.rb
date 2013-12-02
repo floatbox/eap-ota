@@ -21,7 +21,7 @@ module PaymentAttrs
   # @return [string]
 
   # !attribute payment_status
-  # @ deprecated
+  # @deprecated
   # @see Order.payment_statuses
   # @return [string]
 
