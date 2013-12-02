@@ -22,13 +22,13 @@ end
 def check(*args)
   rapida = Rapida.new(*args)
   check_response = rapida.check
-  parsed = parse(check_response)
+  parse(check_response)
 end
 
 def pay(*args)
   rapida = Rapida.new(*args)
   check_response = rapida.pay
-  parsed = parse(check_response)
+  parse(check_response)
 end
 
 
@@ -37,6 +37,7 @@ describe Rapida do
   let(:txn_id) { '1337' }
   let(:phone) { '9998887766' }
 
+  ### CHECK
   describe '#check' do
 
     let(:order) { new_order }
@@ -88,7 +89,13 @@ describe Rapida do
         end
       end
 
-      context 'with wrong price' do
+      specify 'on database error' do
+        RapidaCharge.stub(:create).and_raise(ActiveRecord::StatementInvalid.new)
+        parsed = check(txn_id, order.code, order.price_with_payment_commission, phone)
+        parsed.result.should == '1'
+      end
+
+      context 'with wrong price - ' do
 
         specify 'price is greater than real' do
           parsed = check(txn_id, account, price + 1, phone)
@@ -110,6 +117,7 @@ describe Rapida do
 
   end
 
+  ### PAY
   describe '#pay' do
   end
 

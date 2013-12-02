@@ -39,6 +39,12 @@ class Rapida
 
   def create_pending_payment!
     @order.payments << RapidaCharge.create(status: 'pending', their_ref: @txn_id)
+    @order.payments
+  rescue ActiveRecord::StatementInvalid => e
+    # ловим ошибку при работе с базой,
+    # т.к. сохранить платеж не получилось - отдаем код с временной ошибкой
+    with_warning(e)
+    @error = :temporary_error
   end
 
   # /операции с платежами
