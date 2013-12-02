@@ -42,7 +42,7 @@ class Rapida
     @order.payments
   rescue ActiveRecord::StatementInvalid => e
     # ловим ошибку при работе с базой,
-    # т.к. сохранить платеж не получилось - отдаем код с временной ошибкой
+    # т.к. сохранить платеж не получилось - отдаем код с "временной" ошибкой
     with_warning(e)
     @error = :temporary_error
   end
@@ -52,11 +52,12 @@ class Rapida
 
   # проверки состояния платежа и заказа
 
-  # проставлять @error и @comment можно как внутри valid?, так и внутри @checkable? и @payable?
+  # проставлять @error и @comment можно внутри любого валидационного метода
+  # более того, это делать обязательно, т.к. если @error остается пустым - возвращается код 0 ОК
 
   def checkable?
     # проверяет, можно ли вернуть check без ошибки
-    order? && pending? && valid?
+    sufficient_params? && pending? && adequate_price?
   end
 
   def payable?
@@ -65,41 +66,33 @@ class Rapida
   # TODO сделать стандартный генератор
   # методов типа "#{prefix_}#{status}?" для моделей
   def pending?
-    !!(order? && @order.payment_status == 'pending')
+    order? && @order.payment_status == 'pending'
   end
 
   def order?
     (@order ||= Order.where(code: @account).first) ? true : false
   end
 
-  # общие проверки для check и pay
-  def valid?
-    !(
-      insufficient_params? ||
-      inadequate_price?
-    )
-  end
-
-  def insufficient_params?
+  def sufficient_params?
     [:txn_id, :account, :price].each do |attr|
       # есть небольшая проблема с несоответствием названия sum/price,
       # но не думаю что это очень важно и требует переименования
       unless instance_variable_get(:"@#{attr}")
         @error = :denied_technically
         @comment = "отсутствует атрибут #{attr}"
-        return true
+        return false
       end
     end
-    false
+    true
   end
 
-  def inadequate_price?
+  def adequate_price?
     cmp = @price <=> @order.price_with_payment_commission
     if cmp == 0
-      false
+      true
     else
       @error = cmp > 0 ? :price_gt_needed : :price_lt_needed
-      true
+      false
     end
   end
 

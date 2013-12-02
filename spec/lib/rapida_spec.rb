@@ -40,7 +40,7 @@ describe Rapida do
   ### CHECK
   describe '#check' do
 
-    let(:order) { new_order }
+    let(:order) { new_order { |o| payment_status = 'pending' } }
     let(:account) { order.code }
     let(:price) { order.price_with_payment_commission }
 
@@ -93,6 +93,16 @@ describe Rapida do
         RapidaCharge.stub(:create).and_raise(ActiveRecord::StatementInvalid.new)
         parsed = check(txn_id, order.code, order.price_with_payment_commission, phone)
         parsed.result.should == '1'
+      end
+
+      specify 'multiple queries on same txn_id' do
+        parsed = nil
+
+        2.times do
+          parsed = check(txn_id, account, price, phone)
+        end
+
+        parsed.result.should eq('0')
       end
 
       context 'with wrong price - ' do
