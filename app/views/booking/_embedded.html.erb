@@ -1,10 +1,31 @@
 <% recommendation = @order_form.recommendation %>
+
 <div class="bf-timer">
 <div class="bft-content">
-    <h6 class="bft-title"><%= raw t 'booking.countdown.title', :counter => '<span class="bft-counter"></span>' %></h6>
-    <p class="bft-description"><%= t 'booking.countdown.description', :passengers => t(@order_form.people.one? ? 'one' : 'few', :scope => 'booking.countdown.passengers') %></p>
+    <table>
+    <tr>
+        <td class="bft-title"><%= raw t 'booking.countdown.title', :counter => '<span class="bft-counter"></span>' %></td>
+        <td class="bft-description"><%= t 'booking.countdown.description', :passengers => t(@order_form.people.one? ? 'one' : 'few', :scope => 'booking.countdown.passengers') %></td>
+        <td class="bft-reminder">
+        <% if I18n.locale == :ru %>
+            <h6 class="bftr-title">И не забудьте потом <span class="bftr-tip">откроется в новом окне</span></h6>
+            <% ostrovok_url = ostrovok_link(@order_form) %>
+            <% excursion_url = tripster_link(@order_form) || weatlas_link(@order_form) %>
+            <% if ostrovok_url %>
+                <p class="bftr-item"><a class="bftr-link" href="<%= ostrovok_url %>" target="_blank">забронировать отель <%= ostrovok_city(@order_form) %></a></p>
+            <% end %>
+            <p class="bftr-item"><a class="bftr-link" href="https://insurance.eviterra.com" target="_blank">купить туристическую страховку</a></p>
+            <% if excursion_url %>
+                <p class="bftr-item"><a class="bftr-link" href="<%= excursion_url %>" target="_blank">организовать себе экскурсию</a></p>
+            <% end %>
+        <% end %>
+        </td>
+    </tr>
+    </table>
+    <div class="bft-arrow"></div>
 </div>
 </div>
+
 <div class="b-header"><h3 class="bh-text"><%= t 'booking.title' %></h3></div>
 <div class="b-details">
 <div class="od-segments">
