@@ -77,14 +77,14 @@ describe Rapida do
         specify 'account not provided' do
           parsed = check(txn_id, nil, price, phone)
 
-          parsed.result.should == '8'
+          parsed.result.should == '4'
           parsed.rapida_txn_id.should == txn_id
         end
 
         specify 'more than one mandatory paramater not provided' do
           parsed = check(txn_id, nil, nil, nil)
 
-          parsed.result.should == '8'
+          parsed.result.should == '4'
           parsed.rapida_txn_id.should == txn_id
         end
       end
@@ -127,6 +127,12 @@ describe Rapida do
         parsed = check(txn_id, 'lulz', price, phone)
 
         parsed.result.should == '5'
+      end
+
+      specify 'wrong code format' do
+        parsed = check(txn_id, 'WRONG🚷', price, phone)
+
+        parsed.result.should == '4'
       end
 
     end

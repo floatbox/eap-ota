@@ -57,7 +57,7 @@ class Rapida
 
   def checkable?
     # проверяет, можно ли вернуть check без ошибки
-    sufficient_params? && pending? && adequate_price?
+    valid_params? && pending? && adequate_price?
   end
 
   def payable?
@@ -78,8 +78,12 @@ class Rapida
     end
   end
 
+  def valid_params?
+    valid_account? && sufficient_params?
+  end
+
   def sufficient_params?
-    [:txn_id, :account, :price].each do |attr|
+    [:txn_id, :price].each do |attr|
       # есть небольшая проблема с несоответствием названия sum/price,
       # но не думаю что это очень важно и требует переименования
       unless instance_variable_get(:"@#{attr}")
@@ -89,6 +93,12 @@ class Rapida
       end
     end
     true
+  end
+
+  def valid_account?
+    valid = !!(/^\w{1,200}$/.match @account)
+    @error = :wrong_account unless valid
+    valid
   end
 
   def adequate_price?
