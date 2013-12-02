@@ -13,33 +13,28 @@ class SendgridClient
 
   def bounces options = {}
     body = options.slice(:email, :date_start, :date_end)
-    response = request('bounces.get.json', body).body
-    response = MultiJson.load response
-    response
+    request('bounces.get.json', body)
   end
 
   def blocks options = {}
     body = options.slice(:email, :date_start, :date_end)
-    response = request('blocks.get.json', body).body
-    response = MultiJson.load response
-    response
+    request('blocks.get.json', body)
   end
 
   def invalidemails options = {}
     body = options.slice(:email, :date_start, :date_end)
-    response = request('invalidemails.get.json', body).body
-    response = MultiJson.load response
-    response
+    request('invalidemails.get.json', body)
   end
 
   private
 
   def request endpoint, options = {}
-    return '' unless Conf.sendgrid.enabled
+    return false unless Conf.sendgrid.enabled
     transport = Net::HTTP.new(host, 443)
     transport.use_ssl = true
 
     body = AUTH_BODY.merge(options).to_param
-    transport.request_post [base_url, endpoint].join('/'), body
+    response = transport.request_post [base_url, endpoint].join('/'), body
+    MultiJson.load response.body
   end
 end

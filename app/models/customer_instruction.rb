@@ -1,17 +1,17 @@
 class CustomerInstruction < ActiveRecord::Base
   belongs_to :customer
 
-  def self.statuses; ["sent", "error", "delayed"] end
+  def self.statuses; ['sent', 'error', 'delayed'] end
 
   def sent_status
-    if status == 'sent'
-      str = 'sent'
-      str += ' to ' + email
-      str += '<br>at ' + created_at.strftime('%d.%m.%y %H:%M') if created_at
-      str.html_safe
+    if status == 'error'
+      str_status = '<span style="color:red">' + status + '</span>'
     else
-      status
+      str_status = status
     end
+    str_status += ' to ' + email
+    str_reason = '<br><br><span style="color:red">' + reason + '</span>' if reason
+    (str_status + str_reason.to_s).html_safe
   end
 
   def error_reason
@@ -20,17 +20,21 @@ class CustomerInstruction < ActiveRecord::Base
 
   def load_sendgrid_status
     sc = SendgridClient.new
-    blocks = sc.blocks(:email => email, :date_start => created_at).first
-    self.reason = blocks["reason"] if blocks
-
-    unless reason
-      bounces = sc.bounces(:email => email, :date_start => created_at).first
-      self.reason = bounces["reason"] if bounces
+    request_params = {:email => email, :date_start => created_at}
+    self.reason = nil
+    blocks = sc.blocks(request_params)
+    unless blocks.blank?
+      self.reason = 'Block: ' + blocks.first["reason"]
     end
 
-    unless reason
-      invalidemails = sc.invalidemails(:email => email, :date_start => created_at).first
-      self.reason = invalidemails["reason"] if invalidemails
+    bounces = sc.bounces(request_params) unless reason
+    unless bounces.blank?
+      self.reason = 'Bounce ' + bounces.first["reason"]
+    end
+
+    invalidemails = sc.invalidemails(request_params) unless reason
+    unless invalidemails.blank?
+      self.reason = 'Invalidemail: ' + invalidemails.first["reason"]
     end
 
     if reason
