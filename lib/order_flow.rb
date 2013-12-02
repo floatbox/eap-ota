@@ -25,22 +25,19 @@ class OrderFlow
     StatCounters.d_inc destination, %W[enter.api.total] if destination
     StatCounters.d_inc destination, %W[enter.api.#{context.partner_code}.total] if destination
 
-    if strategy.check_price_and_availability(forbid_class_changing)
-      @order_form = OrderForm.new(
-        :recommendation => recommendation,
-        :people_count => search.tariffied,
-        :query_key => search.query_key,
-        :partner => context.partner,
-        :marker => marker
-      )
-      @order_form.save_to_cache
-      StatCounters.inc %W[enter.preliminary_booking.success]
-      StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.success]
-      StatCounters.inc %W[enter.preliminary_booking_by_airline.#{recommendation.validating_carrier_iata}.success]
-      return true
-    else
-      return
-    end
+    return unless strategy.check_price_and_availability(forbid_class_changing)
+    @order_form = OrderForm.new(
+      :recommendation => recommendation,
+      :people_count => search.tariffied,
+      :query_key => search.query_key,
+      :partner => context.partner,
+      :marker => marker
+    )
+    @order_form.save_to_cache
+    StatCounters.inc %W[enter.preliminary_booking.success]
+    StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.success]
+    StatCounters.inc %W[enter.preliminary_booking_by_airline.#{recommendation.validating_carrier_iata}.success]
+    return true
   end
 
   def pay_result
@@ -66,7 +63,7 @@ class OrderFlow
       @order_form.update_in_cache
       return :new_price
     end
-    if !@order_form.valid?
+    if @order_form.invalid?
       StatCounters.inc %W[pay.errors.form]
       logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"
       return :invalid_data
