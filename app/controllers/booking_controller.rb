@@ -6,10 +6,10 @@ class BookingController < ApplicationController
   protect_from_forgery :except => [:confirm_3ds, :create]
   before_filter :log_referrer, :only => [:api_redirect, :api_booking]
   before_filter :log_user_agent
+  before_filter :save_partner_cookies, :only => [:create, :api_redirect]
+
   before_filter :set_context_partner, :set_context_deck_user
   before_filter :set_context_robot, only: [:api_booking]
-
-  before_filter :save_partner_cookies, :only => [:create, :api_redirect]
 
   # вызывается аяксом со страницы api_booking и с морды
   # Parameters:
