@@ -315,12 +315,13 @@ class Order < ActiveRecord::Base
       :pnr_number,
       :full_info,
       :last_tkt_date,
-      :payment_type,
       :delivery,
       :last_pay_time,
       :partner,
       :marker,
       :needs_visa_notification
+
+    self.payment_type = order_form.payment.type
 
     copy_attrs recommendation, self,
       :source,
@@ -333,7 +334,7 @@ class Order < ActiveRecord::Base
     self.cabins = recommendation.cabins.join(',')
     self.departure_date = recommendation.journey.flights[0].dept_date
     # FIXME вынести рассчет доставки отсюда
-    if order_form.payment_type != 'card'
+    if order_form.payment.type != 'card'
       self.cash_payment_markup = recommendation.price_payment + (order_form.payment_type == 'delivery' ? Conf.payment.price_delivery : 0)
     end
     if recommendation.commission
@@ -365,8 +366,8 @@ class Order < ActiveRecord::Base
         :price_our_markup
     end
     self.ticket_status = 'booked'
-    self.name_in_card = order_form.card.name
-    self.pan = order_form.card.pan
+    self.name_in_card = order_form.payment.card.name
+    self.pan = order_form.payment.card.pan
   end
 
   def strategy

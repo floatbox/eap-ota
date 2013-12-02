@@ -10,18 +10,18 @@
     </div>
     <div class="bfc-number">
         <h6 class="bf-label"><label for="bfcn-part1"><%= t 'booking.card.number.label' %></label> <span class="bfl-tip">(<%= raw t 'booking.card.number.hint' %>)</span></h6>
-        <input type="text" pattern="[0-9]*" size="16" name="card[number]" maxlength="22" id="bfc-number" class="bf-field bfc-field -metrika-nokeys">
+        <input type="text" pattern="[0-9]*" size="16" name="order[payment][card][number]" maxlength="22" id="bfc-number" class="bf-field bfc-field -metrika-nokeys">
     </div>
     <div class="bfc-name">
         <h6 class="bf-label"><label for="bfc-name" title="Имя и фамилия латинскими буквами, как на карте"><%= raw t 'booking.card.name' %></label></h6>    
-        <%= f.text_field :name, :id => 'bfc-name', :class => "bf-field bfc-field -metrika-nokeys" %>
+        <input type="text" name="order[payment][card][name]" id="bfc-name" class="bf-field bfc-field -metrika-nokeys">
         <div class="bwarning language-warning latent"><%= raw t 'booking.card.keyboard' %></div>
     </div>
     <div class="bfc-expiration">
         <h6 class="bf-label"><label for="bc-exp-month" title="На карте обозначен как &laquo;VALID THRU&raquo;"><%= t 'booking.card.expires' %></label></h6>
         <div class="bfc-date">
-            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-month"><%= t 'booking.card.dates.m' %></label><input type="text" pattern="[0-9]*" size="2" name="card[month]" maxlength="2" id="bc-exp-month" class="bf-field bfc-field bfcd-month -metrika-nokeys"></div>
-            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-year"><%= t 'booking.card.dates.y' %></label><input type="text" pattern="[0-9]*" size="2" name="card[year_short]" maxlength="2" id="bc-exp-year" class="bf-field bfc-field bfcd-year -metrika-nokeys"></div>
+            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-month"><%= t 'booking.card.dates.m' %></label><input type="text" pattern="[0-9]*" size="2" name="order[payment][card][month]" maxlength="2" id="bc-exp-month" class="bf-field bfc-field bfcd-month -metrika-nokeys"></div>
+            <div class="bfcd-item"><label class="bf-placeholder" for="bc-exp-year"><%= t 'booking.card.dates.y' %></label><input type="text" pattern="[0-9]*" size="2" name="order[payment][card][year_short]" maxlength="2" id="bc-exp-year" class="bf-field bfc-field bfcd-year -metrika-nokeys"></div>
         </div>        
     </div>
 </div>
@@ -31,7 +31,7 @@
     <div class="bfc-stripe">&nbsp;</div>
     <div class="bfc-cvv">
         <h6 class="bf-label"><label for="bc-cvv" id="bc-cvv-label">CVV</label>&nbsp;<span class="bfl-tip">(<%= raw t 'booking.card.cvv_hint' %>)</span></h6>
-        <input type="text" pattern="[0-9]*" size="3" name="card[verification_value]" maxlength="3" id="bc-cvv" class="bf-field bfc-field -metrika-nokeys">
+        <input type="text" pattern="[0-9]*" size="3" name="order[payment][card][verification_value]" maxlength="3" id="bc-cvv" class="bf-field bfc-field -metrika-nokeys">
         <div id="bfcn-sample" title="Последние четыре цифры номера карты"><span class="bfcn-empty">####</span></div>
     </div>
 </div>

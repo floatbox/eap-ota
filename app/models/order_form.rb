@@ -9,12 +9,10 @@ class OrderForm
 
   attr_accessor :email
   attr_accessor :phone
-  attr_accessor :payment_type
   attr_accessor :delivery
   attr_accessor :people
   #accepts_nested_attributes_for :people
 
-  attr_writer :card
   attr_accessor :recommendation
   attr_writer :price_with_payment_commission
   attr_accessor :pnr_number
@@ -32,6 +30,15 @@ class OrderForm
   attr_accessor :context
   attr_reader :show_vat, :vat_included
 
+  # на переходный период
+  def payment_type=(value)
+    payment.type = value
+  end
+
+  def payment_type
+    payment.type
+  end
+
   delegate :last_tkt_date, :to => :recommendation
   validates :email,
     presence: true,
@@ -42,10 +49,6 @@ class OrderForm
     presence: true,
     format:
       { with: /\A[\d \+\-\(\)]+\z/, message: 'Некорректный номер телефона' }
-
-  def card
-    @card || CreditCard.new
-  end
 
   def last_pay_time
     return Time.now + 24.hours if Conf.amadeus.env != 'production' && !Rails.env.test? # так как тестовый Амадеус в прошлом
@@ -117,6 +120,14 @@ class OrderForm
   def persons= attrs
     attrs = url_encoded_array_to_proper attrs
     @people = attrs.map {|person| Person.new person}
+  end
+
+  def payment= attrs
+    @payment = PaymentForm.new attrs
+  end
+
+  def payment
+    @payment ||= PaymentForm.new
   end
 
   def errors_hash
@@ -222,7 +233,7 @@ class OrderForm
     people_count[:adults] + people_count[:children]
   end
 
-  validate :validate_card, if: ->{payment_type == 'card'}
+  validate :validate_card, if: ->{payment.type == 'card'}
   validate :validate_dept_date, if: ->{!context.lax? && recommendation.source == 'amadeus'}
   validate :validate_people
 
@@ -233,8 +244,8 @@ class OrderForm
   end
 
   def validate_card
-    if card
-      errors.add :card, 'Некорректные данные карты' unless card.valid?
+    if payment.card
+      errors.add :card, 'Некорректные данные карты' unless payment.card.valid?
     else
       errors.add :card, 'Отсутствуют данные карты'
     end

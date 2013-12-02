@@ -184,7 +184,7 @@ describe OrderForm do
             "number" => "abcdef",
             "phone" => "81234567890",
             "email" => "super@example.com",
-            "payment_type" => "cash"
+            "payment" => {"type" => "cash"}
           }
         end
 
@@ -203,7 +203,7 @@ describe OrderForm do
           "number" => "abcdef",
           "phone" => "81234567890",
           "email" => "super@example.com",
-          "payment_type" => "cash"
+          "payment" => {"type" => "cash"}
         }
       end
 

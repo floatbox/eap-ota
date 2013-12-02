@@ -123,7 +123,7 @@ class BookingController < ApplicationController
     @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
     @order_form.context = context
     @order_form.update_attributes(params[:order])
-    @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
+    @order_form.payment.card = params[:card] if params[:card]
 
     order_flow = OrderFlow.new(order_form: @order_form, context: context, remote_ip: request.remote_ip)
 

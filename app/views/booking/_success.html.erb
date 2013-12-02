@@ -14,7 +14,7 @@
     <iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Feviterra&amp;width=287&amp;height=241&amp;show_faces=true&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=false&amp;appId=429677207045748" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:287px; height:241px; background: #FFF;" allowTransparency="true"></iframe>
 </div>
 <div class="bfrs-message">
-    <p class="bfrsm-text"><strong><%= t 'booking.success.allright' %></strong> <%= t @order_form.people.one? ? 'one' : 'few', :scope => [:booking, :success, @order_form.payment_type == 'card' ? 'card' : 'cash'] %> <%= t 'booking.success.confirmation' %>&nbsp; <span class="link bf-hint bfrsm-hint" data-hint="bfh-mail"><%= t 'booking.success.whattodo.link' %></span</p>
+    <p class="bfrsm-text"><strong><%= t 'booking.success.allright' %></strong> <%= t @order_form.people.one? ? 'one' : 'few', :scope => [:booking, :success, @order_form.payment.type == 'card' ? 'card' : 'cash'] %> <%= t 'booking.success.confirmation' %>&nbsp; <span class="link bf-hint bfrsm-hint" data-hint="bfh-mail"><%= t 'booking.success.whattodo.link' %></span</p>
     <p class="bfrsm-pnr"><a target="_blank" href="<%= pnr_path %><%= '?lang=en' if I18n.locale == :en %>"><%= t 'booking.success.print' %></a></p>
     <p class="bfrsm-text bfrsm-number"><%= raw t 'booking.success.pnr', :number => content_tag(:span, pnr_number, :class => 'bfr-pnr') %></p>
 </div>

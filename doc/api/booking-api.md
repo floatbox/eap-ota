@@ -107,7 +107,7 @@ name                                      | required | description              
 `order[persons][0][document_expiration]`  |          |                           | 2020-12-30
 `order[persons][1][last_name]`            |          | фамилия второго пассажира |
 ...                                       |
-`order[payment_type]`                     | *        | метод оплаты              | cash
+`order[payment][type]`                    | *        | метод оплаты              | cash
 
 ### Ответ
 

@@ -85,7 +85,7 @@ class OrderFlow
       return :new_price
     end
 
-    unless @order_form.payment_type == 'card'
+    unless @order_form.payment.type == 'card'
       StatCounters.inc %W[pay.success.total pay.success.cash]
       logger.info "Pay: booking successful, payment: cash"
       return :ok
@@ -96,7 +96,7 @@ class OrderFlow
       order: @order_form.order,
       order_form: @order_form
     )
-    @payment_response = @order_form.order.block_money(@order_form.card, custom_fields)
+    @payment_response = @order_form.order.block_money(@order_form.payment.card, custom_fields)
 
     if @payment_response.success?
       logger.info "Pay: payment and booking successful"
