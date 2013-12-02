@@ -1,16 +1,19 @@
 # encoding: utf-8
 class PricerController < ApplicationController
+  include ContextMethods
   layout false
 
   before_filter :parse_and_validate_url, :only => [:pricer, :calendar]
+  before_filter :set_context_deck_user, only: [:pricer, :calendar]
+  before_filter :set_context_partner, only: [:pricer]
+  before_filter :set_context_robot, :set_context_partner_api, only: [:api]
   around_filter :enforce_timeout, only: [:pricer, :api]
 
   include Monitoring::Benchmarkable
 
   def pricer
-    @context = Context.new(deck_user: current_deck_user)
     @destination = Destination.get_by_search @search
-    @recommendations = Mux.new(context: @context).async_pricer(@search)
+    @recommendations = Mux.new(context: context).async_pricer(@search)
     if (@destination && @recommendations.present? && !admin_user)
       @destination.move_average_price @search, @recommendations.cheapest, @code
     end
@@ -50,9 +53,8 @@ class PricerController < ApplicationController
   end
 
   def calendar
-    @context = Context.new(deck_user: current_deck_user)
     if @search.segments.size < 3
-      @recommendations = Mux.new(context: @context).calendar(@search)
+      @recommendations = Mux.new(context: context).calendar(@search)
     end
     render :partial => 'matrix'
   ensure
@@ -90,19 +92,18 @@ class PricerController < ApplicationController
 
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
-    @context = Context.new(partner: params[:partner], robot: true)
-    if !Conf.api.enabled || !@context.pricer_enabled?
+    if !Conf.api.enabled || !context.pricer_enabled?
       render 'api/error', :status => 503, :locals => {:message => 'service disabled by administrator'}
       return
     end
     avia_search_hash = params.dup.delete_if {|key, value| %W[controller action format].include?(key)}
     @search = AviaSearch.simple(avia_search_hash)
 
-    StatCounters.inc %W[search.api.total search.api.#{@context.partner_code}.total]
+    StatCounters.inc %W[search.api.total search.api.#{context.partner_code}.total]
 
     if @search.valid?
       @destination = Destination.get_by_search @search
-      @recommendations = Mux.new(context: @context).pricer(@search)
+      @recommendations = Mux.new(context: context).pricer(@search)
 
       # измеряем рекомендации до фильтрации
       meter :api_total_unfiltered_recommendations, @recommendations.size
@@ -112,23 +113,23 @@ class PricerController < ApplicationController
         @destination.move_average_price @search, @recommendations.cheapest, @code
       end
 
-      @recommendations.remove_unprofitable!(@context.partner.income_at_least)
+      @recommendations.remove_unprofitable!(context.partner.income_at_least)
 
       recommendations_total = @recommendations.size
       # измеряем после фильтрации
       meter :api_total_recommendations, recommendations_total
 
-      logger.info "Recommendations left after removing unprofitable(#{@context.partner_code}): #{recommendations_total}"
-      StatCounters.inc %W[search.api.success search.api.#{@context.partner_code}.success]
-      logger.info "Increment counter search.api.success for partner #{@context.partner_code}"
-      StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{@context.partner_code}.total] if @destination
+      logger.info "Recommendations left after removing unprofitable(#{context.partner_code}): #{recommendations_total}"
+      StatCounters.inc %W[search.api.success search.api.#{context.partner_code}.success]
+      logger.info "Increment counter search.api.success for partner #{context.partner_code}"
+      StatCounters.d_inc @destination, %W[search.total search.api.total search.api.#{context.partner_code}.total] if @destination
       # поправка на неопределенный @destination что бы сходились счетчики
-      StatCounters.inc %W[search.api.#{@context.partner_code}.bad_destination] if !@destination
+      StatCounters.inc %W[search.api.#{context.partner_code}.bad_destination] if !@destination
       # FIXME пофиксить Recommendation.price_for_partner
-      @partner = @context.partner
+      @partner = context.partner
       render 'api/variants'
     else
-      StatCounters.inc %W[search.api.invalid search.api.#{@context.partner_code}.invalid]
+      StatCounters.inc %W[search.api.invalid search.api.#{context.partner_code}.invalid]
       logger.info "Invalid API search with params #{avia_search_hash} validation errors: #{@search.errors.full_messages}"
       @recommendations = []
       render 'api/variants'
@@ -150,6 +151,10 @@ class PricerController < ApplicationController
       StatCounters.inc %W[search.errors.coded_url_is_broken]
       render :text => "404 Not found", :status => :not_found
     end
+  end
+
+  def set_context_partner_api
+    context_builder.partner = params[:partner]
   end
 
 end

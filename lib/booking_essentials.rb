@@ -11,8 +11,7 @@ module BookingEssentials
     return unless @search
     return unless @recommendation.allowed_booking?
 
-    track_partner(@context.partner.token, params[:marker])
-    strategy = Strategy.select(rec: @recommendation, search: @search, context: @context)
+    strategy = Strategy.select(rec: @recommendation, search: @search, context: context)
 
     StatCounters.inc %W[enter.preliminary_booking.total]
     StatCounters.inc %W[enter.preliminary_booking.#{partner}.total] if partner
@@ -91,7 +90,7 @@ module BookingEssentials
     strategy = Strategy.select({
       rec: @order_form.recommendation,
       order_form: @order_form,
-      context: @context
+      context: context
     })
     booking_status = strategy.create_booking
 
