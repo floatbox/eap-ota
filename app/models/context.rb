@@ -30,7 +30,7 @@ class Context
 
   def inspect
     attrs = {
-      deck_user: deck_user,
+      deck_user: deck_user.attributes.slice("id", "roles"),
       partner: partner.attributes.slice("id", "token", "enabled", "suggested_limit"),
       robot: robot,
       config: config
