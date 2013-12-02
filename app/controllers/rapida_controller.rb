@@ -15,7 +15,7 @@ class RapidaController < ApplicationController
   private
 
   def get_params!
-    @command = params[:command].to_sym
+    @command = params[:command] && params[:command].to_sym
     @requisites = [params[:txn_id], params[:account], params[:sum], params[:phone] ]
   end
 
