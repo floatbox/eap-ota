@@ -18,6 +18,7 @@ class RecommendationSet
     @recs = recs
   end
 
+  attr_accessor :context
   attr_accessor :recs
   alias recommendations recs
   alias to_a recs
@@ -28,7 +29,7 @@ class RecommendationSet
   end
 
   def process!(opts = {})
-    context = opts[:context] or raise ArgumentError, "needs context"
+    self.context = opts[:context] or raise ArgumentError, "needs context"
     benchmark 'RecommendationSet: process!, total', level: :info do
       run :select_full_information!
       run :select_valid_interline!
@@ -37,7 +38,6 @@ class RecommendationSet
       run :reject_ground! if context.pricer_filter?
       run :find_commission!
       run :select_sellable! if context.pricer_filter?
-      run :find_discount!
 
       # сортируем если ищем для морды
       run :sort! if context.pricer_sort?
@@ -89,16 +89,12 @@ class RecommendationSet
   end
 
   def find_commission!
-    @recs.each &:find_commission!
+    @recs.each {|rec| rec.find_commission! context: context}
   end
 
   # сейчас вызывается дополнительным проходом, вне mux
   def remove_unprofitable!(income_at_least)
     @recs.reject! {|r| r.income < income_at_least} if income_at_least
-  end
-
-  def find_discount!
-    @recs.each &:find_discount!
   end
 
   # объединяем эквивалентные варианты

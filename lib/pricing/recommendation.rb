@@ -7,7 +7,7 @@ module Pricing
 
     attr_accessor :discount_rule
 
-    delegate :subagent, :agent, :consolidator, :blanks, :ticketing_method, 
+    delegate :subagent, :agent, :consolidator, :blanks, :ticketing_method,
       :to => :commission, :prefix => :commission
 
     # временно делаю выставляемыми и в Commission::Rule и в Discount::Rule
@@ -145,6 +145,12 @@ module Pricing
 
     # пока не придумал для метода места получше
     def find_commission!(opts={})
+      raise ArgumentError.new('needs context') unless opts[:context]
+      find_commission_rule! opts
+      find_discount! opts
+    end
+
+    def find_commission_rule!(opts={})
       Commission::Finder.new.cheap!(self, opts)
     end
 
