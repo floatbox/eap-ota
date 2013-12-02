@@ -4,7 +4,7 @@ rule 1 do
 ticketing_method "downtown"
 agent "5%"
 subagent "4%"
-discount "2%"
+discount "7%"
 agent_comment "5% американский office-id"
 subagent_comment "4% от тарифа на рейсы Перевозчика по всем тарифам классов L,V,X,T,N,I,W."
 subclasses "LVXTNIW"
