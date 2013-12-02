@@ -80,7 +80,7 @@
                 <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-exp-year" name="order[persons][$n][document_expiration][year]" maxlength="4" title="Год окончания срока действия документа"></div>
             </div>
             <div class="bf-checkbox">
-                <input type="checkbox" value="1" name="order[persons][$n][document_noexpiration]" id="bfp$n-permanent">
+                <input type="checkbox" value="1" id="bfp$n-permanent">
                 <label for="bfp$n-permanent">Без срока</label>
             </div>
         </td>
@@ -92,7 +92,7 @@
             <% programs = carrier.available_bonus_programms %>
             <% unless programs.empty? %>
                 <div class="bf-checkbox">
-                    <input type="checkbox" value="1" name="order[persons][$n][bonus_present]" id="bfp$n-bonus">
+                    <input type="checkbox" value="1" id="bfp$n-bonus">
                     <label for="bfp$n-bonus">Есть бонусная карта <%= carrier.alliance ? "альянса #{ carrier.alliance.name }" : "авиакомпании #{ carrier.name }" %></label>
                 </div>
             <% end %>
@@ -112,14 +112,14 @@
             <div class="bf-select bfp-bonus-type">
                 <div class="bf-select-arrow"></div>
                 <input class="bf-field" value="<%= carrier.iata %>" disabled="disabled" style="background: #FFF; opacity: 1;">
-                <select name="order[persons][$n][bonuscard_type]" id="bfp$n-bonus-type" class="bf-select-overlay">
+                <select name="order[persons][$n][bonus_type]" id="bfp$n-bonus-type" class="bf-select-overlay">
                     <%= options_for_select(programs.map {|a| [ a.bonus_program_name, a.iata ] }) %>
                 </select>
             </div>
         </div>
         <div>
             <h6 class="bf-label"><label for="bfp$n-bonus-num">Номер карты</label></h6>
-            <input type="text" size="30" name="order[persons][$n][bonuscard_number]" maxlength="30" id="bfp$n-bonus-num" class="bf-field bfp-bonus-number">
+            <input type="text" size="30" name="order[persons][$n][bonus_number]" maxlength="30" id="bfp$n-bonus-num" class="bf-field bfp-bonus-number">
         </div>
         </td>
     </tr>
@@ -221,11 +221,11 @@
         <div class="bfc-deadline">Бронирование необходимо оплатить до&nbsp;<strong><%= I18n.l(@order_form.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</div>
         <div class="bfc-delivery"<% unless @order_form.enabled_delivery? && @order_form.enabled_cash? %> style="display: none;"<% end %>>
             <div class="bfc-delivery-item">
-                <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes"<% if @order_form.enabled_delivery? %> checked="checked"<% end %>>
+                <input type="radio" class="bfcd-radio" value="delivery" id="bfcd-yes"<% if @order_form.enabled_delivery? %> checked="checked"<% end %>>
                 <label for="bfcd-yes">Хочу оплатить курьеру при&nbsp;доставке (+<%= Conf.payment.price_delivery %>&nbsp;рублей)</label>
             </div>
             <div class="bfc-delivery-item">
-                <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no"<% unless @order_form.enabled_delivery? %> checked="checked"<% end %>>
+                <input type="radio" class="bfcd-radio" value="cash" id="bfcd-no"<% unless @order_form.enabled_delivery? %> checked="checked"<% end %>>
                 <label for="bfcd-no">Хочу самостоятельно приехать в&nbsp;офис и&nbsp;оплатить</label>
             </div>
         </div>

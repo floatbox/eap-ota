@@ -251,7 +251,7 @@
             %qualifier PR
             %number= index+1
 
-    - if person.bonus_present
+    - if person.bonus_number.present?
       -# CC 'FFN...'
       %dataElementsIndiv
         %elementManagementData
@@ -259,12 +259,12 @@
         %serviceRequest
           %ssr
             %type FQTV
-            %companyId= person.bonuscard_type
+            %companyId= person.bonus_type
             %indicator P01
         %frequentTravellerData
           %frequentTraveller
-            %companyId= person.bonuscard_type
-            %membershipNumber= person.bonuscard_type + person.bonuscard_number
+            %companyId= person.bonus_type
+            %membershipNumber= person.bonus_type + person.bonus_number
         %referenceForDataElement
           %reference
             %qualifier PR

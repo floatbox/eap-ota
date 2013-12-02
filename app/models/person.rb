@@ -13,12 +13,17 @@ class Person
   attribute :birthday,              Date
   attribute :document_expiration,   Date
   attribute :passport,              String
+  # FIXME убрать, как только жаваскрипт перестанет их слать
   attribute :document_noexpiration, Boolean, default: false
   attribute :bonus_present,         Boolean, default: false
-  attribute :bonuscard_type,        String
-  attribute :bonuscard_number,      String
+  attribute :bonus_type,            String
+  attribute :bonus_number,          String
   attribute :number_in_amadeus,     Integer
   attribute :with_seat,             Boolean, default: false
+
+  # FIXME убрать, как только жаваскрипт перестанет их слать
+  alias bonuscard_type= bonus_type=
+  alias bonuscard_number= bonus_number=
 
   # можно тоже превратить в аттрибуты virtus при желании
   attr_accessor :passenger_ref, :tickets, :associated_infant
@@ -33,7 +38,6 @@ class Person
     presence: true,
     format: { with: /^[a-zA-Z-]*$/, message: "Некорректная фамилия" }
   validates :passport, presence: true, with: :check_passport
-  validates :document_expiration, presence: true, unless: :document_noexpiration
 
   before_validation :clear_first_name_and_last_name
 
@@ -68,13 +72,13 @@ class Person
   end
 
   def smart_document_expiration_date
-    document_noexpiration ? (Date.today + 18.months) : document_expiration
+    document_expiration || (Date.today + 18.months)
   end
 
   def coded
     res = "#{first_name}/#{last_name}/#{sex}/#{nationality.alpha3}/#{birthday.strftime('%d%b%y').upcase}/#{passport}/"
-    res += "expires:#{document_expiration.strftime('%d%b%y').upcase}/" unless document_noexpiration
-    res += "bonus: #{bonuscard_type}#{bonuscard_number}/" if bonus_present
+    res += "expires:#{document_expiration.strftime('%d%b%y').upcase}/" if document_expiration
+    res += "bonus: #{bonus_type}#{bonus_number}/" if bonus_number.present?
     res += "child" if child
     res += "infant" if infant
     res
@@ -88,10 +92,10 @@ class Person
     if nationality == "RUS"
       return "СР" if passport.mb_chars.gsub(/[^a-zA-Z\dа-яА-Я]+/, '').match(/^[\dA-Za-z]{1,5}[а-яА-Яa-zA-Z]{2}\d{6}$/) && (Date.today - 14.years <= birthday)
       return "ПС" if passport.mb_chars.gsub(/[^\d]+/, '').match(/^\d{10}$/) && (Date.today - 14.years >= birthday)
-      return "ПСП" if passport.mb_chars.gsub(/[^\d]+/, '').match(/^\d{9}$/) && !document_noexpiration
+      return "ПСП" if passport.mb_chars.gsub(/[^\d]+/, '').match(/^\d{9}$/) && document_expiration.present?
       return nil
     elsif cleared_passport.mb_chars.length > 5
-      return document_noexpiration ? "НП" : "ЗА"
+      return document_expiration.blank? ? "НП" : "ЗА"
     end
   end
 
