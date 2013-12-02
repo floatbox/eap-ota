@@ -2,6 +2,7 @@
 class BookingController < ApplicationController
   include BookingEssentials
   include ContextMethods
+  helper_method :context #FIXME
   # FIXME надо научить аякс слать authenticity_token на :create
   protect_from_forgery :except => [:confirm_3ds, :create]
   before_filter :log_referrer, :only => [:api_redirect, :api_booking]
