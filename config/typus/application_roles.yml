@@ -26,6 +26,7 @@ admin:
   HotOffer: read, delete
   Subscription: create, read, update, delete
   Customer: read, cancel_confirmation
+  CustomerInstruction: read
   Destination: read, delete
   AirlineAlliance: create, read, update, delete
   FlightGroup: create, read, update, delete

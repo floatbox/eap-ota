@@ -40,5 +40,6 @@ ActiveSupport::Inflector.inflections do |inflect|
     inflect.plural(/^Партнер$/i,  'Партнеры' )
     inflect.plural(/^История изменений$/i,  'История изменений' )
     inflect.plural(/^Покупатель$/i,  'Покупатели' )
+    inflect.plural(/^Письма ЛК$/i,  'Письма ЛК' )
 end
 

@@ -176,6 +176,15 @@ riemann:
 alfastrah:
   host: uat2.vtsft.ru
   base_url: /travel-ext-services/TravelExtService
+sendgrid:
+  enabled: no
+  username: eviterra
+  password: flywithme
+  api:
+    host: api.sendgrid.com
+    base_url: /api
+  production:
+    enabled: yes
 performance:
   # очищать ли CodeStash между запросами?
   # поведение для "no" не тестировано, возможны проблемы с ActiveRecord::IdentityMap

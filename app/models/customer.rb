@@ -9,12 +9,20 @@ class Customer < ActiveRecord::Base
           :confirmable,
           :recoverable, :rememberable, :trackable
 
+  def devise_mailer
+    CustomerMailer
+  end
+
+  self.password_length = 6..128
+  self.reset_password_within = 48.hours
+
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
 
   has_paper_trail
 
   has_many :orders
+  has_many :customer_instructions
 
   scope :without_orders, lambda {
       where("id IN (#{select('customers.id').joins('LEFT JOIN orders ON orders.customer_id = customers.id').where('orders.id IS NULL').to_sql})")
