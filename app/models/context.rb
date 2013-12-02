@@ -10,27 +10,14 @@ class Context
   # Текущий залогиненный в админку юзер
   attr_accessor :deck_user
 
+  # Текущий партнер
+  attr_accessor :partner
+
   # Запрос из API?
   attr_accessor :robot
 
   # Текущая конфигурация
   attr_accessor :config
-
-  # Partner, ассоциированный с текущим клиентом
-  def partner
-    @partner || Partner.anonymous
-  end
-
-  # @param Код партнера или уже готовый партнер
-  def partner=(partner_or_code)
-    case partner_or_code
-    when Partner
-      @partner = partner_or_code
-    else
-      # Partner[] для несуществующих кодов возвращает Partner.anonymous
-      @partner = Partner[partner_or_code]
-    end
-  end
 
   # @returns 'anonymous' для пустого партнера
   def partner_code
@@ -39,6 +26,18 @@ class Context
 
   def config
     @config ||= Conf
+  end
+
+  def inspect
+    attrs = {
+      deck_user: deck_user,
+      partner: partner.attributes.slice("id", "token", "enabled", "suggested_limit"),
+      robot: robot,
+      config: config
+    }.map do |k, v|
+      "#{k}: #{v.inspect}"
+    end.join(', ')
+    "<Context: #{attrs}>"
   end
 
   # @group Настройки и разрешения.

@@ -176,6 +176,14 @@ FactoryGirl.define do
     robot false
     partner FactoryGirl.build(:partner, :anonymous)
 
+    initialize_with do
+      builder = ContextBuilder.new
+      builder.partner = partner
+      builder.robot = robot
+      builder.deck_user = deck_user
+      builder.build!
+    end
+
     trait :deck_user do
       deck_user Deck::User.new
     end
