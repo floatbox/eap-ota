@@ -14,7 +14,7 @@ class Rapida
 
   def check
     # создает платеж со статусом pending
-    create_pending_charge! if checkable?
+    create_pending_payment! if checkable?
 
     builder = Builder.new result: error_code(error),
                           txn_id: @txn_id,
@@ -29,7 +29,6 @@ class Rapida
   end
 
   def unknown_command
-
   end
 
   # /основные обработчики
@@ -39,7 +38,7 @@ class Rapida
   # операции с платежами
 
   def create_pending_payment!
-    @order.payment << RapidaCharge.create(status: 'pending', their_ref: @txn_id)
+    @order.payments << RapidaCharge.create(status: 'pending', their_ref: @txn_id)
   end
 
   # /операции с платежами
@@ -51,26 +50,32 @@ class Rapida
 
   def checkable?
     # проверяет, можно ли вернуть check без ошибки
-    order? && @order.pending? && valid?
+    order? && pending? && valid?
   end
 
   def payable?
   end
 
+  # TODO сделать стандартный генератор
+  # методов типа "#{prefix_}#{status}?" для моделей
+  def pending?
+    !!(order? && @order.payment_status == 'pending')
+  end
+
   def order?
-    @order ||= Order.where(code: @account).first ? true : false
+    (@order ||= Order.where(code: @account).first) ? true : false
   end
 
   # общие проверки для check и pay
   def valid?
-    !!(
+    !(
       insufficient_params? ||
       inadequate_price?
     )
   end
 
   def insufficient_params?
-    [:txn_id, :account, :price, :phone].each do |attr|
+    [:txn_id, :account, :price].each do |attr|
       # есть небольшая проблема с несоответствием названия sum/price,
       # но не думаю что это очень важно и требует переименования
       unless instance_variable_get(:"@#{attr}")
@@ -83,7 +88,7 @@ class Rapida
   end
 
   def inadequate_price?
-    cmp = price <=> @order.price_with_payment_commission
+    cmp = @price <=> @order.price_with_payment_commission
     if cmp == 0
       false
     else
@@ -154,7 +159,7 @@ class Rapida
           xml.sum_           @price   if @price   # сумма платежа
           xml.debt_          @debt    if @debt    # сумма, оставшаяся к оплате - пока не используем
         }
-      end
+      end.to_xml
     end
 
     def pay_response
@@ -175,7 +180,7 @@ class Rapida
           xml.passangers_    @persons if @persons # пассажиры.to_s
           xml.receipt_       @receipt if @repeipt # линк на маршрутку
         }
-      end
+      end.to_xml
     end
   end
 
