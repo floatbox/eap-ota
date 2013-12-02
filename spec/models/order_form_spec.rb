@@ -217,7 +217,7 @@ describe OrderForm do
     # или перенести в контроллер-спек, а здесь работать только с конкретными хэшами
     let(:person_attributes) do
       {
-        "0" => {
+        "1" => {
           "document_noexpiration" => "0",
           "birthday" => {
             "year" => "1984",
@@ -238,7 +238,7 @@ describe OrderForm do
           "passport" => "123456789",
           "first_name" => "ALEKSEY"
         },
-        "1" => {
+        "0" => {
           "document_noexpiration" => "1",
           "birthday" => {
             "year" => "1985",
@@ -264,6 +264,10 @@ describe OrderForm do
         order.people.size.should == 2
       end
 
+      it "should have passengers in correct order" do
+        order.people.first.first_name.should == 'MARIA'
+      end
+
       it "should have valid passengers" do
         persons = order.people
         persons.first.should be_valid
@@ -279,6 +283,10 @@ describe OrderForm do
 
       it "should have two passengers" do
         order.people.size.should == 2
+      end
+
+      it 'should have passengers in correct order' do
+        order.people.first.first_name.should == 'ALEKSEY'
       end
 
       it "should have valid passengers" do

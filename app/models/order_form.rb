@@ -329,12 +329,12 @@ class OrderForm
   def url_encoded_array_to_proper struct
     return struct if struct.is_a?(Array)
     raise ArgumentError unless url_encoded_array?(struct)
-    struct.values
+    struct.sort_by {|k, v| k}.map(&:last)
   end
 
   def url_encoded_array? struct
     return false unless struct.is_a?(Hash)
-    return false unless struct.keys.first == '0'
+    return false unless struct.keys.map(&:to_i).sort.first == 0
     true
   end
 
