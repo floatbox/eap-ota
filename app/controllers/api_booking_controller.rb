@@ -6,7 +6,7 @@ class ApiBookingController < ApplicationController
 
   def create
     # FIXME тут должно быть robot: true, но повременю
-    @context = Context.new(partner: params[:partner])
+    @context = Context.new(partner: partner)
     if preliminary_booking_result(false)
       render :json => {
         :success => true,
@@ -22,7 +22,7 @@ class ApiBookingController < ApplicationController
 
   def update
     # FIXME тут должно быть robot: true, но повременю
-    @context = Context.new(partner: params[:partner])
+    @context = Context.new(partner: partner)
     @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
     @order_form.context = @context
     @order_form.update_attributes(params[:order])

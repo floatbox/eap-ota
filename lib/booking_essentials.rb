@@ -11,7 +11,6 @@ module BookingEssentials
     return unless @search
     return unless @recommendation.allowed_booking?
 
-    track_partner(@context.partner.token, params[:marker])
     strategy = Strategy.select(rec: @recommendation, search: @search, context: @context)
 
     StatCounters.inc %W[enter.preliminary_booking.total]

@@ -8,7 +8,7 @@ class PricerController < ApplicationController
   include Monitoring::Benchmarkable
 
   def pricer
-    @context = Context.new(deck_user: current_deck_user)
+    @context = Context.new(deck_user: current_deck_user, partner: partner)
     @destination = Destination.get_by_search @search
     @recommendations = Mux.new(context: @context).async_pricer(@search)
     if (@destination && @recommendations.present? && !admin_user)
@@ -90,6 +90,7 @@ class PricerController < ApplicationController
 
   # FIXME попытаться вынести общие методы или объединить с pricer/validate
   def api
+    # тут берём partner из параметров, потому что на апи нет кук
     @context = Context.new(partner: params[:partner], robot: true)
     if !Conf.api.enabled || !@context.pricer_enabled?
       render 'api/error', :status => 503, :locals => {:message => 'service disabled by administrator'}

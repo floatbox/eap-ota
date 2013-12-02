@@ -6,7 +6,7 @@ class BookingController < ApplicationController
   before_filter :log_referrer, :only => [:api_redirect, :api_booking]
   before_filter :log_user_agent
 
-  # before_filter :save_partner_cookies, :only => [:preliminary_booking, :api_redirect]
+  before_filter :save_partner_cookies, :only => [:create, :api_redirect]
 
   # вызывается аяксом со страницы api_booking и с морды
   # Parameters:
@@ -15,7 +15,7 @@ class BookingController < ApplicationController
   #   "partner"=>"yandex",
   #   "marker"=>"",
   def create
-    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    @context = Context.new(deck_user: current_deck_user, partner: partner)
     # FIXME используется еще?
     @coded_search = params[:query_key]
     logo_url = @context.partner.logo_exist? ? @context.partner.logo_url : ''
@@ -35,7 +35,7 @@ class BookingController < ApplicationController
   # Parameters:
   #   "query_key"=>"ki1kri"
   def api_booking
-    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    @context = Context.new(deck_user: current_deck_user, partner: partner)
     @query_key = params[:query_key]
     # оставил в таком виде, чтобы не ломалось при рендере
     # если переделаем урлы и тут - заработает
@@ -60,8 +60,6 @@ class BookingController < ApplicationController
 
   def api_redirect
     @search = AviaSearch.simple(params.slice(*AviaSearch::SIMPLE_PARAMS))
-    # FIXME если partner из @search не берется больше - переделать на before_filter save_partner_cookies
-    track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?
       StatCounters.inc %W[enter.api_redirect.success]
       redirect_to "#{Conf.api.url_base}/##{@search.encode_url}"
@@ -80,7 +78,7 @@ class BookingController < ApplicationController
   end
 
   def show
-    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    @context = Context.new(deck_user: current_deck_user, partner: partner)
     @order_form = OrderForm.load_from_cache(params[:id] || params[:number])
     # Среагировать на изменение продаваемости/цены
     @order_form.recommendation.find_commission!
@@ -98,7 +96,7 @@ class BookingController < ApplicationController
 
   # TODO переделать роутинг, чтобы :id стал частью урла.
   def recalculate_price
-    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    @context = Context.new(deck_user: current_deck_user, partner: partner)
     @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
     @order_form.recommendation.find_commission!
     @order_form.context = @context
@@ -113,7 +111,7 @@ class BookingController < ApplicationController
 
   # бронирование и платеж
   def update
-    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    @context = Context.new(deck_user: current_deck_user, partner: partner)
     @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
     @order_form.context = @context
     @order_form.update_attributes(params[:order])
@@ -143,7 +141,7 @@ class BookingController < ApplicationController
   # неподписанный респонс Payu
   def confirm_3ds
     @payment = Payment.find_3ds_by_backref!(params)
-    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    @context = Context.new(deck_user: current_deck_user, partner: partner)
 
     @order = @payment.order
     if @order.ticket_status == 'canceled'
