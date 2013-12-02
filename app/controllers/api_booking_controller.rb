@@ -10,11 +10,10 @@ class ApiBookingController < ApplicationController
     if preliminary_booking_result(false)
       render :json => {
         :success => true,
-        :order => {
+        :order => @order_form.info_hash.merge(
           :id => @order_form.number,
-          :link => api_v1_order_url(@order_form.number),
-          :info => @order_form.info_hash
-        }
+          :link => api_v1_order_url(@order_form.number)
+        )
       }
     else
       render :json => {:success => false}
@@ -32,11 +31,11 @@ class ApiBookingController < ApplicationController
     when :forbidden_sale, :failed_booking
       render :json => {success: false, reason: 'unable_to_sell'}
     when :new_price
-      render :json => {success: false, reason: 'price_changed', info: @order_form.info_hash}
+      render :json => {success: false, reason: 'price_changed', order: @order_form.info_hash}
     when :invalid_data
-      render :json => {success: false, reason: 'invalid_data', errors: @order_form.errors_hash}
+      render :json => {success: false, reason: 'invalid_data', order: {errors: @order_form.errors_hash}}
     when :ok
-      render :json => {success: true, pnr_number: @order_form.pnr_number}
+      render :json => {success: true, order: @order_form.info_hash.merge( pnr_number: @order_form.pnr_number ) }
     when :threeds
       render :json => {:success => 'threeds', :threeds_params => @payment_response.threeds_params, :threeds_url => @payment_response.threeds_url}
     when :failed_payment
