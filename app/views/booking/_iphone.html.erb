@@ -80,7 +80,7 @@
                 <div class="bfpd-item"><label class="bf-placeholder" for="bfp$n-exp-year">ГГГГ</label><input type="text" pattern="[0-9]*" class="bf-field bfpd-year" id="bfp$n-exp-year" name="order[persons][$n][document_expiration][year]" maxlength="4" title="Год окончания срока действия документа"></div>
             </div>
             <div class="bf-checkbox">
-                <input type="checkbox" value="1" name="order[persons][$n][document_noexpiration]" id="bfp$n-permanent">
+                <input type="checkbox" value="1" id="bfp$n-permanent">
                 <label for="bfp$n-permanent">Без срока</label>
             </div>
         </td>
@@ -92,7 +92,7 @@
             <% programs = carrier.available_bonus_programms %>
             <% unless programs.empty? %>
                 <div class="bf-checkbox">
-                    <input type="checkbox" value="1" name="order[persons][$n][bonus_present]" id="bfp$n-bonus">
+                    <input type="checkbox" value="1" id="bfp$n-bonus">
                     <label for="bfp$n-bonus">Есть бонусная карта <%= carrier.alliance ? "альянса #{ carrier.alliance.name }" : "авиакомпании #{ carrier.name }" %></label>
                 </div>
             <% end %>

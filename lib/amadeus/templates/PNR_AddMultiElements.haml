@@ -251,7 +251,7 @@
             %qualifier PR
             %number= index+1
 
-    - if person.bonus_present
+    - if person.bonuscard_number.present?
       -# CC 'FFN...'
       %dataElementsIndiv
         %elementManagementData

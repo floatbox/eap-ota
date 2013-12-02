@@ -64,7 +64,7 @@
     <% programs = carrier.available_bonus_programms %>
     <% unless programs.empty? %>
         <div class="bf-checkbox">
-            <input type="checkbox" value="1" name="order[persons][$n][bonus_present]" id="bfp$n-bonus">
+            <input type="checkbox" value="1" id="bfp$n-bonus">
             <label for="bfp$n-bonus"><%= carrier.alliance ? t('booking.passengers.bonus.alliance', :name => carrier.alliance.name) : t('booking.passengers.bonus.carrier', :name => carrier.name) %></label>
         </div>
     <% end %>
@@ -78,7 +78,7 @@
     </td>
     <td colspan="2" class="bfp-option">
         <div class="bf-checkbox">
-            <input type="checkbox" value="1" name="order[persons][$n][document_noexpiration]" id="bfp$n-permanent">
+            <input type="checkbox" value="1" id="bfp$n-permanent">
             <label for="bfp$n-permanent"><%= t 'booking.passengers.expiration.without' %></label>
         </div>    
     </td>
