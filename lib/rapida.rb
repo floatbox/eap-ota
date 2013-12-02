@@ -28,9 +28,6 @@ class Rapida
     'pay'
   end
 
-  def unknown_command
-  end
-
   # /основные обработчики
 
   private

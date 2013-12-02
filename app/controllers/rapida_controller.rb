@@ -7,7 +7,7 @@ class RapidaController < ApplicationController
     response = case @command
     when :check then rapida.check
     when :pay   then rapida.pay
-    else rapida.unknown_command
+    else return render :status => :not_acceptable, :text => 'command not allowed'
     end
     render xml: response
   end
