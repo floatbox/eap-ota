@@ -24,8 +24,13 @@ class Rapida
   end
 
   def pay
-    # заглушка
-    'pay'
+    charge_payment! if payable?
+
+    builder = Buider.new result: error_code(error),
+                         txn_id: @txn_id,
+                         account: @account,
+                         info: @comment
+    builder.pay_response
   end
 
   # /основные обработчики
@@ -38,9 +43,20 @@ class Rapida
     @order.payments << RapidaCharge.create(status: 'pending', their_ref: @txn_id)
     @order.payments
   rescue ActiveRecord::StatementInvalid => e
+    rescue_db_error(e)
+  end
+
+  def charge_payment!
+    @order.payments << RapidaCharge.create(status: 'pending', their_ref: @txn_id)
+    @order.payments
+  rescue ActiveRecord::StatementInvalid => e
+    rescue_db_error(e)
+  end
+
+  def rescue_db_error(exception)
     # ловим ошибку при работе с базой,
     # т.к. сохранить платеж не получилось - отдаем код с "временной" ошибкой
-    with_warning(e)
+    with_warning(exception)
     @error = :temporary_error
   end
 
@@ -182,8 +198,6 @@ class Rapida
           # prv_txn:
           # > Уникальный номер операции пополнения баланса Потребителя.
           # > Этот элемент должен возвращаться после запроса на пополнение баланса.
-          # > При запросе на проверку возможности осуществления Платежа,
-          # > его возвращать не обязательно - он все равно не обрабатывается.
           xml.prv_txn_       @pay_id  if @pay_id  # наш id судя по всему
           xml.comment_       @comment if @comment # кандидат на убиение
           xml.trip_          @extra   if @extra   # экстра инфо, пока просто для галочки
