@@ -70,7 +70,12 @@ class Rapida
   end
 
   def order?
-    (@order ||= Order.where(code: @account).first) ? true : false
+    if @order ||= Order.where(code: @account).first
+      true
+    else
+      @error = :unknown_account
+      false
+    end
   end
 
   def sufficient_params?

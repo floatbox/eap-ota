@@ -123,6 +123,12 @@ describe Rapida do
 
       end
 
+      specify 'unknown code' do
+        parsed = check(txn_id, 'lulz', price, phone)
+
+        parsed.result.should == '5'
+      end
+
     end
 
   end
