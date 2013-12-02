@@ -135,7 +135,6 @@ ActiveRecord::Schema.define(:version => 20131130235415) do
     t.string   "sirena_name"
     t.boolean  "disabled"
     t.boolean  "search_around"
-    t.string   "ufi"
   end
 
   add_index "cities", ["iata"], :name => "index_cities_on_iata"
@@ -389,24 +388,6 @@ ActiveRecord::Schema.define(:version => 20131130235415) do
     t.integer  "priority"
   end
 
-  create_table "order_requests", :force => true do |t|
-    t.integer  "order_id"
-    t.integer  "assigned_to_id"
-    t.string   "status"
-    t.string   "subject"
-    t.text     "message",        :null => false
-    t.text     "comment"
-    t.integer  "priority"
-    t.date     "departure_date"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-  end
-
-  add_index "order_requests", ["assigned_to_id"], :name => "index_order_requests_on_assigned_to_id"
-  add_index "order_requests", ["departure_date"], :name => "index_order_requests_on_departure_date"
-  add_index "order_requests", ["order_id"], :name => "index_order_requests_on_order_id"
-  add_index "order_requests", ["priority"], :name => "index_order_requests_on_priority"
-
   create_table "orders", :force => true do |t|
     t.string   "email"
     t.string   "phone"
@@ -546,6 +527,7 @@ ActiveRecord::Schema.define(:version => 20131130235415) do
 
   add_index "payments", ["order_id"], :name => "index_payments_on_order_id"
   add_index "payments", ["pan"], :name => "index_payments_on_pan"
+  add_index "payments", ["ref"], :name => "payments_ref"
   add_index "payments", ["status"], :name => "index_payments_on_status"
 
   create_table "promo_codes", :force => true do |t|
