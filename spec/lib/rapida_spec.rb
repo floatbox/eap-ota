@@ -64,25 +64,46 @@ describe Rapida do
 
     context 'failed' do
 
-      specify 'txn_id not provided' do
-        parsed = check(nil, account, price, phone)
+      context 'with wrong parameters' do
 
-        parsed.result.should == '8'
-        parsed.account.should == account
+        specify 'txn_id not provided' do
+          parsed = check(nil, account, price, phone)
+
+          parsed.result.should == '8'
+          parsed.account.should == account
+        end
+
+        specify 'account not provided' do
+          parsed = check(txn_id, nil, price, phone)
+
+          parsed.result.should == '8'
+          parsed.rapida_txn_id.should == txn_id
+        end
+
+        specify 'more than one mandatory paramater not provided' do
+          parsed = check(txn_id, nil, nil, nil)
+
+          parsed.result.should == '8'
+          parsed.rapida_txn_id.should == txn_id
+        end
       end
 
-      specify 'account not provided' do
-        parsed = check(txn_id, nil, price, phone)
+      context 'with wrong price' do
 
-        parsed.result.should == '8'
-        parsed.rapida_txn_id.should == txn_id
-      end
+        specify 'price is greater than real' do
+          parsed = check(txn_id, account, price + 1, phone)
 
-      specify 'more than one mandatory paramater not provided' do
-        parsed = check(txn_id, nil, nil, nil)
+          parsed.result.should == '242'
+          parsed.account.should == account
+        end
 
-        parsed.result.should == '8'
-        parsed.rapida_txn_id.should == txn_id
+        specify 'price is less than real' do
+          parsed = check(txn_id, account, price - 100, phone)
+
+          parsed.result.should == '241'
+          parsed.account.should == account
+        end
+
       end
 
     end
