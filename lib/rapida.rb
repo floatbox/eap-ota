@@ -20,7 +20,7 @@ class Rapida
     info = info && info.full_info[0...300] # длина до 300 символов
     route = @order && @order.route
     # сделать еще один запрос выглядит пока лучше, чем вычленять из full_info
-    persons = Ticket.uniq.select([:first_name, :last_name, 'tickets.route']).joins(:order).where('orders.code = ?', 'lvj17l').join(&:name)
+    persons = Ticket.uniq.select([:first_name, :last_name, 'tickets.route']).joins(:order).where('orders.code = ?', @account).join(&:name)
 
     builder = Builder.new result: error_code(error),
                           txn_id: @txn_id,
