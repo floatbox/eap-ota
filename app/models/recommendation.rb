@@ -109,6 +109,7 @@ class Recommendation
     new_rec.price_fare, new_rec.price_tax = prices
     new_rec.reset_commission!
     # FIXME отреагировать на изменение цены/продаваемости!
+    # FIXME как сюда контекст прокинуть?
     new_rec.find_commission!
     new_rec
   end
@@ -337,7 +338,7 @@ class Recommendation
 
   def self.filters_data recs
     data = {}
-    variants = recs.collect(&:variants).flatten 
+    variants = recs.collect(&:variants).flatten
 
     data[:time] = []
     data[:locations] = []
@@ -368,7 +369,7 @@ class Recommendation
     }.uniq
     data[:layover_cities] = layover_cities.uniq.sort_by(&:name)
     data[:few_layovers] = flights_count.min < 3 && flights_count.max > 2
-    
+
     durations = all_segments.flatten.collect(&:layover_durations).flatten.compact
     unless durations.empty?
       data[:min_layover_duration] = durations.min / 60

@@ -99,7 +99,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     else
       @recommendation = Amadeus::Strategy.new(order: @order).recommendation_from_booking
       # FIXME надо бы убрать. что мешает сериализации работать без комиссии?
-      @recommendation.find_commission!
+      @recommendation.find_commission! context: ContextBuilder.from_order(@order)
       redirect_to check_admin_commissions_url(:code => @recommendation.serialize)
     end
   #rescue

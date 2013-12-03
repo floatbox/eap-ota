@@ -31,7 +31,7 @@ class Admin::CommissionsController < Admin::BaseController
     if @examples_text
       recommendations = @examples_text.split("\n").map {|ex| Recommendation.example(ex) }
       recommendations.each do |recommendation|
-        recommendation.find_commission!
+        recommendation.find_commission! context: Context.new
       end
       @rules_with_examples =
         recommendations.group_by(&:commission)

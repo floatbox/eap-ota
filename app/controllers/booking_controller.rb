@@ -91,7 +91,7 @@ class BookingController < ApplicationController
   def show
     @order_form = OrderForm.load_from_cache(params[:id] || params[:number])
     # Среагировать на изменение продаваемости/цены
-    @order_form.recommendation.find_commission!
+    @order_form.recommendation.find_commission! context: context
     @order_form.init_people
     @order_form.context = context
     @search = AviaSearch.from_code(@order_form.query_key)
@@ -107,7 +107,7 @@ class BookingController < ApplicationController
   # TODO переделать роутинг, чтобы :id стал частью урла.
   def recalculate_price
     @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
-    @order_form.recommendation.find_commission!
+    @order_form.recommendation.find_commission! context: context
     @order_form.context = context
     @order_form.update_attributes(params[:order])
     @order_form.valid?

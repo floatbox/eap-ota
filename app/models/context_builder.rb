@@ -6,6 +6,14 @@ class ContextBuilder
     @frozen = false
   end
 
+  def self.from_order order
+    new(
+      partner: order.partner,
+      robot: false, #FIXME
+      deck_user: nil #FIXME TOO
+    ).build!
+  end
+
   def build!
     @frozen = true
     context = Context.new @options.slice(:partner, :robot, :deck_user)
