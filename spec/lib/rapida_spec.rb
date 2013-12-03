@@ -40,7 +40,7 @@ describe Rapida do
   ### CHECK
   describe '#check' do
 
-    let(:order) { new_order { |o| payment_status = 'pending' } }
+    let(:order) { new_order }
     let(:account) { order.code }
     let(:price) { order.price_with_payment_commission }
 
