@@ -1,4 +1,5 @@
 module Discount
+  class SectionNotFound < LoadError; end
 end
 
 require 'discount/book'
