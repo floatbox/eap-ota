@@ -61,6 +61,32 @@ describe Rapida do
         parsed.rapida_txn_id.should == txn_id
       end
 
+      context 'payment persistance' do
+
+        before do
+          check(txn_id, account, price, phone)
+        end
+
+        specify 'with exactly one payment' do
+          payment = order.payments.size.should eq(1)
+        end
+
+        context 'with valid' do
+
+          before do
+            @payment = order.payments.last
+          end
+
+          subject(:payment) { @payment }
+
+          its(:endpoint_name) { should eq('rapida') }
+          its(:price) { should eq(price) }
+          its(:status) { should eq('pending') }
+          its(:their_ref) { should eq(txn_id) }
+        end
+
+      end
+
     end
 
     context 'failed' do

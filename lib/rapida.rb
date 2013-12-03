@@ -50,9 +50,9 @@ class Rapida
   def create_pending_payment!
     payment = RapidaCharge.new
     payment.set_defaults
-    payment.their_ref = @txn_id,
-    payment.price = @price,
-    payment.status = 'pending',
+    payment.their_ref = @txn_id
+    payment.price = @price
+    payment.status = 'pending'
     @order.payments << payment
     @order.payments
   rescue ActiveRecord::StatementInvalid => e
