@@ -1,5 +1,17 @@
 module Discount
   class SectionNotFound < LoadError; end
+
+  class << self
+
+    delegate :register,
+        to: :default_book
+
+    def default_book
+      @book ||= Discount::Book.new
+    end
+
+  end
+
 end
 
 require 'discount/book'

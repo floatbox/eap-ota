@@ -5,15 +5,12 @@
 # сейчас действует аналогично Commission::Section - выбирает набор исходя из текущей даты
 
 class Discount::Book
-  def self.default_book
-    @book ||= new
-  end
 
   def initialize
     @index = []
   end
 
-  def register start_date, definition
+  def register start_date, &definition
     section = Discount::Section.new Date.parse(start_date), definition
     @index << section
     @index.sort_by! {|s| s.start_date}.reverse!
