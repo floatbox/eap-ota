@@ -24,12 +24,12 @@
 
 ### Параметры
 
-name           | required or default  | description | example
----------------|----------------------|-------------|--------
-recommendation | required             | `recommendation` из ответа api/v1/variants.xml  | amadeus.LO.SS.MM.88.LO678SVOWAW151212-LO335WAWCDG161212
-adults         | 1                    | полных тарифов
-children       | 0                    | детских тарифов с местом (до 12 лет)
-infants        | 0                    | детских тарифов без места (до 2 лет)
+name             | required or default  | description | example
+-----------------|----------------------|-------------|--------
+`recommendation` | *                    | `recommendation` из ответа api/v1/variants.xml  | amadeus.LO.SS.MM.88.LO678SVOWAW151212-LO335WAWCDG161212
+`adults`         | `1`                  | полных тарифов
+`children`       | `0`                  | детских тарифов с местом (до 12 лет)
+`infants`        | `0`                  | детских тарифов без места (до 2 лет)
 
 ### Успешный ответ
 
