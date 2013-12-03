@@ -10,10 +10,10 @@ class Discount::Book
     @index = []
   end
 
-  def register start_date, &definition
-    section = Discount::Section.new Date.parse(start_date), definition
+  def register start_time, &definition
+    section = Discount::Section.new DateTime.parse(start_time), definition
     @index << section
-    @index.sort_by! {|s| s.start_date}.reverse!
+    @index.sort_by! {|s| s.start_time}.reverse!
     if @index.uniq.size != @index.size
       raise ArgumentError, "discounts for #{start_time} already registered."
     end
@@ -24,8 +24,8 @@ class Discount::Book
     section.find_rule_for_rec rec, opts
   end
 
-  def current_section date = Date.today
-    s = @index.find {|section| section.start_date <= date}
+  def current_section time = DateTime.now
+    s = @index.find {|section| section.start_time <= time}
     raise Discount::SectionNotFound unless s
     s
   end

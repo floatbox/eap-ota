@@ -8,10 +8,10 @@ class Discount::Section
     end
   end
 
-  attr_reader :start_date, :definition
+  attr_reader :start_time, :definition
 
-  def initialize start_date, definition
-    @start_date = start_date
+  def initialize start_time, definition
+    @start_time = start_time
     @definition = definition
   end
 
