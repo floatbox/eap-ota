@@ -16,7 +16,7 @@ class Discount::Book
   def register start_date, definition
     section = Discount::Section.new Date.parse(start_date), definition
     @index << section
-    @index.sort_by! {|s| s.start_date}
+    @index.sort_by! {|s| s.start_date}.reverse!
     if @index.uniq.size != @index.size
       raise ArgumentError, "discounts for #{start_time} already registered."
     end
