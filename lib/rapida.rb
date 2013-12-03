@@ -16,10 +16,18 @@ class Rapida
     # создает платеж со статусом pending
     create_pending_payment! if checkable?
 
+    info = @order && @order.full_info
+    info = info && info.full_info[0...300] # длина до 300 символов
+    route = @order && @order.route
+    # сделать еще один запрос выглядит пока лучше, чем вычленять из full_info
+    persons = Ticket.uniq.select([:first_name, :last_name, 'tickets.route']).joins(:order).where('orders.code = ?', 'lvj17l').join(&:name)
+
     builder = Builder.new result: error_code(error),
                           txn_id: @txn_id,
                           account: @account,
-                          info: @comment
+                          info: info,
+                          trip: route,
+                          persons: persons
     builder.check_response
   end
 
@@ -40,15 +48,20 @@ class Rapida
   # операции с платежами
 
   def create_pending_payment!
-    @order.payments << RapidaCharge.create(status: 'pending', their_ref: @txn_id)
+    @order.payments << RapidaCharge.create(
+      their_ref: @txn_id,
+      price: @price,
+      status: 'pending',
+    )
     @order.payments
   rescue ActiveRecord::StatementInvalid => e
     rescue_db_error(e)
   end
 
   def charge_payment!
-    @order.payments << RapidaCharge.create(status: 'pending', their_ref: @txn_id)
-    @order.payments
+    @order.update_attributes(
+      payment_status: 'charged',
+    )
   rescue ActiveRecord::StatementInvalid => e
     rescue_db_error(e)
   end
@@ -70,10 +83,11 @@ class Rapida
 
   def checkable?
     # проверяет, можно ли вернуть check без ошибки
-    valid_params? && pending? && adequate_price?
+    valid_params? && order? && adequate_price?
   end
 
   def payable?
+    valid_params? && pending? && adequate_price?
   end
 
   # TODO сделать стандартный генератор
@@ -172,7 +186,7 @@ class Rapida
     # FIXME возможно вынести отдельно надо будет, посмотрим насколько разрастется
 
     include KeyValueInit
-    attr_accessor :txn_id, :result, :account, :persons, :info, :extra, :price, :debt, :comment, :pay_id, :receipt
+    attr_accessor :txn_id, :result, :account, :persons, :info, :trip, :price, :debt, :comment, :pay_id, :receipt
 
     def check_response
       Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
@@ -181,7 +195,7 @@ class Rapida
           xml.result_        @result              # 0 - ок, 1 - не ок
           xml.account_       @account if @account # идентификатор, переданный рапидой, равен Order#code
           xml.passangers_    @persons if @persons # пассажиры.to_s
-          xml.trip_          @extra   if @extra   # экстра инфо, пока просто для галочки
+          xml.trip_          @trip    if @trip    # инфо по перелетам
           xml.shortinfo_     @info    if @info    # любые заметки
           xml.sum_           @price   if @price   # сумма платежа
           xml.debt_          @debt    if @debt    # сумма, оставшаяся к оплате - пока не используем
@@ -200,8 +214,7 @@ class Rapida
           # > Этот элемент должен возвращаться после запроса на пополнение баланса.
           xml.prv_txn_       @pay_id  if @pay_id  # наш id судя по всему
           xml.comment_       @comment if @comment # кандидат на убиение
-          xml.trip_          @extra   if @extra   # экстра инфо, пока просто для галочки
-          # TODO переспросить насчет названия и этого тега
+          xml.trip_          @trip    if @trip    # инфо по перелетам
           xml.passangers_    @persons if @persons # пассажиры.to_s
           xml.receipt_       @receipt if @repeipt # линк на маршрутку
         }
