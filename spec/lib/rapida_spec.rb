@@ -90,7 +90,7 @@ describe Rapida do
       end
 
       specify 'on database error' do
-        RapidaCharge.stub(:create).and_raise(ActiveRecord::StatementInvalid.new)
+        RapidaCharge.stub(:new).and_raise(ActiveRecord::StatementInvalid.new)
         parsed = check(txn_id, order.code, order.price_with_payment_commission, phone)
         parsed.result.should == '1'
       end

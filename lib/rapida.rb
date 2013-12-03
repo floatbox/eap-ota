@@ -48,11 +48,12 @@ class Rapida
   # операции с платежами
 
   def create_pending_payment!
-    @order.payments << RapidaCharge.create(
-      their_ref: @txn_id,
-      price: @price,
-      status: 'pending',
-    )
+    payment = RapidaCharge.new
+    payment.set_defaults
+    payment.their_ref = @txn_id,
+    payment.price = @price,
+    payment.status = 'pending',
+    @order.payments << payment
     @order.payments
   rescue ActiveRecord::StatementInvalid => e
     rescue_db_error(e)
