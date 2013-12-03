@@ -5,4 +5,5 @@
 require File.expand_path('../production.rb', __FILE__)
 Eviterra::Application.configure do
   # оверрайды - сюда
+  config.log_level = :info
 end
