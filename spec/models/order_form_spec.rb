@@ -3,6 +3,37 @@ require 'spec_helper'
 
 describe OrderForm do
 
+  extend RSpec::Matchers::DSL
+
+  # order_form.should have_associated( parent_last_name, infant_last_name)
+
+  matcher :have_associated do |parent_last_name, infant_last_name|
+    match do |order_form|
+      parent = order_form.adults.find{|a| a.last_name == parent_last_name}
+      parent.associated_infant && (parent.associated_infant.last_name == infant_last_name)
+    end
+  end
+
+  matcher :have_no_infants_associated do |parent_last_name|
+    match do |order_form|
+      parent = order_form.adults.find{|a| a.last_name == parent_last_name}
+      !parent.associated_infant
+    end
+  end
+
+  matcher :have_only_one_mommy do |infant_last_name|
+    match do |order_form|
+      parents = order_form.adults.select{|a| a.associated_infant.try(&:last_name) == infant_last_name}
+      parents.size == 1
+    end
+  end
+
+  matcher :have_no_infants_associated_to_infants do
+    match do |order_form|
+      order_form.infants.none?(&:associated_infant)
+    end
+  end
+
   describe '#needs_visa_notification' do
 
     subject {
@@ -15,7 +46,7 @@ describe OrderForm do
       }
       context 'with passenger from KZ' do
         let(:people){
-          [Person.new(nationality_id: Country['KZ'].id)]
+          [Person.new(nationality_code: 'KAZ')]
         }
         its(:needs_visa_notification) {should be_true}
 
@@ -23,7 +54,7 @@ describe OrderForm do
 
       context 'with one passenger from GB' do
         let(:people){
-          [Person.new(nationality_id: Country['GB'].id)]
+          [Person.new(nationality_code: 'GBR')]
         }
         its(:needs_visa_notification) {should be_false}
       end
@@ -37,14 +68,14 @@ describe OrderForm do
 
       context 'with passenger from UA' do
         let(:people){
-          [Person.new(nationality_id: Country['UA'].id)]
+          [Person.new(nationality_code: 'UKR')]
         }
         its(:needs_visa_notification) {should be_false}
       end
 
       context 'with one passenger from GB' do
         let(:people){
-          [Person.new(nationality_id: Country['GB'].id)]
+          [Person.new(nationality_code: 'GBR')]
         }
         its(:needs_visa_notification) {should be_false}
       end
@@ -123,7 +154,6 @@ describe OrderForm do
       OrderForm.new(
         :recommendation => recommendation,
         :people_count => {:adults => 1, :children => 0, :infants => 0},
-        :variant_id => "2",
         :query_key => 'abcde',
         :price_with_payment_commission => 1000,
         :partner => 'sample_partner'
@@ -144,7 +174,6 @@ describe OrderForm do
       it {should be}
       its(:recommendation) {should == recommendation}
       its(:people_count) {should == {:adults => 1, :children => 0, :infants => 0}}
-      its(:variant_id) {should == "2"}
       its(:query_key) {should == 'abcde'}
       its(:partner) {should == 'sample_partner'}
       its(:price_with_payment_commission) {should == 1000}
@@ -188,29 +217,35 @@ describe OrderForm do
     # или перенести в контроллер-спек, а здесь работать только с конкретными хэшами
     let(:person_attributes) do
       {
-        "0" => {
+        "1" => {
           "document_noexpiration" => "0",
-          "birthday(1i)" => "1984",
-          "birthday(2i)" => "06",
-          "birthday(3i)" => "16",
-          "nationality_id" => "170",
+          "birthday" => {
+            "year" => "1984",
+            "month" => "06",
+            "day" => "16"
+          },
+          "nationality_code" => "RUS",
           #"bonuscard_type" => "[FILTERED]",
           #"bonuscard_number" => "[FILTERED]",
-          "document_expiration_date(1i)" => "2014",
-          "document_expiration_date(2i)" => "09",
-          "document_expiration_date(3i)" => "08",
+          "document_expiration" => {
+            "year" => "2014",
+            "month" => "09",
+            "day" => "08"
+          },
           "sex" => "m",
           "last_name" => "IVASHKIN",
           "bonus_present" => "0",
           "passport" => "123456789",
           "first_name" => "ALEKSEY"
         },
-        "1" => {
+        "0" => {
           "document_noexpiration" => "1",
-          "birthday(1i)" => "1985",
-          "birthday(2i)" => "09",
-          "birthday(3i)" => "04",
-          "nationality_id" => "170",
+          "birthday" => {
+            "year" => "1985",
+            "month" => "09",
+            "day" => "04"
+          },
+          "nationality_code" => "RUS",
           "sex" => "f",
           "last_name" => "IVASHKINA",
           "bonus_present" => "0",
@@ -219,55 +254,50 @@ describe OrderForm do
         }
       end
 
-    let(:order) do
-      order = OrderForm.new
-      order.people_attributes = person_attributes
-      order
+    context "www-url-encoded style (hash of '0' => ...)" do
+      let(:order) do
+        order = OrderForm.new persons: person_attributes
+        order
+      end
+
+      it "should have two passengers" do
+        order.people.size.should == 2
+      end
+
+      it "should have passengers in correct order" do
+        order.people.first.first_name.should == 'MARIA'
+      end
+
+      it "should have valid passengers" do
+        persons = order.people
+        persons.first.should be_valid
+        persons.second.should be_valid
+      end
     end
 
-    it "should have two passengers" do
-      order.people.size.should == 2
-    end
+    context "proper json style (array)" do
+      let(:order) do
+        order = OrderForm.new persons: person_attributes.values
+        order
+      end
 
-    it "should have valid passengers" do
-      order.people.first.should be_valid
-      order.people.second.should be_valid
+      it "should have two passengers" do
+        order.people.size.should == 2
+      end
+
+      it 'should have passengers in correct order' do
+        order.people.first.first_name.should == 'ALEKSEY'
+      end
+
+      it "should have valid passengers" do
+        persons = order.people
+        persons.first.should be_valid
+        persons.second.should be_valid
+      end
     end
   end
 
   describe '#associate_infants' do
-
-    # FIXME extend нужен для синтаксиса matcher.. вынести повыше?
-    extend RSpec::Matchers::DSL
-
-    # order_form.should have_associated( parent_last_name, infant_last_name)
-
-    matcher :have_associated do |parent_last_name, infant_last_name|
-      match do |order_form|
-        parent = order_form.adults.find{|a| a.last_name == parent_last_name}
-        parent.associated_infant && (parent.associated_infant.last_name == infant_last_name)
-      end
-    end
-
-    matcher :have_no_infants_associated do |parent_last_name|
-      match do |order_form|
-        parent = order_form.adults.find{|a| a.last_name == parent_last_name}
-        !parent.associated_infant
-      end
-    end
-
-    matcher :have_only_one_mommy do |infant_last_name|
-      match do |order_form|
-        parents = order_form.adults.select{|a| a.associated_infant.try(&:last_name) == infant_last_name}
-        parents.size == 1
-      end
-    end
-
-    matcher :have_no_infants_associated_to_infants do
-      match do |order_form|
-        order_form.infants.none?(&:associated_infant)
-      end
-    end
 
     subject do
       o = OrderForm.new(
@@ -360,8 +390,5 @@ describe OrderForm do
     end
 
     its(:calculated_people_count) {should == {:adults => 2, :children => 2, :infants => 2}}
-
   end
-
-
 end

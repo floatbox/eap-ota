@@ -1,8 +1,9 @@
 # encoding: utf-8
 class BookingController < ApplicationController
   include BookingEssentials
-  protect_from_forgery :except => :confirm_3ds
-  before_filter :log_referrer, :only => [:api_redirect, :api_booking, :rambler_booking]
+  # FIXME надо научить аякс слать authenticity_token на :create
+  protect_from_forgery :except => [:confirm_3ds, :create]
+  before_filter :log_referrer, :only => [:api_redirect, :api_booking]
   before_filter :log_user_agent
 
   # before_filter :save_partner_cookies, :only => [:preliminary_booking, :api_redirect]
@@ -13,11 +14,11 @@ class BookingController < ApplicationController
   #   "recommendation"=>"amadeus.SU.V.M.4.SU2074SVOLCA040512",
   #   "partner"=>"yandex",
   #   "marker"=>"",
-  #   "variant_id"=>"1"
-  def preliminary_booking
+  def create
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    # FIXME используется еще?
     @coded_search = params[:query_key]
-    @partner = Partner[params[:partner]]
-    logo_url = @partner.logo_exist? ? @partner.logo_url : ''
+    logo_url = @context.partner.logo_exist? ? @context.partner.logo_url : ''
     if preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       render :json => {
         :success => true,
@@ -34,10 +35,10 @@ class BookingController < ApplicationController
   # Parameters:
   #   "query_key"=>"ki1kri"
   def api_booking
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
     @query_key = params[:query_key]
     # оставил в таком виде, чтобы не ломалось при рендере
     # если переделаем урлы и тут - заработает
-    @partner = Partner[params[:partner]]
     @search = AviaSearch.from_code(params[:query_key])
     unless @search && @search.valid?
       # необходимо очистить anchor вручную
@@ -57,22 +58,8 @@ class BookingController < ApplicationController
     StatCounters.inc %W[enter.api.total]
   end
 
-  def api_rambler_booking
-    uri = RamblerApi.redirecting_uri params
-    StatCounters.inc %W[enter.rambler_cache.success]
-    redirect_to uri
-
-  # FIXME можно указать :formats => [:xml], но я задал дефолтный формат в роутинге
-  rescue CodeStash::NotFound => iata_error
-    render 'api/rambler_failure', :status => :not_found, :locals => { :message => iata_error.message }
-  rescue ArgumentError => argument_error
-    render 'api/rambler_failure', :status => :bad_request, :locals => { :message => argument_error.class }
-  ensure
-    StatCounters.inc %W[enter.rambler_cache.total]
-  end
-
   def api_redirect
-    @search = AviaSearch.simple(params.slice( :from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner ))
+    @search = AviaSearch.simple(params.slice(*AviaSearch::SIMPLE_PARAMS))
     # FIXME если partner из @search не берется больше - переделать на before_filter save_partner_cookies
     track_partner(params[:partner] || @search.partner, params[:marker])
     if @search.valid?
@@ -92,39 +79,45 @@ class BookingController < ApplicationController
     render 'api/form'
   end
 
-  def index
-    @order_form = OrderForm.load_from_cache(params[:number])
+  def show
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    @order_form = OrderForm.load_from_cache(params[:id] || params[:number])
     # Среагировать на изменение продаваемости/цены
     @order_form.recommendation.find_commission!
     @order_form.init_people
-    @order_form.admin_user = admin_user
+    @order_form.context = @context
     @search = AviaSearch.from_code(@order_form.query_key)
 
     if params[:iphone]
       render :partial => 'iphone'
-    elsif corporate_mode?
-      render :partial => 'corporate'
     else
-      render :partial => 'embedded'  
+      render :partial => 'embedded'
     end
 
   end
 
+  # TODO переделать роутинг, чтобы :id стал частью урла.
   def recalculate_price
-    @order_form = OrderForm.load_from_cache(params[:order][:number])
-    @order_form.people_attributes = params[:person_attributes]
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
     @order_form.recommendation.find_commission!
-    @order_form.admin_user = admin_user
+    @order_form.context = @context
+    @order_form.update_attributes(params[:order])
     @order_form.valid?
-    if @order_form.recommendation.sellable? && @order_form.update_price_and_counts
+    if @order_form.recommendation.allowed_booking? && @order_form.update_price_and_counts
       render :partial => 'newprice'
     else
       render :partial => 'failed_booking'
     end
   end
 
-  def pay
-
+  # бронирование и платеж
+  def update
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
+    @order_form = OrderForm.load_from_cache(params[:id] || params[:order][:number])
+    @order_form.context = @context
+    @order_form.update_attributes(params[:order])
+    @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
     case pay_result
     when :forbidden_sale
       render :partial => 'forbidden_sale'
@@ -150,6 +143,7 @@ class BookingController < ApplicationController
   # неподписанный респонс Payu
   def confirm_3ds
     @payment = Payment.find_3ds_by_backref!(params)
+    @context = Context.new(deck_user: current_deck_user, partner: params[:partner])
 
     @order = @payment.order
     if @order.ticket_status == 'canceled'
@@ -165,10 +159,9 @@ class BookingController < ApplicationController
         logger.info "Pay: problem confirming 3ds"
         @error_message = :payment
       else
-        strategy = Strategy.select(:order => @order)
-        strategy.lax = !!admin_user
+        strategy = Strategy.select(order: @order, context: @context)
 
-        if  !strategy.delayed_ticketing?
+        if !strategy.delayed_ticketing?
           logger.info "Pay: ticketing"
 
           unless strategy.ticket

@@ -84,7 +84,7 @@ slide: function() {
     var that = this;
     this.message.el.hide();
     this.content.el.show();
-    this.filters.el.show();
+    this.filters.show();
     this.fixed.update();
     this.content.tabs.removeClass('rt-compact');
     if (this.content.tabs.height() > 50) {
@@ -104,9 +104,6 @@ update: function(data) {
 load: function() {
     var that = this;
     var data = {query_key: this.data.query_key};
-    if (this.data.fragment_exist) {
-        data.restore_results = true;
-    }
     this.getPriceTemplate();
     this.all.load('/pricer/', data, 150000);
     this.matrix.load('/calendar/', data, 75000);
@@ -161,12 +158,21 @@ processSubscription: function() {
 },
 processCollections: function() {
     var that = this;
-    if (this.all.offers.length) {
-        var tab = page.location.offer;
-        if (tab && results[tab] && !results[tab].control.hasClass('rt-disabled')) {
-            this.content.select(tab);
+    if (this.all.offers.length || this.matrix.offer && this.matrix.offer.variants.length) {
+        if (this.all.offers.length) {
+            this.content.tabs.show();
+            this.matrix.content.find('.rm-notice').hide();
+            var tab = page.location.offer;
+            if (tab && results[tab] && !results[tab].control.hasClass('rt-disabled')) {
+                this.content.select(tab);
+            } else {
+                this.content.selectFirst();
+            }
         } else {
-            this.content.selectFirst();
+            this.matrix.content.find('.rm-notice').show();
+            this.content.tabs.hide();
+            this.content.select('matrix');        
+            this.filters.hide();
         }
         this.processSubscription();
         setTimeout(function() {
@@ -375,8 +381,14 @@ update: function() {
     this.update = $.noop;
 },
 toggle: function(mode) {
-    this.loading.toggle(mode === 'loading');
     this.empty.toggle(mode === 'empty');
+    if (mode === 'loading') {
+        var items = this.loading.find('.rmia-item').hide();
+        items.eq(Math.min(Math.floor(Math.random() * items.length), items.length - 1)).show();
+        this.loading.show();
+    } else {
+        this.loading.hide();
+    }
 },
 show: function() {
     this.el.show();

@@ -21,16 +21,16 @@ module Amadeus
         end.values
 
         variants = original_rec.try(:variants) || []
-        RecommendationSet.new(
-          xml_recommendations.transpose.map do |xml_recommendation|
-            rec = Recommendation.new( :variants => variants )
-            rec.booking_classes = xml_recommendation.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:designator').map(&:to_s)
-            rec.cabins = xml_recommendation.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:option').map(&:to_s)
-            rec.price_fare, rec.price_tax = xml_recommendation.map{|cg|local_prices cg}.transpose.map(&:sum)
-            rec.baggage_array = baggage_array(xml_recommendation)
-            rec
-          end
-        )
+        xml_recommendations.transpose.map do |xml_recommendation|
+          rec = Recommendation.new( :variants => variants )
+          rec.booking_classes = xml_recommendation.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:designator').map(&:to_s)
+          rec.fare_bases = xml_recommendation.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:fareBasis/r:additionalFareDetails/r:rateClass').map(&:to_s)
+          rec.published_fare = xml_recommendation.first.xpath('r:fareInfoGroup/r:pricingIndicators/r:priceTariffType').to_s == 'I'
+          rec.cabins = xml_recommendation.first.xpath('r:fareInfoGroup/r:segmentLevelGroup/r:cabinGroup/r:cabinSegment/r:bookingClassDetails/r:option').map(&:to_s)
+          rec.price_fare, rec.price_tax = xml_recommendation.map{|cg|local_prices cg}.transpose.map(&:sum)
+          rec.baggage_array = baggage_array(xml_recommendation)
+          rec
+        end
       end
 
       def error_message

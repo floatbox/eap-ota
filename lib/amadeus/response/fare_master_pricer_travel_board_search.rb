@@ -9,7 +9,7 @@ module Amadeus
       def recommendations
         recommendations = benchmark 'search recommendations' do
 
-          return(recommendations_sax) if Conf.amadeus.search_sax
+          return recommendations_sax if Conf.amadeus.search_sax
 
           xpath("//r:recommendation").map do |rec|
             price_total, price_tax =
@@ -22,6 +22,10 @@ module Amadeus
               rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:rbd").every.to_s
             availabilities =
               rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:cabinProduct/r:avlStatus").every.to_s
+            fare_bases =
+              rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareBasis").every.to_s
+            published_fare =
+              rec.xpath("r:paxFareProduct[r:paxReference/r:ptc='ADT']/r:fareDetails/r:groupOfFares/r:productInformation/r:fareProductDetail/r:fareType").every.to_s.all?{|ft| ft == 'RP'}
 
             validating_carrier_iata =
               rec.xpath("r:paxFareProduct/r:paxFareDetail/r:codeShareDetails[r:transportStageQualifier='V']/r:company").to_s
@@ -61,22 +65,24 @@ module Amadeus
               :cabins => cabins,
               :booking_classes => booking_classes,
               :availabilities => availabilities,
-              :last_tkt_date => last_tkt_date
+              :last_tkt_date => last_tkt_date,
+              :fare_bases => fare_bases,
+              :published_fare => published_fare
             )
           end
         end
-        RecommendationSet.new(recommendations)
+        recommendations
       end
 
       # xpath
       def error_message
-        error_message_sax if Conf.amadeus.search_sax
+        return error_message_sax if Conf.amadeus.search_sax
 
         xpath('//r:errorMessage/r:errorMessageText/r:description').to_s
       end
 
       def error_code
-        error_code_sax if Conf.amadeus.search_sax
+        return error_code_sax if Conf.amadeus.search_sax
 
         xpath('//r:errorMessage/r:applicationError/r:applicationErrorDetail/r:error').to_s
       end

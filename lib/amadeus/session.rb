@@ -4,22 +4,10 @@ module Amadeus
   # обошелся без блокировки таблиц
   class Session
 
-  def self.office_for_alias(al)
-    Conf.amadeus.offices.each do |office, settings|
-      return office if settings["alias"] == al.to_s
-    end
-    raise ArgumentError, "no office_id defined for alias #{al}"
-  end
-
-  # FIXME избавиться от констант
-  BOOKING = office_for_alias(:booking)
-  TICKETING = office_for_alias(:ticketing)
-  DOWNTOWN = office_for_alias(:downtown)
-  ZAGORYE = office_for_alias(:zagorye)
-  LVIV = office_for_alias(:lviv)
+  extend Monitoring::Benchmarkable
 
   cattr_accessor :logger do
-    Rails.logger
+    ForwardLogging.new(Rails.logger)
   end
 
   cattr_accessor :pool do
@@ -40,7 +28,7 @@ module Amadeus
     # вызывается с параметром и без (для класс-методов амадеуса)
     def book(office=nil)
       office ||= default_office
-      logger.info { "Amadeus::Session: free sessions count: #{pool.free_count(office)}" }
+      logger.debug { "Amadeus::Session: free sessions count: #{pool.free_count(office)}" }
       find_free_and_book(office) || sign_in(office, true)
     end
 
@@ -53,14 +41,16 @@ module Amadeus
 
     # без параметра создает незарезервированную сессию
     def sign_in(office, booked=false)
-      office ||= default_office
-      session_id = Amadeus::Service.security_authenticate(office: office).or_fail!.session_id
-      session = new(session_id: session_id, office: office)
-      logger.info "Amadeus::Session: #{session.token} signed into #{office}"
-      session.increment
-      # saves session
-      session.booked = booked
-      session
+      benchmark 'amadeus session sign in' do
+        office ||= default_office
+        session_id = Amadeus::Service.security_authenticate(office: office).or_fail!.session_id
+        session = new(session_id: session_id, office: office)
+        logger.info "Amadeus::Session: #{session.token} signed into #{office}"
+        session.increment
+        # saves session
+        session.booked = booked
+        session
+      end
     end
 
     # для кронтасков, скоростью не блещет
@@ -120,7 +110,7 @@ module Amadeus
     logger.info "Amadeus::Session: #{token} signing out (#{seq})"
     record.destroy
     Amadeus::Service.new(:session => self).security_sign_out
-  rescue Handsoap::Fault
+  rescue Amadeus::SoapError
     # it's ok
   end
 

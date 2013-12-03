@@ -45,6 +45,19 @@ Spork.prefork do
     config.before(:each) do
       Amadeus::Rate.stub :euro_rate => 43.0
     end
+
+    # deferred GC -- ускоряет спеки
+    config.before(:all) do
+      DeferredGarbageCollection.start
+    end
+
+    config.after(:all) do
+      DeferredGarbageCollection.reconsider
+    end
+    # /deferred GC
+
+    # https://github.com/plataformatec/devise/wiki/How-To:-Controllers-tests-with-Rails-3-(and-rspec)
+    config.include Devise::TestHelpers, :type => :controller
   end
 
 end

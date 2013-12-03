@@ -1,24 +1,17 @@
 # -*- encoding: utf-8 -*-
+require 'handsoap/multi_curb_driver'
+
 module Amadeus
 
   class Service < Handsoap::Service
 
   endpoint :uri => Conf.amadeus.endpoint, :version => 1
 
-  # сжатие
-  #require 'handsoap/compressed_curb_driver'
-  #Handsoap.http_driver = :compressed_curb
-  #require 'handsoap/typhoeus_driver'
-  #Handsoap.http_driver = :typhoeus
-  require 'handsoap/multi_curb_driver'
-  Handsoap.http_driver = :multicurb
-
+  Handsoap.http_driver = :net_http
   Handsoap.timeout = 60
-
-
-  # response logger
-  include FileLogger
-  def debug_dir; 'log/amadeus' end
+  # сохраняет xml из респонса as is,
+  # без этого sax-парсер работать не будет
+  Handsoap.store_raw_response = true
 
   # handsoap logger
   if Conf.amadeus.logging
@@ -74,69 +67,75 @@ module Amadeus
     benchmark 'invoke request' do
       debug '==============='
       debug "unixtime: #{Time.now.to_i}"
-      super
+      begin
+        super
+      rescue Curl::Err::CurlError, EOFError, Errno::ECONNRESET, SocketError
+        raise Amadeus::NetworkError
+      rescue Handsoap::Fault => e
+        # TODO проверить бэктрейс и оригинальное сообщение об ошибке
+        raise Amadeus::SoapError.wrap(e)
+      end
     end
   end
 
   def invoke_request request
 
-    Rails.logger.info "Amadeus::Service: #{request.action} started"
-
-    xml_response = nil
-    if Conf.amadeus.fake
-      xml_string = read_latest_log_file(request.action)
-      xml_response = parse_string(xml_string)
-    else
-      if session.nil? && request.needs_session?
-        raise ArgumentError, 'called without session'
-      end
-      invoke_opts = {}
-      invoke_opts[:soap_action] = request.soap_action
-      invoke_opts[:soap_header] = {'SessionId' => session.session_id} if session
-      xml_response = invoke(request.action, invoke_opts) do |body|
+    ActiveSupport::Notifications.instrument( 'request.amadeus',
+      service: self,
+      request: request
+    ) do |payload|
+      payload[:xml_response] = invoke(request.action, invoke_opts(request)) do |body|
         body.set_value request.soap_body, :raw => true
       end
       # FIXME среагировать на HTTP error
+      # FIXME или перенести в ensure, не забыв поправить Amadeus::LogSubscriber
       session.increment if session
-      log_file(request.action, xml_response.to_xml) unless request.action =~ /Pricer/
-    end
 
-    request.process_response(xml_response)
+      payload[:response] = request.process_response( payload[:xml_response] )
+    end
   end
 
   def invoke_async_request request, &on_success
-    Rails.logger.info "Amadeus::Service: #{request.action} async queued"
-    invoke_opts = {}
-    invoke_opts[:soap_action] = request.soap_action
-    invoke_opts[:soap_header] = {'SessionId' => session.session_id}
+    ActiveSupport::Notifications.instrument( 'async_request.amadeus' ) do |async_payload|
 
-    if Conf.amadeus.fake
-      xml_string = read_latest_log_file(request.action)
-      xml_response = parse_string(xml_string)
-      on_success.call( request.process_response(xml_response) )
-
-    else
       callbacks = Proc.new do |deffered|
         deffered.callback &on_success
         deffered.errback do |err|
-          Rails.logger.error "Amadeus::Service: async: #{err.inspect}"
-          err.backtrace.each do |str|
-            Rails.logger.error "ERROR: #{str}"
-          end
+          # WTF: никогда не вызывается. Возможно, баг в multicurb-драйвере
         end
       end
 
       async(callbacks) do |dispatcher|
-        dispatcher.request(request.action, invoke_opts) do |body|
+        dispatcher.request(request.action, invoke_opts(request)) do |body|
           body.set_value request.soap_body, :raw => true
         end
         dispatcher.response do |xml_response|
-          session.increment
-          request.process_response(xml_response)
+          # FIXME сейчас будет активно врать про duration запроса. В четвертых рельсах
+          # есть instrumenter.start и finish, позволит замерять время адекватнее
+          ActiveSupport::Notifications.instrument( 'request.amadeus',
+            service: self,
+            request: request,
+            xml_response: xml_response
+          ) do |payload|
+            session.increment
+            payload[:response] = request.process_response(xml_response)
+          end
         end
       end
+
     end
   end
+
+  def invoke_opts(request)
+    if session.nil? && request.needs_session?
+      raise ArgumentError, 'called without session'
+    end
+    invoke_opts = {}
+    invoke_opts[:soap_action] = request.soap_action
+    invoke_opts[:soap_header] = {'SessionId' => session.session_id} if session
+    invoke_opts
+  end
+  private :invoke_opts
 
   # Amadeus::Service#pnr_add_multi_elements etc.
   Amadeus::Request::SOAP_ACTIONS.keys.each do |action|
@@ -154,7 +153,6 @@ module Amadeus
 # метрика
 
   include NewRelic::Agent::MethodTracer
-  add_method_tracer :log_file, 'Custom/Amadeus/log'
   add_method_tracer :debug, 'Custom/Amadeus/log'
   add_method_tracer :parse_soap_response_document, 'Custom/Amadeus/xmlparse'
 # debugging
@@ -164,17 +162,6 @@ module Amadeus
     doc = Handsoap::XmlQueryFront.parse_string(xml_string, :nokogiri)
     on_response_document(doc)
     doc
-  end
-
-  def read_latest_doc(action)
-    xml_string = read_latest_log_file(action)
-    parse_string(xml_string)
-  end
-
-  def read_each_doc(action)
-    read_each_log_file(action) do |xml, path|
-      yield parse_string(xml), path
-    end
   end
 
   end

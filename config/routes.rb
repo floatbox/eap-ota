@@ -1,31 +1,25 @@
 # encoding: utf-8
 Eviterra::Application.routes.draw do
 
-  devise_for :deck_users, ActiveAdmin::Devise.config
+  devise_for :deck_users, ActiveAdmin::Devise.config.merge(class_name: 'Deck::User')
+  # оверрайд logout для typus
+  get "deck/logout(.:format)", to: "active_admin/devise/sessions#destroy", as: "destroy_admin_session"
 
-#  devise_for :customers, :controllers => { :sessions => "customers/sessions" }
   devise_scope :customer do
-    put "profile/confirm", :to => "profile/confirmations#confirm", :as => 'customer_confirm'
-    get "profile/success", :to => "profile/registrations#success", :as => 'customer_success'
+    get    '#login' => 'profile/sessions#new', :as => :new_customer_session
+    post   'profile/sign_in' => 'profile/sessions#create', :as => :customer_session
+    delete 'profile/sign_out' => 'profile/sessions#destroy', :as => :destroy_customer_session
+    put    'profile/confirm' => 'profile/confirmations#confirm', :as => :customer_confirm
   end
 
-  devise_for :customers, 
-    :controllers => { 
-      :sessions => 'profile/sessions', 
+  devise_for :customers,
+    :path => 'profile',
+    :controllers => {
       :confirmations => 'profile/confirmations',
       :registrations => 'profile/registrations',
       :passwords => 'profile/passwords'
-    },  
-    :path => "profile", 
-    :path_names => { 
-      :sign_in => 'login', 
-      :sign_out => 'logout', 
-      :password => 'secret', 
-      :confirmation => 'verification', 
-      :unlock => 'unblock', 
-      :registration => 'sign_up', 
-      :sign_up => 'new'
-    }
+    },
+    :skip => [:sessions]
 
 
   match 'pricer' => 'pricer#pricer', :as => :pricer
@@ -34,14 +28,28 @@ Eviterra::Application.routes.draw do
   match 'pricer/pricer_benchmark' => 'pricer#pricer_benchmark', :as => :pricer_pricer_benchmark
 
   # in development: use 'api.lvh.me:3000' or modify your /etc/hosts
-  constraints subdomain: /^api(?:\.staging)?$/ do
+  constraints subdomain: Conf.api.subdomain do
     root to: 'api_home#index'
     match 'status' => 'home#status'
     match 'avia/form' => 'booking#api_form'
     match 'avia/v1/variants(.:format)' => 'pricer#api', :format => :xml
     match 'avia/v1/searches' => 'booking#api_redirect'
     match 'partner/v1/orders(.:format)' => 'api_order_stats#index', :format => :json
+    # предложения по неймспейсу?
+    post 'v1/orders' => 'api_booking#create'
+    post 'v1/orders/:id' => 'api_booking#update', :as => :api_v1_order
+
+    # FIXME попробовать resources? но как научить принимать post на update?
+    get 'v2/orders(.:format)' => 'api_orders#index'
+    post 'v2/orders(.:format)' => 'api_orders#create'
+    get 'v2/orders/:id(.:format)' => 'api_orders#show'
+    match 'v2/orders/:id(.:format)' => 'api_orders#update', via: [:post, :patch]
+
     match '*anything' => redirect('/')
+  end
+
+  constraints subdomain: /^insurance(?:\.staging)?$/ do
+    root to: 'insurance#index'
   end
 
   match 'api/search(.:format)' => 'api_home#gone'
@@ -49,19 +57,19 @@ Eviterra::Application.routes.draw do
   # какой-то жаваскрипт фигачит посты сюда. убрать потом
   post 'api/booking/edit' => proc { [404, {}, []] }
   match 'api/booking/:query_key(.:format)' => 'booking#api_booking', :via => :get
-  match 'api/rambler_booking(.:format)' => 'booking#api_rambler_booking', :via => :get, :format => :xml, :as => :api_rambler_booking
   match 'api/order_stats' => 'api_order_stats#index'
-  match 'api/v1/preliminary_booking' => 'api_booking#preliminary_booking', :as => :api_preliminary_booking
-  post 'api/v1/pay' => 'api_booking#pay', :as => :api_booking_pay
+  # FIXME грохнуть оба, как только piece of summer перейдет
+  match 'api/v1/preliminary_booking' => 'api_booking#create', :as => :api_preliminary_booking
+  post 'api/v1/pay' => 'api_booking#update', :as => :api_booking_pay
 
-  match 'booking' => 'booking#index', :as => :booking
   match 'hot_offers' => 'pricer#hot_offers', :as => :hot_offers
   match 'price_map' => 'pricer#price_map', :as => :price_map
-  match 'booking/form' => 'booking#form', :as => :booking_form
+  # TODO прокинуть :id и сюда тоже
   post 'booking/recalculate_price' => 'booking#recalculate_price', :as => :booking_recalculate_price
-  post 'booking/pay' => 'booking#pay', :as => :booking_pay
-  # FIXME сделать POST однажды
-  match 'booking/preliminary_booking' => 'booking#preliminary_booking', :as => :preliminary_booking
+  post 'booking/:id' => 'booking#update', :as => :booking_pay
+  post 'booking' => 'booking#create', :as => :preliminary_booking
+  get 'booking' => 'booking#show' # FIXME удалить WTF оно еще приходит с iphone
+  get 'booking/:id' => 'booking#show', :as => :booking
   post 'confirm_3ds' => 'booking#confirm_3ds', :as => :confirm_3ds
   match 'order/:id' => 'PNR#show', :as => :show_order
   match 'notice/:id' => 'PNR#show_notice', :as => :show_notice
@@ -74,9 +82,6 @@ Eviterra::Application.routes.draw do
   match '/pay/:code(/:gateway)' => 'payments#edit', :via => :get, :as => :edit_payment
   match '/pay/:code(/:gateway)' => 'payments#update', :via => :post, :as => :edit_payment
 
-  match '/corporate/start' => 'corporate#start', :as => :start_corporate
-  match '/corporate/stop' => 'corporate#stop', :as => :stop_corporate
-  match '/corporate' => 'corporate#index', :as => :corporate
   match '/flight_groups/:id' => 'flight_groups#show', :as => :show_flight_group
   match '/seat_map/:flight(/:booking_class)' => 'seat_map#show', :as => :show_seat_map
 
@@ -92,8 +97,8 @@ Eviterra::Application.routes.draw do
   match 'contacts' => 'about#contacts', :as => :about
   match 'about/:action' => 'about', :as => :about
   match 'partners' => 'about#partners', :as => :about
-  
-  match 'insurance' => 'insurance#index', :as => :insurance  
+
+  match 'insurance' => 'insurance#index', :as => :insurance
 
   match "whereami" => 'home#whereami', :as => :whereami
   match 'status' => 'home#status'
@@ -117,66 +122,9 @@ Eviterra::Application.routes.draw do
   match 'profile/itinerary/:id' => 'PNR#show_stored', :as => :profile_itinerary
   match 'profile/spyglass/:id' => 'profile#spyglass', :as => :profile_spyglass
   match 'profile/itinerary/:id/ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :profile_itinerary_for_ticket
+  match 'profile/orders' => 'profile#orders', :as => :profile_orders
 
   root :to => 'home#index'
 
   ActiveAdmin.routes(self)
-
-  # The priority is based upon order of creation:
-  # first created -> highest priority.
-
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  # root :to => "welcome#index"
-
-  # See how all your routes lay out with "rake routes"
-
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
 end
-

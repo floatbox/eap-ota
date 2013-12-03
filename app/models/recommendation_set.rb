@@ -2,113 +2,139 @@
 
 class RecommendationSet
 
-  delegate  :empty?,
-            :present?,
-            :blank?,
-            :size,
-            :count,
-            :flights,
-            :first,
-            :last,
-            :map,
-            :map!,
-            :collect,
-            :select,
-            :reject,
-            :select!,
-            :reject!,
-            :delete_if,
-            :uniq!,
-            :flat_map,
-            :flatten,
-            :segments,
-            :variants,
-            :[],
-    to: :recommendations
-
-
-  def initialize(recommendations=Array.new)
-    @recommendations = recommendations
+  include ActiveSupport::Benchmarkable
+  cattr_accessor :logger do
+    ForwardLogging.new(Rails.logger, Logger::DEBUG)
   end
 
-  def recommendations
-    @recommendations
+  def self.wrap(arg)
+    return arg if arg.is_a? RecommendationSet
+    RecommendationSet.new(arg)
   end
 
-  def to_a
-    @recommendations
+  def initialize(recs=[])
+    recs.is_a? Array or
+      raise TypeError, "cannot init #{recs.class} with RecommendationSet"
+    @recs = recs
   end
 
-  def each &block
-    @recommendations.each &block
-  end
+  attr_accessor :recs
+  alias recommendations recs
+  alias to_a recs
+  delegate :each, :size, :empty?, :present?, :to => :recs
 
   def + other
-    @recommendations += case other
-      when Array then other
-      when RecommendationSet then other.recommendations
-      else raise TypeError, "cannot concatenate #{other.class} with RecommendationSet"
+    RecommendationSet.new( @recs + RecommendationSet.wrap(other).recs )
+  end
+
+  def process!(opts = {})
+    context = opts[:context] or raise ArgumentError, "needs context"
+    benchmark 'RecommendationSet: process!, total', level: :info do
+      run :select_full_information!
+      run :select_valid_interline!
+      run :reject_ignored_carriers! if context.pricer_filter?
+      run :reject_ignored_flights! if context.pricer_filter?
+      run :reject_ground! if context.pricer_filter?
+      run :find_commission!
+      run :select_sellable! if context.pricer_filter?
+
+      # сортируем если ищем для морды
+      run :sort! if context.pricer_sort?
+      # Выключил, потому что сейчас всегда один поиск.
+      # Поиски по нескольким офисам надо будет группировать другим способом.
+      # run :group! if context.pricer_sort?
+      run :clear_variants!
     end
-    self
   end
 
-  def to_s
-    "#{super}: #{@recommendations.to_s}"
+  # запускает подпроцесс и репортит его время и еще что-нибудь.
+  def run stage
+    benchmark "RecommendationSet: #{stage}", level: :debug do
+      send stage
+    end
   end
 
-  def << other
-    @recommendations << other
-    self
+  def select_full_information!
+    @recs.select! &:full_information?
   end
 
-  def select_valid!
-    select_by! :full_information?, :valid_interline?
-    reject_by! :ignored_carriers
-    yield(@recommendations) if block_given?
-    # чистка - пока что могут оставаться рекомендации без вариантов
-    @recommendations.select! &:variants?
-    self
+  def select_valid_interline!
+    @recs.select! &:valid_interline?
   end
 
-  def sort_by &block
-    RecommendationSet.new(@recommendations.sort_by &block)
+  def reject_ignored_carriers!
+    @recs.reject! &:ignored_carriers?
   end
 
-  def filters_data
-    Recommendation.filters_data @recommendations
+  def reject_ignored_flights!
+    @recs.reject! &:ignored_flights?
+  end
+
+  def reject_ground!
+    @recs.reject! &:ground?
+  end
+
+  def select_sellable!
+    @recs.select! &:sellable?
+  end
+
+  def clear_variants!
+    @recs.each &:clear_variants
+    @recs.select! &:variants?
+  end
+
+  def sort!
+    @recs.sort_by! &:price_total
   end
 
   def find_commission!
-    @recommendations.each(&:find_commission!)
+    @recs.each &:find_commission!
   end
 
-  # бывший Recommendation#corrected - там ему больше не место
-  def group_and_correct
-    result = RecommendationSet.new
-    #объединяем эквивалентные варианты
-    @recommendations.each do |r|
+  # сейчас вызывается дополнительным проходом, вне mux
+  def remove_unprofitable!(income_at_least)
+    @recs.reject! {|r| r.income < income_at_least} if income_at_least
+  end
+
+  # объединяем эквивалентные варианты
+  def group!
+    result = []
+    @recs.each do |r|
       #некрасиво, но просто и работает
-      if r.groupable_with? result[-1]
+      # FIXME очень некрасиво! хорошо что скоро убьем.
+      if groupable? r, result[-1]
         result[-1].variants += r.variants
-      elsif r.groupable_with? result[-2]
+      elsif groupable? r, result[-2]
         result[-2].variants += r.variants
-      elsif r.groupable_with? result[-3]
+      elsif groupable? r, result[-3]
         result[-3].variants += r.variants
       else
         result << r
       end
     end
-    result
+    @recs = result
   end
 
-  private
-
-  def reject_by! *criterias
-    criterias.each { |criteria| reject!(&criteria) }
+  def groupable? rec1, rec2
+    rec2 or return
+    %W[
+      price_fare
+      price_tax
+      validating_carrier_iata
+      booking_classes
+      marketing_carrier_iatas
+    ].all? do |attr|
+      rec1.send(attr) == rec2.send(attr)
+    end
   end
 
-  def select_by! *criterias
-    criterias.each { |criteria| select!(&criteria) }
+  def filters_data
+    Recommendation.filters_data @recs
+  end
+
+  # FIXME осторожно! опирается на факт предварительной сортировки!
+  def cheapest
+    recs.first
   end
 
 end

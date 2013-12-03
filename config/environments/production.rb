@@ -1,6 +1,11 @@
 # encoding: utf-8
 Eviterra::Application.configure do
 
+  config.after_initialize do
+    # тут можно понизить или повысить level у отдельных логгеров
+    # Moped.logger = ForwardLogging.new(Rails.logger, Logger::DEBUG)
+  end
+
   # # изменения в логгере: lumberjack + syslog
   # # закомменчено до проверки на staging
   # template = lambda do |entry| 
@@ -25,7 +30,7 @@ Eviterra::Application.configure do
 
   # новая фича в rails 3.2. Возможные варианты - :uuid, :subdomain, :pid, :remote_ip
   # добавляет в лог указанные аттрибуты для каждого запроса
-  config.log_tags = [:uuid]
+  config.log_tags = [:uuid, :remote_ip]
 
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -73,6 +78,7 @@ Eviterra::Application.configure do
 
   # See everything in the log (default is :info)
   # config.log_level = :debug
+  config.colorize_logging = false
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
@@ -116,7 +122,7 @@ Eviterra::Application.configure do
 
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
-  config.active_record.auto_explain_threshold_in_seconds = 0.5
+  config.active_record.auto_explain_threshold_in_seconds = nil
 
   # автоматически включает мониторинг GC в newrelic, когда включен GC::Profiler
   # ручку в конфиге не делал

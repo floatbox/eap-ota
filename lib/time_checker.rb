@@ -7,9 +7,6 @@ module TimeChecker
     (0...WORK_END_HOUR).to_a + (WORK_START_HOUR..23).to_a
   end
 
-
-
-
   #Чтобы было время выписать билет и поправить косяки
   #   мы продаем билеты не позднее 4-х часов до вылета
 
@@ -31,24 +28,8 @@ module TimeChecker
     return departure_datetime_utc.to_time > time_of_sell + 24.hours && last_tkt_date > Date.today
   end
 
-
-  def self.ok_to_sell_sirena departure_datetime_utc, time_of_sell = nil
-    time_of_sell ||= Time.now
-    time_of_sell + 4.hours < departure_datetime_utc.to_time
-  end
-
-  #У пользователя есть как минимум 10 минут, чтобы изучить список
-  def self.ok_to_show_sirena departure_datetime_utc
-    ok_to_sell_sirena(departure_datetime_utc, Time.now + 20.minutes)
-  end
-
   def self.ok_to_show departure_datetime_utc
     ok_to_sell(departure_datetime_utc, nil, Time.now + 20.minutes)
-  end
-
-  #У пользователя есть как минимум 10 минут, чтобы заполнить форму
-  def self.ok_to_book_sirena departure_datetime_utc
-    ok_to_sell_sirena(departure_datetime_utc, Time.now + 10.minutes)
   end
 
   def self.ok_to_book departure_datetime_utc, last_tkt_date = nil

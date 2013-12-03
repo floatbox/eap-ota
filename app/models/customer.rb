@@ -16,6 +16,19 @@ class Customer < ActiveRecord::Base
 
   has_many :orders
 
+  scope :without_orders, lambda {
+      where("id IN (#{select('customers.id').joins('LEFT JOIN orders ON orders.customer_id = customers.id').where('orders.id IS NULL').to_sql})")
+    }
+
+  def self.create_from_order(email)
+    customer = find_or_initialize_by_email(email)
+    customer.skip_confirmation_notification!
+    ## TODO закоментить в продакшн до выкатки
+    # customer.send_first_purchase_instructions if customer.not_registred?
+    customer.save unless customer.persisted?
+    customer
+  end
+
   def cancel_confirmation!
       self.confirmation_token = nil
       self.confirmation_sent_at = nil
@@ -36,15 +49,21 @@ class Customer < ActiveRecord::Base
     confirmation_token.present?
   end
 
-  # Send confirmation instructions by email
-  def send_registration_instructions
+  def prepare_instruction_opts
     self.confirmation_token = nil if reconfirmation_required?
     @reconfirmation_required = false
 
     generate_confirmation_token! if self.confirmation_token.blank?
 
-    opts = pending_reconfirmation? ? { :to => unconfirmed_email } : { }
-    send_devise_notification(:registration_instructions, opts)
+    pending_reconfirmation? ? { :to => unconfirmed_email } : { }
+  end
+
+  def send_first_purchase_instructions
+    send_devise_notification(:first_purchase_instructions, prepare_instruction_opts)
+  end
+
+  def send_invite_instructions
+    send_devise_notification(:invite_instructions, prepare_instruction_opts)
   end
 
   def password_match?

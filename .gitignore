@@ -1,6 +1,5 @@
 __*
-doc
-!doc/*.txt
+doc/**/*.html
 .yardoc
 config/database.yml
 config/mongoid.yml

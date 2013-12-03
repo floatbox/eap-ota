@@ -16,6 +16,9 @@ describe Amadeus::Response::AirSellFromRecommendation, :amadeus do
     it "should treat long flight without stops as backward date shift (TYO-HNL)" do
               subject.send( :shift_date, '140312', '0030', '1240', 1, 0).should == '130312'
     end
+    it "should treat long flights without stops and with small time delta as same day (LAX—MOW)" do
+              subject.send( :shift_date, '150214', '1545', '1605', 1, 0).should == '160214'
+    end
   end
 
   describe 'when arrival is "before" departure because of timezones' do
@@ -107,7 +110,6 @@ describe Amadeus::Response::AirSellFromRecommendation, :amadeus do
 
   end
 
-
   describe 'no departure time in itinerary' do
 
     # departure time is unset on second flight
@@ -132,6 +134,51 @@ describe Amadeus::Response::AirSellFromRecommendation, :amadeus do
         pending "not sure what to do here" do
           its(:departure_time) {should be_nil}
         end
+      end
+
+    end
+
+  end
+
+  describe 'with arrival in after tomorrow' do
+
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/Air_SellFromRecommendation_long_flight_same_day.xml')
+    end
+
+    subject {response}
+
+    it {should be_success }
+    its(:segments_confirmed?) { should be_true }
+    its(:segments_status_codes) { should == ['OK'] }
+
+    describe "#fill_itinerary!" do
+      let :segments do
+        [
+          Segment.new(
+            :flights => [ Flight.new(
+              :departure_iata => 'LAX',
+              :arrival_iata => 'SVO',
+              :marketing_carrier_iata => 'DL',
+              :flight_number => '8178',
+              :departure_date => '150214' # Date.new(2014, 2, 15)
+            ) ]
+          )
+        ]
+      end
+
+      before { response.fill_itinerary!(segments) }
+
+      context "first flight" do
+        subject { segments.first.flights.first }
+
+        its(:departure_time) {should == '1545'}
+        its(:arrival_time) {should == '1605'}
+        its(:arrival_date) {should == '160214'} # Date.new(2014, 2, 15)
+        its(:equipment_type_iata) {should == '332'}
+        its(:departure_term) {should == 'B'}
+        its(:arrival_term) {should == 'D'}
+        its(:technical_stop_count) {should == 0}
       end
 
     end

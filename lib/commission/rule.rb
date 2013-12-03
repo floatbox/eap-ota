@@ -15,7 +15,7 @@ class Commission::Rule
 
   # GDS
   # @note сейчас нигде не используется
-  # @return [Symbol] :amadeus, :sirena
+  # @return [Symbol] :amadeus
   attr_accessor :system
 
   # @!group Тип комиссионного правила.
@@ -60,9 +60,13 @@ class Commission::Rule
   # @return [Array<String>]
   attr_reader :routes
 
-  # скомпилированные до регексов маршруты
+  # скомпилированные до регексов маршруты, один из которых должен подойти
   # @return [Array<String,Regexp>]
-  attr_reader :compiled_routes
+  attr_reader :compiled_positive_routes
+
+  # скомпилированные до регексов маршруты, ни один из которых не должен подойти
+  # @return [Array<String,Regexp>]
+  attr_reader :compiled_negative_routes
 
   # последнее средство сравнения - текст блока на ruby.
   # будет выполнен в контексте рекомендации.
@@ -154,8 +158,12 @@ class Commission::Rule
 
   def routes=(routex_array)
     @routes = routex_array
-    @compiled_routes = routex_array.flat_map do |routex|
-      Commission::Rule::RoutexCompiler.new(routex).compiled
+    @compiled_positive_routes = []
+    @compiled_negative_routes = []
+    routex_array.each do |routex|
+      compiler = Commission::Rule::RoutexCompiler.new(routex)
+      @compiled_positive_routes += compiler.compiled_positive
+      @compiled_negative_routes += compiler.compiled_negative
     end
   end
 

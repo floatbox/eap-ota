@@ -77,7 +77,7 @@ I18n.locale = '<%= I18n.locale %>';
 <div class="ph-content">
     <div class="ph-bar">
         <div class="ph-logo">
-            <a href="/" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
+            <a href="<%= smart_root_path %>" title="Кликните, чтобы сбросить условия и результаты поиска"><img src="/images/common/eviterra-bg.png" alt="Eviterra"></a>
         </div>
         <% if admin_user %>
         <div class="ph-lang">
@@ -95,7 +95,7 @@ I18n.locale = '<%= I18n.locale %>';
             </div>
         <% else %>
         <div class="ph-tab" id="pht-tickets">
-            <a class="pht-content" href="/">
+            <a class="pht-content" href="<%= smart_root_path %>">
                 <span class="pht-title">Авиабилеты</span>
                 <span class="pht-tip">Дешевле, чем у&nbsp;авиакомпаний <span class="phtt-link">Почему?</span></span>
             </a>
@@ -107,9 +107,9 @@ I18n.locale = '<%= I18n.locale %>';
             </div>    
         </div>
         <div class="ph-tab">
-            <a class="pht-content" href="https://ostrovok.ru/?partner_slug=eviterracom" target="_blank">
+            <a class="pht-content" href="https://hotels.eviterra.com">
                 <span class="pht-title">Отели</span>
-                <span class="pht-tip">300<span class="thousand">000</span> по всему миру, лучшие условия</span>
+                <span class="pht-tip">Более 150<span class="thousand">000</span> отелей по всему миру, лучшие условия</span>
             </a>
         </div>
         <% if controller.controller_name == 'insurance' %>
@@ -121,15 +121,14 @@ I18n.locale = '<%= I18n.locale %>';
         </div>
         <% else %>
         <div class="ph-tab">
-            <a class="pht-content" href="/insurance">
+            <a class="pht-content" href="https://insurance.eviterra.com">
                 <span class="pht-title">Страховки</span>
                 <span class="pht-tip">Электронные полисы, подходят для получения визы</span>
             </a>
         </div>
         <% end %>
+        <%= render "profile/popup" %>
     </div>
-
-    <%= render "profile/popup" if admin_user %>
 
     <div class="ph-phone"><span class="code">+7 495</span> 660-35-20</div>
     <div class="ph-social">

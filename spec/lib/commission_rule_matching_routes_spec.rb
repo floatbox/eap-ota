@@ -7,14 +7,16 @@ describe Commission::Rule::Matching do
   describe "routes" do
 
     RSpec::Matchers.define(:match_route) do |route|
-      match_for_should do |routex|
+      match_for_should do |routexes|
         @recommendation = mock(Recommendation, route: route)
-        @rule = Commission::Rule.new(routes: [routex])
+        @rule = Commission::Rule.new(routes: Array(routexes))
         @rule.applicable_routes?(@recommendation)
       end
 
       failure_message_for_should do |routex|
-        "expected that #{routex.inspect} would match #{route.inspect}, compiled_routes: #{@rule.compiled_routes.inspect}"
+        "expected that #{routex.inspect} would match #{route.inspect}, " +
+          "compiled_positive_routes: #{@rule.compiled_positive_routes.inspect}, " +
+          "compiled_negative_routes: #{@rule.compiled_negative_routes.inspect}"
       end
     end
 
@@ -110,6 +112,18 @@ describe Commission::Rule::Matching do
         it {should match_route('NYC-PAR-MOW-PAR-NYC')}
         it {should_not match_route('MOW-NYC')}
       end
+    end
+
+    describe "negative routes" do
+      subject {'^RU-PAR'}
+      it {should_not match_route('MOW-PAR')}
+      it {should match_route('PAR-MOW-PAR')}
+    end
+
+    describe "combination of negative and positive" do
+      subject { ['^RU...', '^US-RU/ALL', 'PAR-MOW/RT', 'MOW-PAR...']}
+      it {should match_route('PAR-MOW-PAR')}
+      it {should_not match_route('MOW-PAR-MOW')}
     end
 
     describe "bad syntax" do

@@ -88,6 +88,7 @@
 </tr>
 </table>
 <br>
+
 <table cellspacing="0" cellpadding="0" width="916" style="font-weight: bold; font-size: 16px; line-height: 20px; font-family: Arial, sans-serif; color: #F90A6F;">
 <tr>
     <td align="center">
@@ -96,8 +97,11 @@
     </td>
 </tr>
 </table>
-<br>
+
+<%= render :partial => 'pnr/rules' %><br>
+<% unless @lang %>
 <div style="width: 916px; font-size: 13px; line-height: 15px; font-family: Arial, sans-serif; color: #777777;">
 Согласно письму Министерства финансов России № 03–03–06/1/717 от 11.10.2007 данная маршрутная квитанция и посадочный талон
 являются достаточными документами для предоставления отчетности в бухгалтерию по месту работы, если это требуется.
 </div>
+<% end %>

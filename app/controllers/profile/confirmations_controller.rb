@@ -9,7 +9,7 @@ class Profile::ConfirmationsController < Devise::ConfirmationsController
     if successfully_sent?(resource)
       return render :json => {:success => true, :location => after_resending_confirmation_instructions_path_for(resource_name)}
     else
-      return render :json => {:success => false, :errors => resource.errors.full_messages}
+      failure
     end
   end
 

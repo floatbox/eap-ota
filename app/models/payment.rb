@@ -161,6 +161,10 @@ class Payment < ActiveRecord::Base
     end
   end
 
+  # Флаг для админки - прошел ли платеж через 3ds авторизацию?
+  def had_3ds
+  end
+
   # вызывается и после считывания из базы
   def set_initial_status
     self.status ||= 'blocked'

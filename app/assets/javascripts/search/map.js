@@ -12,6 +12,19 @@ init: function() {
     this.prices.init(this.el.find('.smap-prices'));
     this.colors = ['#81aa00', '#db7100', '#0aa0c6', '#bf00db', '#db0048', '#9a5000'];
     this.items = [];
+
+    var applyState = function(event) {
+        if (event.state && event.state.pricesMap) {
+            that.showPrices(event.state.pricesMap, true);
+        }
+        if (event.state && event.state.selectedPriceCity) {
+            search.locations.segments[0].arv.set(event.state.selectedPriceCity);
+            search.dates.setSelected(event.state.selectedPriceDates);
+        }
+    };
+    if (window.addEventListener) {
+        window.addEventListener('popstate', applyState, false);
+    }
 },
 bindResize: function() {
     var that = this;
@@ -25,9 +38,15 @@ resize: function(instant) {
     dh += search.dates.el.height() + 2;
     dh += search.options.el.height();
     dh += results.header.height;
-    var mh = Math.max(36, $w.height() - dh);
-    this.content.height(mh);
-    this.toggleZoom(mh);
+    var height = $w.height() - dh;
+    if (height < 150) {
+        this.el.addClass('sm-hidden');
+        this.content.height(26);
+    } else {
+        this.el.removeClass('sm-hidden');
+        this.content.height(height);
+        this.toggleZoom(height);
+    }
     if (this.api && this.bounds) {
         this.fitBounds();
     }
@@ -75,14 +94,14 @@ slideDown: function() {
     var ch = this.content.height();
     var dh = wh - ch - search.dates.tlheight;
     this.wrapper.height(wh).css('overflow', 'hidden');
+    this.el.removeClass('sm-hidden');
     this.content.animate({
         height: Math.max(36, ch + dh)
     }, 300, function() {
         search.dates.toggleHidden(true);
         google.maps.event.trigger(that.api, 'resize');
         that.wrapper.height('').css('overflow', '');
-        that.toggleZoom(ch + dh);
-        that.fitBounds();
+        that.resize();
     });
     search.dates.el.find('.sdt-tab').delay(150).fadeOut(150);
 },
@@ -101,7 +120,7 @@ slideUp: function() {
         if (that.prices.el.find('.smp-collapse').length) {
             that.prices.showExpand();
         }
-        that.fitBounds();
+        that.resize();
     });
     search.dates.el.find('.sdt-tab').fadeIn(150);
 },
@@ -198,7 +217,7 @@ loadPrices: function() {
         timeout: 45000
     });
 },
-showPrices: function(items) {
+showPrices: function(items, fromState) {
     var that = this;
     this.clean();
     if (items.length === 0) {
@@ -258,6 +277,9 @@ showPrices: function(items) {
     } else {
         this.prices.link.html('<div class="smpl-content smp-simple">' + I18n.t('search.map.title', {min: Math.floor(pmin).separate()}) + '&nbsp;<span class=\"ruble\">Р</span></div>');
     }
+    if (!fromState && window.history.pushState) {
+        window.history.pushState({pricesMap: items}, document.title);
+    }
     this.pricesMode = true;
 },
 filterPrices: function(limit) {
@@ -278,6 +300,12 @@ filterPrices: function(limit) {
 applyPrice: function(el) {
     search.locations.segments[0].arv.set(el.data('city'));
     search.dates.setSelected(el.data('dates'));
+    if (window.history.pushState) {
+        window.history.pushState({
+            selectedPriceCity: el.data('city'),
+            selectedPriceDates: el.data('dates')
+        }, document.title);
+    }
 },
 fitBounds: function() {
     if (this.bounds.getCenter) {

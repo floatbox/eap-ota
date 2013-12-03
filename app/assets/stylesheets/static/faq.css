@@ -1,20 +1,21 @@
 /* Faq */
 .faq {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
 }
 .faq dt {
-    margin: 15px 0 5px;
+    margin: 25px 0 10px;
+    font-size: 16px;
     font-weight: bold;
 }
 .faq dd {
-    margin: 0 0 5px 0;
+    margin: 0 0 10px;
 }
 .faq .asection {
-    margin: 0 285px 20px 0;
-    padding-top: 15px;
-    border-top: 1px solid #DDD;
+    margin: 0 285px 25px 0;
+    padding-top: 20px;
+    border-top: 1px solid #AAAAAA;
 }
-.faq #service {
+.faq #booking {
     padding-top: 0;
     border-top: none;
 }
@@ -25,19 +26,20 @@
     line-height: 18px;
     color: #333;
 }
-.fc-fixed {
-    position: fixed;
-    top: 134px;
-    width: 255px;
-}
-.fc-fixed ul {
+.faq-contents ul {
     margin: 0 0 15px;
+    padding-top: 4px;
     border-bottom: 1px solid #AAA;
     padding-left: 1em;
     padding-bottom: 15px;
     list-style: disc;
     color: #ED1192;
 }
-.fc-fixed li {
+.faq-contents li {
     margin: 0 0 5px;
+}
+.fc-fixed {
+    position: fixed;
+    top: 26px;
+    width: 255px;
 }

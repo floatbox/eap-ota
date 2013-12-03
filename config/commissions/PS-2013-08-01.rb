@@ -1,10 +1,10 @@
 carrier "PS", start_date: "2013-08-01"
 
 rule 1 do
-disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
+discount "6%"
 agent_comment "Для перевозок, содержащих участок в/из пунктов РФ:"
 agent_comment "5% (3%) (3%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в Москвы;"
 check %{ includes(country_iatas, 'RU') and includes(city_iatas, 'MOW LED') }
@@ -13,24 +13,24 @@ example "svocdg cdgsvo"
 end
 
 rule 2 do
-disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "7%"
-subagent "5%"
-agent_comment "7% (5%) (5%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в пунктов в РФ, кроме Москвы;"
+subagent "8%"
+discount "11%"
+agent_comment "7% (8%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в пунктов в РФ, кроме Москвы;"
 check %{ includes(country_iatas, 'RU') and not includes(city_iatas, 'MOW LED') }
 example "svxcdg"
 example "svxcdg cdgsvx"
 end
 
 rule 3 do
-disabled "переключили на downtown"
 important!
 ticketing_method "aviacenter"
 agent "7%"
-subagent "5%"
+subagent "8%"
+discount "11%"
 agent_comment "7% от тарифа Бизнес класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) из/в пунктов в РФ;"
-subagent_comment "5%"
+subagent_comment "8%"
 classes :business
 check %{ includes(country_iatas, 'RU') }
 example "svocdg/business"
@@ -38,10 +38,10 @@ example "svocdg/business cdgsvo/business"
 end
 
 rule 4 do
-disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
+discount "6%"
 agent_comment "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 subagent_comment "3% от опубл. тарифов на рейсы Interline c обязательным участком PS"
 interline :yes
@@ -50,10 +50,10 @@ example "cdgsvo svocdg/ab"
 end
 
 rule 5 do
-disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
+discount "3%"
 consolidator "2%"
 agent_comment "0% от опубл. тарифов на рейсы Interline без участка PS"
 subagent_comment "0% от опубл. тарифов на рейсы Interline без участка PS"
@@ -63,10 +63,10 @@ example "cdgsvo/ab"
 end
 
 rule 6 do
-disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
+discount "3%"
 consolidator "2%"
 comment "для несодержащих РФ перевозок"
 agent_comment "1% (5 руб+2%сбор АЦ) (скидки нет) от тарифа на собственных и совместных рейсах Авиакомпании под кодом PS (566)"
@@ -76,10 +76,10 @@ example "ievcdg"
 end
 
 rule 7 do
-disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
+discount "3%"
 consolidator "2%"
 comment "для несодержащих РФ перевозок"
 agent_comment "1% (5 руб+2%сбор АЦ) (скидки нет) от тарифа на рейсы Interline с участком PS;"
@@ -90,10 +90,10 @@ example "cdgiev ievcdg/ab"
 end
 
 rule 8 do
-disabled "переключили на downtown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
+discount "3%"
 consolidator "2%"
 comment "для несодержащих РФ перевозок"
 agent_comment "0% от опубл. тарифов на рейсы Interline без участка PS"
@@ -104,13 +104,13 @@ example "cdgiev/ab"
 end
 
 rule 9 do
-important!
+disabled "переключили на бонусный ац"
 ticketing_method "downtown"
 agent "7%"
 subagent "6%"
+discount "9%"
 agent_comment "все через dtt"
-interline :no, :yes
 example "svocdg"
-example "svocdg cdgsvo/ab"
+example "svocdg cdgsvo"
 end
 

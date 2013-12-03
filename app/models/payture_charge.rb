@@ -26,6 +26,10 @@ class PaytureCharge < Payment
     self.name_in_card = card.name
   end
 
+  def had_3ds
+    !! threeds_key
+  end
+
   def can_block?; pending? end
   def can_confirm_3ds?; threeds? end
   def can_cancel?; blocked? end
@@ -39,12 +43,14 @@ class PaytureCharge < Payment
     raise ArgumentError, 'ref is not set yet' unless ref
     raise ArgumentError, 'price is 0' unless price && !price.zero?
     raise ArgumentError, 'specify card data, please' unless @card
-    update_attributes :status => 'processing_block'
+    # TODO при появлении возможностей обмена/возврата в личном кабинете
+    # перенести сохранение ip в Payment
+    update_attributes status: 'processing_block', ip: custom_fields.ip
     response = gateway.block(price, @card, :our_ref => ref, :custom_fields => custom_fields)
     if response.threeds?
       update_attributes :status => 'threeds', :threeds_key => response.threeds_key
     elsif response.success?
-      update_attributes :status => 'blocked'
+      update_attributes :status => 'blocked', :auth_code => response.auth_code
     elsif response.error?
       update_attributes :status => 'rejected', :error_code => response.err_code
     else

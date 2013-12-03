@@ -12,7 +12,6 @@ class PNRController < ApplicationController
   def get_data
     @pnr = PNR.get_by_number params[:id]
     @prices = @pnr.order
-    @pnr.email = @prices.email if @prices.source == 'sirena' && @pnr.email.blank?
     @passengers = @pnr.passengers
     @last_pay_time = @pnr.order.last_pay_time
   end
@@ -78,12 +77,5 @@ class PNRController < ApplicationController
     render 'error', :status => 500
   end
 
-  # sirena pdf receipt FIXME unfinished, unused
-  def receipt
-    @pnr = PNR.get_by_number params[:id]
-    if @pnr.order && @pnr.order.source == 'sirena'
-      render :text => @pnr.sirena_receipt, :content_type => 'application/pdf'
-    end
-  end
 end
 

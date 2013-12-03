@@ -8,11 +8,6 @@ describe CodeStash do
     expect { Airport['DME'] }.to_not raise_error(CodeStash::NotFound)
   end
 
-  it "should not raise when searching for russian code" do
-    pending "sirena is disabled for now"
-    Airport['ДМД'].should_not raise_error(CodeStash::NotFound)
-  end
-
   context '[] on Models' do
 
     pending context 'with empty code' do

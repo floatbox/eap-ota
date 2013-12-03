@@ -36,7 +36,7 @@
     <td>
         <div style="font-weight: bold;"><%= full_human_date_en( flight.departure_date ) %><br><%= human_week_day_en( flight.departure_date ) %></div>
         <div style="font-weight: bold; font-size: 18px; line-height: 24px;"><%= fmt_time(flight.departure_time) %></div>
-        <%= flight.departure_name_en %><br>
+        <%= flight.departure_name_en %>&nbsp;<span style="color: #777777; font-size: 11px; line-height: 11px;"><%= flight.departure_iata %></span><br>
         <% if flight.departure_term %>
             Terminal&nbsp;<%= flight.departure_term %><br>
         <% end %>
@@ -45,7 +45,7 @@
     <td>
         <div style="font-weight: bold;"><%= full_human_date_en( flight.arrival_date ) %><br><%= human_week_day_en( flight.arrival_date ) %></div>
         <div style="font-weight: bold; font-size: 18px; line-height: 24px;"><%= fmt_time(flight.arrival_time) %></div>
-        <%= flight.arrival_name_en %><br>
+        <%= flight.arrival_name_en %>&nbsp;<span style="color: #777777; font-size: 11px; line-height: 11px;"><%= flight.arrival_iata %></span><br>
         <% if flight.arrival_term %>
             Terminal&nbsp;<%= flight.arrival_term %><br>
         <% end %>

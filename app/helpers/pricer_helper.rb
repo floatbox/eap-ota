@@ -255,6 +255,18 @@ module PricerHelper
     days = t('date.pre_day_names')
     l(date, :format => :human) + ', ' + days[date.wday]
   end
+  
+  def long_trip variant
+    date1 = Date.strptime(variant.segments.first.departure_date, '%d%m%y')
+    date2 = Date.strptime(variant.segments.last.departure_date, '%d%m%y')
+    date1.month != date2.month && date2.day > date1.day
+  end
+  
+  def trip_duration variant
+    date1 = Date.strptime(variant.segments.first.departure_date, '%d%m%y')
+    date2 = Date.strptime(variant.segments.last.departure_date, '%d%m%y')
+    t('date.days', :count => (date2 - date1).to_i).html_safe
+  end  
 
   def human_layovers_count count
     numbers = ['одной', 'двумя', 'тремя', 'четыремя', 'пятью']
@@ -300,13 +312,13 @@ module PricerHelper
     end
     result
   end
-
+  
   def variant_debug_info(recommendation, variant)
     # concat recommendation.source
     # concat %( <a href="#" onclick="prompt('ctrl+c!', '#{h recommendation.cryptic(variant)}'); return false">КОД</a> ).html_safe if recommendation.source == 'amadeus'
     concat 'Наземный участок ' if recommendation.ground?
     concat recommendation.validating_carrier_iata + ', '
-    if recommendation.sellable?
+    if recommendation.allowed_booking?
       concat %( тариф #{recommendation.price_fare.to_i})
       concat ", #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
       concat %( (FM #{recommendation.commission.agent}) #{recommendation.commission.subagent})
@@ -330,6 +342,8 @@ module PricerHelper
       reason = 'продажа отключена' if reason == true;
       concat 'Не можем продать '
       concat link_to(reason, check_admin_commissions_url(:code => recommendation.serialize(variant)), :target => '_blank')
+    else
+      concat 'не можем продать, дополнительные критерии в #allowed_booking?'
     end
     # concat ' (' + recommendation.booking_classes.join(',') + ')'
     concat " Мест: #{recommendation.availability}"

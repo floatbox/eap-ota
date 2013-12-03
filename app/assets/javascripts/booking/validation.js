@@ -252,10 +252,10 @@ initFormat: function() {
         var field = $(this), value = $.trim(field.val());
         if (value && value.search(/^\d{1,3}$/) === 0) {
             var y = parseInt(value, 10);
-            if ((that.future && y < 100) || y <= that.cyear) {
-                y += 2000;
+            if (y < 100) {
+                y += (that.future || y <= that.year) ? 2000 : 1900;
             } else if (y < 1000) {
-                y = 1900 + y % 100;
+                y += 1000;
             }
             field.val(y);
             that.validate(true);

@@ -4,6 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
+discount "5%"
 agent_comment "на период 01.09.2013 года по 30.09.2013 года"
 agent_comment "7% на Эконом и Бизнес классе на все направления AZ с началом путешествия только из Екатеринбурга, "
 agent_comment "обязательным наличием в маршруте двух рейсов Екатеринбург Рим AZ 553 и Рим Екатеринбург AZ 552."
@@ -17,6 +18,7 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
+discount "1%"
 agent_comment "1 euro. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
 subagent_comment "5 руб. с билета по опубл. тарифам на все остальные рейсы AZ (включая code-share);"
 example "mrucdg"
@@ -27,6 +29,7 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
+discount "1%"
 agent_comment "1 euro с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 subagent_comment "5 руб. с билета по опубл. тарифам на рейсы Interline, если 1-ый сегмент выполнен под кодом AZ."
 interline :first

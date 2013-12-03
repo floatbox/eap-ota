@@ -43,6 +43,8 @@ module Pricing
 
     def vat
       if vat_status == '18%'
+        (price_with_payment_commission*18/118).round(2)
+      elsif vat_status == '18%_old'
         ((price_fare + price_tax)*18/118).round(2)
       else
         0

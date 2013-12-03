@@ -42,6 +42,38 @@
     cursor: pointer;
 }
 
+/* Hidden map control */
+.sm-hidden .smap-prices {
+    height: 26px;
+    background: url("/images/common/dark.jpg") #373941;
+    box-shadow: none;
+}
+.sm-hidden .smp-link {
+    width: 960px;
+    margin: 0 auto;
+    text-align: left;
+}
+.sm-hidden .smpl-content {
+    position: relative;
+    top: -2px;
+    left: 402px;
+    display: inline;
+    padding: 0;
+    color: #7a7e5a;
+}
+.sm-hidden .smp-load {
+    color: #a8ad6b;
+    text-decoration: underline;
+}
+.sm-hidden .smp-progress {
+    background: none;
+}
+.sm-hidden .smp-slider,
+.sm-hidden .smp-expand,
+.sm-hidden .smp-collapse {
+    visibility: hidden;
+}
+
 /* Slider */
 .smp-slider {
     display: none;

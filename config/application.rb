@@ -22,6 +22,8 @@ module Eviterra
     # убрать после миграции на rails 4
     config.paths.add "app/controllers/concerns", eager_load: true
     config.paths.add "app/models/concerns",      eager_load: true
+    config.paths.add "app/jobs",                 eager_load: true
+    config.paths.add "app/validators",           eager_load: true
 
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
@@ -42,13 +44,17 @@ module Eviterra
 
     config.middleware.use "CodeStash::Middleware"
 
+    # X-Forwarded-For парсится слишком поздно, в логах светился ip балансера зачем-то.
+    config.middleware.delete "ActionDispatch::RemoteIp"
+    config.middleware.insert_before "Rails::Rack::Logger", "ActionDispatch::RemoteIp"
+
     config.generators do |g|
       g.orm :active_record
     end
 
     initializer 'action_dispatch.eviterra_exceptions', :before => 'action_dispatch.configure' do
-    # config.action_dispatch.rescue_responses.update 'Mongoid::NotFound' => :not_found, ...
     # config.action_dispatch.rescue_responses.update 'ArgumentError' => :bad_request
+      config.action_dispatch.rescue_responses.update 'Mongoid::Errors::DocumentNotFound' => :not_found
       config.action_dispatch.rescue_responses.update 'BSON::InvalidObjectId' => :not_found
     end
 

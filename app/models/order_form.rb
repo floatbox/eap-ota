@@ -23,25 +23,27 @@ class OrderForm
   attr_accessor :partner
   attr_accessor :marker
   attr_accessor :number
-  attr_accessor :sirena_lead_pass
   attr_accessor :order # то, что сохраняется в базу
-  attr_accessor :variant_id #нужен при восстановлении формы по урлу
   # Снимает ограничения на бронирование. Параметр не сохраняется в кэш.
-  attr_accessor :admin_user
+  attr_accessor :context
   attr_reader :show_vat, :vat_included
 
   delegate :last_tkt_date, :to => :recommendation
-  validates_format_of :email, :with =>
-  /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :message => "Некорректный email"
-  validates_presence_of :email, :phone
-  validates_format_of :phone, :with => /^[\d \+\-\(\)]+$/
+  validates :email,
+    presence: true,
+    mx_record: true,
+    format:
+      { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, message: "Некорректный email" }
+  validates :phone,
+    presence: true,
+    format:
+      { with: /\A[\d \+\-\(\)]+\z/, message: 'Некорректный номер телефона' }
 
   def card
     @card || CreditCard.new
   end
 
   def last_pay_time
-    return if recommendation.source == 'sirena'
     return Time.now + 24.hours if Conf.amadeus.env != 'production' && !Rails.env.test? # так как тестовый Амадеус в прошлом
     return if recommendation.flights.first.departure_datetime_utc - 72.hours < Time.now
     return unless last_tkt_date
@@ -52,21 +54,11 @@ class OrderForm
   end
 
   # разрешает сделать бронирование с оплатой потом.
-  def enabled_delayed_payment?
-    admin_user ||
-      (enabled_delivery? || enabled_cash?) && last_pay_time
+  def allowed_delayed_payment?
+    return false unless context.enabled_delayed_payment?
+    context.lax? || !!last_pay_time
   end
-
-  # возможна доставка
-  def enabled_delivery?
-    ! Conf.site.forbidden_delivery
-  end
-
-  # возможна оплата наличными
-  def enabled_cash?
-    admin_user ||
-      ! Conf.site.forbidden_cash
-  end
+  delegate :enabled_delivery?, :enabled_cash?, to: :context
 
   def tk_xl
     dept_datetime_mow = Location.default.tz.utc_to_local(recommendation.journey.departure_datetime_utc) - 1.hour
@@ -97,7 +89,7 @@ class OrderForm
   end
 
   #дети до 2-х лет, без явно указанного места
-  def  potential_infants
+  def potential_infants
     people.find_all{|p| p.potential_infant?(last_flight_date) }
   end
 
@@ -118,11 +110,9 @@ class OrderForm
     potential_infants - associated_infants
   end
 
-  def people_attributes= attrs
-    @people ||= []
-    attrs.each do |k, person_attrs|
-      @people[k.to_i] = Person.new(person_attrs)
-    end
+  def persons= attrs
+    attrs = url_encoded_array_to_proper attrs
+    @people = attrs.map {|person| Person.new person}
   end
 
   def errors_hash
@@ -169,8 +159,7 @@ class OrderForm
         :discount => recommendation.price_discount.round(2),
         :fee => recommendation.fee.round(2)
       },
-      :rules => recommendation.rules,
-      :booking_classes => recommendation.booking_classes
+      :rules => recommendation.rules
     }
   end
 
@@ -180,14 +169,14 @@ class OrderForm
 
   def save_to_cache
     cache = OrderFormCache.new
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+    copy_attrs self, cache, :recommendation, :people_count, :query_key, :partner, :marker, :price_with_payment_commission
     cache.with(safe: true).save
     self.number = cache.id.to_s
   end
 
   def update_in_cache
     cache = OrderFormCache.find(number) or raise(NotFound, "#{number} not found")
-    copy_attrs self, cache, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+    copy_attrs self, cache, :recommendation, :people_count, :query_key, :partner, :marker, :price_with_payment_commission
     cache.with(safe: true).save
   end
 
@@ -196,7 +185,7 @@ class OrderForm
     def load_from_cache(cache_number)
       cache = OrderFormCache.find(cache_number) or raise(NotFound, "#{cache_number} not found")
       order = new
-      copy_attrs cache, order, :recommendation, :people_count, :variant_id, :query_key, :partner, :marker, :price_with_payment_commission
+      copy_attrs cache, order, :recommendation, :people_count, :query_key, :partner, :marker, :price_with_payment_commission
       order.number = cache.id.to_s
       order
     end
@@ -229,28 +218,26 @@ class OrderForm
     people_count[:adults] + people_count[:children]
   end
 
-  validate :validate_card, :validate_dept_date, :validate_people
+  validate :validate_card, if: ->{payment_type == 'card'}
+  validate :validate_dept_date, if: ->{!context.lax? && recommendation.source == 'amadeus'}
+  validate :validate_people
 
   def validate_dept_date
-    return if admin_user
-    if recommendation.source == 'amadeus'
-      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell(recommendation.journey.departure_datetime_utc, recommendation.last_tkt_date)
-    elsif recommendation.source == 'sirena'
-      errors.add :recommendation, 'Первый вылет слишком рано' unless TimeChecker.ok_to_sell_sirena(recommendation.journey.departure_datetime_utc)
+    if !TimeChecker.ok_to_sell(recommendation.journey.departure_datetime_utc, recommendation.last_tkt_date)
+      errors.add :recommendation, 'Первый вылет слишком рано'
     end
   end
 
   def validate_card
-    if payment_type == 'card'
-      errors.add :card, 'Отсутствуют данные карты' unless card
-      errors.add :card, 'Некорректные данные карты' if card && !card.valid?
+    if card
+      errors.add :card, 'Некорректные данные карты' unless card.valid?
+    else
+      errors.add :card, 'Отсутствуют данные карты'
     end
   end
 
   # FIXME убрать внутрь Person
   def validate_people
-    people.each(&:set_birthday)
-    people.each(&:set_document_expiration_date)
     associate_infants
     set_childen_and_infants
     unless people.all?(&:valid?)
@@ -261,7 +248,7 @@ class OrderForm
   def update_price_and_counts
     search = AviaSearch.from_code(query_key)
     search.people_count = calculated_people_count
-    strategy = Strategy.select( :rec => recommendation, :search => search )
+    strategy = Strategy.select( :rec => recommendation, :search => search, :context => context )
     if strategy.check_price_and_availability
       self.people_count = search.people_count
       self.price_with_payment_commission = recommendation.price_with_payment_commission
@@ -300,7 +287,6 @@ class OrderForm
     recommendation.validating_carrier.iata
   end
 
-
   def full_info
     res = ''
     people.every.coded.join("\n")
@@ -338,5 +324,18 @@ class OrderForm
     stem_length = [max_length - LONGEST_ENDING, SHORTEST_STEM].max
     first_name[0, stem_length] == second_name[0, stem_length]
   end
+
+  def url_encoded_array_to_proper struct
+    return struct if struct.is_a?(Array)
+    raise ArgumentError unless url_encoded_array?(struct)
+    struct.sort_by {|k, v| k}.map(&:last)
+  end
+
+  def url_encoded_array? struct
+    return false unless struct.is_a?(Hash)
+    return false unless struct.keys.map(&:to_i).sort.first == 0
+    true
+  end
+
 end
 

@@ -1,82 +1,6 @@
 require 'spec_helper'
 
 describe BookingController do
-  describe '#api_rambler_booking' do
-
-    let :request_params do
-      { :va  => 'SU',                                   #Validating airline (авиакомпания, на бланке которой выписывается билет)
-        :dir => { '0' => {                                      #Cегменты прямого перелета
-          :bcl => 'M',                                  #Booking_class
-          :cls => 'B',                                  #Cabin
-          :oa  => 'SU',                                 #Перевозчик, владелец самолета (IATA код Operating Airline)
-          :n   => '840',                                #Номер рейса
-          :ma  => 'SU',                                 #Авиакомпания, которую пишут в номере рейса (IATA код Marketing Airline)
-          :eq  => '320',                                #IATA код типа самолета
-          :dur => '75',                                 #Длительность перелета в сегменте (мин)
-          :dep =>{                                      #Данные вылета
-            :p  => 'LED',                               #IATA код аэропорта
-            :dt => '280911',                            #Дата и время в формате ГГГГ-ММ-ДД ЧЧ:ММ:СС
-            :t  => '1'                                  #Терминал, если есть, иначе пустая строка
-            },
-          :arr =>{                                      #Данные приземления (аналогичны dep)
-            :p => 'SVO',
-            :d => '280911',
-            :t => 'D'
-            }
-          }},
-        :ret => {},                                     #Дата обратного вылета
-        :c   => 2151,                                   #Цена (рубли)
-        :c1  => 2151                                    #Цена за одного взрослого пассажира
-      }
-    end
-
-    it 'creates appropriate avia_search' do
-      avia_search = mock('AviaSearch')
-      recommendation = mock('Recommendation')
-      recommendation.stub(:deserialize)
-
-      AviaSearch.should_receive(:simple).with(hash_including(
-        :from => 'LED',
-        :to => 'MOW',
-        :date1 => '280911',
-        :adults => 1,
-        :cabin => 'C',
-        :partner => 'rambler')).and_return(avia_search)
-      avia_search.stub(:valid?).and_return('true')
-      avia_search.stub(:query_key)
-      avia_search.stub(:partner).and_return('rambler')
-      get :api_rambler_booking, request_params.merge(:format => 'xml')
-    end
-
-    it 'creates appropriate recommendation' do
-      flights = mock('Flight')
-      segments = [mock('Segment')]
-      recommendation = mock('Recommendation')
-      segments.stub(:flights).and_return(flights)
-      flights.stub_chain(:departure, :city, :iata).and_return('LED')
-      flights.stub_chain(:arrival, :city, :iata).and_return('SVO')
-      flights.stub(:departure_date).and_return('280911')
-      recommendation.stub_chain(:cabins, :first).and_return('C')
-
-
-      Flight.should_receive(:new).with(hash_including(
-        :operating_carrier_iata => 'SU',
-        :marketing_carrier_iata => 'SU',
-        :flight_number => '840',
-        :departure_iata => 'LED',
-        :arrival_iata => 'SVO',
-        :departure_date => '280911')).and_return(flights)
-      Recommendation.should_receive(:new).with(hash_including(
-        :source => 'amadeus',
-        :validating_carrier_iata => 'SU',
-        :booking_classes => ['M'],
-        :cabins => ['C']
-        )).and_return(recommendation)
-      recommendation.should_receive(:serialize).and_return("amadeus.SU.N.C..SU840LEDMOW280911" )
-      get :api_rambler_booking, request_params.merge(:format => 'xml')
-    end
-  end
-
   context 'how do we deal with partners and markers' do
     let :partner_and_marker_present do
       {
@@ -99,13 +23,13 @@ describe BookingController do
     end
     let(:pricer){AviaSearch.simple(:from => 'MOW', :to => 'PAR', :date1 => DateTime.tomorrow.strftime("%d.%m.%Y"))}
 
-    describe '#preliminary_booking' do
+    describe '#create' do
 
       before do
         # stubbing preliminary_booking internal methods
         recommendation = Recommendation.new(:booking_classes => ['Y'])
         recommendation.stub(:find_commission!)
-        recommendation.stub(:sellable?).and_return(true)
+        recommendation.stub(:allowed_booking?).and_return(true)
         Recommendation.stub(:deserialize).and_return(recommendation)
         strategy = mock('Strategy', check_price_and_availability: nil).as_null_object
         Strategy.stub(:select).and_return(strategy)
@@ -115,7 +39,7 @@ describe BookingController do
       it 'saves both partner and marker if they present' do
         Partner.create(:token => 'yandex', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
-        get :preliminary_booking, partner_and_marker_present
+        post :create, partner_and_marker_present
         response.cookies['partner'].should == 'yandex'
         response.cookies['marker'].should == 'ffdghg'
       end
@@ -123,7 +47,7 @@ describe BookingController do
       it 'saves partner if it is present' do
         Partner.create(:token => 'momondo', :cookies_expiry_time => 10, :enabled => true,  :password => 1)
 
-        get :preliminary_booking, partner_present
+        post :create, partner_present
         response.cookies['partner'].should == 'momondo'
         response.cookies['marker'].should == nil
       end
@@ -131,7 +55,7 @@ describe BookingController do
       it "doesn't touch cookie if there's no partner"  do
         Partner.stub(:find_by_token)
 
-        get :preliminary_booking, marker_present
+        post :create, marker_present
         response.cookies['partner'].should == nil
         response.cookies['marker'].should == nil
       end

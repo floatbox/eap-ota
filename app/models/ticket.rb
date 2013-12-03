@@ -259,8 +259,9 @@ class Ticket < ActiveRecord::Base
     end
   end
 
+  # значения для фильтра в админке, иначе выполняются долгие select distinct все время
   def self.validators
-    uniq.pluck(:validator).compact.sort
+    %W{92228065 92223412 92222701 10729143}
   end
 
   def self.sources
@@ -346,7 +347,7 @@ class Ticket < ActiveRecord::Base
   end
 
   def vat_selector
-    ['0', '18%', 'unknown'].map do |vat_st|
+    ['0', '18%', '18%_old', 'unknown'].map do |vat_st|
       if vat_status == vat_st
         "<span class='selected_vat'> #{vat_status} </span>"
       else
@@ -426,8 +427,9 @@ class Ticket < ActiveRecord::Base
     e.message
   end
 
+  # Используется только в админке
   def rate
-    CBR.exchange_on(ticketed_date || Date.today).get_rate(original_price_fare_currency, "RUB").to_f if original_price_fare_currency
+    CBR.exchange_on(ticketed_date || Date.today).get_rate(original_price_fare_currency, "RUB").to_f if original_price_fare_currency && original_price_fare_currency != "RUB"
   end
 
 end

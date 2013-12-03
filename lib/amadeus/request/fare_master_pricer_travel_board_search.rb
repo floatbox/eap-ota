@@ -1,7 +1,7 @@
 module Amadeus
   module Request
     class FareMasterPricerTravelBoardSearch < Amadeus::Request::Base
-      attr_accessor :people_count, :nonstop, :segments, :cabin, :lite, :suggested_limit
+      attr_accessor :people_count, :nonstop, :segments, :cabin, :suggested_limit, :search_around
 
       def initialize(*args)
         unless args.first.is_a?(Hash)
@@ -14,7 +14,7 @@ module Amadeus
       end
 
       def suggested_limit
-         @suggested_limit || (lite ? Conf.amadeus.recommendations_lite : Conf.amadeus.recommendations_full)
+         @suggested_limit || 250
       end
 
     end

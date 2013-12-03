@@ -101,7 +101,6 @@ ru:
         last_pay_time: "Ссылка оплаты работает до"
         contact: "Контактные данные"
         phone: "Телефон"
-        sirena_lead_pass: "Фамилия первого пассажира в брони, для Сирены"
         name_in_card: "ФИО на кредитной карте"
         pan: "Номер карты"
         full_info: "Данные пассажиров"
@@ -161,8 +160,14 @@ ru:
         control_links: "Управление"
         created_at: "Создан"
         external_gateway_link: "Детальная история"
+        auth_code: "Код авторизации"
+        had_3ds: "Был 3DS"
         <<: *PRICING_ATTRIBUTES
-
+      customer:
+        password: "Пароль"
+    validations:
+      sms_message: "Сообщение слишком длинное"
+      mx_record: "Указанный {адрес электронной почты} не существует."
 
   views:
     pagination:
@@ -243,4 +248,5 @@ ru:
   'Yes': Да
   'no': нет
   'No': Нет
+
 

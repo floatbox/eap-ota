@@ -30,28 +30,19 @@ abort: function() {
     }
     if (this.offer) {
         results.content.el.find('.rc-overlay').hide();
-        this.offer.book.removeClass('ob-disabled ob-fade').show();
-        this.offer.updateBook();
+        if (!this.offer.book.hasClass('ob-failed')) {
+            this.offer.book.removeClass('ob-disabled ob-fade').show();
+            this.offer.updateBook();
+        }
     }
     delete this.variant;
     delete this.offer;
 },
 prebook: function(offer) {
-    var that = this;
-    var params = {
+    this.abort();
+    this.prebookRequest({
         query_key: results.data.query_key,
         recommendation: offer.selected.id
-    };
-    this.abort();
-    this.request = $.ajax({
-        url: '/booking/preliminary_booking?' + $.param(params),
-        success: function(data) {
-            that.process(data);
-        },
-        error: function(xhr, status) {
-            if (status !== 'abort') that.failed();
-        },
-        timeout: 120000
     });
     results.content.el.find('.rc-overlay').show();
     offer.book.addClass('ob-disabled ob-fade');
@@ -61,6 +52,28 @@ prebook: function(offer) {
     _kmq.push(['record', 'RESULTS: variant selected']);
     _kmq.push(['record', 'RESULTS: ' + results.content.selected + ' variant selected']);
     _gaq.push(['_trackEvent', 'Бронирование', 'Выбор варианта']);
+},
+prebookRequest: function(params, retry) {
+    var that = this;
+    this.request = $.ajax({
+        type: 'POST',
+        url: '/booking',
+        data: params,
+        success: function(data) {
+            that.process(data);
+        },
+        error: function(xhr, status) {
+            if (status === 'abort') return;
+            if (retry) {
+                that.failed();
+            } else { 
+                setTimeout(function() {
+                    that.prebookRequest(params, true); // Пробуем ещё раз
+                }, 100);
+            }
+        },
+        timeout: 90000
+    });
 },
 process: function(result) {
     var that = this;
@@ -72,6 +85,8 @@ process: function(result) {
         }, 1000);
         _kmq.push(['record', 'PRE-BOOKING: success']);
     } else {
+        this.offer.selected.disabled = true;
+        this.offer.countPrices();
         this.failed();
     }
 },
@@ -88,7 +103,7 @@ failed: function() {
 },
 load: function() {
     var that = this;
-    this.request = $.get('/booking/?number=' + this.key, function(content) {
+    this.request = $.get('/booking/' + this.key, function(content) {
         page.location.set('booking', that.key);
         if (results.data) {
             page.title.set(I18n.t('page.booking.few', {title: results.data.titles.window}));
@@ -193,25 +208,29 @@ hide: function() {
     _yam.hit(page.location.track());
     delete this.offer;
 },
-newSearch: function() {
+newSearch: function(saveCities) {
     this.el.hide().removeClass('b-processing');
     this.content.html('');
 
+    results.header.select.hide();
     results.header.el.find('.rh-newsearch').remove();
     results.header.buttonEnabled.hide();
     results.header.button.show();
     results.header.el.removeClass('rh-fixed');
 
-    search.locations.toggleSegments(1);
-    var segment = search.locations.segments[0];
-    if (search.mode.selected === 'ow') {
-        var dpt = segment.arv.selected || segment.arv.value;
-        var arv = segment.dpt.selected || segment.dpt.value;
-        segment.dpt.set(dpt);
-        segment.arv.set(arv);
-    } else {
-        segment.arv.set('');
+    if (!saveCities) {
+        search.locations.toggleSegments(1);
+        var segment = search.locations.segments[0];
+        if (search.mode.selected === 'ow') {
+            var dpt = segment.arv.selected || segment.arv.value;
+            var arv = segment.dpt.selected || segment.dpt.value;
+            segment.dpt.set(dpt);
+            segment.arv.set(arv);
+        } else {
+            segment.arv.set('');
+        }
     }
+    
     search.dates.setSelected([]);
     search.el.show();
     search.map.resize();
@@ -234,7 +253,7 @@ init: function() {
     });
     this.el.find('.bffg-content').each(function() {
         var content = $(this);
-        content.html(content.html().replace(/\n/gm, '<br>'));
+        content.html('<p>' + content.html().replace(/\n/gm, '</p><p>') + '</p>');
     });
     booking.el.find('.bffd-farerules').click(function(event) {
         that.show();

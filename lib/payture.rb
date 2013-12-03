@@ -45,9 +45,13 @@ class Payture
       @doc["ACSUrl"]
     end
 
+    def auth_code
+      @doc["AddInfo"] && (@doc["AddInfo"]["Key"] == 'AuthCode') && @doc["AddInfo"]["Value"]
+    end
+
     # FIXME найти более удачный способ прокидывать сюда конфирмационный урл
     def threeds_return_url
-      Conf.site.ssl ? 'https://' : 'http://' + "#{Conf.site.host}/confirm_3ds"
+      (Conf.site.ssl ? 'https://' : 'http://') + "#{Conf.site.host}/confirm_3ds"
     end
 
     def threeds_params

@@ -172,7 +172,13 @@ class Commission::Formula
     )
   end
 
-  # вычленяет часть формулы
+  def round(precision=0)
+    Commission::Formula.new(
+      @parts.map {|k, v|  [k, v.round(precision)] }
+    )
+  end
+
+  # Вычленяет часть формулы.
   def extract(part)
     Commission::Formula.new(part => @parts[part])
   end

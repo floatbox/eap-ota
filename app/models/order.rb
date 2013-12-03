@@ -13,6 +13,7 @@ class Order < ActiveRecord::Base
   scope :MOWR221F9, lambda { by_office_id 'MOWR221F9' }
   scope :MOWR2219U, lambda { by_office_id 'MOWR2219U' }
   scope :FLL1S212V, lambda { by_office_id 'FLL1S212V' }
+  scope :looking_like_fraud, where("auto_ticket = ? AND no_auto_ticket_reason LIKE 'С большой вероятностью фрод%'", false)
   scope :for_manual_ticketing, lambda { where("orders.payment_status IN ('blocked', 'charged') AND
     ticket_status = 'booked' AND
     orders.pnr_number != '' AND
@@ -52,7 +53,7 @@ class Order < ActiveRecord::Base
   # error_ticket - билеты были отправлены на выписку, но не были выписаны до таймаута
   # ticketed - билеты были выписаны
   def self.ticket_statuses
-    [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket']
+    [ 'booked', 'canceled', 'ticketed', 'processing_ticket', 'error_ticket', 'fraud']
   end
 
   def self.fee_schemes
@@ -69,6 +70,10 @@ class Order < ActiveRecord::Base
 
   def save_stored_flights(flights)
     self.stored_flights = flights.map {|fl| StoredFlight.from_flight(fl) } if Conf.site.store_flights if flights.all? &:dept_date #костыль, для билетов с открытой датой
+  end
+
+  def flights
+    stored_flights.map(&:to_flight).sort_by(&:departure_datetime_utc)
   end
 
   def show_vat
@@ -110,7 +115,7 @@ class Order < ActiveRecord::Base
   end
 
   def make_payable_by_card
-    update_attributes(auto_ticket: true, no_auto_ticket_reason: '') if pnr_number.present? && ['delivery', 'cash'].include?(payment_type)
+    update_attributes(auto_ticket: true, no_auto_ticket_reason: '') if pnr_number.present?
     update_attributes(:payment_type => 'card', :payment_status => 'not blocked', :offline_booking => true) if payment_status == 'pending' && (pnr_number.present? || parent_pnr_number.present?)
   end
 
@@ -120,6 +125,7 @@ class Order < ActiveRecord::Base
   has_many :secured_payments, conditions: { status: %W[ blocked charged processing_charge ]}, class_name: 'Payment'
   belongs_to :customer
   has_and_belongs_to_many :stored_flights
+  has_many :fare_rules
 
   # не_рефанды
   def last_payment
@@ -143,8 +149,8 @@ class Order < ActiveRecord::Base
   before_validation :capitalize_pnr
   before_save :calculate_price_with_payment_commission, :if => lambda { price_with_payment_commission.blank? || price_with_payment_commission.zero? || !fix_price? }
   before_save :set_prices
-  before_create :generate_code, :set_customer, :set_payment_status, :set_email_status
-  after_save :create_order_notice
+  before_create :generate_code, :set_payment_status, :set_email_status
+  after_save :create_order_notice, :set_customer
 
   def set_prices
     self.fee_scheme = Conf.site.fee_scheme if new_record? || fee_scheme.blank?
@@ -238,6 +244,7 @@ class Order < ActiveRecord::Base
   scope :sent_manual, where(:email_status => 'manual')
   scope :reported, where(:payment_status => ['blocked', 'charged'], :offline_booking => false).where("orders.pnr_number != ''")
   scope :extra_pay, where("orders.pnr_number = '' AND parent_pnr_number != '' AND orders.payment_status = 'blocked'")
+  scope :fraud, where("ticket_status = 'fraud'")
 
 
   scope :stale, lambda {
@@ -307,7 +314,6 @@ class Order < ActiveRecord::Base
       :phone,
       :pnr_number,
       :full_info,
-      :sirena_lead_pass,
       :last_tkt_date,
       :payment_type,
       :delivery,
@@ -380,9 +386,18 @@ class Order < ActiveRecord::Base
 
       #Необходимо, тк t.update_attributes глючит при создании билетов (не обновляет self.tickets)
       tickets.reload
+      load_fare_rules
       true
     else
       false
+    end
+  end
+
+  def load_fare_rules
+    strategy.fare_rule_hashes.each do |rule_hash|
+      if fare_rules.where(rule_hash).blank?
+        fare_rules.create(rule_hash)
+      end
     end
   end
 
@@ -459,6 +474,15 @@ class Order < ActiveRecord::Base
   def prices
     [price_fare, price_tax]
   end
+
+  def first_email
+    if email.present?
+      email.strip.split(/[,; ]+/).first.downcase
+    else
+      nil
+    end
+  end
+
 
   # считывание offline брони из GDS
   ######################################
@@ -632,11 +656,9 @@ class Order < ActiveRecord::Base
   end
 
   def set_customer
-    if !email.blank?
-      self.customer = Customer.find_or_initialize_by_email(email)
-      # TODO этот вызов надо будет убрать при запуске ЛК
-      customer.skip_confirmation_notification!
-      customer.save unless customer.persisted?
+    if (customer && first_email != customer.email) || (!customer && !first_email.blank?)
+      new_customer = Customer.create_from_order(first_email)
+      update_column(:customer_id, new_customer.id)
     end
   end
 

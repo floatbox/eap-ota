@@ -113,9 +113,9 @@ a.pht-content:hover .pht-title {
     padding: 1px 15px 12px;
     font-size: 13px;
     line-height: 16px;
-    background: #f1b346;
+    background: #EDEDE3;
     color: #333;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
 }
 .pht-popup:before {
     content: '';
@@ -127,7 +127,7 @@ a.pht-content:hover .pht-title {
     margin-left: -10px;
     border: 10px solid transparent;
     border-top: none;
-    border-bottom-color: #f1b346;
+    border-bottom-color: #EDEDE3;
 }
 .phtp-close {
     float: right;
@@ -178,40 +178,21 @@ a.pht-content:hover .pht-title {
 }
 
 /* User */
-.ph-user {
-    float: left;
-    margin-left: 5px;
-}
-.phu-wrapper {
-    position: relative;
-    z-index: 10;
-    padding: 10px 15px;
+#user {
+    display: none;
 }
 .phu-control {
-    position: relative;
-    font-size: 13px;
-    line-height: 15px;
-    text-decoration: underline;
     cursor: pointer;
 }
-.phuc-bar {
-    display: none;
-    position: absolute;
-    top: -20px;
-    left: -15px;
-    width: 100%;
-    padding: 0 15px;
-    height: 50px;
-    background: #EDEDE3;
-    clip: rect(10px 160px 46px -10px);
-    box-shadow: 0 0 10px rgba(0,0,0,0.35);
-    z-index: -1;
+.phu-control:hover {
+    text-decoration: underline;
 }
 .phu-fade {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 10;
     width: 100%;
     height: 100%;
     margin-bottom: -1px;
@@ -219,35 +200,41 @@ a.pht-content:hover .pht-title {
     opacity: 0.5;
     filter:progid:DXImageTransform.Microsoft.Alpha(opacity=50);
 }
-.phu-active .phu-control {
-    text-decoration: none;
-}
-.phu-active .phuc-bar,
-.phu-active .phu-fade {
-    display: block;
-}
 
 /* Popup */
 .phu-popup {
     display: none;
     position: absolute;
-    top: 36px;
-    left: 0;
+    top: 100%;
+    left: 50%;
+    margin: 5px 0 0 -140px;
     background: #EDEDE3;
     box-shadow: 0 2px 12px rgba(0,0,0,0.35);
-    z-index: -2;
+    z-index: 11;
     font-size: 12px;
-    line-height: 14px;
+    line-height: 15px;
+}
+.phu-popup:before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -10px;
+    width: 1px;
+    height: 1px;
+    margin-left: -10px;
+    border: 10px solid transparent;
+    border-top: none;
+    border-bottom-color: #EDEDE3;
 }
 .phu-stator {
-    width: 260px;
+    width: 280px;
     overflow: hidden;
     border-bottom: 1px solid #b8b8ad;
     box-shadow: 0 1px 0 rgba(255,255,255,0.75);
 }
 .phu-slider {
     position: relative;
-    width: 520px;
+    width: 560px;
     overflow: hidden;
 }
 .phu-section {
@@ -255,14 +242,14 @@ a.pht-content:hover .pht-title {
 }
 .phu-slider .phu-section {
     float: left;
-    width: 230px;
+    width: 250px;
 }
 .phu-signup,
 .phu-forgot {
     display: none;
 }
 .phus-title {
-    margin: 0 0 13px;
+    margin: 0 0 8px;
     font-weight: bold;
     font-size: 13px;
     line-height: 15px;
@@ -287,7 +274,7 @@ a.pht-content:hover .pht-title {
 }
 .phuf-input {
     margin: 0;
-    width: 210px;
+    width: 230px;
     padding: 5px 9px;
     border: 1px solid #B2B2B2;
 }
@@ -322,6 +309,14 @@ a.pht-content:hover .pht-title {
     box-shadow: 0 1px 0 rgba(0,0,0,0.15);
     color: #777;
 }
+.phu-loading {
+    display: none;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: 8px 0 0 10px;
+    background: url(/images/booking/progress-b.gif) no-repeat;
+}
 .phu-error {
     display: none;
     margin: 10px 0 0;
@@ -339,7 +334,7 @@ a.pht-content:hover .pht-title {
 
 .phu-forgot-link,
 .phu-forgot-fields .phu-remember-link {
-    margin-top: 8px;
+    margin-top: 9px;
     float: right;
     color: #777;
     line-height: 15px;
@@ -368,45 +363,22 @@ a.pht-content:hover .pht-title {
     display: none;
 }
 
-/* User */
-.phu-link {
-    padding: 10px 0 0 15px;
-    font-size: 13px;
-    line-height: 15px;
-}
-.phul-wrapper {
-    float: left;
-    max-width: 150px;
-    height: 16px;
+/* Logout */
+.phu-email {
+    width: 100%;
     overflow: hidden;
-}
-.phul-text {
-    float: left;
-    height: 16px;
-    text-decoration: underline;
-}
-.phul-overflow {
-    float: right;
-    position: relative;
-    top: -16px;
-    margin-left: -19px;
-    width: 20px;
-    height: 16px;
-    background: -webkit-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
-    background: -moz-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
-    background: -ms-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
-    background: -o-linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
-    background: linear-gradient(left, rgba(242, 242, 242, 0), #F2F2F2);
-}
-.phul-logout {
-    float: left;
-    margin-left: 2px;
-    padding: 0 3px;
-    cursor: pointer;
-}
-.phul-icon {
-    vertical-align: -2px;
+    text-overflow: ellipsis;
 }
 .phu-logout {
     display: none;
+}
+.phul-logout {
+    padding-right: 14px;
+    background: url('/images/common/exit.png') no-repeat 100% 1px;
+}
+.phul-logout:hover {
+    color: #333;
+}
+.pht-selected .phul-logout:hover {
+    color: #A7A8AB;
 }

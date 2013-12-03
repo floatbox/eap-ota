@@ -5,7 +5,7 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   class XMLResponse
     include CompactSAXMachine
 
-    element :error do
+    element :errorMessage do
       element :description
       element :error
     end
@@ -19,7 +19,9 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
             element :cabin
             element :rbd
             element :avlStatus
+            element :fareBasis
             element :passengerType
+            element :fareType
             def adt?; passengerType == 'ADT' end
           end
         end
@@ -100,6 +102,8 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
       cabins = product_informations.map(&:cabin)
       booking_classes = product_informations.map(&:rbd)
       availabilities = product_informations.map(&:avlStatus)
+      fare_bases = product_informations.map(&:fareBasis)
+      published_fare = product_informations.map(&:fareType).all?{|ft| ft == 'RP'}
 
       validating_carrier_iata = pax_fare_product.codeShareDetails.find(&:v?).company
       marketing_carrier_iatas = pax_fare_product.codeShareDetails.map(&:company)
@@ -121,10 +125,12 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
         cabins: cabins,
         booking_classes: booking_classes,
         availabilities: availabilities,
-        last_tkt_date: last_tkt_date
+        last_tkt_date: last_tkt_date,
+        fare_bases: fare_bases,
+        published_fare: published_fare
       )
     end
-    RecommendationSet.new(recommendations)
+    recommendations
   end
 
   def variants_sax(recommendation, flight_indexes_cache)
@@ -206,17 +212,16 @@ module Amadeus::Response::FareMasterPricerTravelBoardSearchSax
   end
 
   def error_message_sax
-    parsed.error.description
+    parsed.errorMessage.description
   rescue NoMethodError
   end
 
   def error_code_sax
-    parsed.error.error
+    parsed.errorMessage.error
   rescue NoMethodError
   end
 
   def parsed
-    xml = benchmark 'to_xml' do doc.to_xml end
-    @parsed ||= XMLResponse.parse(xml)
+    @parsed ||= XMLResponse.parse(doc.raw_xml)
   end
 end

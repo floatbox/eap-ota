@@ -10,8 +10,8 @@ module DataMigration
 
   # удаляет всех пользователей из deck_users и накатывает заново копиями из старого typus_users
   def self.migrate_admin_users
-    DeckUser.delete_all
-    DeckUser.connection.execute %(
+    Deck::User.delete_all
+    Deck::User.connection.execute %(
       insert into deck_users (id, email, first_name, last_name, created_at, locked_at, roles)
         select id, email, first_name, last_name, created_at, if(status, null, updated_at), role from typus_users
     )
@@ -302,16 +302,65 @@ def self.fill_in_morpher_fields(klass, first_id = 0)
     end
   end
 
-  def self.fill_customers_for_orders
-    Order.where("customer_id IS NULL").limit(200).each do |order|
-      customer_email = order.email.strip.split(/[,; ]/).first
-      #customer = Customer.find_or_create_by_email(customer_email)
-      customer = Customer.find_or_initialize_by_email(customer_email)
+  ## Набор дата-миграций для приведения в порядок поля email в Order и Customer
+  # 1. чистим поле email в ордере
+  def self.trim_orders_email
+    Order.update_all('email = TRIM(email)', 'email != TRIM(email)')
+  end
+
+  # 2. меняем всем разделители нескольких email на запятые
+  def self.fix_orders_email_delim
+    Order.update_all('email = REPLACE(email, ";", ",")', 'INSTR(orders.email, ";")')
+  end
+
+  # 3. перепривязываем ордер к кастомеру по первому email в поле, если он в ордере вдруг изменился
+  def self.fix_customers_for_orders
+    Order.joins(:customer).where('TRIM(orders.email) != "" AND SUBSTRING_INDEX(TRIM(orders.email), ",", 1) != customers.email').limit(200).each do |order|
+      customer = Customer.find_or_initialize_by_email(order.first_email)
       customer.skip_confirmation_notification!
       customer.save unless customer.persisted?
       order.update_column(:customer_id, customer.id)
       #order.save
     end
+  end
+
+  # 4. удаляем кастомеров без единого ордера
+  def self.delete_customers_without_orders
+    Customer.without_orders.limit(200).each do |customer|
+      customer.delete
+    end
+  end
+
+  #5. Переводим email всех кастомеров в нижний регистр
+  def self.lowercase_customers_email
+    Customer.update_all('email = TRIM(LCASE(email))', 'BINARY LCASE(email) != email', :limit => 200)
+  end
+
+  # Заполняем базу кастомеров по старым заказам
+  def self.fill_customers_for_orders_old
+    Order.where("customer_id IS NULL AND email != ''").order("created_at DESC").limit(2000).each do |order|
+      customer = Customer.find_or_initialize_by_email(order.first_email)
+      customer.skip_confirmation_notification!
+      customer.save unless customer.persisted?
+      order.update_column(:customer_id, customer.id)
+      #order.save
+    end
+  end
+
+  # Заполняем базу кастомеров по старым заказам
+  def self.fill_customers_for_orders
+    counter = 0
+    total = Order.where("customer_id IS NULL AND email != ''").count
+    puts '==========>>> Status:' + total.to_s + ' // ' + Order.count.to_s
+    Order.where("customer_id IS NULL AND email != ''").find_in_batches do |group|
+      group.each do |order|
+        order.set_customer
+        counter += 1
+      end
+      puts '==========>>> ' + counter.to_s + ' // ' + total.to_s
+      sleep 10
+    end
+    puts '==========>>> Left: ' + Order.where("customer_id IS NULL AND email != ''").count.to_s
   end
 
   def self.migrate_partners

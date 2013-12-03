@@ -4,7 +4,8 @@ init: function() {
     if (this.el.length) {
         var logout = this.el.find('.phu-logout form');
         if (logout.length) {
-            this.el.find('.phul-logout').on('click', function() {
+            this.el.find('.phul-logout').on('click', function(event) {
+                event.preventDefault();
                 logout.submit();
             });
             this.show = $.noop;
@@ -12,11 +13,17 @@ init: function() {
             this.initPopup();
             this.authorization.init();
             this.password.init();
+            this.token.init();
             this.initPlaceholders();
         }
     } else {
         this.show = $.noop;
     }
+    window.addEventListener('load', function() {
+        if (window.history.state && window.history.state.authorized && !logout.length) {
+            window.location.reload();
+        }
+    }, false)
     this.init = $.noop;
 },
 initPopup: function() {
@@ -26,11 +33,12 @@ initPopup: function() {
     });
     this.el.find('.phu-control').on('click', function(event) {
         event.stopPropagation();
-        that[that.el.hasClass('phu-active') ? 'hide' : 'show']();
+        that.show();
     });
     this._hide = function(event) {
         if (event.type == 'click' && !event.button || event.which == 27) that.hide();
     };
+    this.fade = this.el.closest('.ph-tabs').find('.phu-fade');
 },
 initPlaceholders: function() {
     var fields = this.el.find('.phuf-input');
@@ -44,20 +52,26 @@ initPlaceholders: function() {
 },
 show: function(id) {
     var that = this;
-    this.el.addClass('phu-active');
+    this.fade.show();
     this.opened = this[id || 'authorization'].el.show();
-    this.opened.find('.phuf-input').trigger('change');    
+    this.opened.find('.phuf-input').trigger('change');
     setTimeout(function() {
         $w.on('click keydown', that._hide);
     }, 10);
     if (id === 'password') {
         $('#new-password-1').focus();
     }
+    search.overlayed = true;
 },
 hide: function() {
-    this.el.removeClass('phu-active');
     this.opened.hide();
+    this.fade.hide();    
     $w.off('click keydown', this._hide);
+    search.overlayed = false;
+    if (this.resetOnHide) {
+        this.resetOnHide = false;
+        page.reset();
+    }
 },
 };
 
@@ -77,7 +91,7 @@ init: function() {
         var re = $('#forgot-email');
         re.val(le.val()).trigger('blur');
         that.el.find('.phu-forgot').show();
-        that.slider.animate({left: -260}, 200);
+        that.slider.animate({left: -280}, 200);
     });
     this.el.find('.phu-remember-link').on('click', function(event) {
         event.preventDefault();
@@ -91,15 +105,16 @@ init: function() {
     this.el.on('click', '.phu-signup-link', function() {
         if ($(this).hasClass('phust-link')) that.openSignUp();
     });
-    
-    this.initForms();    
-    
+
+    this.initForms();
+
 },
 openSignIn: function() {
     var elem = this.el;
     $('#signin-email').val($('#signup-email').val()).trigger('blur');
     elem.find('.phus-title .phu-signin-link').removeClass('phust-link');
-    elem.find('.phu-confirm').closest('.phu-section').hide();        
+    elem.find('.phu-signup-result').hide();
+    elem.find('.phu-confirm').closest('.phu-section').hide();
     elem.find('.phu-signup').closest('.phu-section').show();
     elem.find('.phu-signup').slideUp(150);
     elem.find('.phu-stator').animate({
@@ -130,14 +145,16 @@ initForms: function() {
 
     var that = this;
     var checkEmail = function(value, full) {
-        if (full) { 
+        if (full) {
             if (!value) return 'Введите адрес электронной почты.';
             if (!/^\S+@\S+\.\w+$/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
-        } else if (value) {
+            if (/@.*@/.test(value)) return 'Недействительный адрес электронной почты. Введите корректный адрес.';
+        } 
+        if (value) {
             if (/[а-яА-Я]/.test(value)) return 'Адрес электронной почты может содержать только латинские символы.';
         }
     };
-    
+
     var notConfirmed = '\
         <p>Вы не завершили регистрацию. Для завершения регистрации перейдите по&nbsp;ссылке из&nbsp;письма-подтверждения.</p>\
         <p><span class="link phu-confirm-link">Что делать, если ничего не&nbsp;пришло?</span></p>';
@@ -148,6 +165,9 @@ initForms: function() {
         if (full && !value) return 'Введите пароль.';
     });
     signIn.process = function(result) {
+        if (window.history.replaceState) {
+            window.history.replaceState({authorized: true}, document.title, window.location.href.replace('#login', ''));
+        }
         window.location = result.location;
     };
     signIn.messages['not_confirmed'] = notConfirmed;
@@ -162,7 +182,7 @@ initForms: function() {
         } else {
             signIn.caps = undefined;
         }
-        signIn.validate();        
+        signIn.validate();
     });
     signIn.elem.find('.phu-error').on('click', '.phu-confirm-link', function() {
         $('#confirm-email').val($('#signin-email').val()).trigger('blur');
@@ -170,12 +190,13 @@ initForms: function() {
         that.showConfirm();
         that.openSignUp();
     });
-    
+
     var signUp = new profileForm(this.el.find('.phu-signup'));
     signUp.add('#signup-email', checkEmail);
     signUp.process = function(result) {
         that.el.find('.phu-signup').closest('.phu-section').hide();
-        that.el.find('.phu-signup-result .phus-title').html('Аккаунт создан');        
+        that.el.find('.phu-signup-result .phus-title').html('Аккаунт создан');
+        that.el.find('.phu-signup-result .phu-confirm-link').closest('p').show();
         that.el.find('.phu-signup-result').show();
     };
     signUp.messages['not_confirmed'] = notConfirmed;
@@ -191,8 +212,9 @@ initForms: function() {
     confirm.process = function(result) {
         that.el.find('.phu-confirm').closest('.phu-section').hide();
         that.el.find('.phu-signup-result .phus-title').html('Подтверждение регистрации');
+        that.el.find('.phu-signup-result .phu-confirm-link').closest('p').hide();
         that.el.find('.phu-signup-result').show();
-    };    
+    };
     confirm.messages['Email was already confirmed, please try signing in'] = '<p>Пользователь с таким адресом уже зарегистрирован.</p><p><span class="phu-signin-link phust-link">Войти</span></p>';
     confirm.messages['Email not found'] = '<p>Пользователь с&nbsp;таким адресом не&nbsp;зарегистрирован.</p><p><span class="link phu-signup-link">Зарегистрироваться</span></p>';
     confirm.elem.find('.phu-error').on('click', '.phu-signup-link', function() {
@@ -200,9 +222,9 @@ initForms: function() {
         confirm.error.hide();
         that.el.find('.phu-confirm').closest('.phu-section').hide();
         that.el.find('.phu-signup').closest('.phu-section').show();
-        that.el.find('.phu-signup .phu-button').prop('disabled', false);        
+        that.el.find('.phu-signup .phu-button').prop('disabled', false);
     });
-    
+
     var forgot = new profileForm(this.el.find('.phu-forgot'));
     forgot.add('#forgot-email', checkEmail);
     forgot.process = function() {
@@ -222,17 +244,17 @@ initForms: function() {
         that.el.find('.phu-forgot-fields').show();
         forgot.button.prop('disabled', false);
     });
-    
+
     this.el.find('.phu-signup-result .phu-confirm-link').on('click', function() {
         $('#confirm-email').val($('#signup-email').val()).trigger('blur');
-        that.showConfirm();        
+        that.showConfirm();
     });
-    
+
     $('#signin-email, #signup-email, #forgot-email, #confirm-email').on('focus', function() {
         if (this.value && /[а-яА-Я]/.test(this.value)) $(this).val('').trigger('input');
     }).on('change', function() {
         $(this).val($.trim(this.value));
-    });    
+    });
 
 }
 };
@@ -240,9 +262,9 @@ initForms: function() {
 /* Password popup */
 User.password = {
 init: function() {
-    
+
     this.el = $('#phup-password');
-    
+
     var compare = function() {
         var p1 = $('#new-password-1').val();
         var p2 = $('#new-password-2').val();
@@ -270,18 +292,27 @@ init: function() {
         } else {
             form.caps = undefined;
         }
-        form.validate();        
+        form.validate();
     });
-    
+
     form.process = function(result) {
         window.location = result.location;
-    };    
-    
+    };
+
 },
-use: function(token) {
-    $('#customer_confirmation_token').val(token);
+use: function(token, name, url) {
+    $('#password_token').val(token).attr('name', 'customer[' + name + ']');
+    this.el.find('form').attr('action', url);
 }
 };
+
+/* Fake token popup */
+User.token = {
+init: function() {
+    this.el = $('#phup-token');
+}
+}
+
 
 /* Form with ajax */
 var profileForm = function(elem) {
@@ -296,6 +327,7 @@ var profileForm = function(elem) {
     this.process = $.noop;
     this.error = this.elem.find('.phu-error');
     this.button = this.elem.find('.phu-submit .phu-button').prop('disabled', false);
+    this.loading = this.elem.find('.phu-loading');
     this.fields = [];
     this.messages = {};
 };
@@ -303,7 +335,7 @@ profileForm.prototype = {
 validate: function(full) {
     this.errors = [];
     if (!full && this.dismatch) this.errors.push(this.dismatch);
-    if (!full && this.caps) this.errors.push(this.caps);    
+    if (!full && this.caps) this.errors.push(this.caps);
     for (var i = 0, l = this.fields.length; i < l; i++) {
         var f = this.fields[i];
         if (full) f.validate(true);
@@ -324,6 +356,7 @@ send: function() {
             type: 'POST',
             data: this.elem.serialize()
         }).done(function(result) {
+            that.loading.hide();
             if (result.success) {
                 that.process(result);
             } else if (result.errors && result.errors.length) {
@@ -331,10 +364,12 @@ send: function() {
                 that.showError(result.errors[0]);
             }
         }).fail(function(jqXHR, status, message) {
+            that.loading.hide();
             that.button.prop('disabled', false);
             that.showError(jqXHR.statusText);
         });
         this.button.prop('disabled', true);
+        this.loading.show();
     }
 },
 add: function(selector, check) {

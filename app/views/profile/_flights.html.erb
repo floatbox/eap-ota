@@ -2,17 +2,17 @@
 <div class="ord-flights">
 <table>
 <tr>
-    <th style="width: 294px;">Маршрут</th>
-    <th style="width: 200px;">Отправление</th>
-    <th style="width: 200px;">Прибытие</th>
-    <th>Класс тарифа и багаж</th>
+    <th>Рейсы</th>
+    <th style="width: 220px;">Отправление</th>
+    <th style="width: 220px;">Прибытие</th>
+    <th style="width: 180px;">Тариф и багаж</th>
 </tr>
 <% for flight, booking_class, baggage_limitations in order.profile_flights.zip( order.profile_booking_classes, order.baggage_array) %>
 <tr>
     <td>
         <h6 class="ordf-route"><%= flight.departure.city.name %> — <%= flight.arrival.city.name %></h6>
         <p><%= flight.operating_carrier_name || flight.marketing_carrier_name %></p>
-        <p>Рейс <%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %></p>
+        <p><%= flight.marketing_carrier_iata %>&nbsp;<%= flight.flight_number %></p>
     </td>
     <td>
         <p class="ordf-date"><%= full_human_date( flight.departure_date ) %>, <%= human_week_day( flight.departure_date ) %></p>
@@ -20,7 +20,7 @@
         <p><%= flight.departure_name %><% if flight.departure_term %>, терминал&nbsp;<%= flight.departure_term %><% end %></p>
     </td>
     <td>
-        <p class="ordf-date"><%= human_date( flight.arrival_date ) %>, <%= human_week_day( flight.arrival_date ) %></p>
+        <p class="ordf-date"><%= full_human_date( flight.arrival_date ) %>, <%= human_week_day( flight.arrival_date ) %></p>
         <p class="ordf-time"><%= fmt_time(flight.arrival_time) %></p>
         <p><%= flight.arrival_name %><% if flight.arrival_term %>, терминал&nbsp;<%= flight.arrival_term %><% end %></p>
     </td>

@@ -30,6 +30,8 @@ class Admin::OrdersController < Admin::EviterraResourceController
     add_predefined_filter 'MOWR2219U', {:scope => 'MOWR2219U'}
     add_predefined_filter 'FLL1S212V', {:scope => 'FLL1S212V'}
     add_predefined_filter 'For manual ticketing', {:scope => 'for_manual_ticketing'}, 'for_manual_ticketing'
+    add_predefined_filter 'Looking like fraud', {:scope => 'looking_like_fraud'}
+    add_predefined_filter 'Fraud', {:scope => 'fraud'}
     # FIXME для наших дейт-фильтров нужен формат 2012/2/21 вместо 2012-02-21
     #add_predefined_filter 'Today', {:created_at => Date.today.to_s(:db)}
     #add_predefined_filter 'Yesterday', {:created_at => Date.yesterday.to_s(:db)}
@@ -95,7 +97,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     unless @order.source == 'amadeus' && @order.pnr_number
       redirect_to :back, alert: 'works only for amadeus order with PNR number'
     else
-      @recommendation = Strategy::Amadeus.new(order: @order).recommendation_from_booking
+      @recommendation = Amadeus::Strategy.new(order: @order).recommendation_from_booking
       # FIXME надо бы убрать. что мешает сериализации работать без комиссии?
       @recommendation.find_commission!
       redirect_to check_admin_commissions_url(:code => @recommendation.serialize)

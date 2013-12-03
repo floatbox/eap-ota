@@ -25,4 +25,8 @@ module ProfileTicket
     kind == 'ticket' && status == 'returned'
   end
 
+  def profile_stored?
+    flights.present?
+  end
+
 end

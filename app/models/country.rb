@@ -63,31 +63,5 @@ class Country < ActiveRecord::Base
     @city_iatas ||= cities.pluck(:iata).compact
   end
 
-  # FIXME WTF? хотя бы iata коды использовать. не айдишники из базы!1
-  def self.options_for_nationality_select
-    [ ['', [['Россия', 170]]],
-      [ '&mdash;&mdash;&mdash;&mdash;'.html_safe,
-        [['Азербайджан', 3],
-        ['Армения', 13],
-        ['Беларусь', 20],
-        ['Грузия', 58],
-        ['Казахстан', 81],
-        ['Киргизия', 88],
-        ['Латвия', 102],
-        ['Литва', 108],
-        ['Молдова', 127],
-        ['Таджикистан', 200],
-        ['Туркмения', 211],
-        ['Узбекистан', 214],
-        ['Украина', 215],
-        ['Эстония', 242]
-      ]],
-      ['&mdash;&mdash;&mdash;&mdash;'.html_safe,
-        Country.all(:order => :name_ru).map{ |c|
-          ([c.name_ru.to_s, c.id])
-        }
-      ]
-    ]
-  end
 end
 

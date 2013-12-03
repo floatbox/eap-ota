@@ -16,13 +16,16 @@ init: function() {
 
     if (this.location.booking) {
         this.restoreBooking(this.location.search, this.location.booking);
-    } else if (this.location.search.indexOf('confirmation_token') == 0) {
-        var token = this.location.search.replace('confirmation_token=', '');
-        User.password.use(token);
-        User.show('password');
+    } else if (this.location.search === 'login') {
         search.map.resize();
-        /*this.reset();
-        this.loadLocation();*/
+        User.el.show();
+        User.show('authorization');
+        User.resetOnHide = true;
+        this.loadLocation();
+    } else if (this.location.search.indexOf('confirmation_token') == 0) {
+        this.showConfirmationForm();
+    } else if (this.location.search.indexOf('reset_password_token') == 0) {
+        this.showPasswordForm();    
     } else if (this.location.search) {
         this.restoreResults(this.location.search);
     } else {
@@ -55,6 +58,43 @@ loadLocation: function() {
         search.defaultValues.segments = [{dpt: city}];
     });
 },
+showConfirmationForm: function() {
+    User.el.show();
+    User.resetOnHide = true;
+    var token = this.location.search.replace('confirmation_token=', '');
+    $.ajax({
+        method: 'GET',
+        url: '/profile/confirmation',
+        data: {confirmation_token: token},
+        success: function(result) {
+            if (result.success) {
+                User.password.el.find('.phus-title').css('margin-bottom', '');
+                User.password.el.find('.phupp-profile').html('для личного кабинета <strong>' + result.resource.email + '</strong>').show();
+                User.password.use(token, 'confirmation_token', '/profile/confirm');
+                User.show('password');
+            } else {
+                User.show('token');
+            }
+        },
+        error: function() {
+            User.show('token');
+        },
+        timeout: 20000
+    });
+    this.loadLocation();
+    search.map.resize();
+},
+showPasswordForm: function() {
+    User.el.show();
+    User.resetOnHide = true;
+    var token = this.location.search.replace('reset_password_token=', '');
+    User.password.el.find('.phus-title').css('margin-bottom', '13px');
+    User.password.el.find('.phupp-profile').hide();
+    User.password.use(token, 'reset_password_token', '/profile/password');
+    User.show('password');
+    this.loadLocation();
+    search.map.resize();
+},
 restoreResults: function(key) {
     search.el.hide();
     search.loadSummary({query_key: key});
@@ -85,7 +125,7 @@ reset: function() {
     setTimeout(function() {
         search.waitRequests();
     }, 350);
-    search.mode.values.show();
+    //search.mode.values.show();
     search.locations.focusEmpty();
 },
 showData: function(data) {

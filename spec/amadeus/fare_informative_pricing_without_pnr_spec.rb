@@ -17,6 +17,8 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR, :amadeus do
     specify {response.recommendations(recommendation).first.price_fare.should == 99640}
     specify {response.recommendations(recommendation).first.price_tax.should == 18086}
 
+    its('recommendations.first.fare_bases') {should ==  ["YFLEX1RT", "YFLEX1RT", "YFLEX1RT", "YFLEX1RT"]}
+    its('recommendations.first.published_fare') {should be_true}
     its('recommendations.first.baggage_array') {should ==  [[BaggageLimit.new(baggage_quantity: 1, baggage_type: 'N')] * 3]*4}
   end
 
@@ -30,6 +32,8 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR, :amadeus do
 
     specify {response.recommendations(recommendation).first.price_fare.should == 64280}
     specify {response.recommendations(recommendation).first.price_tax.should == 11752}
+    its('recommendations.first.fare_bases') {should ==  ["YRUTH9", "YRUTH9", "YRUTH9", "YRUTH9"]}
+    its('recommendations.first.published_fare') {should be_true}
   end
 
   describe 'how one girl let me down' do
@@ -42,6 +46,8 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR, :amadeus do
 
     specify {response.recommendations(recommendation).first.price_fare.should == 29600.0}
     specify {response.recommendations(recommendation).first.price_tax.should == 492.0}
+    its('recommendations.first.fare_bases') {should ==  ["KOW"]}
+    its('recommendations.first.published_fare') {should be_true}
 
     its('recommendations.first.baggage_array') {should ==  [[BaggageLimit.new(baggage_weight: 20, baggage_type: 'W', measure_unit: 'K')] * 4 + [BaggageLimit.new(baggage_weight: 10, baggage_type: 'W', measure_unit: 'K')]]}
   end
@@ -57,6 +63,8 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR, :amadeus do
     specify {response.recommendations(recommendation).should have(1).item}
     specify {response.recommendations(recommendation).first.price_fare.should == 9900.0}
     specify {response.recommendations(recommendation).first.price_tax.should == 3705.0}
+    its('recommendations.first.fare_bases') {should ==  ["UOW"]}
+    its('recommendations.first.published_fare') {should be_true}
   end
 
   describe 'no fares returned' do
@@ -67,5 +75,15 @@ describe Amadeus::Response::FareInformativePricingWithoutPNR, :amadeus do
 
     specify {response.should_not be_success}
 
+  end
+
+  describe 'with nego fare' do
+
+    let_once! :response do
+      amadeus_response('spec/amadeus/xml/Fare_InformativePricingWithoutPNR_nego_fare.xml')
+    end
+    subject {response}
+
+    specify {response.recommendations.first.published_fare.should be_false}
   end
 end

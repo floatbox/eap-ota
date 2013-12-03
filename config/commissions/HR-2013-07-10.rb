@@ -4,6 +4,7 @@ rule 1 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
+discount "3%"
 consolidator "2%"
 comment "включено с дополнительной проверкой"
 agent_comment "1 руб. от тарифов, опубликованных в системе бронирования, для авиакомпании Hahn Air и интерлайн-партнеров Hahn Air, указанных на сайте www.HR-ticketing.com;"

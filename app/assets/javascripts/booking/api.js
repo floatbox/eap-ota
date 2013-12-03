@@ -20,7 +20,9 @@ booking.restore = function() {
 booking.prebook = function(query_key, hash, partner, marker) {
     var that = this;
     this.request = $.ajax({
-        url: '/booking/preliminary_booking?query_key=' + query_key + '&recommendation=' + hash + '&partner=' + partner + '&marker=' + marker + '&variant_id=1',
+        type: 'POST',
+        url: '/booking',
+        data: { query_key: query_key, recommendation: hash, partner: partner, marker: marker },
         success: function(result) {
             if (result && result.success) {
                 if (result.partner_logo_url) {
@@ -40,9 +42,7 @@ booking.prebook = function(query_key, hash, partner, marker) {
 },
 booking.load = function(number, price_changed) {
     var that = this;
-    this.request = $.get('/booking/', {
-        number: number
-    }, function(content) {
+    this.request = $.get('/booking/' + number, function(content) {
         window.location.hash = number;
         that.view(content);
         var price = decoratePrice(I18n.t('currencies.RUR', {count: Number(that.content.find('.bf-newprice').attr('data-price'))}));
@@ -72,7 +72,6 @@ booking.load = function(number, price_changed) {
             var el = $(this);
             hint.show(event, 'В альянс ' + el.html() + ' входят авиакомпании: ' + el.attr('data-carriers') + '.');
         });
-        results.subscription.init($('#booking-subscription'));
         $('#booking-disclaimer').prependTo(that.content).show();
     });
 };
@@ -86,8 +85,3 @@ booking.failed = function() {
 booking.cancel = function() {
     window.location = '/#' + this.query_key;
 };
-
-/* Errors
-window.onerror = function(text) {
-    _gaq.push(['_trackEvent', 'Ошибка JS', 'При переходе с метапоиска', text]);
-} */

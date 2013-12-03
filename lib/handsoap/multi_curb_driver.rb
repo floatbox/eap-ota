@@ -37,6 +37,7 @@ module Handsoap
       req = curl_request(request)
       deferred = Handsoap::Deferred.new
       # returns Curl::Err::* and message
+      # FIXME не вызывается? никогда не видел вживую.
       req.on_failure do |klass, msg|
         ActiveSupport::Notifications.instrument 'request.curl', curl: req
         deferred.trigger_errback [klass, msg]

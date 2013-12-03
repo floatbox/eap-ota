@@ -51,7 +51,6 @@ ActiveAdmin.register Order do
       f.input :source
       f.input :pnr_number
       f.input :parent_pnr_number
-      f.input :sirena_lead_pass
       f.input :route
       f.input :payment_type
     end

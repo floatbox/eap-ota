@@ -1,6 +1,19 @@
 # encoding: utf-8
 class Admin::EviterraResourceController < Admin::ResourcesController
 
+  def admin_user
+    current_deck_user
+  end
+
+  def authenticate
+    authenticate_deck_user!
+  end
+
+  def admin_sign_out_path
+    destroy_deck_user_session_path
+  end
+  helper_method :admin_sign_out_path
+
   def user_for_paper_trail
     admin_user && admin_user.email
   end

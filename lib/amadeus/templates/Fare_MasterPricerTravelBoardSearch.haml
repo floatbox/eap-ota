@@ -73,7 +73,7 @@
     %departureLocalization
       -unless segment.from_country_or_region?
         %departurePoint
-          -if !lite && segment.search_around_from
+          -if search_around && segment.search_around_from
             %distance 200
             %distanceUnit K
           %locationId= segment.from_iata
@@ -84,7 +84,7 @@
     %arrivalLocalization
       -unless segment.to_country_or_region?
         %arrivalPointDetails
-          -if !lite && segment.search_around_to
+          -if search_around && segment.search_around_to
             %distance 200
             %distanceUnit K
           %locationId= segment.to_iata

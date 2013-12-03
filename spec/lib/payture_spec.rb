@@ -69,6 +69,7 @@ describe Payture do
       it { should_not be_error }
       its(:our_ref) { should == "3codesnik46001" }
       its(:amount) { should == 5372.10 }
+      its(:auth_code) { should be_nil }
     end
 
     describe "3ds" do
@@ -101,6 +102,18 @@ describe Payture do
       }
 
 
+    end
+
+    describe "#auth_code" do
+      let :parsed_response do
+        {
+          "Block" => {
+            "AddInfo" => {"Key"=>"AuthCode", "Value"=>"081121"},
+            "OrderId" =>"psb_274329", "Key"=>"EviterraPSB3DS", "Success"=>"True", "Amount"=>"631845"
+          }
+        }
+      end
+      its(:auth_code) { should == "081121" }
     end
   end
 end

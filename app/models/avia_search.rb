@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class AviaSearch
-  include Virtus
+  include Virtus.model
   include Search::Defaults
   include Search::Humanize::Presenter
   include ActiveModel::Validations
@@ -15,8 +15,9 @@ class AviaSearch
   delegate :to, :from, :from_iata, :to_iata, :date, :to => 'segments.first'
 
   validates_presence_of :segments
-  validates_numericality_of :adults, :children, in: 1..6
-  validates_numericality_of :infants, in: 1..4
+  validates_numericality_of :adults,   only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 6
+  validates_numericality_of :children, only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 6
+  validates_numericality_of :infants,  only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 4
   validates_numericality_of :people_total, less_than_or_equal_to: 8
   validate :segments_validity
 
@@ -47,28 +48,52 @@ class AviaSearch
     new(params)
   end
 
+  # FIXME переделать в builder тоже? с отдельной валидацией, мейби.
+  SIMPLE_PARAMS = %W[
+    from to
+    from1 from2 from3 from4 from5 from6
+    to1 to2 to3 to4 to5 to6
+    date1 date2 date3 date4 date5 date6
+    adults children infants cabin partner
+  ]
+
   def self.simple(args)
-    allowed_parameters = [:from, :to, :date1, :date2, :adults, :children, :infants, :seated_infants, :cabin, :partner]
-    wrong_parameters = args.keys.map(&:to_sym) - allowed_parameters
-    lack_of_parameters = [:from, :to, :date1] - args.keys.map(&:to_sym)
+    args = args.dup.stringify_keys!
+
+    args["from1"] ||= args["from"]
+    args["to1"] ||= args["to"]
+    # можно не указывать обе точки второго сегмента для туда-обратно
+    args["from2"] ||= args["to1"]
+    args["to2"] ||= args["from1"]
+    # можно не указывать fromN для неразрывных маршрутов
+    ("date2".."date6").zip("from2".."from6", "to1".."to5").each do |date, from, to|
+      args[from] ||= args[to] if args[date]
+    end
+    args.delete_if {|k, v| v.blank? }
+
+    wrong_parameters = args.keys - SIMPLE_PARAMS
     unless wrong_parameters.empty?
       raise ArgumentError, "Unknown parameter(s) - \"#{wrong_parameters.join(', ')}\""
     end
+    lack_of_parameters = %W[from1 to1 date1] - args.keys
     unless lack_of_parameters.empty?
       raise ArgumentError, "Lack of required parameter(s)  - \"#{lack_of_parameters.join(', ')}\""
     end
-    #return unless Location[args[:from]] && Location[args[:to]]
 
-    segments = [AviaSearchSegment.new(from: args[:from], to: args[:to], date: convert_api_date(args[:date1]))]
-    if args[:date2].present?
-      segments << AviaSearchSegment.new(from: args[:to], to: args[:from], date: convert_api_date(args[:date2]))
+    segments = []
+    (1..6).each do |i|
+      # map и break не дружат
+      break unless args["date#{i}"]
+      segments << AviaSearchSegment.new(
+        from: args["from#{i}"], to: args["to#{i}"], date: convert_api_date(args["date#{i}"])
+      )
     end
 
-    adults = (args[:adults] || 1).to_i
-    children = args[:children].to_i
-    infants = args[:infants].to_i + args[:seated_infants].to_i
-    cabin = args[:cabin]
-    partner = args[:partner]
+    adults = (args["adults"] || 1).to_i
+    children = args["children"].to_i
+    infants = args["infants"].to_i
+    cabin = args["cabin"]
+    partner = args["partner"]
 
     new :segments => segments,
       :adults => adults, :children => children, :infants => infants, :cabin => cabin,
@@ -89,22 +114,6 @@ class AviaSearch
     else
       date_str
     end
-  end
-
-  def hash_for_rambler
-    return if complex_route?
-    res = {
-      :src => from_iata,
-      :dst => to_iata,
-      :dir => segments[0].date_as_date.strftime('%Y-%m-%d'),
-      :cls => RamblerCache::CABINS_MAPPING[cabin] || 'E',
-      :adt => adults,
-      :cnn => children,
-      :inf => infants,
-      :wtf => 0
-    }
-    res.merge!({:ret => segments[1].date_as_date.strftime('%Y-%m-%d')}) if segments[1]
-    res
   end
 
   def date1
@@ -153,7 +162,7 @@ class AviaSearch
 
   def map_segments
     result = segments.map{|s|
-      { 
+      {
         :dpt => map_point(s.from),
         :arv => map_point(s.to)
       }

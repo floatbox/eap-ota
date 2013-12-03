@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<consumeOutMessageResponse>
+<header/>
+<payload>
+<code>ok</code>
+<outMessageList>
+<outMessage clientId="3" providerId="14">
+<code>ok</code>
+</outMessage>
+<outMessage clientId="4" providerId="16">
+<code>ok</code>
+</outMessage>
+</outMessageList>
+</payload>
+</consumeOutMessageResponse>
