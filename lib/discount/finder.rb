@@ -7,7 +7,7 @@ class Discount::Finder
 
   def find!(rec, opts={})
     commission = rec.commission
-    rule = Discount::Book.default_book.find_rule_for_rec rec, opts
+    rule = Discount.default_book.find_rule_for_rec rec, opts
     rec.discount_rule = rule
   end
 
