@@ -61,22 +61,30 @@ module HotelsHelper
   end
 
   def destination flights
-    point = {}
     return unless flights.first
+    point = {}
+    long_stop_point = {}
+    long_stop_time = 0
     start_point_iata = flights.first.departure_iata
     flights.each do |fl|
-      if point[:iata] && fl.departure_datetime_utc - point[:at] > 12.hours && fl.dept_date != point[:arrv_date]
+      if point[:iata]
         point[:dt] = fl.departure_datetime_utc
         point[:dept_date] = fl.dept_date
-        return point
+        if point[:dt] - point[:at] > long_stop_time
+          long_stop_point = point.clone
+          long_stop_time = point[:dt] - point[:at]
+        end
       end
       point[:city] = fl.arrival.city
       point[:iata] = fl.arrival_iata
       point[:arrv_date] = fl.arrv_date
       point[:at] = fl.arrival_datetime_utc
     end
-    point[:dept_date] = point[:arrv_date] + 3.days
-    return point if point[:iata] != start_point_iata
+    if point[:iata] != start_point_iata
+      point[:dept_date] = point[:arrv_date] + 3.days
+      return point
+    end
+    return long_stop_point unless long_stop_point.empty?
   end
 
 end
