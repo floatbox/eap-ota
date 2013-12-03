@@ -3,11 +3,12 @@
 class Rapida
   # класс для работы с RapidaCharge и всем-всем-всем
 
-  def initialize(txn_id, account, price, phone)
-    @txn_id = txn_id
-    @account = account
-    @price = (price && BigDecimal.new(price))
-    @phone = phone
+  def initialize(params)
+    @txn_id = params[:txn_id]
+    @account = params[:account]
+    @price = params[:price] && BigDecimal.new(params[:price])
+    @phone = params[:phone]
+    @txn_date = params[:txn_date]
   end
 
   # основные обработчики

@@ -19,14 +19,14 @@ def new_order
   order
 end
 
-def check(*args)
-  rapida = Rapida.new(*args)
+def check(args)
+  rapida = Rapida.new(args)
   check_response = rapida.check
   parse(check_response)
 end
 
-def pay(*args)
-  rapida = Rapida.new(*args)
+def pay(args)
+  rapida = Rapida.new(args)
   check_response = rapida.pay
   parse(check_response)
 end
@@ -43,19 +43,28 @@ describe Rapida do
     let(:order) { new_order }
     let(:account) { order.code }
     let(:price) { order.price_with_payment_commission }
+    let(:args) do
+      {
+        txn_id: txn_id,
+        phone: phone,
+        price: price,
+        account: account
+      }
+    end
 
     context 'successfull' do
 
       specify 'all parameters provided' do
         # TODO порефакторить спеку
-        parsed = check(txn_id, account, price, phone)
+        parsed = check(args)
         parsed.result.should == '0'
         parsed.account.should == account
         parsed.rapida_txn_id.should == txn_id
       end
 
       specify 'phone not provided' do
-        parsed = check(txn_id, account, price, nil)
+        args.delete(:phone)
+        parsed = check(args)
 
         parsed.result.should == '0'
         parsed.rapida_txn_id.should == txn_id
@@ -64,7 +73,7 @@ describe Rapida do
       context 'payment persistance' do
 
         before do
-          check(txn_id, account, price, phone)
+          check(args)
         end
 
         specify 'with exactly one payment' do
@@ -94,21 +103,26 @@ describe Rapida do
       context 'with wrong parameters' do
 
         specify 'txn_id not provided' do
-          parsed = check(nil, account, price, phone)
+          args.delete(:txn_id)
+          parsed = check(args)
 
           parsed.result.should == '8'
           parsed.account.should == account
         end
 
         specify 'account not provided' do
-          parsed = check(txn_id, nil, price, phone)
+          args.delete(:account)
+          parsed = check(args)
 
           parsed.result.should == '4'
           parsed.rapida_txn_id.should == txn_id
         end
 
         specify 'more than one mandatory paramater not provided' do
-          parsed = check(txn_id, nil, nil, nil)
+          args.delete(:account)
+          args.delete(:phone)
+          args.delete(:price)
+          parsed = check(args)
 
           parsed.result.should == '4'
           parsed.rapida_txn_id.should == txn_id
@@ -117,7 +131,11 @@ describe Rapida do
 
       specify 'on database error' do
         RapidaCharge.stub(:new).and_raise(ActiveRecord::StatementInvalid.new)
-        parsed = check(txn_id, order.code, order.price_with_payment_commission, phone)
+        args.update(
+          account: order.code,
+          price: order.price_with_payment_commission
+        )
+        parsed = check(args)
         parsed.result.should == '1'
       end
 
@@ -125,7 +143,7 @@ describe Rapida do
         parsed = nil
 
         2.times do
-          parsed = check(txn_id, account, price, phone)
+          parsed = check(args)
         end
 
         parsed.result.should eq('0')
@@ -134,14 +152,16 @@ describe Rapida do
       context 'with wrong price - ' do
 
         specify 'price is greater than real' do
-          parsed = check(txn_id, account, price + 1, phone)
+          args[:price] = price + 1
+          parsed = check(args)
 
           parsed.result.should == '242'
           parsed.account.should == account
         end
 
         specify 'price is less than real' do
-          parsed = check(txn_id, account, price - 100, phone)
+          args[:price] = price - 100
+          parsed = check(args)
 
           parsed.result.should == '241'
           parsed.account.should == account
@@ -150,13 +170,15 @@ describe Rapida do
       end
 
       specify 'unknown code' do
-        parsed = check(txn_id, 'lulz', price, phone)
+        args[:account] = 'lulz'
+        parsed = check(args)
 
         parsed.result.should == '5'
       end
 
       specify 'wrong code format' do
-        parsed = check(txn_id, 'WRONG🚷', price, phone)
+        args[:account] = 'WRONG🚷'
+        parsed = check(args)
 
         parsed.result.should == '4'
       end

@@ -3,7 +3,7 @@
 class RapidaController < ApplicationController
   def payment
     get_params!
-    rapida = Rapida.new *@requisites
+    rapida = Rapida.new @requisites
     response = case @command
     when :check then rapida.check
     when :pay   then rapida.pay
@@ -16,7 +16,7 @@ class RapidaController < ApplicationController
 
   def get_params!
     @command = params[:command] && params[:command].to_sym
-    @requisites = [params[:txn_id], params[:account], params[:sum], params[:phone] ]
+    @requisites = params.slice([:txn_id, :account, :price, :phone, :txn_date])
   end
 
 end
