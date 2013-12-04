@@ -13,11 +13,9 @@ Ticket:
      - customized_original_price_tax
      - price_penalty
      - customized_original_price_penalty
-     - price_discount
-     - price_our_markup
+     - fee
      - price_operational_fee
      - office_id
-     - validator
      - status
      - kind
      - ticketed_date
