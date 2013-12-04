@@ -7,7 +7,26 @@ class ApiBookingController < ApplicationController
   before_filter :set_context_partner, :set_context_robot
 
   def create
-    if preliminary_booking_result(false)
+    @recommendation = Recommendation.deserialize(params[:recommendation])
+    @recommendation.find_commission!
+    @search = AviaSearch.new
+    @search.adults = params[:adults] if params[:adults]
+    @search.children = params[:children] if params[:children]
+    @search.infants = params[:infants] if params[:infants]
+    @search.segments = @recommendation.segments.map do |s|
+      {
+        from: s.departure.city.iata,
+        to: s.arrival.city.iata,
+        date: s.departure_date
+      }
+    end
+
+    order_flow = OrderFlow.new(search: @search,
+                               recommendation: @recommendation,
+                               context: context)
+
+    if order_flow.preliminary_booking_result(false)
+      @order_form = order_flow.order_form
       render :json => {
         :success => true,
         :order => @order_form.info_hash.merge(
@@ -25,7 +44,10 @@ class ApiBookingController < ApplicationController
     @order_form.context = context
     @order_form.update_attributes(params[:order])
     @order_form.card = CreditCard.new(params[:card]) if @order_form.payment_type == 'card'
-    case pay_result
+
+    order_flow = OrderFlow.new(order_form: @order_form, context: context, remote_ip: request.remote_ip)
+
+    case order_flow.pay_result
     when :forbidden_sale, :failed_booking
       render :json => {success: false, reason: 'unable_to_sell'}
     when :new_price
@@ -35,7 +57,8 @@ class ApiBookingController < ApplicationController
     when :ok
       render :json => {success: true, order: @order_form.info_hash.merge( pnr_number: @order_form.pnr_number ) }
     when :threeds
-      render :json => {:success => 'threeds', :threeds_params => @payment_response.threeds_params, :threeds_url => @payment_response.threeds_url}
+      payment_response = order_flow.payment_response
+      render :json => {:success => 'threeds', :threeds_params => payment_response.threeds_params, :threeds_url => payment_response.threeds_url}
     when :failed_payment
       render :json => {success: false, reason: 'payment_error'}
     end
