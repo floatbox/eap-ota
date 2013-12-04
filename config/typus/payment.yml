@@ -40,6 +40,9 @@ PaytureCharge:
 PaytureRefund:
   <<: *HIDDEN_SECTION
 
+RapidaCharge:
+  <<: *HIDDEN_SECTION
+
 CashCharge:
   <<: *HIDDEN_SECTION
 

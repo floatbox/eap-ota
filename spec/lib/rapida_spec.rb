@@ -42,12 +42,12 @@ describe Rapida do
 
     let(:order) { new_order }
     let(:account) { order.code }
-    let(:price) { order.price_with_payment_commission }
+    let(:sum) { order.price_with_payment_commission }
     let(:args) do
       {
         txn_id: txn_id,
         phone: phone,
-        price: price,
+        sum: sum,
         account: account
       }
     end
@@ -89,7 +89,7 @@ describe Rapida do
           subject(:payment) { @payment }
 
           its(:endpoint_name) { should eq('rapida') }
-          its(:price) { should eq(price) }
+          its(:price) { should eq(sum) }
           its(:status) { should eq('pending') }
           its(:their_ref) { should eq(txn_id) }
         end
@@ -121,7 +121,7 @@ describe Rapida do
         specify 'more than one mandatory paramater not provided' do
           args.delete(:account)
           args.delete(:phone)
-          args.delete(:price)
+          args.delete(:sum)
           parsed = check(args)
 
           parsed.result.should == '4'
@@ -133,7 +133,7 @@ describe Rapida do
         RapidaCharge.stub(:new).and_raise(ActiveRecord::StatementInvalid.new)
         args.update(
           account: order.code,
-          price: order.price_with_payment_commission
+          sum: order.price_with_payment_commission
         )
         parsed = check(args)
         parsed.result.should == '1'
@@ -152,7 +152,7 @@ describe Rapida do
       context 'with wrong price - ' do
 
         specify 'price is greater than real' do
-          args[:price] = price + 1
+          args[:sum] = sum + 1
           parsed = check(args)
 
           parsed.result.should == '242'
@@ -160,7 +160,7 @@ describe Rapida do
         end
 
         specify 'price is less than real' do
-          args[:price] = price - 100
+          args[:sum] = sum - 100
           parsed = check(args)
 
           parsed.result.should == '241'

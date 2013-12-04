@@ -6,15 +6,16 @@ class Rapida
   def initialize(params)
     @txn_id = params[:txn_id]
     @account = params[:account]
-    @price = params[:price] && BigDecimal.new(params[:price])
+    @price = params[:sum] && BigDecimal.new(params[:sum])
     @phone = params[:phone]
-    @txn_date = params[:txn_date]
+    @txn_date = params[:txn_date] && DateTime.strptime(params[:txn_date], '%Y%m%d%H%M%S')
   end
 
   # основные обработчики
 
   def check
-    # создает платеж со статусом pending
+    # создает платеж со статусом pending,
+    # если в базе нет рапидовского платежа с their_ref = txn_id
     create_pending_payment! if checkable?
 
     builder = Builder.new result: error_code(error),
@@ -33,10 +34,10 @@ class Rapida
                           txn_id: @txn_id,
                           account: @account,
                           info: info,
-                          prv_txn: @pay_ref,
+                          pay_ref: @pay_ref,
                           persons: persons,
                           trip: route,
-                          receipt: app.profile_itinerary_url(@order.id)
+                          receipt: '' # TODO починить ссылку на маршрутку
     builder.pay_response
   end
 
@@ -59,9 +60,8 @@ class Rapida
   end
 
   def charge_payment!
-    payment = @order.last_payment
-    payment.update_attributes charged_on: @txn_date
-    @pay_ref = payment.set_ref
+    payment = RapidaCharge.where(order_id: @order, their_ref: @txn_id).first
+    payment.update_attributes charged_on: @txn_date, ref: payment.generate_ref
     @order.charge!
   rescue ActiveRecord::StatementInvalid => e
     rescue_db_error(e)
@@ -84,11 +84,15 @@ class Rapida
 
   def checkable?
     # проверяет, можно ли вернуть check без ошибки
-    valid_params? && order? && adequate_price?
+    valid_params? && order? && !payment? && adequate_price?
   end
 
   def payable?
     valid_params? && pending? && adequate_price?
+  end
+
+  def payment?
+    RapidaCharge.where(their_ref: @txn_id).count > 0
   end
 
   # TODO сделать стандартный генератор
@@ -153,7 +157,7 @@ class Rapida
 
   def info
     # длина до 300 символов
-    (i = @order && @order.full_info) ? i.full_info[0...300] : ''
+    (@order && i = @order.full_info) ? i[0...300] : ''
   end
 
   def route
@@ -206,7 +210,7 @@ class Rapida
   class Builder
     # Отвечает исключительно за генерацию xml-ответов.
     # Все проверки должен делать класс Rapida.
-    # FIXME возможно вынести отдельно надо будет, посмотрим насколько разрастется
+    # FIXME возможно вынести отдельно надо будет, посмотрим насколько разростется
 
     include KeyValueInit
     attr_accessor :txn_id, :result, :account, :persons, :info, :trip, :price, :debt, :comment, :pay_ref, :receipt
@@ -231,10 +235,6 @@ class Rapida
         xml.response_ {
           xml.rapida_txn_id  @txn_id              # id рапиды
           xml.result_        @result              # 0 - ок, 1 - не ок
-          # FIXME ?
-          # prv_txn:
-          # > Уникальный номер операции пополнения баланса Потребителя.
-          # > Этот элемент должен возвращаться после запроса на пополнение баланса.
           xml.prv_txn_       @pay_ref if @pay_ref # ref нашего платежа
           xml.comment_       @comment if @comment # кандидат на убиение
           xml.trip_          @trip    if @trip    # инфо по перелетам

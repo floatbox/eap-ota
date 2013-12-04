@@ -16,7 +16,7 @@ class RapidaController < ApplicationController
 
   def get_params!
     @command = params[:command] && params[:command].to_sym
-    @requisites = params.slice([:txn_id, :account, :price, :phone, :txn_date])
+    @requisites = params.slice(:txn_id, :account, :sum, :phone, :txn_date)
   end
 
 end
