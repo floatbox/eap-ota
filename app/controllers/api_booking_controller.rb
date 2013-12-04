@@ -1,6 +1,5 @@
 # encoding: utf-8
 class ApiBookingController < ApplicationController
-  include BookingEssentials
   include ContextMethods
 
   skip_before_filter :verify_authenticity_token
