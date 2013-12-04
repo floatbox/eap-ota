@@ -3,6 +3,7 @@ class OrderFlow
   include KeyValueInit
   attr_accessor :context, :marker, :recommendation, :search
   attr_accessor :order_form
+  attr_accessor :payment_response
   attr_accessor :remote_ip
 
   def logger
