@@ -2,6 +2,14 @@
 <% @flights ||= @pnr.flights %>
 <% booking_classes = @pnr.try(:booking_classes) || [] %>
 
+<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
+<col width="320">
+<col width="20">
+<col width="190">
+<col width="20">
+<col width="190">
+<col width="20">
+<col width="156">
 <thead valign="bottom" style="font-size: 13px;">
 <tr>
     <td width="320" style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Маршрут<br><% end %>Itinerary</td>
@@ -107,3 +115,4 @@
 </tr>
 <% end %>
 </tbody>
+</table>
