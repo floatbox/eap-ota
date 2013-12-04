@@ -9,5 +9,9 @@ class RapidaCharge < Payment
     self
   end
 
+  def set_ref
+    self.ref = Conf.rapida.ref_prefix + self.id.to_s if persisted?
+  end
+
 end
 

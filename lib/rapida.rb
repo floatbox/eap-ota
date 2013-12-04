@@ -17,12 +17,6 @@ class Rapida
     # создает платеж со статусом pending
     create_pending_payment! if checkable?
 
-    info = @order && @order.full_info
-    info = info && info.full_info[0...300] # длина до 300 символов
-    route = @order && @order.route
-    # сделать еще один запрос выглядит пока лучше, чем вычленять из full_info
-    persons = Ticket.uniq.select([:first_name, :last_name, 'tickets.route']).joins(:order).where('orders.code = ?', @account).join(&:name)
-
     builder = Builder.new result: error_code(error),
                           txn_id: @txn_id,
                           account: @account,
@@ -35,10 +29,14 @@ class Rapida
   def pay
     charge_payment! if payable?
 
-    builder = Buider.new result: error_code(error),
-                         txn_id: @txn_id,
-                         account: @account,
-                         info: @comment
+    builder = Builder.new result: error_code(error),
+                          txn_id: @txn_id,
+                          account: @account,
+                          info: info,
+                          prv_txn: @pay_ref,
+                          persons: persons,
+                          trip: route,
+                          receipt: app.profile_itinerary_url(@order.id)
     builder.pay_response
   end
 
@@ -61,9 +59,10 @@ class Rapida
   end
 
   def charge_payment!
-    @order.update_attributes(
-      payment_status: 'charged',
-    )
+    payment = @order.last_payment
+    payment.update_attributes charged_on: @txn_date
+    @pay_ref = payment.set_ref
+    @order.charge!
   rescue ActiveRecord::StatementInvalid => e
     rescue_db_error(e)
   end
@@ -143,6 +142,27 @@ class Rapida
   # /проверки состояния платежа и заказа
 
 
+  # хелперы для вытягивания информации из ордера
+
+  def persons
+    # сделать еще один запрос выглядит пока лучше, чем вычленять из full_info
+    persons = Ticket.uniq.select([:first_name, :last_name, 'tickets.route']).joins(:order).where('orders.code = ?', @account).join(&:name)
+  rescue ActiveRecord::StatementInvalid => e
+    rescue_db_error(e)
+  end
+
+  def info
+    # длина до 300 символов
+    (i = @order && @order.full_info) ? i.full_info[0...300] : ''
+  end
+
+  def route
+    @order && @order.route
+  end
+
+  # /хелперы для вытягивания информации из ордера
+
+
   # ошибки, статус коды
 
   def error
@@ -169,6 +189,7 @@ class Rapida
     end
   end
 
+  # больше документации ради, пока нигде не используется
   def fatal?(query_type, error_code)
     # фатальность влияет на проведение рапидой повторных запросов
     # Фактически это означает, что если ошибка фатальная - запроса не последует.
@@ -188,7 +209,7 @@ class Rapida
     # FIXME возможно вынести отдельно надо будет, посмотрим насколько разрастется
 
     include KeyValueInit
-    attr_accessor :txn_id, :result, :account, :persons, :info, :trip, :price, :debt, :comment, :pay_id, :receipt
+    attr_accessor :txn_id, :result, :account, :persons, :info, :trip, :price, :debt, :comment, :pay_ref, :receipt
 
     def check_response
       Nokogiri::XML::Builder.new(encoding: 'utf-8') do |xml|
@@ -214,11 +235,11 @@ class Rapida
           # prv_txn:
           # > Уникальный номер операции пополнения баланса Потребителя.
           # > Этот элемент должен возвращаться после запроса на пополнение баланса.
-          xml.prv_txn_       @pay_id  if @pay_id  # наш id судя по всему
+          xml.prv_txn_       @pay_ref if @pay_ref # ref нашего платежа
           xml.comment_       @comment if @comment # кандидат на убиение
           xml.trip_          @trip    if @trip    # инфо по перелетам
           xml.passangers_    @persons if @persons # пассажиры.to_s
-          xml.receipt_       @receipt if @repeipt # линк на маршрутку
+          xml.receipt_       @receipt if @receipt # линк на маршрутку
         }
       end.to_xml
     end

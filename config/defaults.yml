@@ -139,6 +139,7 @@ payonline:
   preauthorization: true
 rapida:
   commission: '1.8%'
+  ref_prefix: rpd_
 cbr:
   usd:
     2011-01-01: 30.0000
