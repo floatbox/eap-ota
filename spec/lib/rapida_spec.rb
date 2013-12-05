@@ -14,7 +14,6 @@ end
 
 def new_order
   order = build(:order)
-  yield(order) if block_given?
   order.save!
   order
 end
@@ -36,7 +35,12 @@ describe Rapida do
 
   let(:txn_id) { '1337' }
   let(:phone) { '9998887766' }
-  let(:order) { new_order }
+  let(:order) do
+    o = new_order
+    o.tickets << build(:ticket)
+    o
+  end
+
   let(:account) { order.code }
   let(:sum) { order.price_with_payment_commission }
   let(:check_args) do
@@ -56,6 +60,7 @@ describe Rapida do
       specify 'all parameters provided' do
         # TODO порефакторить спеку
         parsed = check(check_args)
+
         parsed.result.should == '0'
         parsed.account.should == account
         parsed.rapida_txn_id.should == txn_id
@@ -79,7 +84,7 @@ describe Rapida do
           payment = order.payments.size.should eq(1)
         end
 
-        context 'with valid' do
+        context 'with valid values' do
 
           before do
             @payment = order.payments.last
@@ -206,13 +211,38 @@ describe Rapida do
 
     context 'successful' do
 
-      subject { pay(pay_args) }
-
       specify 'all parameters provided' do
+        response = pay(pay_args)
 
-        subject.result.should == '0'
-        subject.rapida_txn_id.should == txn_id
-        subject.prv_txn.should match(/^#{Conf.rapida.ref_prefix}\d+$/)
+        response.result.should == '0'
+        response.rapida_txn_id.should == txn_id
+        response.prv_txn.should match(/^#{Conf.rapida.ref_prefix}\d+$/)
+      end
+
+      context 'payment persistance' do
+
+        before do
+          pay(pay_args)
+        end
+
+        specify 'with exactly one payment' do
+          payment = order.payments.size.should eq(1)
+        end
+
+        context 'with valid values' do
+
+          before do
+            @payment = order.payments.last
+          end
+
+          subject(:payment) { @payment }
+
+          its(:price) { should eq(sum) }
+          its(:status) { should eq('charged') }
+          its(:their_ref) { should eq(txn_id) }
+          its(:ref) { should match(/^#{Conf.rapida.ref_prefix}\d+$/) }
+        end
+
       end
 
     end
