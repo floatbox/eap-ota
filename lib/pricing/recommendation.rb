@@ -147,7 +147,7 @@ module Pricing
     def find_commission!(opts={})
       raise ArgumentError.new('needs context') unless opts[:context]
       find_commission_rule! opts
-      find_discount! opts
+      find_discount!(opts) if Conf.site.new_discounts
     end
 
     def find_commission_rule!(opts={})

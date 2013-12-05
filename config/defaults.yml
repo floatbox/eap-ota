@@ -6,6 +6,7 @@ site:
   forbidden_delivery: no
   enforce_timeout: no
   store_flights: no
+  new_discounts: yes
   host: 'localhost:3000'
   ssl: no
   fee_scheme: v2
