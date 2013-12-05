@@ -11,7 +11,7 @@ class Discount::Book
   end
 
   def register start_time, &definition
-    section = Discount::Section.new DateTime.parse(start_time), definition
+    section = Discount::Section.new Time.parse(start_time), definition
     @index << section
     @index.sort_by! {|s| s.start_time}.reverse!
     if @index.uniq.size != @index.size
@@ -24,7 +24,7 @@ class Discount::Book
     section.find_rule_for_rec rec, opts
   end
 
-  def current_section time = DateTime.now
+  def current_section time = Time.now
     s = @index.find {|section| section.start_time <= time}
     raise Discount::SectionNotFound unless s
     s
