@@ -59,6 +59,10 @@ class Partner < ActiveRecord::Base
     FileTest.exist?(Rails.root.join("public#{logo_url}").to_s)
   end
 
+  def anonymous?
+    token.blank?
+  end
+
   # для отображения в админке, чтобы копипастить в письма с просьбой о доступе
   def sample_api_url
     if password.present?

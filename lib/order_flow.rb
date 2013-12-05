@@ -19,12 +19,13 @@ class OrderFlow
     strategy = Strategy.select(rec: recommendation, search: search, context: context)
 
     StatCounters.inc %W[enter.preliminary_booking.total]
-    StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.total]
+    StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.total] unless context.partner.anonymous?
     StatCounters.inc %W[enter.preliminary_booking_by_airline.#{recommendation.validating_carrier_iata}.total]
 
-    destination = Destination.get_by_search search
-    StatCounters.d_inc destination, %W[enter.api.total] if destination
-    StatCounters.d_inc destination, %W[enter.api.#{context.partner_code}.total] if destination
+    if destination = Destination.get_by_search search
+      StatCounters.d_inc destination, %W[enter.api.total]
+      StatCounters.d_inc destination, %W[enter.api.#{context.partner_code}.total] unless context.partner.anonymous?
+    end
 
     return unless strategy.check_price_and_availability(forbid_class_changing)
     @order_form = OrderForm.new(
@@ -36,7 +37,7 @@ class OrderFlow
     )
     @order_form.save_to_cache
     StatCounters.inc %W[enter.preliminary_booking.success]
-    StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.success]
+    StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.success] unless context.partner.anonymous?
     StatCounters.inc %W[enter.preliminary_booking_by_airline.#{recommendation.validating_carrier_iata}.success]
     return true
   end
@@ -70,11 +71,11 @@ class OrderFlow
       return :invalid_data
     end
 
-    strategy = Strategy.select({
+    strategy = Strategy.select(
       rec: @order_form.recommendation,
       order_form: @order_form,
       context: context
-    })
+    )
     booking_status = strategy.create_booking
 
     if booking_status == :failed
