@@ -21,6 +21,10 @@ class OrderForm
   attr_accessor :people_count
   attr_accessor :query_key
   attr_accessor :partner
+  # FIXME убрать через пару дней 2013-12-05, избавляемся от косяков в order_form_caches
+  def partner=(partner)
+    @partner = partner if partner.present? && !partner['Partner']
+  end
   attr_accessor :marker
   attr_accessor :number
   attr_accessor :order # то, что сохраняется в базу

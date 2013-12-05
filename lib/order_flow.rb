@@ -32,7 +32,7 @@ class OrderFlow
       :recommendation => recommendation,
       :people_count => search.tariffied,
       :query_key => search.query_key,
-      :partner => context.partner.token,
+      :partner => context.partner.token.presence,
       :marker => marker
     )
     @order_form.save_to_cache
