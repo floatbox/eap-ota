@@ -48,7 +48,7 @@ class OrderFlow
       return :forbidden_sale
     end
     # Среагировать на изменение цены
-    @order_form.recommendation.find_commission!
+    @order_form.recommendation.find_commission! context: context
     return :failed_booking unless @order_form.recommendation.allowed_booking?
 
     if @order_form.counts_contradiction
