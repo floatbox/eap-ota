@@ -22,7 +22,7 @@ class OrderFlow
     StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.total] unless context.partner.anonymous?
     StatCounters.inc %W[enter.preliminary_booking_by_airline.#{recommendation.validating_carrier_iata}.total]
 
-    if destination = Destination.get_by_search search
+    if destination = Destination.get_by_search(search)
       StatCounters.d_inc destination, %W[enter.api.total]
       StatCounters.d_inc destination, %W[enter.api.#{context.partner_code}.total] unless context.partner.anonymous?
     end
