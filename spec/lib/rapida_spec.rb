@@ -122,6 +122,14 @@ describe Rapida do
           parsed.rapida_txn_id.should == txn_id
         end
 
+        specify 'sum not provided' do
+          check_args.delete(:sum)
+          parsed = check(check_args)
+
+          parsed.result.should == '8'
+          parsed.rapida_txn_id.should == txn_id
+        end
+
         specify 'more than one mandatory paramater not provided' do
           check_args.delete(:account)
           check_args.delete(:phone)
@@ -256,6 +264,44 @@ describe Rapida do
     end
 
     context 'failed' do
+
+      context 'with wrong parameters' do
+
+        specify 'txn_id not provided' do
+          pay_args.delete(:txn_id)
+          parsed = pay(pay_args)
+
+          parsed.result.should == '8'
+        end
+
+        specify 'sum not provided' do
+          pay_args.delete(:sum)
+          parsed = pay(pay_args)
+
+          parsed.result.should == '8'
+          parsed.rapida_txn_id.should == txn_id
+        end
+
+        specify 'txn_date not provided' do
+          pay_args.delete(:txn_date)
+          parsed = pay(pay_args)
+
+          parsed.result.should == '8'
+          parsed.rapida_txn_id.should == txn_id
+        end
+
+        specify 'more than one mandatory paramater not provided' do
+          pay_args.delete(:account)
+          pay_args.delete(:phone)
+          pay_args.delete(:sum)
+          parsed = pay(pay_args)
+
+          parsed.result.should == '4'
+          parsed.rapida_txn_id.should == txn_id
+        end
+
+      end
+
     end
 
   end
