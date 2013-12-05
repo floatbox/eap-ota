@@ -88,7 +88,7 @@ module Amadeus::Strategy::Booking
         pricing = amadeus.fare_price_pnr_with_booking_class(:validating_carrier => @rec.validating_carrier.iata).or_fail!
         @rec.last_tkt_date = pricing.last_tkt_date
         # FIXME отреагировать на изменение цены/продаваемости
-        new_rec = @rec.dup_with_new_prices(pricing.prices)
+        new_rec = @rec.dup_with_new_prices(pricing.prices, context)
         unless @order_form.price_with_payment_commission == new_rec.price_with_payment_commission
           logger.error "Amadeus::Strategy: Изменилась цена при тарифицировании: #{@order_form.price_with_payment_commission} -> #{new_rec.price_with_payment_commission}"
           # не попытается ли сохранить бронь после выхода из блока?

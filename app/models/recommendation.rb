@@ -104,13 +104,12 @@ class Recommendation
     variants.first.segments.first.dept_date
   end
 
-  def dup_with_new_prices(prices)
+  def dup_with_new_prices(prices, context)
     new_rec = dup
     new_rec.price_fare, new_rec.price_tax = prices
     new_rec.reset_commission!
     # FIXME отреагировать на изменение цены/продаваемости!
-    # FIXME как сюда контекст прокинуть?
-    new_rec.find_commission!
+    new_rec.find_commission! context: context
     new_rec
   end
 
