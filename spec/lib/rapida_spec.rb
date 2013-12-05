@@ -219,6 +219,14 @@ describe Rapida do
         response.prv_txn.should match(/^#{Conf.rapida.ref_prefix}\d+$/)
       end
 
+      specify 'phone not provided' do
+        pay_args.delete(:phone)
+        parsed = pay(pay_args)
+
+        parsed.result.should == '0'
+        parsed.rapida_txn_id.should == txn_id
+      end
+
       context 'payment persistance' do
 
         before do

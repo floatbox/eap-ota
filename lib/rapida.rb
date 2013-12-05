@@ -29,7 +29,7 @@ class Rapida
   end
 
   def pay
-    @mandatory_params = [:txn_id, :txn_date, :price, :phone]
+    @mandatory_params = [:txn_id, :txn_date, :price]
     charge_payment! if payable?
 
     builder = Builder.new result: error_code(error),
