@@ -64,6 +64,7 @@ class Rapida
     payment = RapidaCharge.where(order_id: @order, their_ref: @txn_id).first
     @ref = payment.generate_ref
     payment.update_attributes(charged_on: @txn_date, ref: @ref)
+    # FIXME? сохранять телефон кастомера
     @order.charge!
   rescue ActiveRecord::StatementInvalid => e
     rescue_db_error(e)
@@ -157,9 +158,9 @@ class Rapida
 
   def persons
     # сделать еще один запрос выглядит пока лучше, чем вычленять из full_info
-    persons = Ticket.uniq.select([:first_name, :last_name, 'tickets.route']).joins(:order).where('orders.code = ?', @account).join(&:name)
-  rescue ActiveRecord::StatementInvalid => e
-    rescue_db_error(e)
+    Ticket.uniq.select([:first_name, :last_name]).joins(:order).where(order_id: @order).collect(&:name).join(', ')
+  rescue ActiveRecord::StatementInvalid
+    ''
   end
 
   def info

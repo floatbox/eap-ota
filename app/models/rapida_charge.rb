@@ -24,5 +24,9 @@ class RapidaCharge < Payment
     payment_status == 'pending'
   end
 
+  def charged?
+    payment_status == 'charged'
+  end
+
 end
 
