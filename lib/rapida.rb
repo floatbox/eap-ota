@@ -16,6 +16,7 @@ class Rapida
   def check
     # создает платеж со статусом pending,
     # если в базе нет рапидовского платежа с their_ref = txn_id
+    @mandatory_params = [:txn_id, :price]
     create_pending_payment! if checkable?
 
     builder = Builder.new result: error_code(error),
@@ -28,13 +29,13 @@ class Rapida
   end
 
   def pay
+    @mandatory_params = [:txn_id, :txn_date, :price, :phone]
     charge_payment! if payable?
 
     builder = Builder.new result: error_code(error),
                           txn_id: @txn_id,
-                          account: @account,
                           info: info,
-                          pay_ref: @pay_ref,
+                          pay_ref: @ref,
                           persons: persons,
                           trip: route,
                           receipt: '' # TODO починить ссылку на маршрутку
@@ -61,7 +62,8 @@ class Rapida
 
   def charge_payment!
     payment = RapidaCharge.where(order_id: @order, their_ref: @txn_id).first
-    payment.update_attributes charged_on: @txn_date, ref: payment.generate_ref
+    @ref = payment.generate_ref
+    payment.update_attributes(charged_on: @txn_date, ref: @ref)
     @order.charge!
   rescue ActiveRecord::StatementInvalid => e
     rescue_db_error(e)
@@ -88,17 +90,22 @@ class Rapida
   end
 
   def payable?
-    valid_params? && pending? && adequate_price?
+    valid_params? && order? && payment? && pending? && adequate_price?
   end
 
   def payment?
-    RapidaCharge.where(their_ref: @txn_id).count > 0
+    RapidaCharge.where(order_id: @order, their_ref: @txn_id).count > 0
   end
 
   # TODO сделать стандартный генератор
   # методов типа "#{prefix_}#{status}?" для моделей
   def pending?
-    order? && @order.payment_status == 'pending'
+    if order? && @order.payment_status == 'pending'
+      true
+    else
+      @error = :paid_already if %W{blocked charged}.include? @order.payment_status
+      false
+    end
   end
 
   def order?
@@ -115,7 +122,7 @@ class Rapida
   end
 
   def sufficient_params?
-    [:txn_id, :price].each do |attr|
+    @mandatory_params.each do |attr|
       # есть небольшая проблема с несоответствием названия sum/price,
       # но не думаю что это очень важно и требует переименования
       unless instance_variable_get(:"@#{attr}")
@@ -235,7 +242,7 @@ class Rapida
         xml.response_ {
           xml.rapida_txn_id  @txn_id              # id рапиды
           xml.result_        @result              # 0 - ок, 1 - не ок
-          xml.prv_txn_       @pay_ref if @pay_ref # ref нашего платежа
+          xml.prv_txn_       @pay_ref             # ref нашего платежа
           xml.comment_       @comment if @comment # кандидат на убиение
           xml.trip_          @trip    if @trip    # инфо по перелетам
           xml.passangers_    @persons if @persons # пассажиры.to_s

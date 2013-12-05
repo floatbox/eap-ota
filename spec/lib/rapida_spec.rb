@@ -27,8 +27,8 @@ end
 
 def pay(args)
   rapida = Rapida.new(args)
-  check_response = rapida.pay
-  parse(check_response)
+  pay_response = rapida.pay
+  parse(pay_response)
 end
 
 
@@ -36,35 +36,34 @@ describe Rapida do
 
   let(:txn_id) { '1337' }
   let(:phone) { '9998887766' }
+  let(:order) { new_order }
+  let(:account) { order.code }
+  let(:sum) { order.price_with_payment_commission }
+  let(:check_args) do
+    {
+      txn_id: txn_id,
+      phone: phone,
+      sum: sum,
+      account: account
+    }
+  end
 
   ### CHECK
   describe '#check' do
-
-    let(:order) { new_order }
-    let(:account) { order.code }
-    let(:sum) { order.price_with_payment_commission }
-    let(:args) do
-      {
-        txn_id: txn_id,
-        phone: phone,
-        sum: sum,
-        account: account
-      }
-    end
 
     context 'successfull' do
 
       specify 'all parameters provided' do
         # TODO порефакторить спеку
-        parsed = check(args)
+        parsed = check(check_args)
         parsed.result.should == '0'
         parsed.account.should == account
         parsed.rapida_txn_id.should == txn_id
       end
 
       specify 'phone not provided' do
-        args.delete(:phone)
-        parsed = check(args)
+        check_args.delete(:phone)
+        parsed = check(check_args)
 
         parsed.result.should == '0'
         parsed.rapida_txn_id.should == txn_id
@@ -73,7 +72,7 @@ describe Rapida do
       context 'payment persistance' do
 
         before do
-          check(args)
+          check(check_args)
         end
 
         specify 'with exactly one payment' do
@@ -103,26 +102,26 @@ describe Rapida do
       context 'with wrong parameters' do
 
         specify 'txn_id not provided' do
-          args.delete(:txn_id)
-          parsed = check(args)
+          check_args.delete(:txn_id)
+          parsed = check(check_args)
 
           parsed.result.should == '8'
           parsed.account.should == account
         end
 
         specify 'account not provided' do
-          args.delete(:account)
-          parsed = check(args)
+          check_args.delete(:account)
+          parsed = check(check_args)
 
           parsed.result.should == '4'
           parsed.rapida_txn_id.should == txn_id
         end
 
         specify 'more than one mandatory paramater not provided' do
-          args.delete(:account)
-          args.delete(:phone)
-          args.delete(:sum)
-          parsed = check(args)
+          check_args.delete(:account)
+          check_args.delete(:phone)
+          check_args.delete(:sum)
+          parsed = check(check_args)
 
           parsed.result.should == '4'
           parsed.rapida_txn_id.should == txn_id
@@ -131,11 +130,11 @@ describe Rapida do
 
       specify 'on database error' do
         RapidaCharge.stub(:new).and_raise(ActiveRecord::StatementInvalid.new)
-        args.update(
+        check_args.update(
           account: order.code,
           sum: order.price_with_payment_commission
         )
-        parsed = check(args)
+        parsed = check(check_args)
         parsed.result.should == '1'
       end
 
@@ -143,7 +142,7 @@ describe Rapida do
         parsed = nil
 
         2.times do
-          parsed = check(args)
+          parsed = check(check_args)
         end
 
         parsed.result.should eq('0')
@@ -152,16 +151,16 @@ describe Rapida do
       context 'with wrong price - ' do
 
         specify 'price is greater than real' do
-          args[:sum] = sum + 1
-          parsed = check(args)
+          check_args[:sum] = sum + 1
+          parsed = check(check_args)
 
           parsed.result.should == '242'
           parsed.account.should == account
         end
 
         specify 'price is less than real' do
-          args[:sum] = sum - 100
-          parsed = check(args)
+          check_args[:sum] = sum - 100
+          parsed = check(check_args)
 
           parsed.result.should == '241'
           parsed.account.should == account
@@ -170,15 +169,15 @@ describe Rapida do
       end
 
       specify 'unknown code' do
-        args[:account] = 'lulz'
-        parsed = check(args)
+        check_args[:account] = 'lulz'
+        parsed = check(check_args)
 
         parsed.result.should == '5'
       end
 
       specify 'wrong code format' do
-        args[:account] = 'WRONG🚷'
-        parsed = check(args)
+        check_args[:account] = 'WRONG🚷'
+        parsed = check(check_args)
 
         parsed.result.should == '4'
       end
@@ -189,6 +188,38 @@ describe Rapida do
 
   ### PAY
   describe '#pay' do
+
+    let(:txn_date) { '20131104171819' }
+    let(:pay_args) do
+      {
+        txn_id: txn_id,
+        phone: phone,
+        sum: sum,
+        account: account,
+        txn_date: txn_date
+      }
+    end
+
+    before do
+      check(check_args)
+    end
+
+    context 'successful' do
+
+      subject { pay(pay_args) }
+
+      specify 'all parameters provided' do
+
+        subject.result.should == '0'
+        subject.rapida_txn_id.should == txn_id
+        subject.prv_txn.should match(/^#{Conf.rapida.ref_prefix}\d+$/)
+      end
+
+    end
+
+    context 'failed' do
+    end
+
   end
 
 end

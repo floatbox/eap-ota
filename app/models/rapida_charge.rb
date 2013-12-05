@@ -11,7 +11,17 @@ class RapidaCharge < Payment
 
   # TODO в Payment поднять пора такую штуку
   def generate_ref
-    self.ref = Conf.rapida.ref_prefix + self.id.to_s if persisted?
+    Conf.rapida.ref_prefix + id.to_s if persisted?
+  end
+
+  def charge!
+    # все проверки сейчас делаются в Rapida
+    update_attributes(status: 'charged')
+  end
+
+  # TODO поднять проверялки статусов в Payment
+  def pending?
+    payment_status == 'pending'
   end
 
 end
