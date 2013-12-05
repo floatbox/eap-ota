@@ -1,6 +1,8 @@
 # encoding: utf-8
 class Commission::Reader::Rule
 
+  include CallerAddress
+
   attr_accessor :opts
 
   def initialize(page = Commission::Page.new)
@@ -142,13 +144,6 @@ class Commission::Reader::Rule
   end
 
   private
-
-  def caller_address level=1
-    caller[level] =~ /^(.*?:\d+)/
-    # по каким-то причинам тут приходит US-ASCII
-    # конвертирую для yaml
-    ($1 || 'unknown').encode('UTF-8')
-  end
 
   def caller_file level=1
     caller[level].split(':')[0]

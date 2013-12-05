@@ -3,6 +3,8 @@
 # "считыватель" для Commission::Book, старый синтаксис
 class Commission::Reader
 
+  include CallerAddress
+
   attr_accessor :book
 
   # FIXME interline не клонируется с помощью .dup
@@ -61,15 +63,6 @@ class Commission::Reader
   def rule number=nil, &block
     reader = Commission::Reader::Rule.new(@page)
     reader.define(number: number, source: caller_address, &block)
-  end
-
-  private
-
-  def caller_address level=1
-    caller[level] =~ /^(.*?:\d+)/
-    # по каким-то причинам тут приходит US-ASCII
-    # конвертирую для yaml
-    ($1 || 'unknown').encode('UTF-8')
   end
 
 end

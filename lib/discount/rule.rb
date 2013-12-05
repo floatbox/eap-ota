@@ -6,6 +6,8 @@ class Discount::Rule
   extend Commission::Attrs
   include KeyValueInit
   include Commission::Fx
+  include CallerAddress
+  extend CallerAddress
 
   # формула для расчета нашей надбавки к стоимости
   # @return [Commission::Formula]
@@ -20,7 +22,7 @@ class Discount::Rule
   def initialize(*)
     @discount = Fx(0)
     @our_markup = Fx(0)
-    @source ||= self.class.caller_address
+    @source ||= caller_address
     @meta ||= 'direct'
     super
   end
@@ -60,13 +62,6 @@ class Discount::Rule
 
   def inspect
     "<Discount::Rule discount: #{discount.inspect} markup: #{our_markup.inspect} at #{source} (#{meta})"
-  end
-
-  def self.caller_address level=1
-    caller[level] =~ /([a-zA-Z0-9-]+\.rb:\d+)/
-    # по каким-то причинам тут приходит US-ASCII
-    # конвертирую для yaml
-    ($1 || 'unknown').encode('UTF-8')
   end
 
 end
