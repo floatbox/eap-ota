@@ -24,9 +24,12 @@ class BookingController < ApplicationController
     @recommendation.find_commission!
     @search = AviaSearch.from_code(params[:query_key])
 
-    order_flow = OrderFlow.new(search: @search,
-                               recommendation: @recommendation,
-                               context: context)
+    order_flow = OrderFlow.new(
+      search: @search,
+      recommendation: @recommendation,
+      context: context,
+      marker: marker
+    )
     if order_flow.preliminary_booking_result(Conf.amadeus.forbid_class_changing)
       @order_form = order_flow.order_form
       render :json => {
