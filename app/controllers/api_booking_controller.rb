@@ -3,7 +3,7 @@ class ApiBookingController < ApplicationController
   include ContextMethods
 
   skip_before_filter :verify_authenticity_token
-  before_filter :set_context_partner, :set_context_robot
+  before_filter :authenticate_partner, :set_context_robot
 
   def create
     @recommendation = Recommendation.deserialize(params[:recommendation])
@@ -61,8 +61,16 @@ class ApiBookingController < ApplicationController
     when :failed_payment
       render :json => {success: false, reason: 'payment_error'}
     end
-
   end
 
+  private
+
+  def authenticate_partner
+    authenticate_or_request_with_http_basic do |token, password|
+      if Partner.authenticate(token, password)
+        context_builder.partner = token
+      end
+    end
+  end
 end
 
