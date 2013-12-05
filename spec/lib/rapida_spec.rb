@@ -32,15 +32,9 @@ end
 
 
 describe Rapida do
-
   let(:txn_id) { '1337' }
   let(:phone) { '9998887766' }
-  let(:order) do
-    o = new_order
-    o.tickets << build(:ticket)
-    o
-  end
-
+  let(:order) { new_order }
   let(:account) { order.code }
   let(:sum) { order.price_with_payment_commission }
   let(:check_args) do
@@ -54,9 +48,7 @@ describe Rapida do
 
   ### CHECK
   describe '#check' do
-
     context 'successfull' do
-
       specify 'all parameters provided' do
         # TODO порефакторить спеку
         parsed = check(check_args)
@@ -75,7 +67,6 @@ describe Rapida do
       end
 
       context 'payment persistance' do
-
         before do
           check(check_args)
         end
@@ -85,7 +76,6 @@ describe Rapida do
         end
 
         context 'with valid values' do
-
           before do
             @payment = order.payments.last
           end
@@ -97,15 +87,11 @@ describe Rapida do
           its(:status) { should eq('pending') }
           its(:their_ref) { should eq(txn_id) }
         end
-
       end
-
     end
 
     context 'failed' do
-
       context 'with wrong parameters' do
-
         specify 'txn_id not provided' do
           check_args.delete(:txn_id)
           parsed = check(check_args)
@@ -162,7 +148,6 @@ describe Rapida do
       end
 
       context 'with wrong price - ' do
-
         specify 'price is greater than real' do
           check_args[:sum] = sum + 1
           parsed = check(check_args)
@@ -178,7 +163,6 @@ describe Rapida do
           parsed.result.should == '241'
           parsed.account.should == account
         end
-
       end
 
       specify 'unknown code' do
@@ -194,14 +178,11 @@ describe Rapida do
 
         parsed.result.should == '4'
       end
-
     end
-
   end
 
   ### PAY
   describe '#pay' do
-
     let(:txn_date) { '20131104171819' }
     let(:pay_args) do
       {
@@ -236,7 +217,6 @@ describe Rapida do
       end
 
       context 'payment persistance' do
-
         before do
           pay(pay_args)
         end
@@ -246,7 +226,6 @@ describe Rapida do
         end
 
         context 'with valid values' do
-
           before do
             @payment = order.payments.last
           end
@@ -258,15 +237,11 @@ describe Rapida do
           its(:their_ref) { should eq(txn_id) }
           its(:ref) { should match(/^#{Conf.rapida.ref_prefix}\d+$/) }
         end
-
       end
-
     end
 
     context 'failed' do
-
       context 'with wrong parameters' do
-
         specify 'txn_id not provided' do
           pay_args.delete(:txn_id)
           parsed = pay(pay_args)
@@ -299,12 +274,8 @@ describe Rapida do
           parsed.result.should == '4'
           parsed.rapida_txn_id.should == txn_id
         end
-
       end
-
     end
-
   end
-
 end
 
