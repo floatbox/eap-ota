@@ -275,6 +275,13 @@ describe Rapida do
           parsed.rapida_txn_id.should == txn_id
         end
       end
+
+      specify 'paid already' do
+        parsed = nil
+        2.times { parsed = pay(pay_args) }
+
+        parsed.result.should == '10'
+      end
     end
   end
 end
