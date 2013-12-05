@@ -100,7 +100,7 @@ module Pricing
       if fee_scheme == 'v2'
         price_blanks + price_consolidator + price_our_markup + price_acquiring_compensation + price_operational_fee + price_difference
       elsif fee_scheme == 'v3'
-        price_blanks + price_consolidator + price_discount + price_our_markup + price_acquiring_compensation + price_operational_fee + price_difference
+        price_blanks + price_consolidator + price_discount + price_our_markup + price_acquiring_compensation + price_difference
       else
         price_with_payment_commission - price_tax - price_fare - price_declared_discount
       end

@@ -175,6 +175,7 @@ Ticket:
       - price_our_markup
       - price_blanks
       - price_operational_fee
+      - fee
       - commission_agent
       - price_agent
       - commission_subagent
