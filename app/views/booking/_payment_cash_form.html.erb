@@ -2,11 +2,11 @@
 <div class="bfc-deadline"><%= raw t 'booking.cash.due_date', :date => I18n.l(@order_form.last_pay_time || Time.now.tomorrow, :format => '%H:%M %e %B') %></div>
 <div class="bfc-delivery"<% unless @order_form.enabled_delivery? && @order_form.enabled_cash? %> style="display: none;"<% end %>>
     <div class="bfc-delivery-item">
-        <input type="radio" class="bfcd-radio" value="delivery" id="bfcd-yes"<% if @order_form.enabled_delivery? %> checked="checked"<% end %>>
+        <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes"<% if @order_form.enabled_delivery? %> checked="checked"<% end %>>
         <label for="bfcd-yes"><%= raw t 'booking.cash.delivery.label', :sum => human_price(Conf.payment.price_delivery) %></label>
     </div>
     <div class="bfc-delivery-item">
-        <input type="radio" class="bfcd-radio" value="cash" id="bfcd-no"<% unless @order_form.enabled_delivery? %> checked="checked"<% end %>>
+        <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no"<% unless @order_form.enabled_delivery? %> checked="checked"<% end %>>
         <label for="bfcd-no"><%= raw t 'booking.cash.office.label' %></label>
     </div>
 </div>

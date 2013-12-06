@@ -221,11 +221,11 @@
         <div class="bfc-deadline">Бронирование необходимо оплатить до&nbsp;<strong><%= I18n.l(@order_form.last_pay_time, :format => '%H:%M %e %B') %></strong>, иначе оно будет автоматически аннулировано.</div>
         <div class="bfc-delivery"<% unless @order_form.enabled_delivery? && @order_form.enabled_cash? %> style="display: none;"<% end %>>
             <div class="bfc-delivery-item">
-                <input type="radio" class="bfcd-radio" value="delivery" id="bfcd-yes"<% if @order_form.enabled_delivery? %> checked="checked"<% end %>>
+                <input type="radio" name="ptype" class="bfcd-radio" value="delivery" id="bfcd-yes"<% if @order_form.enabled_delivery? %> checked="checked"<% end %>>
                 <label for="bfcd-yes">Хочу оплатить курьеру при&nbsp;доставке (+<%= Conf.payment.price_delivery %>&nbsp;рублей)</label>
             </div>
             <div class="bfc-delivery-item">
-                <input type="radio" class="bfcd-radio" value="cash" id="bfcd-no"<% unless @order_form.enabled_delivery? %> checked="checked"<% end %>>
+                <input type="radio" name="ptype" class="bfcd-radio" value="cash" id="bfcd-no"<% unless @order_form.enabled_delivery? %> checked="checked"<% end %>>
                 <label for="bfcd-no">Хочу самостоятельно приехать в&nbsp;офис и&nbsp;оплатить</label>
             </div>
         </div>
