@@ -84,7 +84,7 @@ module Amadeus
           ]/r:serviceRequest/r:ssr[r:type='DOCS']/r:freeText"
         ).each do |ssr_text|
           passport, sex = ssr_text.to_s.split('/').values_at(2, 5)
-          return passport if need_infant == (sex == 'FI' || sex == 'MI')
+          return passport if (need_infant == (sex == 'FI' || sex == 'MI')) && passport.present?
         end
         return
       end
