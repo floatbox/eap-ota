@@ -351,6 +351,13 @@ class Order < ActiveRecord::Base
         :designator,
         :tour_code
 
+      if recommendation.discount_rule
+        copy_attrs recommendation.discount_rule, self, {:prefix => :commission},
+          :discount,
+          :our_markup
+      end
+
+      # Эти, кажется, пересчитываются по формулам выше? зачем копируем?
       copy_attrs recommendation, self,
         :price_agent,
         :price_subagent,
