@@ -6,6 +6,6 @@ Discount.register "2013-12-09" do
   when 'downtown'
     Discount::Rule.netto(commission, '3.5%')
   else
-    Discount::Rule.scale(commission, 0.5)
+    Discount::Rule.scaled(commission, 0.5)
   end
 end
