@@ -6,7 +6,7 @@
       %variant
         -# округляем цену. может быть, временно
         %price= recommendation.price_for_partner(@partner)
-        %url= yandex_newurl(@search, recommendation, variant)
+        %url= yandex_newurl(@search, recommendation, variant, @partner)
         %recommendation= recommendation.serialize(variant)
         %validatingCarrier= recommendation.validating_carrier.iata
         - variant.segments.each do |segment|
