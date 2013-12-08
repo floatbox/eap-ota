@@ -10,7 +10,6 @@ class AviaSearch
   attribute :children, Integer, :default => CHILDREN
   attribute :infants, Integer, :default => INFANTS
   attribute :cabin, String, :default => CABIN
-  attribute :partner, String
   attribute :segments, Array[AviaSearchSegment]
   delegate :to, :from, :from_iata, :to_iata, :date, :to => 'segments.first'
 
@@ -54,7 +53,7 @@ class AviaSearch
     from1 from2 from3 from4 from5 from6
     to1 to2 to3 to4 to5 to6
     date1 date2 date3 date4 date5 date6
-    adults children infants cabin partner
+    adults children infants cabin
   ]
 
   def self.simple(args)
@@ -93,11 +92,9 @@ class AviaSearch
     children = args["children"].to_i
     infants = args["infants"].to_i
     cabin = args["cabin"]
-    partner = args["partner"]
 
     new :segments => segments,
-      :adults => adults, :children => children, :infants => infants, :cabin => cabin,
-      :partner => partner
+      :adults => adults, :children => children, :infants => infants, :cabin => cabin
   end
   # /конструкторы
 
