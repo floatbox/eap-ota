@@ -97,7 +97,7 @@ module Search
       def decode_date(coded_date)
         d = Date.parse(coded_date)
         d = d < Date.today ? d.next_year : d
-        d.strftime('%d%m%y')
+        d
       end
     end
   end
