@@ -70,10 +70,10 @@ class AviaSearch
     end
     args.delete_if {|k, v| v.blank? }
 
-    wrong_parameters = args.keys - SIMPLE_PARAMS
-    unless wrong_parameters.empty?
-      raise ArgumentError, "Unknown parameter(s) - \"#{wrong_parameters.join(', ')}\""
-    end
+    # wrong_parameters = args.keys - SIMPLE_PARAMS
+    # unless wrong_parameters.empty?
+    #   raise ArgumentError, "Unknown parameter(s) - \"#{wrong_parameters.join(', ')}\""
+    # end
     lack_of_parameters = %W[from1 to1 date1] - args.keys
     unless lack_of_parameters.empty?
       raise ArgumentError, "Lack of required parameter(s)  - \"#{lack_of_parameters.join(', ')}\""
