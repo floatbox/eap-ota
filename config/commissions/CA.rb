@@ -5,7 +5,6 @@ important!
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7.5%"
-discount "13%"
 agent_comment "9% Все международные перелеты рейсами СА из России"
 subagent_comment "7.5% Все международные перелеты рейсами СА из России"
 routes "RU..."
@@ -17,7 +16,6 @@ rule 2 do
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2.5%"
-discount "8%"
 agent_comment "3%  от опубл. тарифов на все остальные рейсы СА при обязательном наличии собств.сегмента СА;"
 subagent_comment "2.5% от опубл. тарифов на все остальные рейсы СА при обязательном наличии собств.сегмента СА;"
 interline :no, :yes
@@ -31,7 +29,6 @@ rule 3 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
-discount "5.5%"
 consolidator "2%"
 agent_comment "  0% интерлайн без участия авиакомпании  CA ."
 subagent_comment "  0% интерлайн без участия авиакомпании  CA ."
