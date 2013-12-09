@@ -122,8 +122,9 @@ module Amadeus
 
       def self.delete_all(args={})
         args.assert_valid_keys :office
-        redis.keys("#{KEY_BASE}*").each do |key|
-          redis.pipelined do
+        keys = redis.keys("#{KEY_BASE}*")
+        redis.pipelined do
+          keys.each do |key|
             redis.del(key)
           end
         end
