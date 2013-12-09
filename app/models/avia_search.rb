@@ -84,7 +84,7 @@ class AviaSearch
       # map и break не дружат
       break unless args["date#{i}"]
       segments << AviaSearchSegment.new(
-        from: args["from#{i}"], to: args["to#{i}"], date: convert_api_date(args["date#{i}"])
+        from: args["from#{i}"], to: args["to#{i}"], date: args["date#{i}"]
       )
     end
 
@@ -103,15 +103,6 @@ class AviaSearch
     encoder.url
   end
   alias_method :query_key, :encode_url
-
-  # перенести в хелпер
-  def self.convert_api_date(date_str)
-    if date_str =~ /^20(\d\d)-(\d\d?)-(\d\d?)$/
-      "%02d%02d%02d" % [$3, $2, $1].map(&:to_i)
-    else
-      date_str
-    end
-  end
 
   def date1
     segments.first.date
