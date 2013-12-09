@@ -192,7 +192,7 @@ performance:
   clear_code_stash: yes
 redis:
   host: 'localhost'
-  port: 6379
+  port: 9001
 sms:
   host: 'gate10.mfms.ru'
   port: 9006
