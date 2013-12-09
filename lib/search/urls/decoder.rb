@@ -11,8 +11,6 @@ module Search
     class Decoder
       attr_reader :decoded
 
-      include Search::Defaults
-
       def initialize(url)
         @decoded = nil
         @valid = parse(url)
@@ -27,12 +25,8 @@ module Search
       def parse(url)
 
         segments = []
-        adults = ADULTS
-        children = CHILDREN
-        infants = INFANTS
-        cabin = CABIN
-
         location_stack = []
+        args = {}
 
         # пока забью на сирену, кириллица тоже разделитель.
         url.split(/[^A-Za-z0-9]+/).each do |token|
@@ -56,16 +50,16 @@ module Search
 
           # классы
           when /^business$/i
-            cabin = 'C'
+            args[:cabin] = 'C'
           when /^first$/i
-            cabin = 'F'
+            args[:cabin] = 'F'
 
           when /^(\d*)(adt|adults?)$/i
-            adults   = ($1.presence || 1).to_i
+            args[:adults] = $1.presence || 1
           when /^(\d*)(chd|child|children)$/i
-            children = ($1.presence || 1).to_i
+            args[:children] = $1.presence || 1
           when /^(\d*)(inf|infants?)$/i
-            infants  = ($1.presence || 1).to_i
+            args[:infants] = $1.presence || 1
 
           # все остальное считаем пунктами назначения
           else
@@ -78,13 +72,7 @@ module Search
           raise ParserError, "unknown token or missing date for IATA #{location_stack.inspect}"
         end
 
-        @decoded = AviaSearch.new(
-          adults: adults,
-          children: children,
-          infants: infants,
-          cabin: cabin,
-          segments: segments
-        )
+        @decoded = AviaSearch.new( args.merge( segments: segments ) )
         true
       # штатные случаи рейзятся с ParserError, нештатные - без,
       # в любом случае перехватываем, чтобы не свалиться и переправить юзера на главную

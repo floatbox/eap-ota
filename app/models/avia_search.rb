@@ -2,14 +2,13 @@
 
 class AviaSearch
   include Virtus.model
-  include Search::Defaults
   include Search::Humanize::Presenter
   include ActiveModel::Validations
 
-  attribute :adults, Integer, :default => ADULTS
-  attribute :children, Integer, :default => CHILDREN
-  attribute :infants, Integer, :default => INFANTS
-  attribute :cabin, String, :default => CABIN
+  attribute :adults, Integer, default: 1
+  attribute :children, Integer, default: 0
+  attribute :infants, Integer, default: 0
+  attribute :cabin, String, default: 'Y'
   attribute :segments, Array[AviaSearchSegment]
   delegate :to, :from, :from_iata, :to_iata, :date, :to => 'segments.first'
 
