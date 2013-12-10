@@ -139,8 +139,8 @@ class AviaSearchSerializer
     }
     # piglet piter
     if result.length == 1
-      dpt = from
-      arv = to
+      dpt = search.from
+      arv = search.to
       if dpt && arv
         dpt_alpha2 = dpt.class == Country ? dpt.alpha2 : dpt.country.alpha2
         arv_alpha2 = arv.class == Country ? arv.alpha2 : arv.country.alpha2
