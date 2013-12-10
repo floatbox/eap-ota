@@ -20,7 +20,7 @@ class AviaSearchSerializer
       {
         query_key: search.to_param,
         segments: segments,
-        map_segments: search.map_segments,
+        map_segments: map_segments,
         short: human_short,
         options: {
           adults: search.adults,
@@ -33,7 +33,10 @@ class AviaSearchSerializer
         valid: true
       }
     else
-      { errors: search.segments.flat_map(&:errors) }
+      {
+        map_segments: map_segments,
+        errors: search.segments.flat_map(&:errors)
+      }
     end
   end
 
@@ -125,6 +128,38 @@ class AviaSearchSerializer
       end
     end
     result
+  end
+
+  def map_segments
+    result = search.segments.map{|s|
+      {
+        :dpt => map_point(s.from),
+        :arv => map_point(s.to)
+      }
+    }
+    # piglet piter
+    if result.length == 1
+      dpt = from
+      arv = to
+      if dpt && arv
+        dpt_alpha2 = dpt.class == Country ? dpt.alpha2 : dpt.country.alpha2
+        arv_alpha2 = arv.class == Country ? arv.alpha2 : arv.country.alpha2
+        if dpt_alpha2 == 'RU' && (arv_alpha2 == 'US' || arv_alpha2 == 'IL' || arv_alpha2 == 'GB')
+          result.first[:leave] = true
+        end
+      end
+    end
+    result
+  end
+
+  def map_point obj
+    obj && {
+      :name => obj.name,
+      :from => obj.case_from,
+      :iata => obj.iata,
+      :lat => obj.lat,
+      :lng => obj.lng
+    }
   end
 
 end

@@ -91,37 +91,6 @@ class AviaSearch
     segments.length > 1 && !rt
   end
 
-  def map_segments
-    result = segments.map{|s|
-      {
-        :dpt => map_point(s.from),
-        :arv => map_point(s.to)
-      }
-    }
-    if result.length == 1
-      dpt = from
-      arv = to
-      if dpt && arv
-        dpt_alpha2 = dpt.class == Country ? dpt.alpha2 : dpt.country.alpha2
-        arv_alpha2 = arv.class == Country ? arv.alpha2 : arv.country.alpha2
-        if dpt_alpha2 == 'RU' && (arv_alpha2 == 'US' || arv_alpha2 == 'IL' || arv_alpha2 == 'GB')
-          result.first[:leave] = true
-        end
-      end
-    end
-    result
-  end
-
-  def map_point obj
-    obj && {
-      :name => obj.name,
-      :from => obj.case_from,
-      :iata => obj.iata,
-      :lat => obj.lat,
-      :lng => obj.lng
-    }
-  end
-
   def nearby_cities
     #FIXME
     segments[0].nearby_cities
