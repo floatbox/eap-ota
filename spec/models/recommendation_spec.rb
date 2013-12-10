@@ -110,7 +110,7 @@ describe Recommendation do
           :ticketing_method => 'direct'
         )
       end
-      its('income.round') {should == 15}
+      its('income.round') {should == 55}
     end
 
     context "with all the prices and aviacenter commission" do
@@ -125,7 +125,7 @@ describe Recommendation do
           :ticketing_method => 'aviacenter'
         )
       end
-      its('income.round') {should == -77}
+      its('income.round') {should == -37}
     end
 
   end
