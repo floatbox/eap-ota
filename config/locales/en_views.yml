@@ -46,6 +46,13 @@ en:
       few: "Flights booking %{title}"
     segment: "%{cities} on %{date}"
     return: "back on %{date}"
+  header:
+    tickets:
+      title: "Plane tickets"
+      cheaper: "Cheaper than from the airline."
+      why: "Why?"
+      partnership: "The terms of our partnerships with most airlines allow us to give you a dicount from the airline's official fare."
+      this_is_why: "This is why it's often cheaper to buy from us than from the airline."
   search:
     locations:
       from: "From"

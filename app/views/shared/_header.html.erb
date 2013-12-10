@@ -90,20 +90,20 @@ I18n.locale = '<%= I18n.locale %>';
         <% if controller.controller_name == 'home' || controller.controller_name == 'booking' %>
         <div class="ph-tab pht-selected" id="pht-tickets">
             <div class="pht-content">
-                <span class="pht-title">Авиабилеты</span>
-                <span class="pht-tip">Дешевле, чем у&nbsp;авиакомпаний <span class="phtt-link">Почему?</span></span>
+                <span class="pht-title"><%= t 'header.tickets.title' %></span>
+                <span class="pht-tip"><%= t 'header.tickets.cheaper' %> <span class="phtt-link"><%= t 'header.tickets.why' %></span></span>
             </div>
         <% else %>
         <div class="ph-tab" id="pht-tickets">
             <a class="pht-content" href="<%= smart_root_path %>">
-                <span class="pht-title">Авиабилеты</span>
-                <span class="pht-tip">Дешевле, чем у&nbsp;авиакомпаний <span class="phtt-link">Почему?</span></span>
+                <span class="pht-title"><%= t 'header.tickets.title' %></span>
+                <span class="pht-tip"><%= t 'header.tickets.cheaper' %> <span class="phtt-link"><%= t 'header.tickets.why' %></span></span>
             </a>
         <% end %>
             <div class="pht-popup">
                 <div class="phtp-close">&times;</div>
-                <p class="phtp-text">Условия нашего сотрудничества со&nbsp;многими авиакомпаниями позволяют нам предоставлять скидки от&nbsp;их&nbsp;официальных тарифов.</p>
-                <p class="phtp-text">Вот почему зачастую у&nbsp;нас дешевле.</p>
+                <p class="phtp-text"><%= t 'header.tickets.partnership' %></p>
+                <p class="phtp-text"><%= t 'header.tickets.this_is_why' %></p>
             </div>    
         </div>
         <div class="ph-tab">

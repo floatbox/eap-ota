@@ -131,7 +131,7 @@ a.pht-content:hover .pht-title {
 }
 .phtp-close {
     float: right;
-    margin: 4px -8px 0 0;
+    margin: 4px -8px 5px 5px;
     padding: 0 2px;
     font-size: 20px;
     line-height: 20px;
