@@ -91,7 +91,7 @@ $(function() {
     _kmq.push(kmqdata);
     _gaq.push(['_trackPageview']);
     search.dates = {csnow: new Date('<%= Time.now.to_formatted_s(:rfc822) %>')};
-    results.data = $.parseJSON('<%= raw @search.details.to_json %>');
+    results.data = $.parseJSON('<%= raw AviaSearchSerializer.new(@search).to_json %>');
     results.updateTitles();
     results.header.init();
     results.header.summary.addClass('rh-ready').html('<span class="rhs-text">' + results.data.titles.header + '</span>');
