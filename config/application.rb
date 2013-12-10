@@ -26,6 +26,7 @@ module Eviterra
     config.paths.add "app/jobs",                 eager_load: true
     config.paths.add "app/validators",           eager_load: true
     config.paths.add "app/serializers",          eager_load: true
+    config.paths.add "app/flows",                eager_load: true
 
     # Activate observers that should always be running.
     # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
