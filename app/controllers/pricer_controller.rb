@@ -21,7 +21,7 @@ class PricerController < ApplicationController
     if (@destination && @recommendations.present? && !admin_user)
       @destination.move_average_price @search, @recommendations.cheapest, @code
     end
-    @locations = @search.human_locations
+    @locations = AviaSearchSerializer.new(@search).human_locations
     @average_price = @destination.average_price * @search.people_count[:adults] if @destination && @destination.average_price
     StatCounters.d_inc @destination, %W[search.total search.pricer.total] if @destination
     render :partial => 'recommendations'
@@ -39,7 +39,7 @@ class PricerController < ApplicationController
     @search = AviaSearch.from_code('Y100MOWAMS17SEP')
 
     @recommendations = Marshal.load(file.read)
-    @locations = @search.human_locations
+    @locations = AviaSearchSerializer.new(@search).human_locations
 
     render :partial => 'recommendations'
   end
@@ -65,31 +65,14 @@ class PricerController < ApplicationController
     StatCounters.inc %W[search.calendar.total]
   end
 
-  #FIXME сделать презентер
-  include TranslationHelper
   def validate
-    result = {}
-    if @query_key = params[:query_key]
-      @search = AviaSearch.from_code(@query_key)
-      unless @search && @search.valid?
-        result[:errors] = ['parsing error']
+    @search =
+      if params[:query_key]
+        AviaSearch.from_code(params[:query_key])
+      else
+        AviaSearch.from_js(params[:search])
       end
-    else
-      @search = AviaSearch.from_js(params[:search])
-      unless @search.valid?
-        result[:errors] = @search.segments.flat_map(&:errors)
-      end
-    end
-    if @search.present?
-      result[:map_segments] = @search.map_segments
-    end
-    if @search && @search.valid?
-      result.merge!(@search.details)
-      result[:query_key] = @search.to_param
-      result[:short] = @search.human_short
-      result[:valid] = true
-    end
-    render :json => result
+    render :json => AviaSearchSerializer.new(@search)
   ensure
     StatCounters.inc %W[validate.total]
   end

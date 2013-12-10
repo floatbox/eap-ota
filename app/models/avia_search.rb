@@ -2,7 +2,6 @@
 
 class AviaSearch
   include Virtus.model
-  include Search::Humanize::Presenter
   include ActiveModel::Validations
 
   attribute :adults, Integer, default: 1

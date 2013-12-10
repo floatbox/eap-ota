@@ -117,11 +117,15 @@ class HotOffer
   def search= val
     @search = val
     self.for_stats_only = @search.people_count.values.sum > 1
-    self.description = @search.human_lite
+    self.description = search_description(@search)
     self.url = Conf.site.ssl ? 'https://' : 'http://' + Conf.site.host + '/#' + @search.to_param
   end
 
   private
+
+  def search_description(search)
+    search.segments[0].from.name + (search.rt ? ' ⇄ ' : ' → ') + search.segments[0].to.name
+  end
 
   def set_some_vars
 
