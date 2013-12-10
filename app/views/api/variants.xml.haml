@@ -2,7 +2,6 @@
 <?xml version='1.0' encoding='utf-8' ?>
 %variants
   - @recommendations.each do |recommendation|
-    - p recommendation.inspect
     - recommendation.variants.each do |variant|
       %variant
         -# округляем цену. может быть, временно
