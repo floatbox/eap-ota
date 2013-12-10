@@ -4,6 +4,7 @@
     PaytureAlfa: <%= debug_service_env(:payture_alfa) %><br>
     PayturePSB: <%= debug_service_env(:payture_psb) %><br>
     Payu: <%= debug_service_env(:payu) %><br>
-    card processing: <%= Conf.payment.card_processing %>
+    card processing: <%= Conf.payment.card_processing %><br>
+    partner: <%= context.partner_code %>
 </div>
 <% end %>

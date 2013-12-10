@@ -1,7 +1,10 @@
 # encoding: utf-8
 class HomeController < ApplicationController
+  include ContextMethods
 
   before_filter :save_partner_cookies, :only => :index
+  before_filter :set_context_partner, :set_context_deck_user
+  helper_method :context
 
   def index
   end
