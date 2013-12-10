@@ -84,15 +84,15 @@ module TranslationHelper
 
   # Amount of adults, children and infants
   def human_people(adults, children, infants)
-    a = t('results.header.adults')[adults - 2] if adults > 1
-    c = t('results.header.children')[children - 1] if children > 0
-    i = t('results.header.infants')[infants - 1] if infants > 0
+    a = I18n.t('results.header.adults')[adults - 2] if adults > 1
+    c = I18n.t('results.header.children')[children - 1] if children > 0
+    i = I18n.t('results.header.infants')[infants - 1] if infants > 0
     case I18n.locale
     when :ru
-      return [a, c, i].compact.to_sentence(:words_connector => ' ', :two_words_connector => c && i ? t('nbsp_and') : ' ')
+      return [a, c, i].compact.to_sentence(:words_connector => ' ', :two_words_connector => c && i ? I18n.t('nbsp_and') : ' ')
     else
       return [a, c, i].compact.join(', ')
-    end  
+    end
   end
 
 end

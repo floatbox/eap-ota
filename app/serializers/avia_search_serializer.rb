@@ -26,7 +26,7 @@ class AviaSearchSerializer
           adults: search.adults,
           children: search.children,
           infants: search.infants,
-          total: search.adults + search.children + search.infants,
+          total: search.people_total,
           cabin: search.cabin,
           human: human
         },
@@ -42,37 +42,10 @@ class AviaSearchSerializer
 
   # TranslationHelper#human_people maybe?
   def human
-    person_parts = []
-
-    person_parts << %W[
-      вдвоем втроем вчетвером впятером вшестером всемером ввосьмером
-    ][search.adults-2]  if search.adults > 1
-
-    person_parts << [
-      'с&nbsp;ребенком',
-      'с&nbsp;двумя детьми',
-      'с&nbsp;тремя детьми',
-      'с&nbsp;четырьмя детьми',
-      'с&nbsp;пятью детьми',
-      'с&nbsp;шестью детьми',
-      'с&nbsp;семью детьми'
-    ][search.children-1] if search.children > 0
-
-    person_parts << 'и' if search.infants > 0 && search.children > 0
-
-    person_parts << [
-      'с&nbsp;младенцем',
-      'с&nbsp;двумя младенцами',
-      'с&nbsp;тремя младенцами',
-      'с&nbsp;четырьмя младенцами',
-      'с&nbsp;пятью младенцами',
-      'с&nbsp;шестью младенцами',
-      '7 младенцев'
-    ][search.infants-1] if search.infants > 0
 
     human_parts = []
 
-    human_parts << person_parts.join(' ') unless person_parts.empty?
+    human_parts << human_people(search.adults, search.children, search.infants)
 
     case search.cabin
     when 'C'
@@ -81,7 +54,7 @@ class AviaSearchSerializer
       human_parts << 'первым классом'
     end
 
-    human_parts.join(', ')
+    human_parts.compact.join(', ')
   end
 
   def segments
@@ -104,7 +77,8 @@ class AviaSearchSerializer
 
   def human_short
     if search.rt
-      "#{search.segments[0].from.name} &harr; #{search.segments[0].to.name}, #{search.segments[0].short_date} — #{search.segments[1].short_date}"
+      segment, return_segment = search.segments
+      "#{segment.from.name} &harr; #{segment.to.name}, #{segment.short_date} — #{return_segment.short_date}"
     else
       parts = []
       complex = search.segments.length > 1
