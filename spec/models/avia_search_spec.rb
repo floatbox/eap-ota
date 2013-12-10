@@ -162,7 +162,7 @@ describe AviaSearch do
   end
 
   describe "#simple" do
-    it "should raise ArgumentError for parameters that do not exist" do
+    pending "should raise ArgumentError for parameters that do not exist" do
       args = {
               :from => 'MOW',
               :to => 'LON',
