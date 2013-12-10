@@ -322,10 +322,10 @@ module PricerHelper
       concat %( тариф #{recommendation.price_fare.to_i})
       concat ", #{recommendation.blank_count} бл." if recommendation.blank_count && recommendation.blank_count > 1
       concat %( (FM #{recommendation.commission.agent}) #{recommendation.commission.subagent})
-      unless recommendation.commission.our_markup.zero?
+      unless recommendation.commission_our_markup.zero?
         concat %( + #{recommendation.commission_our_markup})
       end
-      unless recommendation.commission.discount.zero?
+      unless recommendation.commission_discount.zero?
         concat %( - #{recommendation.commission_discount})
       end
       concat ' '
