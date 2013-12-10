@@ -13,6 +13,19 @@ module ExcursionsHelper
     tripster_uri uri_params
   end
 
+  def pnr_excursion_link flights, passengers
+    return unless flights
+    journey = destination flights
+    return unless journey
+    if MongoStorage.read('cities',:namespace=>'tripster') && MongoStorage.read('cities',:namespace=>'tripster').include?(journey[:city].iata)
+      uri_params = pnr_tripster_uri_params(journey)
+      return tripster_uri uri_params
+    else
+      uri_params = pnr_weatlas_uri_params(journey)
+      return weatlas_uri uri_params
+    end
+  end
+
   def weatlas_uri uri_params
     "http://weatlas.com/get.php?aid=10002&#{uri_params.to_query}"
   end
@@ -26,6 +39,12 @@ module ExcursionsHelper
     return unless order_form.recommendation
     {
       'code' =>order_form.recommendation.journey.segments.first.arrival.city.iata
+    }
+  end
+
+  def pnr_weatlas_uri_params journey
+    {
+      'code' =>journey[:city].iata
     }
   end
 
@@ -45,6 +64,14 @@ module ExcursionsHelper
       'city' => order_form.recommendation.journey.segments.first.arrival.city.iata,
       'departure' => tripster_date(departure_date),
       'return' => tripster_date(return_date)
+    }
+  end
+
+  def pnr_tripster_uri_params journey
+    {
+      'city' => journey[:city].iata,
+      'departure' => tripster_date(journey[:arrv_date]),
+      'return' => tripster_date(journey[:dept_date])
     }
   end
 

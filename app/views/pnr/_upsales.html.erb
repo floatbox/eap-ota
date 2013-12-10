@@ -4,18 +4,22 @@
 <div id="upsales">
 <table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
 <tr>
+  <% insurance_url = pnr_insurance_link(@flights, @passengers) %>
+  <% if insurance_url %>
     <td style="width: 33%; background: #edede2; padding: 12px 20px 14px;">
         <div style="font-weight: bold; font-size: 16px; line-height: 20px; margin-bottom: 5px;">
-            <a href="https://insurance.eviterra.com" target="_blank" style="color: #F90A6F;">Туристическая страховка</a>
+            <a href="<%= insurance_url %>" target="_blank" style="color: #F90A6F;">Туристическая страховка</a>
         </div>
         <div>
         — С <%= human_date( @flights.first.departure_date ) %> по <%= human_date( @flights.last.arrival_date ) %><br>
         — электронный полис
-        </div>    
+        </div>
     </td>
     <td width="20" style="width: 1%;"><div style="width: 20px;"><br></div></td>
-    <% ostrovok_url = pnr_ostrovok_link(@flights, @passengers) %>
-    <% if ostrovok_url %>
+  <% end %>
+
+  <% ostrovok_url = pnr_ostrovok_link(@flights, @passengers) %>
+  <% if ostrovok_url %>
     <td style="width: 33%; background: #edede2; padding: 12px 20px 14px;">
         <div style="font-weight: bold; font-size: 16px; line-height: 20px; margin-bottom: 5px;">
             <a href="<%= ostrovok_url %>" target="_blank" style="color: #F90A6F;">Отели <%= pnr_ostrovok_city(@flights) %></a>
@@ -27,16 +31,18 @@
         <% multiple_upsale = true %>
     </td>
     <td width="20" style="width: 1%;"><div style="width: 20px;"><br></div></td>
-    <% end %>
+  <% end %>
+
+  <% excursion_url = pnr_excursion_link(@flights, @passengers) %>
     <td style="width: 33%; background: #edede2; padding: 12px 20px 14px;">
         <div style="font-weight: bold; font-size: 16px; line-height: 20px; margin-bottom: 5px;">
-            <a href="/" target="_blank" style="color: #F90A6F;">Экскурсии</a>
+            <a href="<%= excursion_url %>" target="_blank" style="color: #F90A6F;">Экскурсии</a>
         </div>
         <div>
         — индивидуальные экскурсии<br>
-        — нестандартные впечатления  
-        </div>    
-    </td>    
+        — нестандартные впечатления
+        </div>
+    </td>
 </tr>
 </table>
 </div>
