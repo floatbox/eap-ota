@@ -17,10 +17,10 @@ module YandexHelper
   end
 
   def yandex_url(search)
-    "#{Conf.api.url_base}/##{@search.encode_url}"
+    "#{Conf.api.url_base}/##{@search.to_param}"
   end
 
   def yandex_newurl(search, recommendation, variant, partner)
-    "#{Conf.api.url_base}/api/booking/#{@search.encode_url}#recommendation=#{recommendation.serialize(variant)}&type=api&partner=#{partner.token}"
+    "#{Conf.api.url_base}/api/booking/#{@search.to_param}#recommendation=#{recommendation.serialize(variant)}&type=api&partner=#{partner.token}"
   end
 end

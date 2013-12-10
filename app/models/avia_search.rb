@@ -25,8 +25,9 @@ class AviaSearch
   end
 
   # конструкторы
+  # TODO from_param? from_string?
   def self.from_code(code)
-    Search::Urls::Decoder.new(code).decoded
+    AviaSearch::StringDecoder.new.decode(code)
   end
 
   # нужен для PricerController#validate
@@ -41,11 +42,11 @@ class AviaSearch
   end
   # /конструкторы
 
-  def encode_url
-    encoder = Search::Urls::Encoder.new(self)
-    encoder.url
+  def to_s
+    AviaSearch::StringEncoder.new.encode(self)
   end
-  alias_method :query_key, :encode_url
+  alias_method :to_param, :to_s
+  alias_method :query_key, :to_s
 
   def date1
     segments.first.date

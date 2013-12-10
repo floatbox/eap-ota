@@ -73,7 +73,7 @@ class BookingController < ApplicationController
     @search = AviaSearch.simple(params.slice(*AviaSearch::SimpleDecoder::PARAMS))
     if @search.valid?
       StatCounters.inc %W[enter.api_redirect.success]
-      redirect_to "#{Conf.api.url_base}/##{@search.encode_url}"
+      redirect_to "#{Conf.api.url_base}/##{@search.to_param}"
     else
       redirect_to "#{Conf.api.url_base}/"
     end

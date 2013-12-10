@@ -85,7 +85,7 @@ class PricerController < ApplicationController
     end
     if @search && @search.valid?
       result.merge!(@search.details)
-      result[:query_key] = Search::Urls::Encoder.new(@search).url
+      result[:query_key] = @search.to_param
       result[:short] = @search.human_short
       result[:valid] = true
     end
@@ -112,7 +112,7 @@ class PricerController < ApplicationController
       # измеряем рекомендации до фильтрации
       meter :api_total_unfiltered_recommendations, @recommendations.size
 
-      @code = @search.encode_url
+      @code = @search.to_param
       if (@destination && @recommendations.present?)
         @destination.move_average_price @search, @recommendations.cheapest, @code
       end
