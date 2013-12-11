@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131210150219) do
+ActiveRecord::Schema.define(:version => 20131211142149) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -374,6 +374,7 @@ ActiveRecord::Schema.define(:version => 20131210150219) do
     t.string   "lang"
   end
 
+  add_index "notifications", ["created_at"], :name => "index_notifications_on_created_at"
   add_index "notifications", ["method", "status"], :name => "index_notifications_on_method_and_status"
   add_index "notifications", ["order_id"], :name => "index_notifications_on_order_id"
 
