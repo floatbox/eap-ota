@@ -36,6 +36,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
     #add_predefined_filter 'Today', {:created_at => Date.today.to_s(:db)}
     #add_predefined_filter 'Yesterday', {:created_at => Date.yesterday.to_s(:db)}
     params[:search] = params[:search].gsub(/\./, '_') if params[:search] && params[:search].include?('@')
+    @counter = Admin::OrdersPresenter.new(@resource)
     super
   end
 

@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/Eviterra/typus.git
-  revision: f04313b5a3e37704d356e65bf603ea1d6edeaf7e
+  revision: f8a910f31314c0c02c778d119c004b043e42c443
   specs:
     typus (3.1.9)
       bcrypt-ruby (~> 3.0.0)
