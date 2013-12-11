@@ -36,6 +36,7 @@ module Amadeus
     end
 
     class RedisStore
+      extend Monitoring::Benchmarkable
 
       KEY_BASE = "amadeus_sessions::#{Conf.amadeus.env}"
 
@@ -93,7 +94,10 @@ module Amadeus
       def self.pop_free(office)
         free_tokens = by_office(office)
 
-        unless redis.llen(free_tokens).nonzero?
+        current_sessions = redis.llen(free_tokens)
+        meter :redis_session_pool, current_sessions
+
+        unless current_sessions.nonzero?
           Rails.logger.info "returning nil!"
           return
         end
