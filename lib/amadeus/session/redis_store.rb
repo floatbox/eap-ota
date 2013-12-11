@@ -95,7 +95,7 @@ module Amadeus
 
         current_sessions = redis.llen(free_tokens)
         Monitoring.gauge(
-          service: redis_session_pool,
+          service: 'redis_session_pool',
           metric: current_sessions
         )
 
