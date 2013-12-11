@@ -127,12 +127,10 @@
 .smap-label {
     position: absolute;
     padding: 3px 6px;
-    background: #FFF;
-    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);  
-}
-.gm-style .smap-label {
     font-size: 12px;
     line-height: 14px;
+    background: #FFF;
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
 }
 .sml-active {
     padding: 0;
@@ -151,7 +149,7 @@
     top: 100%;
     width: 0;
     height: 0;
-    border-width: 16px 0 0 12px; 
+    border-width: 16px 0 0 12px;
     border-style: solid;
     border-color: transparent;
 }
@@ -181,4 +179,16 @@
 }
 .sml-active:hover .sml-arrow {
     border-top-color: #FFFFDB;
+}
+
+/* Override Google reset */
+.gm-style .smap-label,
+.gm-style .sml-city {
+    font-size: 12px;
+    line-height: 14px;
+}
+.gm-style .sml-price,
+.gm-style .sml-dates {
+    font-size: 10px;
+    line-height: 12px;
 }
