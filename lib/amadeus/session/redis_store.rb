@@ -100,7 +100,7 @@ module Amadeus
         )
 
         unless current_sessions.nonzero?
-          Rails.logger.info "returning nil!"
+          Rails.logger.info "no sessions in redis pool!"
           return
         end
 
