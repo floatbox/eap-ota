@@ -128,8 +128,8 @@ class AviaSearchSerializer
 
   def map_point obj
     obj && {
-      :name => obj.name,
-      :from => obj.case_from,
+      :name => dict(obj),
+      :from => dict(obj, :from),
       :iata => obj.iata,
       :lat => obj.lat,
       :lng => obj.lng
