@@ -1,4 +1,4 @@
-carrier "UN", start_date: "2013-12-11"
+carrier "UN", start_date: "2014-01-01"
 
 rule 1 do
 ticketing_method "downtown"
@@ -16,32 +16,32 @@ end
 rule 2 do
 important!
 ticketing_method "aviacenter"
-agent "9%"
-subagent "7%"
-comment "базовое вознаграждение ац для высоких c 21.06"
-agent_comment "9% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
-subagent_comment "7%"
+agent "7%"
+subagent "5%"
+comment "базовое вознаграждение ац для высоких c 01.01.2014"
+agent_comment "7% от тарифа на рейсы UN по всем тарифам классов: F, P, R, J, C, A, D, S, M;"
+subagent_comment "5%"
 subclasses "FPRJCADSM"
 example "cdgsvo/r svocdg/f"
 end
 
 rule 3 do
 ticketing_method "aviacenter"
-agent "7%"
-subagent "5%"
-comment "базовое вознаграждение ац c 21.06.2013"
-agent_comment "C 21.06.13г. 7% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
-subagent_comment "5%"
+agent "5%"
+subagent "3%"
+comment "базовое вознаграждение ац c 01.01.2014"
+agent_comment "5% от тарифа на рейсы UN по всем тарифам классов: Y, H, Q, B, K;"
+subagent_comment "3%"
 subclasses "YHQBK"
 example "cdgsvo/h svocdg/y"
 end
 
 rule 4 do
 ticketing_method "aviacenter"
-agent "5%"
-subagent "3%"
-agent_comment "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
-subagent_comment "3% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
+agent "3%"
+subagent "1%"
+agent_comment "3% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
+subagent_comment "1% от тарифа на рейсы Перевозчика по всем тарифам классов L, V, X, T, N, I, G, W, U;"
 subclasses "FPRJCADSMLVXTNIWYHQBKGU"
 example "cdgsvo/g svocdg/u"
 end

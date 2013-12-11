@@ -1,6 +1,6 @@
 class PaymentCustomFields
   include KeyValueInit
-  attr_accessor :ip, :first_name, :last_name, :phone, :email, :date, :points, :segments, :description, :pnr_number
+  attr_accessor :ip, :first_name, :last_name, :phone, :email, :date, :points, :segments, :description, :pnr_number, :nationality
 
   def order= order
     return unless order
@@ -24,6 +24,7 @@ class PaymentCustomFields
     self.phone = order_form.phone.try(:gsub, /\D/, '')
     self.first_name = order_form.people.first.first_name
     self.last_name = order_form.people.first.last_name
+    self.nationality = get_nationality(order_form.people)
   end
 
   def flights= flights
@@ -43,6 +44,11 @@ class PaymentCustomFields
     "#{first_name} #{last_name}" if first_name
   end
 
+  def get_nationality persons
+    countries = persons.map(&:nationality)
+    countries.map {|country| country.try :alpha2}
+  end
+
   private
 
   # платежные системы нервно реагируют на двойные емейлы в заказах
@@ -51,5 +57,4 @@ class PaymentCustomFields
       email.split(',').first.strip
     end
   end
-
 end

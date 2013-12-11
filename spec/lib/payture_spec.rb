@@ -29,7 +29,8 @@ describe Payture do
         :email => 'nobody@example.com',
         :date => Date.new(2012,11,10),
         :points => %W[SVO CDG SVO],
-        :description => 'blah'
+        :description => 'blah',
+        :nationality => %W[RU US UK],
       )
     end
 
@@ -38,7 +39,7 @@ describe Payture do
       subject.send( :add_custom_fields, post, custom_fields)
       # split/sort для ree
       post[:CustomFields].split(';').sort.should ==
-        "IP=127.0.0.1;FirstName=Alexey;LastName=Petrov;Phone=12345689;Email=nobody@example.com;Date=2012.11.10;Segments=2;Description=blah;From=SVO;To1=CDG;To2=SVO".split(';').sort
+        "IP=127.0.0.1;FirstName=Alexey;LastName=Petrov;Phone=12345689;Email=nobody@example.com;Date=2012.11.10;Segments=2;Description=blah;From=SVO;To1=CDG;To2=SVO;Nationality=RU|US|UK".split(';').sort
     end
 
     pending "should sanitize [;= ] from custom fields values"
