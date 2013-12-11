@@ -1,4 +1,5 @@
 --colour
 --drb
+--tag ~redis
 #--tag ~commissions
 --tag ~network

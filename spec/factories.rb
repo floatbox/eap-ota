@@ -204,4 +204,11 @@ FactoryGirl.define do
       partner FactoryGirl.build(:partner, :limit_20)
     end
   end
+
+  factory :amadeus_session_redis_store, class: 'Amadeus::Session::RedisStore' do
+    token { generate(:amadeus_session_token) }
+    seq 2
+    office { 'TEST_DEFAULT_OFFICE' }
+  end
 end
+
