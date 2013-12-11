@@ -12,14 +12,13 @@ module Amadeus
 
   cattr_accessor :pool do
     Amadeus::Session::MongoStore
-    #Amadeus::Session::ARStore
   end
 
   cattr_accessor :default_office do
     Conf.amadeus.default_office
   end
 
-  INACTIVITY_TIMEOUT = 10*60
+  INACTIVITY_TIMEOUT = 10.minutes
   MAX_SESSIONS = 10
 
   class << self
@@ -49,6 +48,14 @@ module Amadeus
         session.increment
         # saves session
         session.booked = booked
+
+        # вернул костыль для RedisStore, переопределять booked= в RedisStore как-то тупо
+        # FIXME не придумал как лучше сделать, разве что отрефакторить и не сохранять на booked=
+        if (!booked && pool.eql?(Amadeus::Session::RedisStore))
+          # в redis сохраняем только свободные сессии, т.е. !booked
+          RedisStore.push_free(session.token, session.seq, session.office)
+        end
+
         session
       end
     end

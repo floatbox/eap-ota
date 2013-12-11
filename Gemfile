@@ -66,6 +66,7 @@ gem 'virtus'
 gem 'sendgrid'
 gem 'hipchat'
 gem 'attribute-defaults'
+gem 'redis'
 
 gem 'mongo-rails-instrumentation', :git => 'git://github.com/Eviterra/mongo-rails-instrumentation.git'
 
