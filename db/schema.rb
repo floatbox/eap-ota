@@ -465,6 +465,7 @@ ActiveRecord::Schema.define(:version => 20131211143232) do
     t.boolean  "old_downtown_booking",                                        :default => false
   end
 
+  add_index "orders", ["created_at"], :name => "index_orders_on_created_at"
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
   add_index "orders", ["partner"], :name => "index_orders_on_partner"
   add_index "orders", ["payment_status", "ticket_status"], :name => "index_orders_on_payment_status_and_ticket_status"
