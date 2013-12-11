@@ -15,7 +15,7 @@ end
 rule 2 do
 ticketing_method "aviacenter"
 agent "5%"
-subagent "3%"
+subagent "3.5%"
 agent_comment "5% (3%) от опубл. тарифов Эконом класса на собств.рейсы EY, а также на сквозные рейсы Interline с обязательным участием EY."
 interline :no, :yes
 example "svocdg"
