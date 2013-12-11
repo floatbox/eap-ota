@@ -107,4 +107,17 @@ module TypusOrder
     end
   end
 
+  def no_auto_ticket_reason_searchable
+    if !no_auto_ticket_reason.blank?
+      result = no_auto_ticket_reason
+      pnrs = no_auto_ticket_reason.scan(/([A-Z1-9]{6})[.,)]/).flatten.uniq
+      pnrs.each do |pnr|
+        result = result.gsub(pnr, "<a href='/admin/orders?search=#{pnr}'>#{pnr}</a>")
+      end
+      result.html_safe
+    else
+      "-"
+    end
+  end
+
 end
