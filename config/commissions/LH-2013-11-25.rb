@@ -64,7 +64,8 @@ agent_comment "Вознаграждение не предоставляется 
 agent_comment "Вознаграждение предоставляется в момент выписки авиабилета посредством внесения в бронирование элемента FM5 для Amadeus (в случае выписки билетов в других системах бронирования процедура взимания комиссии соответствует процедуре взимания стандартной комиссии 5% (3%))."
 subagent_comment "3%"
 subclasses "YBMGHUQVWETS"
-check %{ includes(country_iatas.first, "RU") and flights.last.dept_date < Date.new(2013, 12, 31) and (not includes(city_iatas.first, "MOW") and not includes(city_iatas.second, "BER DUS FRA MUC VIE ZRH GVA BRU") or not includes(city_iatas.first, "LED") and not includes(city_iatas.second, "DUS VIE GVA ZRH")) and not includes(country_iatas, "US") }
+routes "^MOW-BER,DUS,FRA,MUC,VIE,ZRH,GVA,BRU", "^LED-DUS,VIE,GVA,ZRH"
+check %{ includes(country_iatas.first, "RU") and flights.last.dept_date < Date.new(2013, 12, 31) and not includes(country_iatas, "US") }
 example "svocdg"
 end
 
