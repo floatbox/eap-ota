@@ -27,4 +27,3 @@ class Delayed::Worker
   end
 end
 
-Delayed::Command.new(ARGV).daemonize
