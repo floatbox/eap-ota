@@ -77,7 +77,7 @@ class Payment < ActiveRecord::Base
   validates :price, decimal: true
   validate :check_pnr_number
 
-  CHARGES = ['PayuCharge', 'PaytureCharge', 'CashCharge']
+  CHARGES = ['PayuCharge', 'PaytureCharge', 'CashCharge', 'RapidaCharge']
   REFUNDS = ['PayuRefund', 'PaytureRefund', 'CashRefund']
 
   scope :charges, where(:type => CHARGES)
@@ -85,6 +85,7 @@ class Payment < ActiveRecord::Base
 
   PAYU =    ['PayuCharge', 'PayuRefund']
   PAYTURE = ['PaytureCharge', 'PaytureRefund']
+  RAPIDA =  ['RapidaCharge']
   CASH =    ['CashCharge', 'CashRefund']
   CARDS =   PAYU + PAYTURE
   # для документации, сюда указывает yard'овский @see-тег
@@ -95,7 +96,7 @@ class Payment < ActiveRecord::Base
   scope :cash, where(:type => CASH)
   scope :cards, where(:type => CARDS)
   def self.types
-    (PAYU + PAYTURE + CASH).map {|type| [I18n.t(type), type] }
+    (PAYU + PAYTURE + RAPIDA + CASH).map {|type| [I18n.t(type), type] }
   end
 
   # состояния, для оверрайда в подкласах и чтоб кнопки работали
