@@ -137,6 +137,9 @@ payonline:
   private_security_key: '3495dbcb-aa90-46d4-91cf-8be89238ac77'
   host: secure.payonlinesystem.com
   preauthorization: true
+rapida:
+  commission: '1.8%'
+  ref_prefix: rpd_
 cbr:
   usd:
     2011-01-01: 30.0000
