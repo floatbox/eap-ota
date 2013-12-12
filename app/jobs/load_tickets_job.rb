@@ -9,9 +9,9 @@ class LoadTicketsJob
     order = Order.find(@order_id)
     PaperTrail.controller_info = {:done => 'LoadTicketsJob'}
     return unless order.ticket_status == 'processing_ticket'
-    Delayed::Worker.logger.info "starting LoadTicketsJob for #{order.pnr_number}"
+    #Delayed::Worker.logger.info "starting LoadTicketsJob for #{order.pnr_number}"
     raise "Не загрузились билеты (#{order.pnr_number})" unless order.ticket!
-    Delayed::Worker.logger.info "finished LoadTicketsJob for #{order.pnr_number}"
+    #Delayed::Worker.logger.info "finished LoadTicketsJob for #{order.pnr_number}"
   end
 
   def delay(args={})
