@@ -78,7 +78,7 @@ Order:
       - settled?
       - display_fee_details
       - auto_ticket
-      - no_auto_ticket_reason
+      - no_auto_ticket_reason_searchable
       - needs_visa_notification
     form:
       - section_general_info
