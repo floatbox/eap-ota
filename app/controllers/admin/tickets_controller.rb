@@ -3,6 +3,11 @@ class Admin::TicketsController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
+  def index
+    @counter = Admin::TicketsPresenter.new(@resource)
+    super
+  end
+
   def create
     super
     if @item.order
