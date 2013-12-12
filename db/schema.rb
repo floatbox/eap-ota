@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131212130438) do
+ActiveRecord::Schema.define(:version => 20131212141615) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -665,12 +665,14 @@ ActiveRecord::Schema.define(:version => 20131212130438) do
     t.string   "booking_classes"
   end
 
+  add_index "tickets", ["created_at"], :name => "index_tickets_on_created_at"
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"
   add_index "tickets", ["office_id"], :name => "index_tickets_on_office_id"
   add_index "tickets", ["order_id"], :name => "index_tickets_on_order_id"
   add_index "tickets", ["parent_id"], :name => "index_tickets_on_parent_id"
   add_index "tickets", ["pnr_number"], :name => "index_tickets_on_pnr_number"
   add_index "tickets", ["status"], :name => "index_tickets_on_status"
+  add_index "tickets", ["validating_carrier"], :name => "index_tickets_on_validating_carrier"
 
   create_table "typus_users", :force => true do |t|
     t.string   "first_name",       :default => "",    :null => false

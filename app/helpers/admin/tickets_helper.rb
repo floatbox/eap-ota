@@ -1,21 +1,17 @@
 # encoding: utf-8
 module Admin::TicketsHelper
-  
+
   def top_carriers tickets
-    top_number = 10
-    total = tickets.count
-    top = tickets.count(:all, :group => 'tickets.validating_carrier')
-    top = top.sort_by { |k,v| v }.last(top_number).reverse
-    output = ''
-    counter = 0
-    top.each do |t|
-      t << t[1]*100/total
-      counter = counter + 1
-      output = output + counter.to_s + '. ' + t[0].to_s + ' - ' + t[1].to_s + ' (' + t[2].to_s + '%)<br>'
-    end
-    
+    tickets = tickets.dup
+    total = tickets.reorder('').count.to_f
+    top = tickets.reorder('').count(:all, group: 'validating_carrier', order: 'count_all DESC', limit: 10)
+    output = top.each_with_index.map do |carrier_data, index|
+      percentage = (carrier_data[1] / total * 100).round(2)
+      "#{(index + 1)}. #{carrier_data[0]} — #{carrier_data[1]} (#{percentage}%)<br>"
+    end.join('')
+
     #top.inspect
     output.html_safe
   end
-  
+
 end
