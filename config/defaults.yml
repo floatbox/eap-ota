@@ -194,6 +194,8 @@ performance:
   # поведение для "no" не тестировано, возможны проблемы с ActiveRecord::IdentityMap
   clear_code_stash: yes
 redis:
+  host: 'localhost'
+  port: 6379
   production:
     host: 'localhost'
     port: 9001
@@ -203,9 +205,6 @@ redis:
   demo:
     host: 'localhost'
     port: 9001
-  development:
-    host: 'localhost'
-    port: 6379
 sms:
   host: 'gate10.mfms.ru'
   port: 9006
