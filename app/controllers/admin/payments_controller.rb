@@ -11,6 +11,11 @@ class Admin::PaymentsController < Admin::EviterraResourceController
   end
   private :get_model
 
+  def index
+    @counter = Admin::PaymentsPresenter.new(@resource)
+    super
+  end
+
   def new
     redirect_to params.merge(:controller => 'admin/cash_charges')
   end
