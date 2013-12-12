@@ -23,7 +23,7 @@ module Admin
     end
 
     def counters
-      @counters ||= scope.select(%|
+      @counters ||= scope.reorder('').select(%|
         SUM(price_fare) AS s_total_price,
         AVG(price_fare) AS a_average_price
       |).first
