@@ -197,6 +197,12 @@ redis:
   production:
     host: 'localhost'
     port: 9001
+  staging:
+    host: 'localhost'
+    port: 9001
+  demo:
+    host: 'localhost'
+    port: 9001
   development:
     host: 'localhost'
     port: 6379
