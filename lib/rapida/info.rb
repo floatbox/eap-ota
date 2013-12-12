@@ -14,12 +14,14 @@ class Rapida::Info
   end
 
   def info
+    details = @order.try(:full_info) rescue ''
+    info = @order.try(:details) rescue ''
     # длина до 300 символов
-    (@order && i = @order.full_info) ? i[0...300] : ''
+    i = details + "\n" + info ? i[0...300] : ''
   end
 
   def route
-    @order && @order.route
+    @order.try(:route)
   end
 
 end
