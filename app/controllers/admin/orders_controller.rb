@@ -221,5 +221,9 @@ class Admin::OrdersController < Admin::EviterraResourceController
   def set_attributes_on_new
     @item.offline_booking = true
   end
+
+  def fix_emails
+    params[:search] = params[:search].gsub(/\./, '_') if params[:search] && params[:search].include?('@')
+  end
 end
 
