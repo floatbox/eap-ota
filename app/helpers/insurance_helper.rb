@@ -22,6 +22,10 @@ module InsuranceHelper
     "https://partners.cherehapa.ru/widget/jsbanner/eviterra.html?#{uri_params.to_query}"
   end
 
+  def pnr_insurance_link flights, passengers
+    "https://insurance.eviterra.com"
+  end
+
   def sravnikupi_uri_params order_form
     return unless order_form
     return unless order_form.recommendation

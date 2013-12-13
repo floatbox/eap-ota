@@ -2,7 +2,7 @@
 <html lang="ru-RU">
 <head>
 	<meta charset="utf-8">
-    <title>Eviterra — ваш электронный билет</title>
+    <title>Eviterra — <%= content_for?(:title) ? yield(:title) : 'ваш электронный билет' %></title>
     <link rel="shortcut icon" type="image/x-icon" href="https://eviterra.com/favicon.ico">
     <link rel="icon" type="image/png" href="https://eviterra.com/favicon.png">
     <style type="text/css">

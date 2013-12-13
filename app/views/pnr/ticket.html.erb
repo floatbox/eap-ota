@@ -1,113 +1,11 @@
 <%= google_now_template(@pnr, @passengers)%>
-<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
-<col width="340">
-<col width="160">
-<col width="206">
-<col width="210">
-<tbody valign="top">
-<tr>
-    <td width="340" style="font-weight: bold; font-size: 23px; line-height: 26px;"><% unless @lang %>Электронный билет<br><% end %>E-ticket</td>
-    <%= render :partial => 'pnr/numbers' %>
-    <td width="210" rowspan="2">
-        <div style="font-weight: bold; font-size: 32px; line-height: 30px; color: #F90A6F;">
-            <img src="https://eviterra.com/images/booking/eviterra.png" alt="eviterra.com" width="210" height="30"><br>
-        </div><br>
-        <div style="font-size: 15px; line-height: 21px;">
-            +7 495 660-35-20<br>
-            <a style="color: #333333;" href="http://www.eviterra.com/" target="_blank">www.eviterra.com</a><br>
-            <a style="color: #333333;" href="mailto:operator@eviterra.com" target="_blank">operator@eviterra.com</a>
-        </div>
-        <br><br>
-    </td>
-</tr>
-<%= render :partial => 'pnr/passengers' %>
-</tbody>
-</table>
-<br>
-<br>
-
-<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
-<col width="320">
-<col width="20">
-<col width="190">
-<col width="20">
-<col width="190">
-<col width="20">
-<col width="156">
+<%= render :partial => 'pnr/header', locals: {pnr_type: 'ticket'} %>
 <%= render :partial => 'pnr/flights' %>
-<tbody valign="top" style="font-size: 13px; line-height: 16px;">
-<tr>
-    <td colspan="7" style="font-size: 12px; line-height: 12px;"><br></td>
-</tr>
-<% unless @lang %>
-<tr>
-    <td colspan="3">Пожалуйста, убедитесь, что у&nbsp;вас и&nbsp;остальных пассажиров есть визы и&nbsp;иные документы, требующиеся для въезда в&nbsp;страны пункта назначения и&nbsp;пунктов пересадки.</td>
-    <td><br></td>
-    <td colspan="3">По всем вопросам возврата и&nbsp;обмена авиабилетов обращайтесь по&nbsp;электронному адресу <a style="color: #333333;" href="mailto:operator@eviterra.com" target="_blank">operator@eviterra.com</a> с&nbsp;указанием номера бронирования.</td>
-</tr>
-<tr>
-    <td colspan="7" style="font-size: 10px; line-height: 10px;"><br></td>
-</tr>
-<% end %>
-<tr>
-    <td colspan="3">Please make sure that you and all the&nbsp;passengers have all necessary travel documents and visas needed to&nbsp;enter the&nbsp;destination country or to&nbsp;complete connections during the&nbsp;flight.</td>
-    <td><br></td>
-    <td colspan="3">For refund and exchange issues please contact <a style="color: #333333;" href="mailto:operator@eviterra.com" target="_blank">operator@eviterra.com</a> and refer to&nbsp;your booking number.</td>
-</tr>
-</tbody>
-</table>
 <br>
+<%= render :partial => 'pnr/upsales' unless @lang %>
 <br>
-
-<table cellspacing="0" cellpadding="0" width="916" style="font-size: 14px; line-height: 17px; font-family: Arial, sans-serif; color: #333333;">
-<col width="550">
-<col width="366">
-<tr valign="top">
-    <td rowspan="2" width="550">
-        <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Сведения об оплате<br><% end %>Payment Information</div>
-        <div style="font-size: 10px; line-height: 10px;"><br></div>
-        <table cellspacing="0" cellpadding="0" style="font-size: 13px; line-height: 18px;">
-        <tbody valign="top">
-        <col width="340">
-        <col width="190">
-        <%= render :partial => 'pnr/main_prices' %>
-        <tr>
-            <td><% unless @lang %>Форма оплаты <span style="color: #C0C0C0;">/</span> <% end %>Paid by</td>
-            <td><%= @prices.paid_by %></td>
-        </tr>
-        <tr>
-            <td><% unless @lang %>Дата оформления <span style="color: #C0C0C0;">/</span> <% end %>Issue date</td>
-            <td><%= @prices.created_at.strftime('%d.%m.%y') %></td>
-        </tr>
-        </tbody>
-        </table>
-    </td>
-    <td width="366">
-        <div style="font-weight: bold; font-size: 18px; line-height: 21px;"><% unless @lang %>Данные покупателя<br><% end %>Customer Details</div>
-        <div style="font-size: 10px; line-height: 10px;"><br></div>
-        <div style="font-size: 13px; line-height: 18px;">
-        <% if @pnr.email %>
-          <a href="mailto:<%= @pnr.email %>" target="_blank" style="color: #333333; text-decoration: none;"><%= @pnr.email %></a><% end %><% if @pnr.phone %>, <%= @pnr.phone %>
-        <% end %>
-        </div>
-      <% unless @lang %>
-        <% ostrovok_url = pnr_ostrovok_link(@flights, @passengers) %>
-        <% if ostrovok_url %>
-        <div class="noprint" style="background: #FBF4CB; padding: 10px 15px; margin: 15px 0; font-size: 150%; line-height: 1.2em;">
-            <a href="<%= ostrovok_url %>" target="_blank" style="color: #F90A6F;">Забронировать отель <%= pnr_ostrovok_city(@flights) %> по низкой цене</a>
-        </div>
-        <% end %>
-      <% end %>
-    </td>
-</tr>
-<tr valign="bottom">
-    <td style="font-weight: bold; font-size: 16px; line-height: 20px; color: #F90A6F;">
-        <% unless @lang %>Желаем приятного полета с <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a><br><% end %>
-        Have a nice flight with <a href="https://www.eviterra.com/" style="text-decoration: none; color: #F90A6F;">eviterra.com</a>
-    </td>
-</tr>
-</table>
-<%= render :partial => 'pnr/rules' %><br>
+<%= render :partial => 'pnr/details', locals: {pnr_type: 'ticket'} %>
+<%= render :partial => 'pnr/footer' %>
 <% unless @lang %>
 <div style="width: 916px; font-size: 13px; line-height: 15px; font-family: Arial, sans-serif; color: #777777;">
 Согласно письму Министерства финансов России № 03–03–06/1/717 от 11.10.2007 данная маршрутная квитанция и посадочный талон
