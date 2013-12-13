@@ -8,6 +8,8 @@ class NotifierMailer < ActionMailer::Base
   helper :baggage
   helper :google_now
   helper :hotels
+  helper :insurance
+  helper :excursions
   layout 'pnr'
 
   add_template_helper(ApplicationHelper)
