@@ -1,10 +1,16 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 require 'httparty'
+require 'nokogiri'
+
 class HahnAir
   include HTTParty
-  format :json
-  base_uri 'ticketing.hahnair.travel'
+  format :html
+  base_uri 'https://www.hahnair.com'
+  headers({
+    'Referer' => 'https://www.hahnair.com/en/ticketing/home',
+    'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.55 Safari/537.36'
+  })
 
   # sample response
   # @example
@@ -15,13 +21,13 @@ class HahnAir
 
   def self.allows? carriers
     carriers = Array(carriers)
-    resp = get(
-      '/templates/hr-ticketing/ajax_checkcarrier.php',
-      :query => {:bsp => 'RU', :carriers => carriers.join(',')}
-    ).parsed_response
-    answer = resp.find {|h| h['answer']}
-    matching = resp.find {|h| h['matching']}
-    result = answer['answer'] == 'YES' && matching['matching'].include?('ama')
+    resp = get("/service/html/quickcheck/RU/#{carriers.join('/')}").parsed_response
+    result = if carriers.count == 1
+      parse_single resp
+    else
+      parse_multiple resp
+    end
+
     log result, carriers
     result
   rescue
@@ -39,6 +45,21 @@ class HahnAir
     end
   end
 
+  private
+
+  def self.parse_single doc
+    doc = Nokogiri::HTML(doc)
+    result = doc.css('.table-quickcheck>tbody tr').select do |row|
+      row.css('img[alt="Amadeus"]').present? && row.css('.text-success').present?
+    end
+
+    result.count > 0
+  end
+
+  def self.parse_multiple doc
+    doc = Nokogiri::HTML(doc)
+    doc.css('.table-quickcheck-yesno.text-success').present?
+  end
 end
 
 if $0 == __FILE__
