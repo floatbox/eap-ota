@@ -42,10 +42,13 @@
 }
 .rt-item {
     float: left;
-    height: 20px;
-    margin-bottom: -1px;
-    padding: 12px 14px 13px;
+    margin-bottom: -20px;
+    padding: 12px 14px 32px;
     cursor: pointer;
+}
+.rt-matrix {
+    float: right;
+    margin-right: 0;
 }
 .rt-selected {
     background: url(/images/common/dgrey.png) #bfc4c8;
@@ -60,9 +63,17 @@
 .rt-price {
     color: #F90A6F;
 }
-.rt-matrix {
-    float: right;
-    margin-right: 0;
+.rt-hint {
+    position: relative;
+    top: 2px;
+    margin: 1px 0 0;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 12px;
+    color: #A7A8AB;
+}
+.rt-selected .rt-hint {
+    color: #5A5A5A;
 }
 
 /* Subscription */

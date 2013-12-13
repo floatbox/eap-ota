@@ -4,6 +4,17 @@ init: function() {
     this.el = $('#results-content');
     this.initTabs();
     this.initOffers();
+    results.cheap.getHint = function() {
+        return 'обычная цена — ' + results.currencies['RUR'].absorb(results.data.averagePrice.separate());
+    };
+    results.optimal.getHint = function() {
+        return 'c одной короткой пересадкой';
+    };
+    results.nonstop.getHint = function() {
+        var v = this.offer.variants[0];
+        var dp = v.carrierPrice - v.visiblePrice;
+        return dp > 0 ? ('Скидка ' + results.currencies['RUR'].absorb(dp.separate())) : '';
+    };
 },
 position: function() {
     return this.el.position().top - page.header.height - results.header.height;
@@ -11,9 +22,13 @@ position: function() {
 initTabs: function() {
     var that = this;
     this.tabs = $('#results-tabs');
-    this.tabs.delegate('li:not(.rt-selected, .rt-disabled)', 'click', function() {
-        that.select($(this).closest('.rt-item').attr('data-tab'));
+    this.tabs.on('click', '.rt-item', function() {
+        var item = $(this);
+        if (!item.hasClass('.rt-selected') && !item.hasClass('.rt-selected')) {
+            that.select(item.attr('data-tab'));
+        }
     });
+    this.tabTemplate = '<div class="rt-title">{title} <span class="rt-price">{price}</span></div><div class="rt-hint">{hint}</div>';
     this.tabs.find('.rt-item').each(function() {
         var el = $(this), id = el.attr('data-tab');
         var collection = results[id];

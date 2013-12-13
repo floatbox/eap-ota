@@ -352,7 +352,11 @@ updateLabel: function(labels) {
     var sum = results.currencies['RUR'].absorb('<span class="rt-sum">' + minprice.separate() + '</span>');
     var price = minprice === maxprice ? sum : I18n.t('results.tabs.from', {value: sum});
     var title = labels[this.offer.variants.length === 1 ? 'one' : 'many'];
-    this.control.html('{0} <span class="rt-price">{1}</span>'.absorb(title, price));
+    this.control.html(results.content.tabTemplate.absorb({
+        title: title,
+        price: price,
+        hint: this.getHint ? this.getHint() : ''
+    }));
     this.control.removeClass('rt-disabled');
 },
 clear: function(labels) {
