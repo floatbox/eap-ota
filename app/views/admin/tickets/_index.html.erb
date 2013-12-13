@@ -1,7 +1,7 @@
 <%= render 'admin/resources/index' %>
 (в выборке <%= @resource.count %> записей;
-всего <%= number_to_currency @resource.sum(:price_fare), :locale => :ru %> /
-в среднем <%= number_to_currency @resource.average(:price_fare), :locale => :ru %>)
+всего <%= @counter.total_price %> /
+в среднем <%= @counter.average_price %>)
 
 <div style="display: none">
   <div id="top_carriers" style="margin-top: 25px; line-height: 1.4; font-size: 1.1em; color: #444">

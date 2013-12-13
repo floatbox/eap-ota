@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131211143232) do
+ActiveRecord::Schema.define(:version => 20131212141615) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -465,7 +465,9 @@ ActiveRecord::Schema.define(:version => 20131211143232) do
     t.boolean  "old_downtown_booking",                                        :default => false
   end
 
+  add_index "orders", ["created_at"], :name => "index_orders_on_created_at"
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
+  add_index "orders", ["email_status"], :name => "index_orders_on_email_status"
   add_index "orders", ["partner"], :name => "index_orders_on_partner"
   add_index "orders", ["payment_status", "ticket_status"], :name => "index_orders_on_payment_status_and_ticket_status"
   add_index "orders", ["payment_status"], :name => "index_orders_on_payment_status"
@@ -529,10 +531,12 @@ ActiveRecord::Schema.define(:version => 20131211143232) do
     t.string   "auth_code"
   end
 
+  add_index "payments", ["created_at"], :name => "index_payments_on_created_at"
   add_index "payments", ["order_id"], :name => "index_payments_on_order_id"
   add_index "payments", ["pan"], :name => "index_payments_on_pan"
   add_index "payments", ["ref"], :name => "payments_ref"
   add_index "payments", ["status"], :name => "index_payments_on_status"
+  add_index "payments", ["type"], :name => "index_payments_on_type"
 
   create_table "promo_codes", :force => true do |t|
     t.string   "code",                           :null => false
@@ -661,12 +665,14 @@ ActiveRecord::Schema.define(:version => 20131211143232) do
     t.string   "booking_classes"
   end
 
+  add_index "tickets", ["created_at"], :name => "index_tickets_on_created_at"
   add_index "tickets", ["kind"], :name => "index_tickets_on_kind"
   add_index "tickets", ["office_id"], :name => "index_tickets_on_office_id"
   add_index "tickets", ["order_id"], :name => "index_tickets_on_order_id"
   add_index "tickets", ["parent_id"], :name => "index_tickets_on_parent_id"
   add_index "tickets", ["pnr_number"], :name => "index_tickets_on_pnr_number"
   add_index "tickets", ["status"], :name => "index_tickets_on_status"
+  add_index "tickets", ["validating_carrier"], :name => "index_tickets_on_validating_carrier"
 
   create_table "typus_users", :force => true do |t|
     t.string   "first_name",       :default => "",    :null => false
