@@ -3,6 +3,7 @@ class Admin::OrdersController < Admin::EviterraResourceController
   include CustomCSV
   include Typus::Controller::Bulk
 
+  prepend_before_filter :fix_emails
   before_filter :find_order, :only => [:show_pnr, :unblock, :charge, :money_received, :no_money_received, :edit_ticketed, :ticket, :cancel, :reload_tickets, :update, :pnr_raw, :void, :make_payable_by_card, :send_invoice, :ticket_in_ticketing_office, :manual_notice, :show_commission, :cancel_auto_ticketing]
 
   # def set_scope
@@ -35,7 +36,6 @@ class Admin::OrdersController < Admin::EviterraResourceController
     # FIXME для наших дейт-фильтров нужен формат 2012/2/21 вместо 2012-02-21
     #add_predefined_filter 'Today', {:created_at => Date.today.to_s(:db)}
     #add_predefined_filter 'Yesterday', {:created_at => Date.yesterday.to_s(:db)}
-    params[:search] = params[:search].gsub(/\./, '_') if params[:search] && params[:search].include?('@')
     @counter = Admin::OrdersPresenter.new(@resource)
     super
   end
