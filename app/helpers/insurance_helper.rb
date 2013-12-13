@@ -23,6 +23,9 @@ module InsuranceHelper
   end
 
   def pnr_insurance_link flights, passengers
+    return unless flights
+    journey = destination flights
+    return unless journey
     "https://insurance.eviterra.com"
   end
 
