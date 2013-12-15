@@ -2,8 +2,8 @@
 
 class Rapida
 
-  include Error
-  include Validation
+  include Rapida::Error
+  include Rapida::Validation
 
   def initialize(params)
     @txn_id = params[:txn_id]
