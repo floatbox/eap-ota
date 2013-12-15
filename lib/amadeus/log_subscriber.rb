@@ -1,6 +1,19 @@
 require 'amadeus'
 module Amadeus
   class LogSubscriber < ActiveSupport::LogSubscriber
+    RUNTIME_KEY = 'amadeus#runtime'
+    def self.runtime= value
+      Thread.current[RUNTIME_KEY] = value
+    end
+
+    def self.runtime
+      Thread.current[RUNTIME_KEY] ||= 0
+    end
+
+    def self.reset_runtime
+      rt, self.runtime = runtime, 0
+      rt
+    end
 
     def request(event)
       service = event.payload[:service]
@@ -10,6 +23,7 @@ module Amadeus
       exception = event.payload[:exception]
       response = event.payload[:response]
       xml_response = event.payload[:xml_response]
+      self.class.runtime += event.duration.to_i
 
       msg = "Amadeus::Service: "
 

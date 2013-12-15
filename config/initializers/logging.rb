@@ -4,6 +4,7 @@ require 'our/curl/log_subscriber'
 require 'our/curl/monitoring_log_subscriber'
 # лог Amadeus::Service
 require 'amadeus/log_subscriber'
+require 'amadeus/controller_runtime'
 # лог xml файлов
 require 'amadeus/response_log_subscriber'
 # лог рекомендаций
