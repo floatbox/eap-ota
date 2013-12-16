@@ -12,11 +12,15 @@ module Rapida::Validation
   end
 
   def payable?
-    valid_params? && order? && payment? && pending? && adequate_price?
+    valid_params? && order? && payment?(:pay) && pending? && adequate_price?
   end
 
-  def payment?
-    RapidaCharge.where(order_id: @order, their_ref: @txn_id).count > 0
+  def payment?(method = :check)
+    exists = RapidaCharge.where(order_id: @order, their_ref: @txn_id).count > 0
+    if method == :pay
+      @error = :uncheckable_bill unless exists
+    end
+    exists
   end
 
   # TODO сделать стандартный генератор

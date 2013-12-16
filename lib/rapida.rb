@@ -63,7 +63,7 @@ class Rapida
     payment.price = @price
     payment.status = 'pending'
     @order.payments << payment
-    @order.update_attributes(fix_price: true, payment_status: 'pending')
+    @order.update_attributes(payment_status: 'pending')
     @order.payments
   rescue ActiveRecord::StatementInvalid => e
     rescue_db_error(e)

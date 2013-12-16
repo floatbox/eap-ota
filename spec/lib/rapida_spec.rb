@@ -276,6 +276,18 @@ describe Rapida do
         end
       end
 
+      specify 'not authorized with "check" query' do
+        order = new_order
+        parsed = pay(
+          txn_id: txn_id,
+          phone: phone,
+          sum: order.price_with_payment_commission,
+          account: order.code,
+          txn_date: txn_date
+        )
+        parsed.result.should_not == '0'
+      end
+
       specify 'paid already' do
         parsed = nil
         2.times { parsed = pay(pay_args) }
