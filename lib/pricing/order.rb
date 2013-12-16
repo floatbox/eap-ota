@@ -112,7 +112,7 @@ module Pricing
     def acquiring_commission
       return Commission::Formula.new(Conf.cash.corporate_commission) if pricing_method =~ /corporate/
       #так сложно, чтобы не тормознуть генерацию csv
-      return payments.to_a.select{|p| p.type.in? ['PaytureCharge', 'PayuCharge', 'CashCharge']}.sort_by{|p| p.created_at}.last.commission if payments.to_a.present?
+      return payments.to_a.select(&:is_charge?).sort_by(&:created_at).last.commission if payments.to_a.present?
       Commission::Formula.new(Conf.payment.commission)
     end
 
