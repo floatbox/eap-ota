@@ -30,8 +30,7 @@ describe Payture do
         :date => Date.new(2012,11,10),
         :points => %W[SVO CDG SVO],
         :description => 'blah',
-        :nationality => %W[RU US UK],
-        :airports => 'SVO|CDG|SVO',
+        :nationalities => %W[RU US UK],
       )
     end
 

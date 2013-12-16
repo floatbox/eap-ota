@@ -2,7 +2,7 @@ class PaymentCustomFields
   include KeyValueInit
   attr_accessor :ip, :first_name, :last_name, :phone, :email,
                 :date, :points, :segments, :description, :pnr_number,
-                :nationality, :airports
+                :nationalities
 
   def order= order
     return unless order
@@ -26,7 +26,7 @@ class PaymentCustomFields
     self.phone = order_form.phone.try(:gsub, /\D/, '')
     self.first_name = order_form.people.first.first_name
     self.last_name = order_form.people.first.last_name
-    self.nationality = get_nationality(order_form.people)
+    self.nationalities = order_form.people.map(&:nationality).map(&:alpha2)
   end
 
   def flights= flights
@@ -36,7 +36,6 @@ class PaymentCustomFields
     flights.every.departure_iata.zip( flights.every.arrival_iata ).flatten.each do |iata|
       points << iata unless iata == points.last
     end
-    self.airports = points.join('|')
   end
 
   def segments
@@ -45,11 +44,6 @@ class PaymentCustomFields
 
   def combined_name
     "#{first_name} #{last_name}" if first_name
-  end
-
-  def get_nationality persons
-    countries = persons.map(&:nationality)
-    countries.map {|country| country.try :alpha2}
   end
 
   private

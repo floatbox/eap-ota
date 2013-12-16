@@ -15,7 +15,6 @@ describe PaymentCustomFields do
 
       its(:segments) {should == 1}
       its(:points) {should == %W[SVO CDG]}
-      its(:airports) {should == 'SVO|CDG'}
       its(:date) {should == Date.new(2012, 12, 12)}
     end
 
@@ -31,7 +30,6 @@ describe PaymentCustomFields do
 
       its(:segments) {should == 2}
       its(:points) {should == %W[SVO CDG SVO]}
-      its(:airports) {should == 'SVO|CDG|SVO'}
       its(:date) {should == Date.new(2012, 12, 12)}
     end
 
@@ -52,7 +50,7 @@ describe PaymentCustomFields do
       context 'one passenger' do
         let(:people){ [Person.new(nationality_code: 'RUS')] }
 
-        its(:nationality){should == %W[RU]}
+        its(:nationalities){should == %W[RU]}
       end
 
       context 'multiple passengers' do
@@ -63,18 +61,9 @@ describe PaymentCustomFields do
           ]
         }
 
-        its(:nationality){should == %W[RU US UA]}
+        its(:nationalities){should == %W[RU US UA]}
       end
 
-      context 'weird nationalities' do
-        let(:people){[
-            Person.new(nationality_code: 'XXX'),
-            Person.new(nationality_code: 'ARG'),
-          ]
-        }
-
-        its(:nationality){should == [nil, 'AR']}
-      end
     end
   end
 
