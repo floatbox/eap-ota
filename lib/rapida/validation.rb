@@ -25,7 +25,7 @@ module Rapida::Validation
     if order? && @order.payment_status == 'pending'
       true
     else
-      @error = :paid_already if %W{blocked charged}.include? @order.payment_status
+      @error = :paid_already if @order.payments.last.secured?
       false
     end
   end
