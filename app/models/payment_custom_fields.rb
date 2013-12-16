@@ -1,6 +1,8 @@
 class PaymentCustomFields
   include KeyValueInit
-  attr_accessor :ip, :first_name, :last_name, :phone, :email, :date, :points, :segments, :description, :pnr_number, :nationality
+  attr_accessor :ip, :first_name, :last_name, :phone, :email,
+                :date, :points, :segments, :description, :pnr_number,
+                :nationality, :airports
 
   def order= order
     return unless order
@@ -34,6 +36,7 @@ class PaymentCustomFields
     flights.every.departure_iata.zip( flights.every.arrival_iata ).flatten.each do |iata|
       points << iata unless iata == points.last
     end
+    self.airports = points.join('|')
   end
 
   def segments

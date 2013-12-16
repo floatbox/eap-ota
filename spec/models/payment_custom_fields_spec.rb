@@ -15,6 +15,7 @@ describe PaymentCustomFields do
 
       its(:segments) {should == 1}
       its(:points) {should == %W[SVO CDG]}
+      its(:airports) {should == 'SVO|CDG'}
       its(:date) {should == Date.new(2012, 12, 12)}
     end
 
@@ -30,6 +31,7 @@ describe PaymentCustomFields do
 
       its(:segments) {should == 2}
       its(:points) {should == %W[SVO CDG SVO]}
+      its(:airports) {should == 'SVO|CDG|SVO'}
       its(:date) {should == Date.new(2012, 12, 12)}
     end
 

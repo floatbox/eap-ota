@@ -222,7 +222,8 @@ class Payture
       :Date => custom_fields.date.try(:strftime, '%Y.%m.%d'),
       :Segments => custom_fields.segments,
       :Description => custom_fields.description,
-      :Nationality => custom_fields.nationality.try(:join, '|')
+      :Nationality => custom_fields.nationality.try(:join, '|'),
+      :Airports => custom_fields.airports
     }
     if custom_fields.points
       res[:From] = custom_fields.points.first
