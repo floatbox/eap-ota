@@ -140,6 +140,7 @@ payonline:
 rapida:
   commission: '1.8%'
   ref_prefix: rpd_
+  ref_refund_prefix: rpdrfd_
 cbr:
   usd:
     2011-01-01: 30.0000
