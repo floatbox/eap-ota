@@ -20,7 +20,7 @@ class Rapida
     # если в базе нет рапидовского платежа с their_ref = txn_id
     @mandatory_params = [:txn_id, :price]
     create_pending_payment! if checkable?
-    helper = Info.new(@order)
+    helper = Rapida::Info.new(@order)
 
     builder = ResponseBuilder.new(
       result: error_code(error),
@@ -36,7 +36,7 @@ class Rapida
   def pay
     @mandatory_params = [:txn_id, :txn_date, :price]
     charge_payment! if payable?
-    helper = Info.new(@order)
+    helper = Rapida::Info.new(@order)
 
     builder = ResponseBuilder.new(
       result: error_code(error),
