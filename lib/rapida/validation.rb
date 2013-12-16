@@ -22,7 +22,7 @@ module Rapida::Validation
   # TODO сделать стандартный генератор
   # методов типа "#{prefix_}#{status}?" для моделей
   def pending?
-    if order? && @order.payment_status == 'pending'
+    if order? && RapidaCharge.select(:status).where(order_id: @order, their_ref: @txn_id).last.not_secured?
       true
     else
       @error = :paid_already if @order.payments.last.secured?

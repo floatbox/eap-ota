@@ -63,13 +63,14 @@ class Rapida
     payment.price = @price
     payment.status = 'pending'
     @order.payments << payment
+    @order.update_attributes(fix_price: true, payment_status: 'pending')
     @order.payments
   rescue ActiveRecord::StatementInvalid => e
     rescue_db_error(e)
   end
 
   def charge_payment!
-    payment = RapidaCharge.where(order_id: @order, their_ref: @txn_id).first
+    payment = RapidaCharge.where(order_id: @order, their_ref: @txn_id).last
     @ref = payment.generate_ref
     payment.update_attributes(charged_on: @txn_date, ref: @ref)
     # FIXME? сохранять телефон кастомера
