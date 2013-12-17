@@ -152,7 +152,7 @@ describe Rapida do
           check_args[:sum] = sum + 1
           parsed = check(check_args)
 
-          parsed.result.should == '242'
+          parsed.result.should == '0'
           parsed.account.should == account
         end
 
@@ -160,7 +160,7 @@ describe Rapida do
           check_args[:sum] = sum - 100
           parsed = check(check_args)
 
-          parsed.result.should == '241'
+          parsed.result.should == '0'
           parsed.account.should == account
         end
       end
