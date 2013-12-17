@@ -28,7 +28,8 @@ class Rapida
       account: @account,
       info: helper.info,
       trip: helper.route,
-      persons: helper.persons
+      persons: helper.persons,
+      price: @price
     )
     builder.check_response
   end
