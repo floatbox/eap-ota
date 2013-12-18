@@ -6,7 +6,7 @@ module MoneyColumns
 
   MONEY_CONSTRUCTOR = Proc.new do |cents, currency|
     # возможно, проверять не надо, если composed_of allow_nil: true
-    cents ? Money.new(cents, currency || Money.default_currency) : nil
+    Money.new(cents, currency) if cents
   end
 
   MONEY_CONVERTER = Proc.new do |value|

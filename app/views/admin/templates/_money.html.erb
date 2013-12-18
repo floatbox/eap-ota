@@ -1,7 +1,9 @@
+<% currency = form.object.send(attribute).try(:currency) %>
+<% currency ||= form.object.default_currency if form.object.respond_to?(:default_currency) %>
 <li id="<%= attribute_id %>">
   <%= form.label attribute, label_text %>
   <%= form.fields_for attribute do |f| %>
     <%= f.text_field :amount, value: form.object.send(attribute), size: 10 %>
-    <%= f.select :currency, %W[RUB USD EUR], selected: form.object.send(attribute).try(:currency) %>
+    <%= f.select :currency, %W[RUB USD EUR], selected: currency %>
   <% end %>
 </li>
