@@ -17,13 +17,8 @@ module ExcursionsHelper
     return unless flights
     journey = destination flights
     return unless journey
-    if MongoStorage.read('cities',:namespace=>'tripster') && MongoStorage.read('cities',:namespace=>'tripster').include?(journey[:city].iata)
-      uri_params = pnr_tripster_uri_params(journey)
-      return tripster_uri uri_params
-    else
-      uri_params = pnr_weatlas_uri_params(journey)
-      return weatlas_uri uri_params
-    end
+    uri_params = pnr_weatlas_uri_params(journey)
+    return weatlas_uri uri_params
   end
 
   def weatlas_uri uri_params
