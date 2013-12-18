@@ -5,15 +5,15 @@ init: function() {
     this.initTabs();
     this.initOffers();
     results.cheap.getHint = function() {
-        return 'обычная цена — ' + results.currencies['RUR'].absorb(results.data.averagePrice.separate());
+        return I18n.t('results.tabs.cheap.hint', { price: results.currencies['RUR'].absorb(results.data.averagePrice.separate()) });
     };
     results.optimal.getHint = function() {
-        return 'c одной короткой пересадкой';
+        return I18n.t('results.tabs.optimal.hint');
     };
     results.nonstop.getHint = function() {
         var v = this.offer.variants[0];
         var dp = v.carrierPrice - v.visiblePrice;
-        return dp > 0 ? ('Скидка ' + results.currencies['RUR'].absorb(dp.separate())) : '';
+        return dp > 0 ? I18n.t('results.tabs.nonstop.hint', { discount: results.currencies['RUR'].absorb(dp.separate()) }) : '';
     };
 },
 position: function() {

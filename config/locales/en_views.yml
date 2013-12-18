@@ -128,12 +128,15 @@ en:
       cheap:
         one: "Cheap"
         many: "Cheap"
+        hint: "обычная цена — %{price}"
       optimal:
         one: "Optimal"
         many: "Optimal"
+        hint: "c одной короткой пересадкой"
       nonstop:
         one: "Direct"
         many: "Direct"
+        hint: "скидка %{discount}"
       cheapNonstop:
         one: "Cheap direct"
         many: "Cheap direct"
@@ -499,4 +502,4 @@ en:
     partners: "Партнерская программа"
     contacts: "Contacts"
     iata: "Accredited IATA agent<br>since 2011"
-  appstore: "Available on the App Store"    
+  appstore: "Available on the App Store"
