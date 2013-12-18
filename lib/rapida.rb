@@ -29,7 +29,7 @@ class Rapida
       info: helper.info,
       trip: helper.route,
       persons: helper.persons,
-      price: @price
+      price: @order.try(:price_with_payment_commission)
     )
     builder.check_response
   end
@@ -43,6 +43,7 @@ class Rapida
       result: error_code(error),
       txn_id: @txn_id,
       pay_ref: @ref,
+      price: @order.try(:price_with_payment_commission),
       persons: helper.persons,
       trip: helper.route,
       info: helper.info,

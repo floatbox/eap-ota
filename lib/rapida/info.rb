@@ -26,3 +26,4 @@ class Rapida::Info
   end
 
 end
+

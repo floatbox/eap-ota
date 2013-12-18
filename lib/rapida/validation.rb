@@ -8,11 +8,11 @@ module Rapida::Validation
 
   def checkable?
     # проверяет, можно ли вернуть check без ошибки
-    valid_params? && order? && !payment? && adequate_price?
+    valid_params? && order? && !payment?
   end
 
   def payable?
-    valid_params? && order? && payment?(:pay) && pending? && adequate_price?
+    valid_params? && order? && payment?(:pay) && pending?
   end
 
   def payment?(method = :check)
@@ -66,17 +66,5 @@ module Rapida::Validation
     valid
   end
 
-  def adequate_price?
-    actual_price = @order.price_with_payment_commission
-    cmp = @price <=> actual_price
-    if cmp == 0
-      true
-    else
-      @error = cmp > 0 ? :price_gt_needed : :price_lt_needed
-      # эта цена будет показана в ответе
-      @price = actual_price
-      false
-    end
-  end
-
 end
+
