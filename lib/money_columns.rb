@@ -11,6 +11,8 @@ module MoneyColumns
 
   MONEY_CONVERTER = Proc.new do |value|
     case
+    when value.is_a?(Hash)
+      value["amount"] && value["amount"].to_money(value["currency"])
     when value.respond_to?(:to_money)
       value.to_money
     else
@@ -29,6 +31,7 @@ module MoneyColumns
     end
   end
 
+  # TODO setter, как минимум, можно снести
   def has_money_helpers *attrs
      attrs.each do |attr|
        attr_as_string = "#{attr}_as_string"
