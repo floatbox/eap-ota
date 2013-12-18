@@ -2,6 +2,7 @@ carrier "AT"
 
 rule 1 do
 ticketing_method "aviacenter"
+disabled "Козарезова Женя: а/к закрыта"
 agent "5%"
 subagent "3%"
 agent_comment "5% от опубл. тарифов Эконом класса на собств. рейсы АТ"
@@ -12,6 +13,7 @@ end
 
 rule 2 do
 ticketing_method "aviacenter"
+disabled "Козарезова Женя: а/к закрыта"
 agent "7%"
 subagent "5%"
 agent_comment "7% от опубл. тарифов Бизнес класса на собств. рейсы АТ"
