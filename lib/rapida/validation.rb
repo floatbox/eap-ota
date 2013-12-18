@@ -66,9 +66,5 @@ module Rapida::Validation
     valid
   end
 
-  def adequate_price?
-    actual_price = @order.price_with_payment_commission
-    @price = actual_price
-  end
-
 end
+
