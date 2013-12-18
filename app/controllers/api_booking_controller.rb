@@ -24,7 +24,7 @@ class ApiBookingController < ApplicationController
                                recommendation: @recommendation,
                                context: context)
 
-    if order_flow.preliminary_booking_result(false)
+    if order_flow.preliminary_booking_result
       @order_form = order_flow.order_form
       render :json => {
         :success => true,

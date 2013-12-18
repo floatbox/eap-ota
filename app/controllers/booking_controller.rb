@@ -30,7 +30,7 @@ class BookingController < ApplicationController
       context: context,
       marker: marker
     )
-    if order_flow.preliminary_booking_result(Conf.amadeus.forbid_class_changing)
+    if order_flow.preliminary_booking_result
       @order_form = order_flow.order_form
       render :json => {
         :success => true,

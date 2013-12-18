@@ -94,6 +94,11 @@ class Context
     !config.site.forbidden_cash
   end
 
+  def forbid_class_changing?
+    return true if robot
+    config.amadeus.forbid_class_changing
+  end
+
   private
 
   def deck_user_attributes

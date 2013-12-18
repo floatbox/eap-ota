@@ -10,7 +10,7 @@ class OrderFlow
     Rails.logger
   end
 
-  def preliminary_booking_result(forbid_class_changing)
+  def preliminary_booking_result
     return if Conf.site.forbidden_booking
 
     return unless search
@@ -27,7 +27,7 @@ class OrderFlow
       StatCounters.d_inc destination, %W[enter.api.#{context.partner_code}.total] unless context.partner.anonymous?
     end
 
-    return unless strategy.check_price_and_availability(forbid_class_changing)
+    return unless strategy.check_price_and_availability
     @order_form = OrderForm.new(
       :recommendation => recommendation,
       :people_count => search.tariffied,

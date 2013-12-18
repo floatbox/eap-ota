@@ -179,4 +179,14 @@ describe Context do
       end
     end
   end
+
+  describe "#forbid_class_changing?" do
+    it do
+      build(:context, :robot).forbid_class_changing?.should be_true
+    end
+
+    it do
+      build(:context).forbid_class_changing?.should be_false
+    end
+  end
 end

@@ -2,7 +2,7 @@
 module Amadeus::Strategy::PreliminaryBooking
   CABINS_MAPPING = {'M' => 'E', 'W' => 'E', 'Y' => 'E', 'C' => 'B', 'F' => 'F'}
 
-  def check_price_and_availability(forbid_class_changing = Conf.amadeus.forbid_class_changing)
+  def check_price_and_availability
     if !context.lax? && !TimeChecker.ok_to_book(@rec.dept_date + 1.day)
       logger.error 'Amadeus::Strategy::Check: time criteria missed'
       return
@@ -16,7 +16,7 @@ module Amadeus::Strategy::PreliminaryBooking
     @rec.blank_count = @search.people_total
 
     Amadeus.booking do |amadeus|
-      return unless get_places_and_last_tkt_date(amadeus, forbid_class_changing)
+      return unless get_places_and_last_tkt_date(amadeus, context.forbid_class_changing?)
       return unless get_price_and_rules(amadeus)
       # не нужно, booking {...} убьет бронирование
       # amadeus.pnr_ignore
