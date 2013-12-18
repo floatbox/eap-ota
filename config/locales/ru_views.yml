@@ -134,12 +134,15 @@ ru:
       cheap:
         one: "Дешевый"
         many: "Дешевые"
+        hint: "обычная цена — %{price}"
       optimal:
         one: "Оптимальный"
         many: "Оптимальные"
+        hint: "c одной короткой пересадкой"
       nonstop:
         one: "Прямой"
         many: "Прямые"
+        hint: "скидка %{discount}"
       cheapNonstop:
         one: "Дешевый прямой"
         many: "Дешевые прямые"
