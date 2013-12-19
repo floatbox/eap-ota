@@ -400,4 +400,132 @@ describe Order do
 
   end
 
+  describe 'reload_tickets with EMD' do
+
+    let(:order) do
+          order = create(:order,
+          :price_with_payment_commission => BigDecimal('46385.36'),
+          :payment_status=>"charged",
+          :ticket_status=>"ticketed",
+          :source => "amadeus",
+          :price_difference => BigDecimal('-5527.41'),
+          :price_tax => 5518,
+          :has_refunds => false,
+          :price_agent => 4,
+          :price_subagent => 0.20,
+          :commission_ticketing_method => "aviacenter",
+          :fix_price => true,
+          :stored_income => BigDecimal('40102.20'),
+          :stored_balance => BigDecimal('-10977.70'),
+          :fee_scheme => "v3")
+
+        t1 = create(:ticket,
+          :number => "4375874720-21",
+          :price_fare => 12015,
+          :commission_subagent => "0.05",
+          :price_tax => 10795,
+          :code => "220",
+          :status => "exchanged",
+          :kind => "ticket",
+          :commission_agent => "1",
+          :price_agent => 1,
+          :price_subagent => BigDecimal('0.05'),
+          :corrected_price => BigDecimal('23192.68'),
+          :price_acquiring_compensation => BigDecimal('382.68'),
+          :original_price_fare => 12015.to_money("RUB"),
+          :original_price_tax => 10795.to_money("RUB"),
+          :original_price_penalty => 0.to_money("RUB"),
+          :order => order)
+
+        t2 = create(:ticket,
+          :number => "4375874722-23",
+          :price_fare => 12015,
+          :commission_subagent => "0.05",
+          :price_tax => 10795,
+          :code => "220",
+          :status => "exchanged",
+          :kind => "ticket",
+          :commission_agent => "1",
+          :price_agent => 1,
+          :price_subagent => BigDecimal('0.05'),
+          :corrected_price => BigDecimal('23192.68'),
+          :price_acquiring_compensation => BigDecimal('382.68'),
+          :original_price_fare => 12015.to_money("RUB"),
+          :original_price_tax => 10795.to_money("RUB"),
+          :original_price_penalty => 0.to_money("RUB"),
+          :order => order)
+
+        t3 = create(:ticket,
+          :number => "4376745494-95",
+          :commission_subagent => "0.05",
+          :price_tax => 2759,
+          :code => "220",
+          :status => "ticketed",
+          :kind => "ticket",
+          :parent_id => t1.id,
+          :commission_agent => "1",
+          :price_agent => 1,
+          :price_subagent => BigDecimal('0.05'),
+          :price_difference => BigDecimal('46.29'),
+          :original_price_fare => 12015.to_money("RUB"),
+          :original_price_tax => 2759.to_money("RUB"),
+          :original_price_penalty => 0.to_money("RUB"),
+          :order => order)
+
+        t4 = create(:ticket,
+          :number => "4376745497-98",
+          :commission_subagent => "0.05",
+          :price_tax => 2759,
+          :code => "220",
+          :status => "ticketed",
+          :kind => "ticket",
+          :parent_id => t2.id,
+          :commission_agent => "1",
+          :price_agent => 1,
+          :price_subagent => BigDecimal('0.05'),
+          :price_difference => BigDecimal('-113.70'),
+          :original_price_fare => 0.to_money("RUB"),
+          :original_price_tax => 2759.to_money("RUB"),
+          :original_price_penalty => 0.to_money("RUB"),
+          :order => order)
+
+        t5 = create(:ticket,
+          :number => "1816657870",
+          :commission_subagent => "0.05",
+          :code => "220",
+          :status => "ticketed",
+          :kind => "ticket",
+          :price_penalty => BigDecimal('2730'),
+          :commission_agent => "1",
+          :price_agent => 1,
+          :price_subagent => BigDecimal('0.05'),
+          :price_difference => BigDecimal('-2730'),
+          :original_price_penalty => 2730.to_money("RUB"),
+          :order => order)
+
+        t6 = create(:ticket,
+          :number => "1816657871",
+          :commission_subagent => "0.05",
+          :code => "220",
+          :status => "ticketed",
+          :kind => "ticket",
+          :price_penalty => BigDecimal('2730'),
+          :commission_agent => "1",
+          :price_agent => 1,
+          :price_subagent => BigDecimal('0.05'),
+          :price_difference => BigDecimal('-2730'),
+          :original_price_penalty => 2730.to_money("RUB"),
+          :order => order)
+        order
+    end
+
+    subject { order }
+
+    its(:price_fare) {should == 0}
+    its(:price_tax) {should == 5518}
+    its(:fee) {should == -5527.41}
+    its(:recalculated_price_with_payment_commission) {should == 5005.18}
+
+  end
+
 end
