@@ -35,7 +35,6 @@ no_commission "проверить: Система не дает интерлай
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
-discount "2.5%"
 consolidator "2%"
 agent_comment "0% от тарифа на рейсы Interline (разрешен только с авиакомпанией Трансаэро (UN)."
 subagent_comment "0% от тарифа на рейсы Interline (разрешен только с авиакомпанией Трансаэро (UN)."
