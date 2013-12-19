@@ -8,22 +8,19 @@ class Amadeus::Queue
     @office   = office
   end
 
-  def each
-    raise ArgumentError.new('Block required') unless block_given?
+  def each &block
+    raise ArgumentError.new('Block required') unless block
 
     Amadeus.session(office) do |amadeus|
       begin
-        response = amadeus.cmd queue_open_cmd; log response
-        message = Amadeus::Queue::Message::PNR.new response
-        loop do
-          log message
-          raise Amadeus::Error if message.error?
-          yield message
-          break if message.queue_end?
-          message = queue_next(amadeus)
+        response = amadeus.cmd view_queue_cmd; log response
+        pnrs = response.each_line.select {|l| l =~ /^\d/}.map do |line|
+          msg = Amadeus::Queue::Message::PNR.new line
+          raise Amadeus::Error if msg.error?
+          msg
         end
-      ensure
-        amadeus.cmd queue_close_cmd
+
+        pnrs.each &block
       end
     end
   end
@@ -37,6 +34,13 @@ class Amadeus::Queue
     message.count
   end
 
+  def remove_pnr pnr
+    log "Removing pnr #{pnr}"
+    Amadeus.session(office) do |amadeus|
+      amadeus.cmd "qx/#{pnr}/#{queue_id}"
+    end
+  end
+
   private
 
   def logger
@@ -47,44 +51,18 @@ class Amadeus::Queue
     logger.info "[#{queue_id}] #{message}"
   end
 
-  def queue_next amadeus
-    log 'Next message'
-    response = amadeus.cmd queue_next_cmd
-    log response
-    Amadeus::Queue::Message::PNR.new response
-  end
-
-  def queue_open_cmd
-    "QS#{queue_id}"
-  end
-
-  def queue_count_cmd
-    "QC#{queue_id}"
-  end
-
-  def queue_next_cmd
-    'QN'
-  end
-
-  def queue_close_cmd
-    "QI"
+  def view_queue_cmd
+    "QV/#{queue_id}"
   end
 end
 
 module Amadeus::Queue::Message
   class PNR
-    attr_accessor :pnr, :queue_end, :error, :raw_message
-
-    PNR = /\n[A-Z0-9\/]+\s+[A-Z0-9\/]+\s+[A-Z0-9\/]+\s+([A-Z0-9]{6})\n/
-    QUEUE_END = /\*\* QUEUE CYCLE COMPLETE \*\*/
+    attr_accessor :raw_message, :pnr, :error
 
     def initialize message
       @raw_message = message
       parse_message
-    end
-
-    def queue_end?
-      !!queue_end
     end
 
     def error?
@@ -92,7 +70,7 @@ module Amadeus::Queue::Message
     end
 
     def to_s
-      "<Amadeus::Queue::Message::PNR pnr: #{pnr} queue_end: #{queue_end} error: #{error}"
+      "<Amadeus::Queue::Message::PNR pnr: #{pnr} error: #{error}"
     end
 
     def inspect
@@ -102,15 +80,11 @@ module Amadeus::Queue::Message
     private
 
     def parse_message
-      if raw_message =~ QUEUE_END
-        @queue_end = true
-      end
-
-      if match = raw_message.match(PNR)
-        @pnr = match.captures.first
+      pnr_string = raw_message.split(/\s+/)[2]
+      if pnr_string =~ /^[A-Z0-9]{6}$/
+        @pnr = pnr_string
       else
         @error = true
-        @queue_end = true
       end
     end
   end

@@ -10,7 +10,10 @@ class Amadeus::Poller
     loop do
       reset_retry
       begin
-        queue.each &processor
+        queue.each do |message|
+          result = processor.call message
+          queue.remove_pnr(message.pnr) if result
+        end
         sleep sleep_interval
       rescue => e
         with_warning
@@ -26,7 +29,7 @@ class Amadeus::Poller
   end
 
   def sleep_interval
-    @sleep_interval ||= 30.minutes
+    @sleep_interval ||= 1.minutes
   end
 
   def reset_retry
