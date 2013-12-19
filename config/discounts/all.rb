@@ -4,13 +4,11 @@
 Discount.register "2013-12-19 16:00" do
   case context.partner_code
   when 'anonymous'
-    if commission.subagent.extract('%') > Fx(0)
-      Discount::Rule.scaled(commission, 0.5)
-    else
-      Discount::Rule.new(our_markup: 250)
-    end
+    Discount::Rule.new(our_markup: 300)
   when 'app-ios'
-    Discount::Rule.new(our_markup: 500)
+    Discount::Rule.new(our_markup: 600)
+  when 'email'
+    Discount::Rule.new(our_markup: 200)
   else
     Discount::Rule.scaled(commission, 0.5)
   end
