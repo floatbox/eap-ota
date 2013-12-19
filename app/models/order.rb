@@ -344,8 +344,6 @@ class Order < ActiveRecord::Base
         :subagent,
         :consolidator,
         :blanks,
-        :discount,
-        :our_markup,
         :agent_comments,
         :subagent_comments,
         :designator,

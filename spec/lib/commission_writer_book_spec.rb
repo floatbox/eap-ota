@@ -17,8 +17,6 @@ describe Commission::Writer::Book do
       ticketing_method "aviacenter"
       agent "2%"
       subagent "0.05"
-      discount "4%"
-      our_markup "1eur"
       consolidator "2%"
       blanks "50"
       tour_code "FOOBAR"

@@ -138,9 +138,9 @@ ru:
         price_penalty: "Штраф, р."
         customized_original_price_penalty: "Штраф в валюте офиса выписки"
         itinerary_receipt: "Ссылка на квитанцию"
-        original_price_fare_as_string: "Тариф в валюте офиса выписки"
-        original_price_tax_as_string: "Таксы в валюте офиса выписки"
-        original_price_penalty_as_string: "Штраф в валюте офиса выписки"
+        original_price_fare: "Тариф в валюте офиса выписки"
+        original_price_tax: "Таксы в валюте офиса выписки"
+        original_price_penalty: "Штраф в валюте офиса выписки"
         rate: "Курс исходной валюты на момент выписки"
         dept_date: "Дата вылета"
 

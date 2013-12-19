@@ -44,9 +44,9 @@ Ticket:
       - itinerary_receipt
       - parent
     new:
-      - original_price_fare_as_string
-      - original_price_tax_as_string
-      - original_price_penalty_as_string
+      - original_price_fare
+      - original_price_tax
+      - original_price_penalty
       - price_extra_penalty
       - price_operational_fee
       - price_acquiring_compensation
@@ -124,9 +124,9 @@ Ticket:
       - last_name
       - first_name
       - route
-      - original_price_fare_as_string
-      - original_price_tax_as_string
-      - original_price_penalty_as_string
+      - original_price_fare
+      - original_price_tax
+      - original_price_penalty
       - price_extra_penalty
       - price_operational_fee
       - price_acquiring_compensation
@@ -147,9 +147,9 @@ Ticket:
       - cabins_joined
       - booking_classes_joined
     new_refund:
-      - original_price_fare_as_string
-      - original_price_tax_as_string
-      - original_price_penalty_as_string
+      - original_price_fare
+      - original_price_tax
+      - original_price_penalty
       - price_discount
       - price_our_markup
       - price_operational_fee
@@ -206,9 +206,9 @@ Ticket:
       booleans:
         old_booking: ["пересчет запрещен", "пересчет разрешен"]
       templates:
-        original_price_fare_as_string: money
-        original_price_tax_as_string: money
-        original_price_penalty_as_string: money
+        original_price_fare: money
+        original_price_tax: money
+        original_price_penalty: money
   options:
     default_action_on_item: edit
     start_year: 2011

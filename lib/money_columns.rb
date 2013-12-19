@@ -4,17 +4,34 @@ module MoneyColumns
   # FIXME вернуть валидацию на два знака после запятой
   MONEY_VALIDATION_REGEXP = /^ \s* (?:-\s*)? \d+ (?:\.\d+)? \s* (?:USD|EUR|RUB) \s* $/x
 
-  def has_money_columns *columns
-    money_columns = columns.every.to_sym
-    money_columns.each do |column|
-    composed_of column,
-      :class_name => 'Money',
-      :mapping => [[column.to_s + '_cents', 'cents'], [column.to_s + '_currency', 'currency_as_string']],
-      :constructor => Proc.new { |original_tax_cents, original_tax_currency| original_tax_cents ? Money.new(original_tax_cents, original_tax_currency || Money.default_currency)  : nil},
-      :converter => Proc.new { |value| value.respond_to?(:to_money) ? value.to_money : raise(ArgumentError, "Can't convert #{value.class} to Money") }
+  MONEY_CONSTRUCTOR = Proc.new do |cents, currency|
+    # возможно, проверять не надо, если composed_of allow_nil: true
+    Money.new(cents, currency) if cents
+  end
+
+  MONEY_CONVERTER = Proc.new do |value|
+    case
+    when value.is_a?(Hash)
+      value["amount"] && value["amount"].to_money(value["currency"])
+    when value.respond_to?(:to_money)
+      value.to_money
+    else
+      raise(ArgumentError, "Can't convert #{value.class} to Money")
     end
   end
 
+  def has_money_columns *columns
+    money_columns = columns.every.to_sym
+    money_columns.each do |column|
+      composed_of column,
+        class_name: 'Money',
+        mapping: {"#{column}_cents" => 'cents', "#{column}_currency" => 'currency_as_string'},
+        constructor: MONEY_CONSTRUCTOR,
+        converter: MONEY_CONVERTER
+    end
+  end
+
+  # TODO setter, как минимум, можно снести
   def has_money_helpers *attrs
      attrs.each do |attr|
        attr_as_string = "#{attr}_as_string"

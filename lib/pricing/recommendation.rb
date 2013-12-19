@@ -10,14 +10,8 @@ module Pricing
     delegate :subagent, :agent, :consolidator, :blanks, :ticketing_method,
       :to => :commission, :prefix => :commission
 
-    # временно делаю выставляемыми и в Commission::Rule и в Discount::Rule
-    def commission_discount
-      discount_rule.try(:discount) || commission.discount
-    end
-
-    def commission_our_markup
-      discount_rule.try(:our_markup) || commission.our_markup
-    end
+    delegate :discount, :our_markup,
+      :to => :discount_rule, :prefix => :commission
 
     # FIXME работает для текущей схемы, считает что мы эквайринг не берем себе в общем случае
     def income
