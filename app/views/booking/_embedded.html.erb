@@ -10,7 +10,7 @@
         <% if I18n.locale == :ru %>
             <h6 class="bftr-title">И не забудьте потом <span class="bftr-tip">откроется в новом окне</span></h6>
             <% ostrovok_url = ostrovok_link(@order_form) %>
-            <% excursion_url = tripster_link(@order_form) || weatlas_link(@order_form) %>
+            <% excursion_url = weatlas_link(@order_form) %>
             <% if ostrovok_url %>
                 <p class="bftr-item"><a class="bftr-link" href="<%= ostrovok_url %>" target="_blank">забронировать отель <%= ostrovok_city(@order_form) %></a></p>
             <% end %>

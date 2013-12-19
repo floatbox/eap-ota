@@ -23,10 +23,9 @@
 
     <% ostrovok_url = ostrovok_link(@order_form) %>
     <% insurance_url = cherehapa_insurance_uri(@order_form) %>
-    <% tripster_url = tripster_link(@order_form) %>
-    <% weatlas_url = weatlas_link(@order_form) unless tripster_url %>
+    <% excursion_url = weatlas_link(@order_form) %>
 
-    <% if ostrovok_url || insurance_url || weatlas_url || tripster_url %>
+    <% if ostrovok_url || insurance_url || excursion_url %>
     <div class="bfrs-addition">
         <% if ostrovok_url %>
         <div class="bfrs-hotels">
@@ -50,7 +49,7 @@
         </div>
         <% end %>
 
-        <% if tripster_url %>
+        <% if false %>
         <div class="bfrs-excursion">
             <h5 class="bfrsa-title">Чем заняться<br><%= city_case_in(@order_form) %></h5>
             <ul class="bfrsa-features">
@@ -64,7 +63,9 @@
             </div>
             <div class="bfrsa-partner">Совместно с Tripster</div>
         </div>
-        <% elsif weatlas_url %>
+        <% end %>
+
+        <% if excursion_url %>
         <div class="bfrs-excursion">
             <h5 class="bfrsa-title">Чем заняться<br><%= city_case_in(@order_form) %></h5>
             <ul class="bfrsa-features">
@@ -74,7 +75,7 @@
                 <li class="bfrsa-feature">Онлайн-бронирование</li>
             </ul>
             <div class="bfrsa-bar">
-                <a class="bfrsa-link" href="<%= weatlas_url %>" target="_blank">Выбрать и&nbsp;забронировать</a>
+                <a class="bfrsa-link" href="<%= excursion_url %>" target="_blank">Выбрать и&nbsp;забронировать</a>
             </div>
             <div class="bfrsa-partner">Совместно с партнером Weatlas.com</div>
         </div>
