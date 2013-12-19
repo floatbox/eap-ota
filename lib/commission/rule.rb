@@ -98,14 +98,6 @@ class Commission::Rule
   # @return [Commission::Formula]
   has_commission_attrs :consolidator
 
-  # формула для расчета скидки, считается на основе тарифа
-  # @return [Commission::Formula]
-  has_commission_attrs :discount
-
-  # формула для расчета нашей надбавки к стоимости
-  # @return [Commission::Formula]
-  has_commission_attrs :our_markup
-
   # формула для расчета сбора за бланки, используется для сирены
   # @return [Commission::Formula]
   has_commission_attrs :blanks

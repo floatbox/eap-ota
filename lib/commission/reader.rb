@@ -14,8 +14,6 @@ class Commission::Reader
     system: :amadeus,
     consolidator: 0,
     blanks: 0,
-    discount: 0,
-    our_markup: 0,
     agent: "",
     subagent:""
   }

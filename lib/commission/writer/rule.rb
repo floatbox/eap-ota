@@ -28,8 +28,6 @@ class Commission::Writer::Rule
 
     line commission_unless_blank(:agent)
     line commission_unless_blank(:subagent)
-    line commission_if_needed(:discount)
-    line commission_if_needed(:our_markup)
     line commission_if_needed(:consolidator)
     line commission_if_needed(:blanks)
 

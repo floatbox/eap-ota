@@ -83,10 +83,11 @@ describe Recommendation do
         :blank_count => 2
       )
     end
+    let(:discount_rule) { Discount::Rule.zero }
 
     before do
       Conf.payment.stub(:commission).and_return("2.85%")
-      subject.stub(:commission => commission)
+      subject.stub(:commission => commission, :discount_rule => discount_rule)
     end
 
     context "no commission" do
@@ -103,11 +104,15 @@ describe Recommendation do
         Commission::Rule.new(
           :agent => '4%',
           :subagent => '1%',
-          :our_markup => '20',
-          :discount => '3%',
           :consolidator => '0',
           :blanks => '0',
           :ticketing_method => 'direct'
+        )
+      end
+      let :discount_rule do
+        Discount::Rule.new(
+          :our_markup => '20',
+          :discount => '3%',
         )
       end
       its('income.round') {should == 55}
@@ -118,11 +123,15 @@ describe Recommendation do
         Commission::Rule.new(
           :agent => '4%',
           :subagent => '1%',
-          :our_markup => '20',
-          :discount => '1%',
           :consolidator => '2%',
           :blanks => '0',
           :ticketing_method => 'aviacenter'
+        )
+      end
+      let :discount_rule do
+        Discount::Rule.new(
+          :our_markup => '20',
+          :discount => '1%',
         )
       end
       its('income.round') {should == -37}

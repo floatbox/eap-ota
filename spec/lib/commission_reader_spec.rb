@@ -90,8 +90,6 @@ describe Commission::Reader do
         rule 1 do
         consolidator '1%'
         blanks 50
-        discount '2%'
-        our_markup '1%'
         disabled "because of Caturday, that's why"
         check %{ true }
         tour_code "FOOBAR"
@@ -110,8 +108,6 @@ describe Commission::Reader do
     its(:subagent) {should == Fx(3)}
     its(:consolidator) {should == Fx('1%')}
     its(:blanks) {should == Fx('50')}
-    its(:our_markup) {should == Fx('1%')}
-    its(:discount) {should == Fx('2%')}
     its(:disabled) {should == "because of Caturday, that's why"}
     its(:disabled?) {should be_true}
     its(:tour_code) {should == "FOOBAR"}
@@ -209,8 +205,6 @@ describe Commission::Reader do
     its(:system) { should eq(:amadeus) }
     its(:consolidator) { should eq(Fx(0)) }
     its(:blanks) { should eq(Fx(0)) }
-    its(:discount) { should eq(Fx(0)) }
-    its(:our_markup) { should eq(Fx('0')) }
     its(:interline) { should eq([:no]) }
 
 
