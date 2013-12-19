@@ -108,6 +108,12 @@ class Ticket < ActiveRecord::Base
     write_attribute(:booking_classes, bcs.strip.split(' '))
   end
 
+  # в money полях typus отсюда будет брать дефолтную валюту
+  # пусть будет такая же, как и у тарифа родительского билета
+  def default_currency
+    parent && parent.original_price_fare.try(:currency) || 'RUB'
+  end
+
   def set_prices
     self.price_acquiring_compensation = price_payment_commission if corrected_price && kind == 'ticket'
     if order && order.fix_price
