@@ -1,5 +1,21 @@
 # для app-ios 500 маркап
 # для прямого половину от комиссии на комиссионные и маркап 250 р. на некомиссионные
+# для остального скидка — 50% от комиссии
+Discount.register "2013-12-19 16:00" do
+  case context.partner_code
+  when 'anonymous'
+    Discount::Rule.new(our_markup: 300)
+  when 'app-ios'
+    Discount::Rule.new(our_markup: 600)
+  when 'email'
+    Discount::Rule.new(our_markup: 200)
+  else
+    Discount::Rule.scaled(commission, 0.5)
+  end
+end
+
+# для app-ios 500 маркап
+# для прямого половину от комиссии на комиссионные и маркап 250 р. на некомиссионные
 # для АЦ скидка 6% от нетто
 # для DTT скидка 5.5% от нетто
 Discount.register "2013-12-16 12:42" do
