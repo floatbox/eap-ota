@@ -8,7 +8,5 @@ Commission::Rule::Null = Commission::Rule.new(
   agent: 0,
   subagent: 0,
   consolidator: 0,
-  discount: 0,
-  our_markup: 0,
   blanks: 0
 )
