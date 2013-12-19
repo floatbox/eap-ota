@@ -46,7 +46,7 @@ Ticket:
     new:
       - original_price_fare
       - original_price_tax
-      - original_price_penalty_as_string
+      - original_price_penalty
       - price_extra_penalty
       - price_operational_fee
       - price_acquiring_compensation
@@ -149,7 +149,7 @@ Ticket:
     new_refund:
       - original_price_fare
       - original_price_tax
-      - original_price_penalty_as_string
+      - original_price_penalty
       - price_discount
       - price_our_markup
       - price_operational_fee
