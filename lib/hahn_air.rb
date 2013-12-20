@@ -4,7 +4,6 @@ require 'httparty'
 require 'nokogiri'
 
 class HahnAir
-  class ParseError < ArgumentError; end
   include HTTParty
   format :html
   base_uri 'https://www.hahnair.com'
@@ -32,7 +31,6 @@ class HahnAir
     log result, carriers
     result
   rescue
-    with_warning
     log $!.message, carriers
     nil
   end
@@ -51,7 +49,6 @@ class HahnAir
 
   def self.parse_single doc
     doc = Nokogiri::HTML(doc)
-    raise HahnAir::ParseError if doc.css('.table-quickcheck>tbody tr').empty?
     result = doc.css('.table-quickcheck>tbody tr').select do |row|
       row.css('img[alt="Amadeus"]').present? && row.css('.text-success').present?
     end
@@ -61,7 +58,6 @@ class HahnAir
 
   def self.parse_multiple doc
     doc = Nokogiri::HTML(doc)
-    raise HahnAir::ParseError if doc.css('.table-quickcheck-yesno').empty?
     doc.css('.table-quickcheck-yesno.text-success').present?
   end
 end
