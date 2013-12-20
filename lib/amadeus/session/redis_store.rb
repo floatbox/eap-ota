@@ -123,7 +123,8 @@ module Amadeus
       end
 
       def self.free_count(office)
-        (redis.keys("#{KEY_BASE}::*").count || 1) - 1
+        count = redis.keys("#{KEY_BASE}::*").count
+        count.zero? ? 0 : count - 1
       end
 
       def self.delete_all(args={})
