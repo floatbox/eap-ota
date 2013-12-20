@@ -123,6 +123,7 @@ Ticket:
       - validating_carrier
       - last_name
       - first_name
+      - passport
       - route
       - original_price_fare
       - original_price_tax
