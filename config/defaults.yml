@@ -157,10 +157,10 @@ mail:
   profile_reply_to: profile@eviterra.com
   profile_cc: profile@eviterra.com
 ohmystats:
-  enabled: yes
+  enabled: no
   project_id: tyjrlhjuionhuxvojzbravinzfejcnsdgcoyjsks
   production:
-    enabled: yes
+    enabled: no
     project_id: qsxfvashjzioiwazcryxlgysgjuitwyfaasjvkiv
 riemann:
   enabled: no
