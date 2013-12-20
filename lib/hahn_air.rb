@@ -4,7 +4,7 @@ require 'httparty'
 class HahnAir
   include HTTParty
   format :json
-  base_uri 'ticketing.hahnair.travel'
+  base_uri 'https://api.hahnair.com/'
 
   # sample response
   # @example
@@ -15,10 +15,11 @@ class HahnAir
 
   def self.allows? carriers
     carriers = Array(carriers)
-    resp = get(
-      '/templates/hr-ticketing/ajax_checkcarrier.php',
-      :query => {:bsp => 'RU', :carriers => carriers.join(',')}
-    ).parsed_response
+    resp = get("/api/1-eviterra/quickcheck/RU/#{carriers.join('/')}").parsed_response
+    if resp.empty?
+      log 'Unknown carriers:', carriers
+      return false
+    end
     answer = resp.find {|h| h['answer']}
     matching = resp.find {|h| h['matching']}
     result = answer['answer'] == 'YES' && matching['matching'].include?('ama')
