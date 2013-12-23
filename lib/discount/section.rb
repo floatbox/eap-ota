@@ -6,6 +6,24 @@ class Discount::Section
     def find_rule
       rule = instance_eval &definition
     end
+
+    private
+
+    def our_markup value
+      Discount::Rule.new our_markup: value
+    end
+
+    def discount value
+      Discount::Rule.new discount: value
+    end
+
+    def netto value
+      Discount::Rule.netto commission, value
+    end
+
+    def scaled value
+      Discount::Rule.scaled commission, value
+    end
   end
 
   attr_reader :start_time, :definition

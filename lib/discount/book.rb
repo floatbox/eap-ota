@@ -5,7 +5,6 @@
 # сейчас действует аналогично Commission::Section - выбирает набор исходя из текущей даты
 
 class Discount::Book
-
   def initialize
     @index = []
   end
