@@ -2,6 +2,7 @@ carrier "UT"
 
 rule 1 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "4%"
 agent_comment "5% DTT"

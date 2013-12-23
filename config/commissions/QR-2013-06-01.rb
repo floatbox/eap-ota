@@ -38,6 +38,7 @@ end
 rule 4 do
 important!
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 tour_code "USAN002"

@@ -2,6 +2,7 @@ carrier "LX"
 
 rule 1 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "10%"
 subagent "8%"
 tour_code "815ZU"
@@ -16,6 +17,7 @@ end
 
 rule 2 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "8%"
 subagent "6%"
 tour_code "815ZU"
@@ -30,6 +32,7 @@ end
 
 rule 3 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 tour_code "815ZU"

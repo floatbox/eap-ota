@@ -2,6 +2,7 @@ carrier "AB", start_date: "2013-07-01"
 
 rule 1 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "10%"
 subagent "8%"
 comment "только собственные рейсы AB и HG"

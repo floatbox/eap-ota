@@ -3,6 +3,7 @@ carrier "SU", start_date: "2013-07-01"
 rule 1 do
 disabled "с первого сентября - через авиацентр"
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "9%"
 subagent "8%"
 agent_comment "правила для выписки авиакомпании SU в DTT"
@@ -14,6 +15,7 @@ end
 
 rule 2 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "4.5%"
 agent_comment "правила для выписки авиакомпании SU в DTT"
@@ -26,6 +28,7 @@ end
 rule 3 do
 disabled "с первого сентября - через авиацентр"
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "4.5%"
 agent_comment "Коля: SU на dtt 5%/4.5%/4.2%, кроме тель-авива и SU#1"

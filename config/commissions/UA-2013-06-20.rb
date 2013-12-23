@@ -56,6 +56,7 @@ end
 
 rule 5 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "10%"
 subagent "8%"
 tour_code "815ZU"
@@ -71,6 +72,7 @@ end
 
 rule 6 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "8%"
 subagent "6%"
 tour_code "815ZU"
@@ -86,6 +88,7 @@ end
 
 rule 7 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 tour_code "815ZU"

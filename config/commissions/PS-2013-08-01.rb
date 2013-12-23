@@ -98,6 +98,7 @@ end
 rule 9 do
 disabled "переключили на бонусный ац"
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "7%"
 subagent "6%"
 agent_comment "все через dtt"

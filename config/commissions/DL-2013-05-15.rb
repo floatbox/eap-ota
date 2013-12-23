@@ -2,6 +2,7 @@ carrier "DL", start_date: "2013-05-15"
 
 rule 1 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 tour_code "RULAPREM"
@@ -15,6 +16,7 @@ end
 
 rule 2 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 tour_code "RUMCBREM"
@@ -27,6 +29,7 @@ end
 
 rule 3 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 tour_code "RUMXPREM"
@@ -39,6 +42,7 @@ end
 
 rule 4 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 tour_code "RUUSPREM"
@@ -52,6 +56,7 @@ end
 rule 5 do
 important!
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "8%"
 subagent "6%"
 agent_comment "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
@@ -66,6 +71,7 @@ end
 
 rule 6 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 agent_comment "5%"
@@ -94,6 +100,7 @@ end
 rule 8 do
 important!
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 agent_comment "5%"

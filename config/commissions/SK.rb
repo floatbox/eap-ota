@@ -2,6 +2,7 @@ carrier "SK"
 
 rule 1 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "12%"
 subagent "10%"
 agent_comment "через DTT из России в США и наоборот - 12%"
@@ -15,6 +16,7 @@ end
 
 rule 2 do
 ticketing_method "downtown"
+disabled "dtt disabled"
 agent "8%"
 subagent "6%"
 comment "subclasses JZBQVWKLT"
