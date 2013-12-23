@@ -1,8 +1,7 @@
 carrier "DL", start_date: "2013-05-15"
 
 rule 1 do
-ticketing_method "downtown"
-disabled "dtt disabled"
+ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
 tour_code "RULAPREM"
@@ -15,8 +14,19 @@ example "svoadz/j adzsvo/c"
 end
 
 rule 2 do
-ticketing_method "downtown"
-disabled "dtt disabled"
+ticketing_method "aviacenter"
+agent "5%"
+subagent "3%"
+tour_code "RUNYPREM"
+agent_comment "5% (3%) (3%) от опубл. тарифа Бизнес класса (J,C,D,Z,I) на собств.рейсы DL с вылетами из МОСКВЫ (до Caribbean Central Tour Code RUCBPREM); "
+subagent_comment "3%"
+subclasses "JCDZI"
+routes "MOW-NYC/OW,RT"
+example "svojfk/j jfksvo/z"
+end
+
+rule 2 do
+ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
 tour_code "RUMCBREM"
@@ -28,8 +38,7 @@ example "svotab/j tabsvo/z"
 end
 
 rule 3 do
-ticketing_method "downtown"
-disabled "dtt disabled"
+ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
 tour_code "RUMXPREM"
@@ -41,8 +50,7 @@ example "svotam/j tamsvo/z"
 end
 
 rule 4 do
-ticketing_method "downtown"
-disabled "dtt disabled"
+ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
 tour_code "RUUSPREM"

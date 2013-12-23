@@ -3,7 +3,6 @@ carrier "SU", start_date: "2013-07-01"
 rule 1 do
 disabled "с первого сентября - через авиацентр"
 ticketing_method "downtown"
-disabled "dtt disabled"
 agent "9%"
 subagent "8%"
 agent_comment "правила для выписки авиакомпании SU в DTT"

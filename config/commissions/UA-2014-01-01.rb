@@ -27,6 +27,35 @@ example "yowsvo"
 end
 
 rule 3 do
+ticketing_method "aviacenter"
+agent "4%"
+subagent "3%"
+consolidator "2%"
+agent_comment "с 1 января 4% на все опубл. тарифы Эконом класса во всех подклассах бронирования из России в США, Канаду и Латинскую Америку с перелетом из России в Европейские города авиакомпаниями, входящими в LH Group ( LH,LX,SN) , и    трансатлантическим перелетом авиакомпанией United под кодом UA. Обратный перелет также должен быть строго в этой       комбинации. (0% если начало путешествия на UA будет из Европы)."
+agent_comment "Проездной документ должен быть оформлен единым билетом на стоке 016."
+subagent_comment "Спросить у Жени"
+classes :economy
+interline :yes
+check %{ includes_only(operating_carrier_iatas.first, 'LH LX SN') and includes(operating_carrier_iatas.second, 'UA')   and includes(country_iatas.first, 'RU') }
+example "svocdg/lh cdgjfk jfkcdg/lx cdgsvo"
+end
+
+rule 4 do
+ticketing_method "aviacenter"
+important!
+agent "7%"
+subagent "5%"
+consolidator "2%"
+agent_comment "с 1 янв. 6% в следующих подклассах бронирования: F/A/J/C/D/Z на все опубл. тарифы из России в США,     Канаду и Латинскую Америку с перелетом из России в Европейские города авиакомпаниями, входящими в LH Group (LH,LX,     SN) , и трансатлантическим перелетом авиакомпанией United под кодом UA. Обратный перелет также должен быть строго в    этой комбинации. (0% если начало путешествия на UA будет из Европы)."
+agent_comment "Проездной документ должен быть оформлен единым билетом на стоке 016."
+subagent_comment "5%"
+subclasses "FAJCDZ"
+interline :yes
+check %{ includes_only(operating_carrier_iatas.first, 'LH LX SN') and includes(operating_carrier_iatas.second, 'UA')   and includes(country_iatas.first, 'RU') }
+example "svocdg/lh/f cdgjfk/a jfkcdg/lx/c cdgsvo/z"
+end
+
+rule 3 do
 ticketing_method "downtown"
 disabled "dtt disabled"
 agent "10%"
