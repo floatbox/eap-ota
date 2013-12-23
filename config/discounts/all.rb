@@ -1,6 +1,6 @@
 # на все правила АЦ скидка=100% комиссии+4.5%
 # остальное, видимо, так же как было.
-register "2013-12-22 18:00" do
+register "2013-12-23 18:00" do
   case context.partner_code
   when 'anonymous'
     our_markup 300
