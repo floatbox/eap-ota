@@ -253,6 +253,7 @@
     <div class="bff-left">
         <div class="bff-price">
             <div class="bffp-content">
+                <input type="hidden" name="order[payment][amount]" value="<%= price_total %>">
                 <p class="bffp-card"><%= t 'booking.price.total_card', :count => price_total %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
                 <p class="bffp-nd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total), '<span class="bffp-sum">', '</span>' %></p>
                 <p class="bffp-wd"><%= t 'booking.price.total_cash' %><br><%= decorate_price human_price(price_total + Conf.payment.price_delivery), '<span class="bffp-sum">', '</span>' %></p>
