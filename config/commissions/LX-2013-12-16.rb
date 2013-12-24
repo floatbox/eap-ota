@@ -61,7 +61,7 @@ agent_comment "Other conditions: LX (724) Stock only; LX Operating carrier only"
 agent_comment "Exclusions not published fares: CNRs, touroperator fares, Student fares, seamen fares and groups."
 subagent_comment "3%"
 subclasses "STEL"
-routes "CH-CH/ALL"
+routes "RU-CH/OW,RT"
 example "lugsir/s sirlug/t"
 end
 
