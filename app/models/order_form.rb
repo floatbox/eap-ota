@@ -153,8 +153,8 @@ class OrderForm
         end
       end
     }
-    unless card.valid?
-      card.errors.each{|e,v|
+    unless payment.card.valid?
+      payment.card.errors.each{|e,v|
         res["card[#{e}]"] = v
       }
     end
@@ -163,7 +163,7 @@ class OrderForm
 
 
   def hash
-    [recommendation, people_count, people, card].hash
+    [recommendation, people_count, people, payment.card].hash
   end
 
   def info_hash
