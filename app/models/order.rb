@@ -366,7 +366,7 @@ class Order < ActiveRecord::Base
         :price_our_markup
     end
     self.ticket_status = 'booked'
-    self.name_in_card = order_form.payment.card.try.name rescue ''
+    self.name_in_card = order_form.payment.card.name rescue ''
     self.pan = order_form.payment.card.pan rescue ''
   end
 
