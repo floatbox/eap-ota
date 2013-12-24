@@ -1,5 +1,5 @@
 class Amadeus::Queue
-  attr_accessor :queue_id, :office
+  attr_accessor :queue_id, :office, :logger
 
   def initialize queue_id, office = Conf.amadeus.default_office
     # queue_id может быть с категорией и без, но лучше с ней — иначе каунт ломается
@@ -41,11 +41,11 @@ class Amadeus::Queue
     end
   end
 
-  private
-
   def logger
-    Rails.logger
+    @logger || Rails.logger
   end
+
+  private
 
   def log message
     logger.info "[#{queue_id}] #{message}"
