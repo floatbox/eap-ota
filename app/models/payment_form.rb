@@ -4,6 +4,7 @@ class PaymentForm
   include KeyValueInit
   include ActiveModel::Validations
   attr_accessor :type
+  attr_accessor :amount
   attr_reader :card
   def card= attrs
     @card = CreditCard.new(attrs)
