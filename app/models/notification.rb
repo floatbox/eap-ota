@@ -64,7 +64,7 @@ class Notification < ActiveRecord::Base
     if subject.blank?
       case format
         when 'ticket'
-          self.subject = eng ? "Your E-ticket [#{pnr_number}]" : "Ваш электронный билет [#{pnr_number}]" 
+          self.subject = eng ? "Your E-ticket [#{pnr_number}]" : "Ваш электронный билет [#{pnr_number}]"
         when 'order'
           self.subject = eng ? "Your Order [#{pnr_number}]" : "Ваш заказ [#{pnr_number}]"
         when 'booking'
@@ -102,11 +102,6 @@ class Notification < ActiveRecord::Base
     self.format = 'ticket'
     self.comment = CustomTemplate.new.render(:template => "notifications/visa_notice")
     self.delay(queue: 'notifications', run_at: 11.minutes.from_now, priority: 2).send_notice if save
-  end
-
-  def set_order_data
-    self.pnr_number = order.pnr_number
-    self.destination = order.email
   end
 
   def send_email
