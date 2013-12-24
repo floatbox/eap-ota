@@ -58,6 +58,7 @@ class Customer < ActiveRecord::Base
   end
 
   def prepare_instruction_opts
+    I18n.locale = :ru
     self.confirmation_token = nil if reconfirmation_required?
     @reconfirmation_required = false
 

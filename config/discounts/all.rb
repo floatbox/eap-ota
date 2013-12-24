@@ -1,4 +1,19 @@
-# на все правила АЦ скидка=100% комиссии+4.5%
+# на все правила АЦ скидка=100% комиссии+5.5%
+# остальное, видимо, так же как было.
+register "2013-12-24 18:10" do
+  case context.partner_code
+  when 'anonymous'
+    our_markup 300
+  when 'app-ios'
+    our_markup 600
+  when 'email'
+    our_markup 200
+  else
+    netto '5.5%'
+  end
+end
+
+# на все правила АЦ скидка=100% комиссии+5%
 # остальное, видимо, так же как было.
 register "2013-12-23 18:00" do
   case context.partner_code
@@ -9,7 +24,7 @@ register "2013-12-23 18:00" do
   when 'email'
     our_markup 200
   else
-      netto '5%'
+    netto '5%'
   end
 end
 
