@@ -12,8 +12,6 @@
     <td width="10%" style="<%= 'color: blue' if rule.ticketing_method == 'direct' %>" title="<%= rule.agent_comments %>"> <%= rule.agent %> </td>
     <td width="10%" style="<%= 'color: blue' if rule.ticketing_method != 'direct' %>" title="<%= rule.subagent_comments %>"> <%= rule.subagent %> </td>
     <td width="10%" title="сбор агента 1%/2%"> <%= rule.consolidator %> </td>
-    <td width="10%" style="<%= 'color:green' unless rule.discount.try(:zero?) %>" title="скидка"> <%= rule.discount %> </td>
-    <td width="10%" style="<%= 'color:green' unless rule.our_markup.try(:zero?) %>" title="надбавка"> <%= rule.our_markup %> </td>
     <td width="30%" style="color:red"> <%= "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </td>
   </tr>
 </table>
@@ -28,10 +26,6 @@
       <%= rule.subagent %> </th>
     <th width="10%" title="сбор агента 1%/2%">
       <%= rule.consolidator unless rule.consolidator.try(:zero?) %> </th>
-    <th width="10%" style="<%= 'color:green' unless rule.discount.try(:zero?) %>" title="скидка">
-      <%= rule.discount unless rule.discount.try(:zero?) %> </th>
-    <th width="10%" style="<%= 'color:green' unless rule.our_markup.try(:zero?) %>" title="надбавка">
-      <%= rule.our_markup unless rule.our_markup.try(:zero?) %> </th>
     <th width="10%">
       <% if rule.tour_code %>
         tour code: <%= rule.tour_code %>
@@ -40,15 +34,15 @@
         designator: <%= rule.designator %>
       <% end %>
     </th>
-    <th width="10%" style="color:red"> <%= rule.subagent - rule.discount + rule.our_markup %>
+    <th width="10%" style="color:red"> <%= rule.subagent %>
     <%# "отключено #{reason_of_disability(rule)}" if rule.disabled? %> </th>
   </tr>
   <tr style="<%= strype %>">
-    <td colspan=4><h3>агентский договор</h3> <%= raw (rule.agent_comments || '--').gsub("\n", "<br>") %> </td>
-    <td colspan=4><h3>субагентский договор</h3> <%= raw (rule.subagent_comments || '--').gsub("\n", "<br>") %> </td>
+    <td colspan=3><h3>агентский договор</h3> <%= raw (rule.agent_comments || '--').gsub("\n", "<br>") %> </td>
+    <td colspan=3><h3>субагентский договор</h3> <%= raw (rule.subagent_comments || '--').gsub("\n", "<br>") %> </td>
   </tr>
   <tr style="<%= strype %>">
-    <td colspan=4>
+    <td colspan=3>
         <h3>правила</h3>
         <ul>
           <% if rule.important %>
@@ -83,7 +77,7 @@
           </ul>
 
     </td>
-    <td colspan=4>
+    <td colspan=3>
       <% provided_examples = examples.presence || (rule.examples || []).map(&:code) %>
       <% if provided_examples.present? %>
         <h3>примеры</h3>
