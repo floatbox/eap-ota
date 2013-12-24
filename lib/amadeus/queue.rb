@@ -54,6 +54,10 @@ class Amadeus::Queue
   def view_queue_cmd
     "QV/#{queue_id}"
   end
+
+  def queue_count_cmd
+    "QC#{queue_id}"
+  end
 end
 
 module Amadeus::Queue::Message
