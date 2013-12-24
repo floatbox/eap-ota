@@ -49,6 +49,7 @@ example "peesvo svocdg"
 example "rovled ledcdg"
 example "kufsvo svocdg"
 example "ufadme dmecdg"
+example "kufprg prgkuf"
 end
 
 rule 4 do

@@ -62,7 +62,7 @@ agent_comment "Exclusions not published fares: CNRs, touroperator fares, Student
 subagent_comment "3%"
 subclasses "STEL"
 routes "RU-CH/OW,RT"
-example "lugsir/s sirlug/t"
+example "svosir/s sirsvo/t"
 end
 
 rule 4 do
