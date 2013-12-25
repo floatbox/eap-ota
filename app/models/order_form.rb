@@ -280,7 +280,9 @@ class OrderForm
   def price_contradiction
     valid?
     difference = payment.amount - recommendation.price_with_payment_commission
-    difference.abs > 1
+    result = difference.abs > 1
+    Rails.logger.info "Price contradiction: #{payment.amount} - #{recommendation.price_with_payment_commission} = #{difference} : #{result}"
+    result
   end
 
   def last_flight_date
