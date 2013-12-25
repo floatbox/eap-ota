@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.16'
 
 gem 'jquery-rails', '~> 2.0.2'
 gem 'i18n-js', :git => 'https://github.com/fnando/i18n-js.git'
@@ -27,9 +27,6 @@ group :deployment do
 end
 
 # логгеры. выберу только один
-gem 'lumberjack'
-gem 'lumberjack_syslog_device'
-gem 'lumberjack_multi-device'
 gem 'riemann-client', require: false
 # для импорта zip файлов
 gem 'zip'
@@ -57,7 +54,6 @@ gem 'paper_trail'
 gem 'geo_ip'
 gem 'rollbar'
 gem 'newrelic_rpm'
-# gem 'rpm_contrib'
 gem 'mongoid'
 gem 'bson_ext'
 gem 'mobile-fu'
