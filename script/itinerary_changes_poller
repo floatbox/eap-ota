@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+require File.expand_path('../../config/environment',  __FILE__)
+
+queue  = Amadeus::Queue.new 'Q8C22', Amadeus.office('ticketing')
+queue.logger = ActiveSupport::BufferedLogger.new('log/poller.log')
+poller = Amadeus::Poller.new(queue) do |message|
+  order = Order.find_by_pnr_number(message.pnr)
+  note  = order.notifications.new
+  note.comment = CustomTemplate.new.render(partial: 'pnr/itinerary_changes_notice')
+  note.format  = 'ticket'
+  note.save!
+end

@@ -84,6 +84,7 @@ group :development do
   gem 'yard'
   gem 'yard-activerecord'
   gem 'zeus'
+  gem 'letter_opener'
 end
 
 group :test do

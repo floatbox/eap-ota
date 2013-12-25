@@ -217,6 +217,10 @@ GEM
       activesupport (>= 3.0.0)
       railties (>= 3.0.0)
     kgio (2.8.0)
+    launchy (2.1.0)
+      addressable (~> 2.2.6)
+    letter_opener (1.0.0)
+      launchy (>= 2.0.4)
     libnotify (0.8.2)
       ffi (>= 1.0.11)
     listen (2.2.0)
@@ -445,6 +449,7 @@ DEPENDENCIES
   i18n-js!
   jquery-rails (~> 2.0.2)
   kaminari
+  letter_opener
   libnotify
   memoize
   mobile-fu
