@@ -46,7 +46,7 @@ example "svojfk/y jfksvo/m"
 end
 
 rule 6 do
-ticketing_method "aviacetner"
+ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
 agent_comment "5% (3%) от тарифа при условии:"
