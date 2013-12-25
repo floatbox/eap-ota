@@ -109,7 +109,11 @@ module Amadeus::Queue::Message
     private
 
     def parse_message
-      @count = raw_message.lines.to_a[3].split(/\s+/)[2].to_i
+      @count = begin
+        line = raw_message.lines.to_a[3]
+        match_data = line.match(/C[0-9 ]+\.D\d+\.\s*(\d+)/)
+        match_data.captures.first
+      end
     end
   end
 end
