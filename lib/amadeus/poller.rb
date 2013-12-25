@@ -29,7 +29,7 @@ class Amadeus::Poller
   end
 
   def sleep_interval
-    @sleep_interval ||= 1.minutes
+    @sleep_interval ||= 30.minutes
   end
 
   def reset_retry
