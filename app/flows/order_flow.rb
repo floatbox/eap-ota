@@ -60,11 +60,12 @@ class OrderFlow
       end
     end
 
-    if @order_form.price_with_payment_commission != @order_form.recommendation.price_with_payment_commission
+    if @order_form.price_contradiction
       @order_form.price_with_payment_commission = @order_form.recommendation.price_with_payment_commission
       @order_form.update_in_cache
       return :new_price
     end
+
     if @order_form.invalid?
       StatCounters.inc %W[pay.errors.form]
       logger.info "Pay: invalid order: #{@order_form.errors_hash.inspect}"

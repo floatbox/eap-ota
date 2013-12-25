@@ -277,6 +277,12 @@ class OrderForm
     people_count != calculated_people_count
   end
 
+  def price_contradiction
+    valid?
+    difference = payment.amount - recommendation.price_with_payment_commission
+    difference.abs > 1
+  end
+
   def last_flight_date
     recommendation.segments.last.dept_date
   end
