@@ -1,5 +1,5 @@
 # 6% всем
-register "2013-12-15 13:00" do
+register "2013-12-25 14:10" do
   netto "6%"
 end
 
