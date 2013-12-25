@@ -34,7 +34,7 @@ class PaymentsController < ApplicationController
       custom_field_order = @order
     end
 
-    card = CreditCard.new(params[:card])
+    card = CreditCard.new(params[:order][:payment][:card])
     if card.valid?
       custom_fields = PaymentCustomFields.new(
         ip: request.remote_ip,
