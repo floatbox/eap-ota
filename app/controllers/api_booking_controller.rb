@@ -7,7 +7,6 @@ class ApiBookingController < ApplicationController
 
   def create
     @recommendation = Recommendation.deserialize(params[:recommendation])
-    @recommendation.find_commission! context: context
     @search = AviaSearch.new
     @search.adults = params[:adults] if params[:adults]
     @search.children = params[:children] if params[:children]

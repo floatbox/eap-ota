@@ -21,6 +21,7 @@ class OrderFlow
     return if Conf.site.forbidden_booking
 
     return unless search
+    recommendation.find_commission! context: context
     return unless recommendation.allowed_booking?
 
     strategy = Strategy.select(rec: recommendation, search: search, context: context)

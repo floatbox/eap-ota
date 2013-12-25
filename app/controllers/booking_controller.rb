@@ -21,7 +21,6 @@ class BookingController < ApplicationController
   def create
     logo_url = context.partner.logo_exist? ? context.partner.logo_url : ''
     @recommendation = Recommendation.deserialize(params[:recommendation])
-    @recommendation.find_commission! context: context
     @search = AviaSearch.from_code(params[:query_key])
 
     order_flow = OrderFlow.new(
