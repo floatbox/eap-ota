@@ -10,22 +10,20 @@ class OrderFlow
     Rails.logger
   end
 
+  # FIXME больше метамагии?
   def preliminary_booking_result
+    ActiveSupport::Notifications.instrument 'preliminary_booking_result.order_flow', flow: self do |payload|
+      payload[:result] = preliminary_booking_result_without_instrumentation
+    end
+  end
+
+  def preliminary_booking_result_without_instrumentation
     return if Conf.site.forbidden_booking
 
     return unless search
     return unless recommendation.allowed_booking?
 
     strategy = Strategy.select(rec: recommendation, search: search, context: context)
-
-    StatCounters.inc %W[enter.preliminary_booking.total]
-    StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.total] unless context.partner.anonymous?
-    StatCounters.inc %W[enter.preliminary_booking_by_airline.#{recommendation.validating_carrier_iata}.total]
-
-    if destination = Destination.get_by_search(search)
-      StatCounters.d_inc destination, %W[enter.api.total]
-      StatCounters.d_inc destination, %W[enter.api.#{context.partner_code}.total] unless context.partner.anonymous?
-    end
 
     return unless strategy.check_price_and_availability
     @order_form = OrderForm.new(
@@ -36,9 +34,6 @@ class OrderFlow
       :marker => marker
     )
     @order_form.save_to_cache
-    StatCounters.inc %W[enter.preliminary_booking.success]
-    StatCounters.inc %W[enter.preliminary_booking.#{context.partner_code}.success] unless context.partner.anonymous?
-    StatCounters.inc %W[enter.preliminary_booking_by_airline.#{recommendation.validating_carrier_iata}.success]
     return true
   end
 

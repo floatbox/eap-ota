@@ -9,3 +9,5 @@ require 'amadeus/controller_runtime'
 require 'amadeus/response_log_subscriber'
 # лог рекомендаций
 require 'recommendation_log_subscriber'
+# счетчики бронирования
+require 'order_flow_log_subscriber'
