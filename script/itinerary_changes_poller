@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require File.expand_path('../../config/environment',  __FILE__)
 
-queue  = Amadeus::Queue.new 'Q8C22', Amadeus.office('ticketing')
+queue  = Amadeus::Queue.new '8C22', Amadeus.office('ticketing')
 logger = ActiveSupport::BufferedLogger.new('log/poller.log')
 queue.logger = logger
 poller = Amadeus::Poller.new(queue) do |message|
