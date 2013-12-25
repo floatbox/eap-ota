@@ -29,6 +29,7 @@ class StatCounters
   end
 
   def self.inc keys
+    keys.each { |key| Rails.logger.debug "StatCounters: #{key}" }
     # mongo
     connection['counters_daily'].find(date_key).upsert('$inc' => json_set(keys))
     connection['counters_hourly'].find(hour_key).upsert('$inc' => json_set(keys))
