@@ -2,11 +2,14 @@
 require File.expand_path('../../config/environment',  __FILE__)
 
 queue  = Amadeus::Queue.new 'Q8C22', Amadeus.office('ticketing')
-queue.logger = ActiveSupport::BufferedLogger.new('log/poller.log')
+logger = ActiveSupport::BufferedLogger.new('log/poller.log')
+queue.logger = logger
 poller = Amadeus::Poller.new(queue) do |message|
+  logger.info "Processing message: #{message}"
   order = Order.find_by_pnr_number(message.pnr)
   note  = order.notifications.new
   note.comment = CustomTemplate.new.render(partial: 'pnr/itinerary_changes_notice')
   note.format  = 'ticket'
   note.save!
+  logger.info "Processing finished"
 end
