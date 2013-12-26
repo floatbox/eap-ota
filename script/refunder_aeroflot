@@ -1,0 +1,97 @@
+# pnr'ы -> проверить, не полетел ли -> маршрут -> [по россии, из россии за бугор] -> refund для каждого билета в заказе (цена рефанда по правилам) -> нотификацию с маршруткой
+
+require 'pp'
+
+pnrs = %w[]
+statuses = {}
+
+pnrs.each do |pnr|
+  order = Order.find_by_pnr_number(pnr)
+  puts '+'*80
+  puts pnr
+  puts order.id
+  puts '-'*80
+  first_flight = order.flights.first
+
+  if first_flight.nil?
+    puts "Skipping: no flights!"
+    statuses[pnr] = [:skipped, 'no flights']
+    next
+  end
+
+  if first_flight.departure_datetime_utc < 1.day.from_now
+    puts "Skipping: already used: #{first_flight.departure_datetime_utc}"
+    statuses[pnr] = [:skipped, "already used: #{first_flight.departure_datetime_utc}"]
+    next
+  end
+
+  variant = Variant.new(flights: order.flights)
+  if variant.country_iatas.first != 'RU'
+    puts "Skipping: not from RU: #{variant.country_iatas}"
+    statuses[pnr] = [:skipped, "not from RU: #{variant.country_iatas}"]
+    next
+  end
+
+  refund_fee = if variant.country_iatas.uniq == ['RU']
+    1400.to_money('RUB')
+  else
+    1575.to_money('RUB') #fixme 35 eur
+  end
+
+  tickets = []
+
+  order.sold_tickets.to_a.select(&:ticket?).each do |ticket|
+    refund_ticket = Ticket.new(
+      order_id: order.id,
+      parent_id: ticket.id,
+      kind: 'refund',
+      route: ticket.route,
+      original_price_fare: -ticket.original_price_fare,
+      original_price_tax: -ticket.original_price_tax,
+      original_price_penalty: refund_fee,
+      comment: 'Сделано роботами в Российской Федерации',
+    )
+    if ticket.fee < 0
+      refund_ticket.price_discount = -ticket.fee
+    else
+      refund_ticket.price_our_markup = -ticket.fee
+    end
+    refund_ticket.price_operational_fee = Ticket.default_refund_fee(order.created_at)
+
+    refund_ticket.save!
+    tickets << [ticket.reload, refund_ticket]
+    puts "Processed refund for ticket #{ticket.id}"
+  end
+
+  deadline_date, deadline_time = I18n.with_locale(:ru) do
+    datetime = (first_flight.departure_datetime_utc - 48.hours)
+    local_datetime = datetime.getlocal('+04:00')
+    puts "Original departure date: #{datetime}"
+    [I18n.localize(local_datetime, format: "%-d %B"), I18n.localize(local_datetime, format: "%H:%M")]
+  end
+  puts "What we show: #{deadline_date} #{deadline_time}"
+
+  notification = order.notifications.build
+  notification.format  = 'ticket'
+  notification.subject = "Информация по возврату авиабилета по бронированию #{pnr}"
+  notification.comment = %|
+Добрый день!
+
+Согласно правилам тарифа, возврат по вашему бронированию #{order.pnr_number} разрешен.
+
+Сумма к возврату, с учетом штрафа при условии подтверждения отказа от билета более чем за 24 часа до вылета:
+
+| + tickets.map{|(ticket, refund)| "Билет #{ticket.number_with_code}: #{-refund.price_with_payment_commission} руб."}.join("\n") +
+%|
+
+Мы произведем возврат, как только получим от вас подтверждение на проведение операции возврата.
+
+Однако согласно внутреннему регламенту международных платежных систем (visa, mastercard) денежные средства будут зачислены обратно на Ваш банковский счет в течение 33 дней (обычный срок - 2 недели).
+
+Ждем подтверждение для проведения операции возврата в ответном письме до #{deadline_date} до #{deadline_time} по Московскому времени.|
+  notification.save!
+  statuses[pnr] = [:processed]
+  pp statuses
+end
+
+pp statuses
