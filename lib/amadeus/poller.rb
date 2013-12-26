@@ -29,7 +29,7 @@ class Amadeus::Poller
   end
 
   def sleep_interval
-    @sleep_interval ||= 30.minutes
+    @sleep_interval ||= 5.minutes
   end
 
   def reset_retry
@@ -37,7 +37,7 @@ class Amadeus::Poller
   end
 
   def increment_retry
-    self.retry_interval += 5.minutes
+    self.retry_interval += 2.minutes
     logger.info "Retry increased, new value: #{retry_interval / 60} minutes"
   end
 end
