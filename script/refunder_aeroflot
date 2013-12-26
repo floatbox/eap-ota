@@ -9,6 +9,11 @@ pnrs.each do |pnr|
   order = Order.find_by_pnr_number(pnr)
   puts '+'*80
   puts pnr
+  if order.nil?
+    puts "Skipping: wrong pnr"
+    statuses[pnr] = [:skipped, 'wrong pnr']
+    next
+  end
   puts order.id
   puts '-'*80
   first_flight = order.flights.first
@@ -29,6 +34,12 @@ pnrs.each do |pnr|
   if variant.country_iatas.first != 'RU'
     puts "Skipping: not from RU: #{variant.country_iatas}"
     statuses[pnr] = [:skipped, "not from RU: #{variant.country_iatas}"]
+    next
+  end
+
+  if order.tickets.map(&:status).uniq != ['ticketed']
+    puts "Skipping: has refunds/exchanges"
+    statuses[pnr] = [:skipped, "has refunds"]
     next
   end
 
