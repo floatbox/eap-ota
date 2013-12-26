@@ -5,6 +5,7 @@ init: function() {
     this.initTabs();
     this.initOffers();
     results.cheap.getHint = function() {
+        if (this.offer.variants[0].visiblePrice >= results.data.averagePrice) return '';
         return I18n.t('results.tabs.cheap.hint', { price: results.currencies['RUR'].absorb(results.data.averagePrice.separate()) });
     };
     results.optimal.getHint = function() {
