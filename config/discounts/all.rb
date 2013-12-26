@@ -1,3 +1,8 @@
+# 6.5%
+register "2013-12-26 19:30" do
+  netto "6.5%"
+end
+
 # 6.5% + 800
 register "2013-12-25 21:00" do
   Discount::Rule.new(
