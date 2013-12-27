@@ -1,3 +1,10 @@
+# 6.5% + 300
+register "2013-12-27 19:20" do
+  Discount::Rule.new(
+    discount: (commission.subagent.extract('%') + Commission::Formula.new('6.5% + 300')).round(2)
+  )
+end
+
 # 6.5%
 register "2013-12-26 19:30" do
   netto "6.5%"
