@@ -1,7 +1,7 @@
 carrier "OA"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1%"
 subagent "5"
 consolidator "2%"
@@ -11,7 +11,7 @@ example "svocdg"
 end
 
 rule 2 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1%"
 subagent "5"
 consolidator "2%"

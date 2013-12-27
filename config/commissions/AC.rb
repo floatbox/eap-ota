@@ -1,9 +1,9 @@
 carrier "AC", no_commission: "на свои не продается"
 
 rule 1 do
+disabled "dtt disabled"
 no_commission "на свои не продается"
 ticketing_method "downtown"
-disabled "dtt disabled"
 agent "10%"
 subagent "8%"
 agent_comment "по классам F, A,D, Z, P у них осталась комиссия 10 %"
@@ -15,9 +15,9 @@ example "svojfk/a jfksvo/z"
 end
 
 rule 2 do
+disabled "dtt disabled"
 no_commission "на свои не продается"
 ticketing_method "downtown"
-disabled "dtt disabled"
 agent "8%"
 subagent "6%"
 agent_comment "по классам Q, V, W, S, T, L, K у них комиссия 8%"
@@ -29,9 +29,9 @@ example "svojfk/q jfksvo/k"
 end
 
 rule 3 do
+disabled "dtt disabled"
 no_commission "на свои не продается"
 ticketing_method "downtown"
-disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 agent_comment "по классам Y, B, M, U, H у них комиссия 5%"

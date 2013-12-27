@@ -25,7 +25,7 @@ routes "MOW-NYC/OW,RT"
 example "svojfk/j jfksvo/z"
 end
 
-rule 2 do
+rule 3 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -37,7 +37,7 @@ routes "MOW-GY,BB,JM,TT/OW,RT"
 example "svotab/j tabsvo/z"
 end
 
-rule 3 do
+rule 4 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -49,7 +49,7 @@ routes "MOW-MX/OW,RT"
 example "svotam/j tamsvo/z"
 end
 
-rule 4 do
+rule 5 do
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -61,10 +61,10 @@ routes "MOW-US,CA/OW,RT"
 example "svoyyz/c yyzsvo/i"
 end
 
-rule 5 do
+rule 6 do
+disabled "dtt disabled"
 important!
 ticketing_method "downtown"
-disabled "dtt disabled"
 agent "8%"
 subagent "6%"
 agent_comment "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"
@@ -77,9 +77,9 @@ example "svojfk/d jfksvo/m"
 example "jfksvo/x"
 end
 
-rule 6 do
-ticketing_method "downtown"
+rule 7 do
 disabled "dtt disabled"
+ticketing_method "downtown"
 agent "5%"
 subagent "3%"
 agent_comment "5%"
@@ -91,7 +91,7 @@ example "zigjfk/i jfkzig/s"
 example "accjfk/k jfkacc/k"
 end
 
-rule 7 do
+rule 8 do
 important!
 ticketing_method "aviacenter"
 agent "1%"
@@ -105,10 +105,10 @@ example "accjfk/su:dl jfkacc/su:dl"
 example "jfksvo/x/su:dl"
 end
 
-rule 8 do
+rule 9 do
+disabled "dtt disabled"
 important!
 ticketing_method "downtown"
-disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 agent_comment "5%"
@@ -120,7 +120,7 @@ example "zigjfk/i/az:dl jfkzig/s/az:dl"
 example "accjfk/l/az:dl jfkacc/n/az:dl"
 end
 
-rule 9 do
+rule 10 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
@@ -137,7 +137,7 @@ example "cdgoko"
 example "okomia"
 end
 
-rule 10 do
+rule 11 do
 important!
 ticketing_method "aviacenter"
 agent "1%"
@@ -150,7 +150,7 @@ example "miadtw dtwmia"
 example "miadtw dtwmia/ab"
 end
 
-rule 11 do
+rule 12 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
@@ -160,7 +160,7 @@ interline :absent
 example "cdgsvo/ab"
 end
 
-rule 12 do
+rule 13 do
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"

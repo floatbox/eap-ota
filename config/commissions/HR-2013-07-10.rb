@@ -1,7 +1,7 @@
 carrier "HR", start_date: "2013-07-10"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1"
 subagent "0.05"
 consolidator "2%"

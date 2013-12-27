@@ -1,8 +1,8 @@
 carrier "UN", start_date: "2013-12-11"
 
 rule 1 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "5%"
 subagent "4%"
 agent_comment "5% американский office-id"
@@ -16,7 +16,7 @@ end
 
 rule 2 do
 important!
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "9%"
 subagent "7%"
 comment "базовое вознаграждение ац для высоких c 21.06"
@@ -27,7 +27,7 @@ example "cdgsvo/r svocdg/f"
 end
 
 rule 3 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "7%"
 subagent "5%"
 comment "базовое вознаграждение ац c 21.06.2013"
@@ -38,7 +38,7 @@ example "cdgsvo/h svocdg/y"
 end
 
 rule 4 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "3%"
 agent_comment "5% от тарифа на рейсы Перевозчика по всем тарифам Туристического класса;"
@@ -48,7 +48,7 @@ example "cdgsvo/g svocdg/u"
 end
 
 rule 5 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "3%"
 comment "интерлайн c 21.05.2013 (не меняется)"
@@ -61,7 +61,7 @@ end
 
 rule 6 do
 important!
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "10%"
 subagent "8%"
 agent_comment "Для перевозок Interline, при продаже авиаперевозок на бланках с кодом 670 на рейсы авиакомпаний OS, LX, UA, с учаском перевозки на UN, составляет:"
@@ -73,7 +73,7 @@ end
 
 rule 7 do
 important!
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "9%"
 subagent "7%"
 comment "дополнительно: Хьюстон-Сингапур (проверять новый чек)"

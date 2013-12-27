@@ -1,6 +1,6 @@
 carrier "A3", start_date: "2014-01-01"
 
-rule 3 do
+rule 1 do
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -11,7 +11,7 @@ international
 example "svocdg/business cdgsvo/business"
 end
 
-rule 4 do
+rule 2 do
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -21,7 +21,7 @@ international
 example "scocdg cdgsvo"
 end
 
-rule 5 do
+rule 3 do
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
@@ -33,7 +33,7 @@ domestic
 example "skgath athskg/business"
 end
 
-rule 6 do
+rule 4 do
 ticketing_method "aviacenter"
 agent "1"
 subagent "0"

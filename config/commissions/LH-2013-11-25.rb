@@ -1,8 +1,8 @@
 carrier "LH", start_date: "2013-11-25"
 
 rule 1 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "5%"
 subagent "3%"
 tour_code "815ZU"
@@ -16,8 +16,8 @@ example "svojfk/y jfksvo/m"
 end
 
 rule 2 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "8%"
 subagent "6%"
 tour_code "815ZU"
@@ -32,8 +32,8 @@ example "svojfk/q jfksvo/m"
 end
 
 rule 3 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "10%"
 subagent "8%"
 tour_code "815ZU"
@@ -48,7 +48,7 @@ example "svojfk/q jfksvo/f"
 end
 
 rule 4 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "3%"
 agent_comment "Период продаж – 25 ноября – 31 декабря 2013г."
@@ -73,7 +73,7 @@ example "svocdg"
 end
 
 rule 5 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1"
 subagent "0.05"
 consolidator "2%"
@@ -85,7 +85,7 @@ example "dmejfk jfkdme/US"
 end
 
 rule 6 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1"
 subagent "0.05"
 consolidator "2%"

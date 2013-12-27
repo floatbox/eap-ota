@@ -1,7 +1,7 @@
 carrier "BT"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1"
 subagent "0.5"
 consolidator "2%"

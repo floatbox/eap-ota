@@ -1,7 +1,7 @@
 carrier "OK", start_date: "2013-11-01"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "4.5%"
 agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
@@ -18,7 +18,7 @@ end
 
 rule 2 do
 important!
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "4.5%"
 comment "Копия для ловли код-шера"
@@ -36,7 +36,7 @@ example "ledcdg/ab:ok"
 end
 
 rule 3 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "4.5%"
 agent_comment "С 01.11.13г. по 31.03.14г. 5% (3%) от опубл. тарифов на рейсы с вылетом из ниже перечисленных городов РФ (включая рейсы code-share)."
@@ -53,7 +53,7 @@ end
 
 rule 4 do
 important!
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "4.5%"
 comment "Копия для ловли код-шера"
@@ -70,7 +70,7 @@ example "ufadme dmecdg/ab:ok"
 end
 
 rule 5 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1%"
 subagent "0.5%"
 agent_comment "1% от опубл. тарифов на собств.рейсы OK;"

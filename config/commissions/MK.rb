@@ -1,7 +1,7 @@
 carrier "MK"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1%"
 subagent "0.5%"
 agent_comment "1% от опубл. тарифов на рейсы MK (В договоре Interline не прописан.)"
@@ -10,7 +10,7 @@ example "svocdg"
 end
 
 rule 2 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1%"
 subagent "0.5%"
 agent_comment "1р Interline не прописан"

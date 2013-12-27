@@ -96,9 +96,8 @@ example "cdgiev/ab"
 end
 
 rule 9 do
-disabled "переключили на бонусный ац"
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "downtown"
 agent "7%"
 subagent "6%"
 agent_comment "все через dtt"

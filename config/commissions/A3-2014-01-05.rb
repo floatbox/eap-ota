@@ -40,8 +40,8 @@ subagent "0.05"
 consolidator "2%"
 agent_comment "1 рубль (0,05 руб+2% сбор АЦ) с тарифов по Р, G классам, IT- тарифы, а также авиабилеты, выписанные по интерлайн соглашению"
 subagent_comment "1 рубль (0,05 руб+2% сбор АЦ) с тарифов по Р, G классам, IT- тарифы, а также авиабилеты, выписанные по интерлайн соглашению"
-subclasses "PG"
 interline :yes
+subclasses "PG"
 example "svocdg/p cdgsvo/g/ab"
 end
 

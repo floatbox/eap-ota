@@ -1,7 +1,7 @@
 carrier "A3", start_date: "2013-11-23"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "15%"
 subagent "13%"
 agent_comment "На период с 23.11.13 по 31.12.13г. от всех опубл. тарифов (кроме тарифов по классу P, конфиде тарифов и тарифов, опубл. на момент действия распродаж) на собственные рейсы A3 между Россией и Грецией"
@@ -15,7 +15,7 @@ example "svoath/business athsvo/business"
 end
 
 rule 2 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "9%"
 subagent "7%"
 agent_comment "На период с 23.11.13 по 31.12.13г. от всех опубл. тарифов (кроме тарифов по классу P, конфиде тарифов и тарифов, опубл. на момент действия распродаж) на собственные рейсы A3 между Россией и Грецией"
@@ -28,7 +28,7 @@ example "svoath athsvo"
 end
 
 rule 3 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "9%"
 subagent "7%"
 agent_comment "9% для тарифов Бизнес класса"
@@ -39,7 +39,7 @@ example "svocdg/business cdgsvo/business"
 end
 
 rule 4 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "7%"
 subagent "5%"
 agent_comment " 7% для тарифов Экономического класса"
@@ -49,7 +49,7 @@ example "scocdg cdgsvo"
 end
 
 rule 5 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1%"
 subagent "5"
 consolidator "2%"
@@ -61,7 +61,7 @@ example "skgath athskg/business"
 end
 
 rule 6 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1"
 subagent "0"
 consolidator "2%"

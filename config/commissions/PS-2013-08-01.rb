@@ -1,7 +1,7 @@
 carrier "PS", start_date: "2013-08-01"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "3%"
 agent_comment "Для перевозок, содержащих участок в/из пунктов РФ:"
@@ -12,7 +12,7 @@ example "svocdg cdgsvo"
 end
 
 rule 2 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "7%"
 subagent "8%"
 agent_comment "7% (8%) от тарифа Эконом класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) при наличии участков из/в пунктов в РФ, кроме Москвы;"
@@ -23,7 +23,7 @@ end
 
 rule 3 do
 important!
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "7%"
 subagent "8%"
 agent_comment "7% от тарифа Бизнес класса на собств. и совместных рейсах Авиакомпании под кодом PS (566) из/в пунктов в РФ;"
@@ -35,7 +35,7 @@ example "svocdg/business cdgsvo/business"
 end
 
 rule 4 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "3%"
 agent_comment "5% от опубл. тарифов на рейсы Interline c обязательным участком PS"
@@ -46,7 +46,7 @@ example "cdgsvo svocdg/ab"
 end
 
 rule 5 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "0%"
 subagent "0%"
 consolidator "2%"
@@ -58,7 +58,7 @@ example "cdgsvo/ab"
 end
 
 rule 6 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1%"
 subagent "0.05"
 consolidator "2%"
@@ -70,7 +70,7 @@ example "ievcdg"
 end
 
 rule 7 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1%"
 subagent "5"
 consolidator "2%"
@@ -83,7 +83,7 @@ example "cdgiev ievcdg/ab"
 end
 
 rule 8 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "0%"
 subagent "0%"
 consolidator "2%"
@@ -96,9 +96,8 @@ example "cdgiev/ab"
 end
 
 rule 9 do
-disabled "переключили на бонусный ац"
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "7%"
 subagent "6%"
 agent_comment "все через dtt"

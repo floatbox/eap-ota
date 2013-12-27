@@ -13,9 +13,9 @@ example "cdgsvo/ab svocdg/su"
 example "cdgsvo/ab"
 end
 
-rule 3 do
-ticketing_method "aviacenter"
+rule 2 do
 disabled "не умеем"
+ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
 consolidator "2%"

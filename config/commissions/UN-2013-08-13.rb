@@ -1,8 +1,8 @@
 carrier "UN", start_date: "2013-08-13"
 
 rule 1 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "downtown"
 agent "5%"
 subagent "4%"
 agent_comment "5% американский office-id"
@@ -133,9 +133,9 @@ example "tsedme dmepek pekdme dmetse"
 end
 
 rule 12 do
+disabled "dtt disabled"
 important!
 ticketing_method "downtown"
-disabled "dtt disabled"
 agent "12%"
 subagent "11%"
 comment "Майами/Нью-Йорк прямые из Москвы и сквозные через Москву из RU UA KZ UZ AM — через dtt"

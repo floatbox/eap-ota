@@ -1,8 +1,8 @@
 carrier "DL", start_date: "2014-04-01"
 
 rule 1 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "downtown"
 agent "8%"
 subagent "6%"
 agent_comment "1232 DL/AFKL/AZ US-EMEAI Consolidator Commission Program Amendment #1"

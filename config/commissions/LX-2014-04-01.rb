@@ -1,8 +1,8 @@
 carrier "LX", start_date: "2014-04-01"
 
 rule 1 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "downtown"
 agent "10%"
 subagent "8%"
 tour_code "815ZU"
@@ -16,8 +16,8 @@ example "svojfk/a jfksvo/z"
 end
 
 rule 2 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "downtown"
 agent "8%"
 subagent "6%"
 tour_code "815ZU"
@@ -31,8 +31,8 @@ example "svojfk/q jfksvo/k"
 end
 
 rule 3 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "downtown"
 agent "5%"
 subagent "3%"
 tour_code "815ZU"

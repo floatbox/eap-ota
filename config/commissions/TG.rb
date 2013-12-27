@@ -1,7 +1,7 @@
 carrier "TG"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "5%"
 subagent "3%"
 agent_comment "С 01.02.2011г. 5% от всех опубл.и конфиденциальных тарифов на международные рейсы TG"
@@ -11,7 +11,7 @@ example "svobkk"
 end
 
 rule 2 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "0%"
 subagent "0%"
 consolidator "2%"
@@ -22,7 +22,7 @@ example "bkkdmk"
 end
 
 rule 3 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "0%"
 subagent "0%"
 consolidator "2%"

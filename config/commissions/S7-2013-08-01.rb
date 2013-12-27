@@ -1,7 +1,7 @@
 carrier "S7", start_date: "2013-08-01"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "0.1%"
 subagent "0.05"
 consolidator "2%"
@@ -12,7 +12,7 @@ example "svocdg/w"
 end
 
 rule 2 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "0.1%"
 subagent "0.05"
 consolidator "2%"
@@ -23,7 +23,7 @@ example "svocdg/u6 cdgsvo"
 end
 
 rule 3 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "0.1%"
 subagent "0.05"
 consolidator "2%"
@@ -178,7 +178,7 @@ example "vvossn"
 end
 
 rule 4 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "3%"
 subagent "1%"
 agent_comment "При продаже перевозок на международные воздушные линии, включая комбинированную перевозку на внутренние воздушные линии и международные воздушные линии и комбинированную перевозку с несколькими участками международных воздушных линий, на которых установлен единый сквозной тариф (системный трансфер), оформленных на ПД на рейсы Перевозчика,включая рейсы по соглашению код-шер (4000-4999), вознаграждение составляет: 3%"

@@ -1,7 +1,7 @@
 carrier "CX"
 
 rule 1 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "7%"
 subagent "5%"
 agent_comment "7% от всех опубликованных и специальных тарифов"

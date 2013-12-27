@@ -36,9 +36,9 @@ example "cdgpek/q pekcdg/o"
 end
 
 rule 4 do
+disabled "dtt disabled"
 important!
 ticketing_method "downtown"
-disabled "dtt disabled"
 agent "5%"
 subagent "3%"
 tour_code "USAN002"

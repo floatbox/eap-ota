@@ -2,7 +2,7 @@ carrier "SU", start_date: "2013-07-01"
 
 rule 1 do
 disabled "с первого сентября - через авиацентр"
-ticketing_method "downtown"
+ticketing_method "direct"
 agent "9%"
 subagent "8%"
 agent_comment "правила для выписки авиакомпании SU в DTT"
@@ -13,8 +13,8 @@ example "jfksvo svojfk"
 end
 
 rule 2 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "5%"
 subagent "4.5%"
 agent_comment "правила для выписки авиакомпании SU в DTT"
@@ -25,9 +25,8 @@ example "cdgsvo svocdg"
 end
 
 rule 3 do
-disabled "с первого сентября - через авиацентр"
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "5%"
 subagent "4.5%"
 agent_comment "Коля: SU на dtt 5%/4.5%/4.2%, кроме тель-авива и SU#1"
@@ -41,7 +40,7 @@ example "svocdg/su cdgsvo/ab"
 end
 
 rule 4 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "4%"
 subagent "3%"
 agent_comment "4%  от тарифа на собств. рейсы SU с началом перевозки из РФ (вкл. рейсы по согл. «Код-шеринг» и рейсы Interline с участком SU, а также по субсидированным перевозкам);"
@@ -53,7 +52,7 @@ end
 
 rule 5 do
 important!
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1eur"
 subagent "5"
 consolidator "2%"
@@ -65,7 +64,7 @@ example "cdgsvo/ab svocdg/su"
 end
 
 rule 6 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1eur"
 subagent "5"
 consolidator "2%"

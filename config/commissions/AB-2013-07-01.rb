@@ -1,8 +1,8 @@
 carrier "AB", start_date: "2013-07-01"
 
 rule 1 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "10%"
 subagent "8%"
 comment "только собственные рейсы AB и HG"
@@ -15,7 +15,7 @@ example "cdgfra fracdg/hg"
 end
 
 rule 2 do
-ticketing_method "aviacenter"
+ticketing_method "direct"
 agent "1"
 subagent "0.05"
 consolidator "2%"

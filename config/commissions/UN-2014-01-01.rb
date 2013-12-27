@@ -1,8 +1,8 @@
 carrier "UN", start_date: "2014-01-01"
 
 rule 1 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "downtown"
 agent "5%"
 subagent "4%"
 agent_comment "5% американский office-id"

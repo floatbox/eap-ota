@@ -1,8 +1,8 @@
 carrier "LX", start_date: "2013-12-16"
 
 rule 1 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "10%"
 subagent "8%"
 tour_code "815ZU"
@@ -16,8 +16,8 @@ example "svojfk/a jfksvo/z"
 end
 
 rule 2 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "8%"
 subagent "6%"
 tour_code "815ZU"
@@ -31,8 +31,8 @@ example "svojfk/q jfksvo/k"
 end
 
 rule 3 do
-ticketing_method "downtown"
 disabled "dtt disabled"
+ticketing_method "direct"
 agent "5%"
 subagent "3%"
 tour_code "815ZU"
@@ -45,8 +45,8 @@ example "svojfk/y"
 example "svojfk/y jfksvo/m"
 end
 
-rule 6 do
-ticketing_method "aviacenter"
+rule 4 do
+ticketing_method "direct"
 agent "5%"
 subagent "3%"
 agent_comment "5% (3%) от тарифа при условии:"
@@ -65,8 +65,8 @@ routes "RU-CH/OW,RT"
 example "svosir/s sirsvo/t"
 end
 
-rule 4 do
-ticketing_method "aviacenter"
+rule 5 do
+ticketing_method "direct"
 agent "1"
 subagent "0.05"
 agent_comment "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX."
@@ -78,8 +78,8 @@ example "dmebcn"
 example "bcndme dmebcn/lh"
 end
 
-rule 5 do
-ticketing_method "aviacenter"
+rule 6 do
+ticketing_method "direct"
 agent "1"
 subagent "0.05"
 agent_comment "1 руб. с билета по опубл. тарифам на собств. рейсы LX и рейсы Interline с уч. LX."
