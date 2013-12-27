@@ -44,12 +44,11 @@ agent_comment "Пермь - Только транзитные перевозки
 agent_comment "Ростов - Только транзитные перевозки;"
 agent_comment "Самара - Только транзитные перевозки;"
 agent_comment "Уфа - Только транзитные перевозки;"
-check %{ includes(city_iatas.first, "PEE ROV KUF UFA") and city_iatas.count > 2}
+check %{ includes(city_iatas.first, "PEE ROV KUF UFA") and city_iatas.uniq.count > 2}
 example "peesvo svocdg"
 example "rovled ledcdg"
 example "kufsvo svocdg"
 example "ufadme dmecdg"
-example "kufprg prgkuf"
 end
 
 rule 4 do
