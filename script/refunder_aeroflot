@@ -1,6 +1,7 @@
 # pnr'ы -> проверить, не полетел ли -> маршрут -> [по россии, из россии за бугор] -> refund для каждого билета в заказе (цена рефанда по правилам) -> нотификацию с маршруткой
 
 require 'pp'
+require 'set'
 
 pnrs = %w[]
 statuses = {}
@@ -38,7 +39,7 @@ pnrs.each do |pnr|
   end
 
   if order.tickets.map(&:status).uniq != ['ticketed']
-    puts "Skipping: has refunds/exchanges"
+    puts "Skipping: has refunds"
     statuses[pnr] = [:skipped, "has refunds"]
     next
   end
@@ -92,7 +93,7 @@ pnrs.each do |pnr|
 
 Сумма к возврату, с учетом штрафа при условии подтверждения отказа от билета более чем за 24 часа до вылета:
 
-| + tickets.map{|(ticket, refund)| "Билет #{ticket.number_with_code}: #{-refund.price_with_payment_commission} руб."}.join("\n") +
+| + tickets.map{|(ticket, refund)| "Билет #{ticket.number_with_code}: #{-refund.price_with_payment_commission.round(2)} руб."}.join("\n") +
 %|
 
 Мы произведем возврат, как только получим от вас подтверждение на проведение операции возврата.
