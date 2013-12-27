@@ -7,21 +7,13 @@ class ApiBookingController < ApplicationController
 
   def create
     @recommendation = Recommendation.deserialize(params[:recommendation])
-    @search = AviaSearch.new
-    @search.adults = params[:adults] if params[:adults]
-    @search.children = params[:children] if params[:children]
-    @search.infants = params[:infants] if params[:infants]
-    @search.segments = @recommendation.segments.map do |s|
-      {
-        from: s.departure.city.iata,
-        to: s.arrival.city.iata,
-        date: s.departure_date
-      }
-    end
+    @search = AviaSearch.from_recommendation(@recommendation, params.slice(:adults, :children, :infants))
 
-    order_flow = OrderFlow.new(search: @search,
-                               recommendation: @recommendation,
-                               context: context)
+    order_flow = OrderFlow.new(
+      search: @search,
+      recommendation: @recommendation,
+      context: context
+    )
 
     if order_flow.preliminary_booking_result
       @order_form = order_flow.order_form

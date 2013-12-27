@@ -161,7 +161,7 @@ describe AviaSearch do
     end
   end
 
-  describe "#simple" do
+  describe ".simple" do
     pending "should raise ArgumentError for parameters that do not exist" do
       args = {
               :from => 'MOW',
@@ -199,6 +199,35 @@ describe AviaSearch do
               :cabin => 'C'}
        expect{ AviaSearch.simple(args) }.to raise_error(ArgumentError, 'Lack of required parameter(s)  - "from1, to1"')
     end
+  end
+
+  describe '.from_recommendation' do
+
+    subject { described_class.from_recommendation(recommendation, attrs) }
+    let(:attrs) { {} }
+    let :recommendation do
+      Recommendation.new flights: [
+        Flight.new(departure_iata: 'SVO', arrival_iata: 'CDG', dept_date: Date.new(2014,11,12)),
+        Flight.new(departure_iata: 'CDG', arrival_iata: 'SVO', dept_date: Date.new(2014,11,15)),
+        Flight.new(departure_iata: 'VKO', arrival_iata: 'ROV', dept_date: Date.new(2014,12,5)),
+      ]
+    end
+
+    context "without passengers" do
+
+      it { should be_valid }
+      it { should have(3).segments }
+      its('segments.last.from') { should == City['MOW'] }
+      its(:tariffied) { should == { adults: 1, children: 0, infants: 0} }
+    end
+
+    context "without partial passengers" do
+      let(:attrs) { { adults: 2, children: nil, infants: 1} }
+
+      it { should be_valid }
+      its(:tariffied) { should == { adults: 2, children: 0, infants: 1} }
+    end
+
   end
 end
 

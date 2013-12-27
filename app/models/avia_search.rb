@@ -39,6 +39,17 @@ class AviaSearch
   def self.simple(args)
     AviaSearch::SimpleDecoder.new.decode(args)
   end
+
+  def self.from_recommendation(rec, attrs={})
+    segments = rec.segments.map do |s|
+      {
+        from: s.departure.city.iata,
+        to: s.arrival.city.iata,
+        date: s.departure_date
+      }
+    end
+    new(attrs.reject {|k, v| v.blank? }.merge(segments: segments))
+  end
   # /конструкторы
 
   def to_s
