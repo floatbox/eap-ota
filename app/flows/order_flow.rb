@@ -45,6 +45,7 @@ class OrderFlow
     end
     # Среагировать на изменение цены
     @order_form.recommendation.find_commission! context: context
+    logger.info 'OrderFlow: recommendation: ' + @order_form.recommendation.serialize
     return :failed_booking unless @order_form.recommendation.allowed_booking?
 
     if @order_form.counts_contradiction

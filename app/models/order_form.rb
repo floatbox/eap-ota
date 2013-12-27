@@ -187,6 +187,7 @@ class OrderForm
     copy_attrs self, cache, :recommendation, :people_count, :query_key, :partner, :marker, :price_with_payment_commission
     cache.with(safe: true).save
     self.number = cache.id.to_s
+    Rails.logger.info "OrderForm: creating id #{number}"
   end
 
   def update_in_cache
