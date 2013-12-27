@@ -52,7 +52,7 @@ pnrs.each do |pnr|
 
   tickets = []
 
-  order.sold_tickets.to_a.select(&:ticket?).each do |ticket|
+  order.sold_tickets.to_a.select(&:ticket?).select{|t| t.original_price_fare_cents > 0}.each do |ticket|
     refund_ticket = Ticket.new(
       order_id: order.id,
       parent_id: ticket.id,
