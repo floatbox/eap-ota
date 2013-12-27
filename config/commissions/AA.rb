@@ -1,6 +1,7 @@
 carrier "AA"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
@@ -10,6 +11,7 @@ example "svocdg"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "0%"
@@ -22,6 +24,7 @@ example "miaiad"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
@@ -33,6 +36,7 @@ example "miaiad iadmia/ab"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 not_implemented "не умеем отлавливать fare basis"
 ticketing_method "aviacenter"
 agent "0%"

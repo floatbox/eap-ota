@@ -1,6 +1,7 @@
 carrier "AT"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -11,6 +12,7 @@ example "svocdg"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"

@@ -1,6 +1,7 @@
 carrier "EK"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
@@ -13,6 +14,7 @@ example "svocdg/first cdgsvo/first"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
@@ -24,6 +26,7 @@ example "svocdg/first cdgsvo"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "1"
@@ -36,6 +39,7 @@ example "svocdg"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
@@ -46,6 +50,7 @@ example "jfkcdg"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
@@ -58,6 +63,7 @@ example "svocdg/business cdgsvo/ab/business svoled/business ledsvo/business"
 end
 
 rule 6 do
+disabled "aviacenter shutdown"
 not_implemented "Пока не разруливается с чистым экономом на уровне спеки: также как и с OW example в чистом правиле не сделать"
 ticketing_method "aviacenter"
 agent "5%"
@@ -71,6 +77,7 @@ example "svocdg/first cdgsvo/ab/business svoled ledsvo"
 end
 
 rule 7 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"

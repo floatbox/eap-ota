@@ -1,6 +1,7 @@
 carrier "DL", start_date: "2013-05-15"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -14,6 +15,7 @@ example "svoadz/j adzsvo/c"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -26,6 +28,7 @@ example "svojfk/j jfksvo/z"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -38,6 +41,7 @@ example "svotab/j tabsvo/z"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -50,6 +54,7 @@ example "svotam/j tamsvo/z"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -92,6 +97,7 @@ example "accjfk/k jfkacc/k"
 end
 
 rule 8 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "1%"
@@ -121,6 +127,7 @@ example "accjfk/l/az:dl jfkacc/n/az:dl"
 end
 
 rule 10 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
@@ -138,6 +145,7 @@ example "okomia"
 end
 
 rule 11 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "1%"
@@ -151,6 +159,7 @@ example "miadtw dtwmia/ab"
 end
 
 rule 12 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
@@ -161,6 +170,7 @@ example "cdgsvo/ab"
 end
 
 rule 13 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"

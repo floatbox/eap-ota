@@ -1,6 +1,7 @@
 carrier "ZI"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "11%"
 subagent "9%"
@@ -11,6 +12,7 @@ example "svocdg/i"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -21,6 +23,7 @@ example "svocdg/k"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2%"

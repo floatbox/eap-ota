@@ -1,6 +1,7 @@
 carrier "VN", start_date: "2012-09-01"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2%"
@@ -11,6 +12,7 @@ example "svohan hansvo"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2%"
@@ -21,6 +23,7 @@ example "hansgn"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"

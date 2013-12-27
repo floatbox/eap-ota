@@ -1,6 +1,7 @@
 carrier "F7"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0.5%"
@@ -10,6 +11,7 @@ example "svocdg"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0%"
@@ -21,6 +23,7 @@ example "svocdg cdgsvo/ab"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "0%"

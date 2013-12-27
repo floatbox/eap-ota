@@ -1,6 +1,7 @@
 carrier "JL"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -11,6 +12,7 @@ example "okosvo"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -24,6 +26,7 @@ example "svooko okosvo/ab"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"

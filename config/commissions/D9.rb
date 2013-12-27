@@ -1,6 +1,7 @@
 carrier "D9"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -11,6 +12,7 @@ example "svocdg/economy"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "6.3%"
@@ -21,6 +23,7 @@ example "svocdg/business"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "2%"
 subagent "1.4%"

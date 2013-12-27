@@ -1,6 +1,7 @@
 carrier "U6", start_date: "2013-06-20"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -12,6 +13,7 @@ example "svocdg/business cdgsvo/business"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -22,6 +24,7 @@ example "svocdg cdgsvo"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "5%"
@@ -35,6 +38,7 @@ example "tbsiev"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "3%"
 subagent "1%"
@@ -48,6 +52,7 @@ example "svocdg/ab cdgiev ievjfk"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "10"
 subagent "10"
@@ -60,6 +65,7 @@ example "svocdg/s7 cdgsvo"
 end
 
 rule 6 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
@@ -72,6 +78,7 @@ example "svocdg/ab cdgsvo/ab"
 end
 
 rule 7 do
+disabled "aviacenter shutdown"
 not_implemented "не умеем определять конфиденциальные тарифы"
 ticketing_method "aviacenter"
 agent_comment "1 (один) рубль за каждый выписанный авиабилет по конфиденциальным IT тарифам."
@@ -79,6 +86,7 @@ subagent_comment "5 (пять) руб. за каждый выписанный а
 end
 
 rule 8 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "5%"
@@ -91,6 +99,7 @@ example "kuflbd"
 end
 
 rule 9 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "0.1%"
@@ -108,6 +117,7 @@ example "krrovb"
 end
 
 rule 10 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "0.1%"
@@ -122,6 +132,7 @@ example "svotiv tivsvo"
 end
 
 rule 11 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "3%"

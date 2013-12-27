@@ -1,6 +1,7 @@
 carrier "A9"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "8%"
 subagent "6%"
@@ -10,6 +11,7 @@ example "tbsdme"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -20,6 +22,7 @@ example "tbsdme dmetbs/ab"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"

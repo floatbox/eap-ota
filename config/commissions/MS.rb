@@ -1,6 +1,7 @@
 carrier "MS"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -11,6 +12,7 @@ example "svocai caisvo"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
@@ -22,6 +24,7 @@ example "caisvo svocai"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
@@ -33,6 +36,7 @@ example "KULCAI"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
@@ -44,6 +48,7 @@ example "caihrg"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"

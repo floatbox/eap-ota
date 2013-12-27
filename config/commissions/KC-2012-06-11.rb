@@ -1,6 +1,7 @@
 carrier "KC", start_date: "2012-06-11"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "4%"
 subagent "3%"
@@ -11,6 +12,7 @@ example "tsekgf"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
@@ -21,6 +23,7 @@ example "svoala alasvo"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
@@ -32,6 +35,7 @@ example "svoala/ab alasvo"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "4%"
 subagent "3%"

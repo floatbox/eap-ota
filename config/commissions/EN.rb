@@ -1,6 +1,7 @@
 carrier "EN"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"

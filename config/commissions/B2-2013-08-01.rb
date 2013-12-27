@@ -1,6 +1,7 @@
 carrier "B2", start_date: "2013-08-01"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "4%"
 subagent "2.5%"

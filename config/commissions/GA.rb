@@ -1,6 +1,7 @@
 carrier "GA"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -11,6 +12,7 @@ example "jogsoq soqjog"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
@@ -24,6 +26,7 @@ example "jogruh"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -34,6 +37,7 @@ example "jogsvo"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "1"
@@ -48,6 +52,7 @@ example "jogsin"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
@@ -59,6 +64,7 @@ example "okojog"
 end
 
 rule 6 do
+disabled "aviacenter shutdown"
 not_implemented "FLEX PEX?"
 ticketing_method "aviacenter"
 agent "7%"
@@ -70,6 +76,7 @@ example "okojog"
 end
 
 rule 7 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "1%"
@@ -82,6 +89,7 @@ example "okoams"
 end
 
 rule 8 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "5%"
@@ -96,6 +104,7 @@ example "okorse"
 end
 
 rule 9 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "7%"
@@ -110,6 +119,7 @@ example "okodxb"
 end
 
 rule 10 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "9%"

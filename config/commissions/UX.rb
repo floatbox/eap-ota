@@ -1,6 +1,7 @@
 carrier "UX"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"

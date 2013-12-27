@@ -1,6 +1,7 @@
 carrier "CY", start_date: "2013-10-01"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"

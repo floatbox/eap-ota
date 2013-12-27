@@ -1,6 +1,7 @@
 carrier "HU", start_date: "2013-10-01"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "20%"
 subagent "18%"
@@ -14,6 +15,7 @@ example "svopek/c peksvo/c"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "15%"
 subagent "13%"
@@ -28,6 +30,7 @@ example "svopek/d peksvo/i"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -41,6 +44,7 @@ example "svopek/z peksvo/z"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -54,6 +58,7 @@ example "svopek/economy peksvo/economy"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "15%"
 subagent "13%"
@@ -67,6 +72,7 @@ example "ledpek/c pekled/d"
 end
 
 rule 6 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -80,6 +86,7 @@ example "ledpek/i pekled/z"
 end
 
 rule 7 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -93,6 +100,7 @@ example "ledpek/economy pekled/economy"
 end
 
 rule 8 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -110,6 +118,7 @@ example "kjapek/i pekkja/z"
 end
 
 rule 9 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -127,6 +136,7 @@ example "kjapek/economy pekkja/economy"
 end
 
 rule 10 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -140,6 +150,7 @@ example "alapek/i pekala/z"
 end
 
 rule 11 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -153,6 +164,7 @@ example "alapek/economy pekala/economy"
 end
 
 rule 12 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -163,6 +175,7 @@ example "xmnweh"
 end
 
 rule 13 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "3%"
 subagent "1%"
@@ -173,6 +186,7 @@ example "cdgpek"
 end
 
 rule 14 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "3%"
 subagent "1%"
@@ -184,6 +198,7 @@ example "peksvo svopek"
 end
 
 rule 15 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "0%"

@@ -1,6 +1,7 @@
 carrier "TK", start_date: "2013-11-25"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "17%"
 subagent "15%"
@@ -13,6 +14,7 @@ example "svoist/business"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "10%"
 subagent "8%"
@@ -27,6 +29,7 @@ example "svoist istsvo"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -38,6 +41,7 @@ example "istsvo svoist"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "7%"
@@ -51,6 +55,7 @@ example "miaist/business"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "5%"
@@ -65,6 +70,7 @@ example "istank/business"
 end
 
 rule 6 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"

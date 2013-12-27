@@ -1,6 +1,7 @@
 carrier "BA", start_date: "2013-01-01"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
@@ -11,6 +12,7 @@ example "svocdg"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"
@@ -23,6 +25,7 @@ example "svocdg cdgsvo/ab"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0"
 subagent "0"

@@ -1,6 +1,7 @@
 carrier "QR", start_date: "2013-06-01"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
@@ -11,6 +12,7 @@ example "cdgpek/business pekcdg/business"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0.1%"
 subagent "0.05"
@@ -22,6 +24,7 @@ example "cdgpek/business pekcdg/economy"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "0.1%"
@@ -50,6 +53,7 @@ example "jfkled ledcdg"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0.1%"
 subagent "0.05"

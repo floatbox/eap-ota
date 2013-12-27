@@ -1,6 +1,7 @@
 carrier "CA"
 
 rule 1 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "9%"
@@ -13,6 +14,7 @@ example "svopek peksvo"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2.5%"
@@ -26,6 +28,7 @@ example "peksgn"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"

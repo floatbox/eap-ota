@@ -1,6 +1,7 @@
 carrier "MU", start_date: "2011-09-15"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "9%"
 subagent "7%"
@@ -16,6 +17,7 @@ example "svotpe/business"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -29,6 +31,7 @@ example "ledtpe/economy"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -40,6 +43,7 @@ example "ledhkg/economy hkgled/business"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -51,6 +55,7 @@ example "svomfm/ab mfmsvo"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"
@@ -62,6 +67,7 @@ example "shacan"
 end
 
 rule 6 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"

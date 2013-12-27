@@ -1,6 +1,7 @@
 carrier "LO", start_date: "2013-07-03"
 
 rule 1 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "1eur"
@@ -14,6 +15,7 @@ example "ledwaw/business wawled/business"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "7%"
 subagent "5%"
@@ -27,6 +29,7 @@ example "svobkk/p bkksvo/su/a"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1%"
 subagent "5"
@@ -38,6 +41,7 @@ example "svocdg/ab cdgsvo"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1eur"
 subagent "5"

@@ -1,6 +1,7 @@
 carrier "NN"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
@@ -12,6 +13,7 @@ example "svocdg/c cdgsvo/d"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
@@ -21,6 +23,7 @@ example "svocdg cdgsvo"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0"

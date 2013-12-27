@@ -46,6 +46,7 @@ example "svojfk/y jfksvo/m"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0.5%"
 subagent "5"
@@ -57,6 +58,7 @@ example "BRULBA"
 end
 
 rule 5 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0.5%"
 subagent "5"

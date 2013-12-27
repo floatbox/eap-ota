@@ -1,6 +1,7 @@
 carrier "SQ"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2%"
@@ -12,6 +13,7 @@ example "svosin"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "6%"
@@ -25,6 +27,7 @@ example "housvo"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "3%"
 subagent "2%"

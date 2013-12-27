@@ -1,6 +1,7 @@
 carrier "BE"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0.1%"
 subagent "0.05"

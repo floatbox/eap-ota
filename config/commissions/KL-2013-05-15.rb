@@ -1,6 +1,7 @@
 carrier "KL", start_date: "2013-05-15"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "1"
 subagent "0.05"

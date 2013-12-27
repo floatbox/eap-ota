@@ -1,6 +1,7 @@
 carrier "UA", start_date: "2013-06-20"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
@@ -12,6 +13,7 @@ example "jfklax"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "0%"
 subagent "0%"
@@ -27,6 +29,7 @@ example "yowsvo"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3%"
@@ -41,6 +44,7 @@ example "svocdg/lh cdgjfk jfkcdg/lx cdgsvo"
 end
 
 rule 4 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "7%"

@@ -1,6 +1,7 @@
 carrier "LY", start_date: "2013-09-01"
 
 rule 1 do
+disabled "aviacenter shutdown"
 ticketing_method "aviacenter"
 agent "5%"
 subagent "3.5%"
@@ -11,6 +12,7 @@ example "svocdg"
 end
 
 rule 2 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "5%"
@@ -22,6 +24,7 @@ example "svocdg/j cdgsvo/z"
 end
 
 rule 3 do
+disabled "aviacenter shutdown"
 important!
 ticketing_method "aviacenter"
 agent "9.7%"
