@@ -9,6 +9,11 @@ pnrs.each do |pnr|
   order = Order.find_by_pnr_number(pnr)
   puts '+'*80
   puts pnr
+  if order.nil?
+    puts "Skipping: wrong pnr"
+    statuses[pnr] = [:skipped, 'wrong pnr']
+    next
+  end
   puts order.id
   puts '-'*80
   first_flight = order.flights.first
@@ -25,11 +30,17 @@ pnrs.each do |pnr|
     next
   end
 
+  if order.tickets.map(&:status).uniq != ['ticketed']
+    puts "Skipping: has refunds"
+    statuses[pnr] = [:skipped, "has refunds"]
+    next
+  end
+
   refund_fee = 34.to_money('USD')
 
   tickets = []
 
-  order.sold_tickets.to_a.select(&:ticket?).each do |ticket|
+  order.sold_tickets.to_a.select(&:ticket?).select{|t| t.original_price_fare_cents > 0}.each do |ticket|
     refund_ticket = Ticket.new(
       order_id: order.id,
       parent_id: ticket.id,
@@ -68,7 +79,7 @@ pnrs.each do |pnr|
 
 Возврат по бронированию #{order.pnr_number} возможен. По правилам тарифа авиакомпании, сумма к возврату:
 
-| + tickets.map{|(ticket, refund)| "Билет #{ticket.number_with_code}: #{-refund.price_with_payment_commission} руб."}.join("\n") +
+| + tickets.map{|(ticket, refund)| "Билет #{ticket.number_with_code}: #{-refund.price_with_payment_commission.to_i} руб."}.join("\n") +
 %|
 
 (сумма расcчитана по курсу ЦБ РФ на сегодняшний день и может незначительно измениться в зависимости от изменения курса валют ЦБ РФ на дату фактического проведения авиакомпанией возврата).
