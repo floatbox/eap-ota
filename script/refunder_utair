@@ -79,7 +79,7 @@ pnrs.each do |pnr|
 
 Возврат по бронированию #{order.pnr_number} возможен. По правилам тарифа авиакомпании, сумма к возврату:
 
-| + tickets.map{|(ticket, refund)| "Билет #{ticket.number_with_code}: #{-refund.price_with_payment_commission.round(2)} руб."}.join("\n") +
+| + tickets.map{|(ticket, refund)| "Билет #{ticket.number_with_code}: #{-refund.price_with_payment_commission.to_i} руб."}.join("\n") +
 %|
 
 (сумма расcчитана по курсу ЦБ РФ на сегодняшний день и может незначительно измениться в зависимости от изменения курса валют ЦБ РФ на дату фактического проведения авиакомпанией возврата).

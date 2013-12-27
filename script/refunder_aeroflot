@@ -93,7 +93,7 @@ pnrs.each do |pnr|
 
 Сумма к возврату, с учетом штрафа при условии подтверждения отказа от билета более чем за 24 часа до вылета:
 
-| + tickets.map{|(ticket, refund)| "Билет #{ticket.number_with_code}: #{-refund.price_with_payment_commission.round(2)} руб."}.join("\n") +
+| + tickets.map{|(ticket, refund)| "Билет #{ticket.number_with_code}: #{-refund.price_with_payment_commission.to_i} руб."}.join("\n") +
 %|
 
 Мы произведем возврат, как только получим от вас подтверждение на проведение операции возврата.
