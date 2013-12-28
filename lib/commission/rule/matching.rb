@@ -26,15 +26,15 @@ module Commission::Rule::Matching
   end
 
   def turndown_reason recommendation
-    skipped?                                and return :skipped     # "правило не проверяется"
-    # carrier == recommendation.validating_carrier_iata and
-    applicable_interline?(recommendation)    or return :interline   # "интерлайн/не интерлайн"
-    applicable_classes?(recommendation)      or return :classes     # "не подходит класс бронирования"
-    applicable_subclasses?(recommendation)   or return :subclasses  # "не подходит подкласс бронирования"
-    applicable_custom_check?(recommendation) or return :check       # "не прошло дополнительную проверку"
-    applicable_routes?(recommendation)       or return :routes      # "маршрут не в списке применимых"
-    applicable_geo?(recommendation)          or return :geo         # "не тот тип МВЛ/ВВЛ"
-    nil
+    case
+    when skipped?                                   then :skipped     # "правило не проверяется"
+    when ! applicable_interline?(recommendation)    then :interline   # "интерлайн/не интерлайн"
+    when ! applicable_classes?(recommendation)      then :classes     # "не подходит класс бронирования"
+    when ! applicable_subclasses?(recommendation)   then :subclasses  # "не подходит подкласс бронирования"
+    when ! applicable_custom_check?(recommendation) then :check       # "не прошло дополнительную проверку"
+    when ! applicable_routes?(recommendation)       then :routes      # "маршрут не в списке применимых"
+    when ! applicable_geo?(recommendation)          then :geo         # "не тот тип МВЛ/ВВЛ"
+    end
   end
 
   def applicable_interline? recommendation
