@@ -1,20 +1,6 @@
 # encoding: utf-8
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-  def geo_tags_for location
-    location.geo_tags.collect do |geo_tag|
-      link_to h(geo_tag.name), geo_tag
-    end.join ' '
-  end
-
-  def cases_for location
-    "лечу #{location.case_from} #{location.case_to} c пересадкой #{location.case_in}"
-  end
-
-  def ordinal number
-    return "#{number}й" unless (1..9) === number.to_i
-    %w{первый второй третий четвертый пятый шестой седьмой восьмой девятый}[number - 1]
-  end
 
   def nbsp string
     html_escape(string).gsub(/ +/, '&nbsp;').html_safe
@@ -47,10 +33,6 @@ module ApplicationHelper
 
   def exact_price(price)
     sprintf("%.2f", price).sub('.', ',')
-  end
-
-  def display_rt_arrow rt
-    Destination.rts.invert[rt]
   end
 
   def smart_root_path
