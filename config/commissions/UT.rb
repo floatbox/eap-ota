@@ -1,7 +1,6 @@
 carrier "UT"
 
 rule 1 do
-disabled "dtt disabled"
 ticketing_method "downtown"
 agent "5%"
 subagent "4%"

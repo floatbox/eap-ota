@@ -1,3 +1,15 @@
+# включаем даунтаун снова. скидка = комиссия
+register "2013-12-30 09:00" do
+  case commission.ticketing_method
+  when 'downtown'
+    netto 0
+  else
+    Discount::Rule.new(
+      discount: (commission.subagent.extract('%') + Commission::Formula.new('6.5% + 300')).round(2)
+    )
+  end
+end
+
 # 6.5% + 300
 register "2013-12-27 19:20" do
   Discount::Rule.new(

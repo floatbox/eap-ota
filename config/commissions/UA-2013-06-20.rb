@@ -60,7 +60,6 @@ example "svocdg/lh/f cdgjfk/a jfkcdg/lx/c cdgsvo/z"
 end
 
 rule 5 do
-disabled "dtt disabled"
 ticketing_method "downtown"
 agent "10%"
 subagent "8%"
@@ -76,7 +75,6 @@ example "svojfk/a jfksvo/z"
 end
 
 rule 6 do
-disabled "dtt disabled"
 ticketing_method "downtown"
 agent "8%"
 subagent "6%"
@@ -92,7 +90,6 @@ example "svojfk/q jfksvo/k"
 end
 
 rule 7 do
-disabled "dtt disabled"
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"

@@ -67,7 +67,6 @@ example "svoyyz/c yyzsvo/i"
 end
 
 rule 6 do
-disabled "dtt disabled"
 important!
 ticketing_method "downtown"
 agent "8%"
@@ -83,7 +82,6 @@ example "jfksvo/x"
 end
 
 rule 7 do
-disabled "dtt disabled"
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"
@@ -112,7 +110,6 @@ example "jfksvo/x/su:dl"
 end
 
 rule 9 do
-disabled "dtt disabled"
 important!
 ticketing_method "downtown"
 agent "5%"

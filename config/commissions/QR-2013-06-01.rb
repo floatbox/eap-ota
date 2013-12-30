@@ -39,7 +39,6 @@ example "cdgpek/q pekcdg/o"
 end
 
 rule 4 do
-disabled "dtt disabled"
 important!
 ticketing_method "downtown"
 agent "5%"

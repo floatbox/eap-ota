@@ -1,7 +1,6 @@
 carrier "SN"
 
 rule 1 do
-disabled "dtt disabled"
 ticketing_method "downtown"
 agent "10%"
 subagent "8%"
@@ -16,7 +15,6 @@ example "svojfk/a jfksvo/z"
 end
 
 rule 2 do
-disabled "dtt disabled"
 ticketing_method "downtown"
 agent "8%"
 subagent "6%"
@@ -31,7 +29,6 @@ example "svojfk/q jfksvo/k"
 end
 
 rule 3 do
-disabled "dtt disabled"
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"
