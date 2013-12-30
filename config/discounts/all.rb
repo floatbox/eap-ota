@@ -1,10 +1,9 @@
-# включаем даунтаун снова. скидка = комиссия
-
-# маша попросила выключить скидки
-register "2013-12-30 18:30" do
-  netto 0
+# 0 скидки
+register "2013-12-30 18:20" do
+  Discount::Rule.zero
 end
 
+# включаем даунтаун снова. скидка = комиссия
 register "2013-12-30 09:00" do
   case commission.ticketing_method
   when 'downtown'
