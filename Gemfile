@@ -16,6 +16,7 @@ end
 # если убрать в группу :development, не грузит больше в rails c
 # возможно, отжирает память и ресурсы
 gem 'pry-rails'
+gem 'pry-stack_explorer'
 
 gem 'commands'
 

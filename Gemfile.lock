@@ -81,6 +81,8 @@ GEM
     backports (3.3.5)
     bcrypt-ruby (3.0.1)
     beefcake (0.3.7)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     bourbon (2.1.1)
       sass (>= 3.1)
     bson (1.5.2)
@@ -137,6 +139,7 @@ GEM
     curb (0.8.0)
     daemons (1.1.8)
     database_cleaner (0.7.1)
+    debug_inspector (0.0.2)
     delayed_job (3.0.4)
       activesupport (~> 3.0)
     delayed_job_mongoid (2.0.0)
@@ -279,6 +282,9 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.2)
       pry (>= 0.9.10)
+    pry-stack_explorer (0.4.9.1)
+      binding_of_caller (>= 0.7)
+      pry (>= 0.9.11)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -462,6 +468,7 @@ DEPENDENCIES
   nokogiri
   paper_trail
   pry-rails
+  pry-stack_explorer
   rails (= 3.2.16)
   redis
   riemann-client
