@@ -1,4 +1,10 @@
 # включаем даунтаун снова. скидка = комиссия
+
+# маша попросила выключить скидки
+register "2013-12-30 18:30" do
+  netto 0
+end
+
 register "2013-12-30 09:00" do
   case commission.ticketing_method
   when 'downtown'

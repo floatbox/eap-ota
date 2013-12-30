@@ -1,7 +1,7 @@
 carrier "UT"
 
 rule 1 do
-disabled "Все еще выключен?"
+disabled "Маша попросила выключить DTT"
 ticketing_method "downtown"
 agent "5%"
 subagent "4%"

@@ -1,6 +1,7 @@
 carrier "SN"
 
 rule 1 do
+disabled "Маша попросила выключить DTT"
 ticketing_method "downtown"
 agent "10%"
 subagent "8%"
@@ -15,6 +16,7 @@ example "svojfk/a jfksvo/z"
 end
 
 rule 2 do
+disabled "Маша попросила выключить DTT"
 ticketing_method "downtown"
 agent "8%"
 subagent "6%"
@@ -29,6 +31,7 @@ example "svojfk/q jfksvo/k"
 end
 
 rule 3 do
+disabled "Маша попросила выключить DTT"
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"

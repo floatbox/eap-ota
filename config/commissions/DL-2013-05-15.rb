@@ -67,6 +67,7 @@ example "svoyyz/c yyzsvo/i"
 end
 
 rule 6 do
+disabled "Маша попросила выключить DTT"
 important!
 ticketing_method "downtown"
 agent "8%"
@@ -82,6 +83,7 @@ example "jfksvo/x"
 end
 
 rule 7 do
+disabled "Маша попросила выключить DTT"
 ticketing_method "downtown"
 agent "5%"
 subagent "3%"
@@ -110,6 +112,7 @@ example "jfksvo/x/su:dl"
 end
 
 rule 9 do
+disabled "Маша попросила выключить DTT"
 important!
 ticketing_method "downtown"
 agent "5%"

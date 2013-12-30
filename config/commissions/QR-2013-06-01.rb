@@ -39,6 +39,7 @@ example "cdgpek/q pekcdg/o"
 end
 
 rule 4 do
+disabled "Маша попросила выключить DTT"
 important!
 ticketing_method "downtown"
 agent "5%"
