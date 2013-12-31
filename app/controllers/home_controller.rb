@@ -6,6 +6,10 @@ class HomeController < ApplicationController
   before_filter :set_context_partner, :set_context_deck_user
   helper_method :context
 
+  def holidays
+    render :text => File.read(Rails.root.join 'public', 'index.html')
+  end
+
   def index
   end
 

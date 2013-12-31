@@ -125,7 +125,7 @@ Eviterra::Application.routes.draw do
   match 'profile/itinerary/:id/ticket/:ticket_id' => 'PNR#show_for_ticket', :as => :profile_itinerary_for_ticket
   match 'profile/orders' => 'profile#orders', :as => :profile_orders
 
-  root :to => 'home#index'
+  root :to => 'home#holidays'
 
   ActiveAdmin.routes(self)
 end
